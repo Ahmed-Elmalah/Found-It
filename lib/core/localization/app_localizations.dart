@@ -103,6 +103,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your city'**
   String get chooseCityTitle;
+
+  /// No description provided for @statusLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get statusLost;
+
+  /// No description provided for @statusFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get statusFound;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get statusActive;
+
+  /// No description provided for @statusResolved.
+  ///
+  /// In en, this message translates to:
+  /// **'Resolved'**
+  String get statusResolved;
 }
 
 class _AppLocalizationsDelegate

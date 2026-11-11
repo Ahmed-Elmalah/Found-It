@@ -11,4 +11,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chooseCityTitle => 'Choose your city';
+
+  @override
+  String get statusLost => 'Lost';
+
+  @override
+  String get statusFound => 'Found';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusResolved => 'Resolved';
 }

@@ -1,5 +1,10 @@
 {
   "@@locale": "ar",
 
-  "chooseCityTitle": "اختر مدينتك"
+  "chooseCityTitle": "اختر مدينتك",
+
+  "statusLost": "مفقود",
+  "statusFound": "تم العثور عليه",
+  "statusActive": "نشط",
+  "statusResolved": "تم الحل"
 }

@@ -11,4 +11,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chooseCityTitle => 'اختر مدينتك';
+
+  @override
+  String get statusLost => 'مفقود';
+
+  @override
+  String get statusFound => 'تم العثور عليه';
+
+  @override
+  String get statusActive => 'نشط';
+
+  @override
+  String get statusResolved => 'تم الحل';
 }

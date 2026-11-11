@@ -1,5 +1,10 @@
 {
   "@@locale": "en",
 
-  "chooseCityTitle": "Choose your city"
+  "chooseCityTitle": "Choose your city",
+
+  "statusLost": "Lost",
+  "statusFound": "Found",
+  "statusActive": "Active",
+  "statusResolved": "Resolved"
 }

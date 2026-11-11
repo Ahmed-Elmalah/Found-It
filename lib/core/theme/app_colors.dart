@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 abstract final class AppColors {
   static const Color lightBackground = Colors.white;
   static const Color darkBackground = Color(0xFF0F1218);
@@ -34,4 +33,9 @@ abstract final class AppColors {
     outline: Color(0xFF2C3342),
     surfaceContainerHighest: Color(0xFF252B38),
   );
+
+  // 'Found' (success) has no token in the schemes above, so it gets its own
+  // light / dark pair. Used by the report status colors (see ReportStatus).
+  static const Color successLight = Color(0xFF047857);
+  static const Color successDark = Color(0xFF6EE7B7);
 }
