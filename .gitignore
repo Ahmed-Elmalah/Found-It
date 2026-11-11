@@ -46,3 +46,8 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Environment values (Supabase URL / keys) - share privately, never commit
+.env
+.env.*
+!.env.example
