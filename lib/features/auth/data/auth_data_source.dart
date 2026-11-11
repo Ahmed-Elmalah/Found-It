@@ -1,8 +1,15 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// Logout is added in a later stage.
 abstract interface class AuthDataSource {
   bool hasActiveSession();
+
+  /// `true` while a session exists; emits on every auth change.
+  Stream<bool> authStateChanges();
+
+  /// The current user's profile row, or null without a session / row.
+  Future<Map<String, dynamic>?> getMyProfile();
+
+  Future<void> signOut();
 
   Future<void> signInWithPassword({
     required String email,
@@ -24,6 +31,20 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   bool hasActiveSession() => _client.auth.currentSession != null;
+
+  @override
+  Stream<bool> authStateChanges() => _client.auth.onAuthStateChange
+      .map((event) => event.session != null)
+      .distinct();
+
+  @override
+  Future<Map<String, dynamic>?> getMyProfile() async {
+    if (_client.auth.currentSession == null) return null;
+    return _client.rpc('get_my_profile').maybeSingle();
+  }
+
+  @override
+  Future<void> signOut() => _client.auth.signOut();
 
   @override
   Future<void> signInWithPassword({
