@@ -6,6 +6,8 @@ import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
+import 'package:found_it/features/auth/domain/login_use_case.dart';
+import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -53,13 +55,15 @@ Future<void> configureDependencies() async {
 }
 
 // ---------------------------------------------------------------------
-// Auth (Ahmed) — only the session check for now, login/sign up in stage 8
+// Auth (Ahmed) — session check + login. Sign up / logout come later.
 // ---------------------------------------------------------------------
 void _registerAuth() {
   sl
     ..registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl(sl()))
     ..registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()))
-    ..registerLazySingleton(() => HasActiveSessionUseCase(sl()));
+    ..registerLazySingleton(() => HasActiveSessionUseCase(sl()))
+    ..registerLazySingleton(() => LoginUseCase(sl()))
+    ..registerFactory(() => LoginCubit(sl()));
 }
 
 // ---------------------------------------------------------------------

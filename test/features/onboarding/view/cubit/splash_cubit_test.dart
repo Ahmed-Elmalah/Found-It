@@ -26,6 +26,11 @@ class _FakeAuthRepo implements AuthRepository {
 
   @override
   bool hasActiveSession() => session;
+
+  // Not used by the splash; required by the AuthRepository interface.
+  @override
+  Future<void> login({required String email, required String password}) =>
+      throw UnimplementedError();
 }
 
 SplashCubit _build({

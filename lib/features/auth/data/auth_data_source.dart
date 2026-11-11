@@ -1,8 +1,13 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-// Login, sign up and logout are added in stage 8.
+// Sign up and logout are added in a later stage.
 abstract interface class AuthDataSource {
   bool hasActiveSession();
+
+  Future<void> signInWithPassword({
+    required String email,
+    required String password,
+  });
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -12,4 +17,12 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   bool hasActiveSession() => _client.auth.currentSession != null;
+
+  @override
+  Future<void> signInWithPassword({
+    required String email,
+    required String password,
+  }) async {
+    await _client.auth.signInWithPassword(email: email, password: password);
+  }
 }
