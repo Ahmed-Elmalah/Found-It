@@ -1,5 +1,66 @@
 {
   "@@locale": "en",
 
-  "chooseCityTitle": "Choose your city"
+  "chooseCityTitle": "Choose your city",
+
+  "createReport": "Create report",
+  "reportType": "Report type",
+  "lost": "Lost",
+  "found": "Found",
+
+  "itemTitle": "Item title *",
+  "itemTitleHint": "e.g., Black leather wallet",
+  "itemTitleCounter": "{count}/50",
+  "@itemTitleCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "category": "Category *",
+  "selectCategory": "Select category",
+
+  "locationDistrict": "Location (district) *",
+  "selectDistrict": "Select district",
+
+  "date": "Date",
+
+  "photos": "Photos *",
+  "photoCounter": "{count}/4",
+  "@photoCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "addPhoto": "Add",
+  "photoHint": "JPG or PNG, up to 10 MB each. Add 1 to 4 photos.",
+
+  "submitReport": "Submit report",
+
+  "fieldRequired": "Required",
+  "titleTooShort": "Title must be at least 3 characters",
+  "titleTooLong": "Title must be at most 50 characters",
+  "categoryRequired": "Please select a category",
+  "districtRequired": "Please select a district",
+  "photosRequired": "Please add at least 1 photo",
+  "invalidFileType": "Only JPG and PNG files are allowed",
+  "invalidFileSize": "File size must be under 10 MB",
+
+  "invalidFileBanner": "Invalid File: Please upload image files (JPG/PNG) under 10 MB.",
+  "requiredFieldsBanner": "Required Fields: Title, category, and location are required.",
+
+  "photoRejected": "Rejected",
+  "takePhoto": "Take a photo",
+  "chooseFromGallery": "Choose from gallery",
+
+  "reportCreatedTitle": "Report Created Successfully!",
+  "reportCreatedId": "Your report ID is {id}",
+  "@reportCreatedId": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "reportActiveMessage": "Your report is Active and listed for matching.",
+  "viewMyReport": "View my report",
+  "backToHome": "Back to home"
 }

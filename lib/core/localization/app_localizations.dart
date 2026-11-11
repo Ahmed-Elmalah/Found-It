@@ -103,6 +103,216 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your city'**
   String get chooseCityTitle;
+
+  /// No description provided for @createReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Create report'**
+  String get createReport;
+
+  /// No description provided for @reportType.
+  ///
+  /// In en, this message translates to:
+  /// **'Report type'**
+  String get reportType;
+
+  /// No description provided for @lost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get lost;
+
+  /// No description provided for @found.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get found;
+
+  /// No description provided for @itemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Item title *'**
+  String get itemTitle;
+
+  /// No description provided for @itemTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Black leather wallet'**
+  String get itemTitleHint;
+
+  /// No description provided for @itemTitleCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/50'**
+  String itemTitleCounter(int count);
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category *'**
+  String get category;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get selectCategory;
+
+  /// No description provided for @locationDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'Location (district) *'**
+  String get locationDistrict;
+
+  /// No description provided for @selectDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'Select district'**
+  String get selectDistrict;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos *'**
+  String get photos;
+
+  /// No description provided for @photoCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/4'**
+  String photoCounter(int count);
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addPhoto;
+
+  /// No description provided for @photoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'JPG or PNG, up to 10 MB each. Add 1 to 4 photos.'**
+  String get photoHint;
+
+  /// No description provided for @submitReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get submitReport;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get fieldRequired;
+
+  /// No description provided for @titleTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at least 3 characters'**
+  String get titleTooShort;
+
+  /// No description provided for @titleTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at most 50 characters'**
+  String get titleTooLong;
+
+  /// No description provided for @categoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get categoryRequired;
+
+  /// No description provided for @districtRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a district'**
+  String get districtRequired;
+
+  /// No description provided for @photosRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least 1 photo'**
+  String get photosRequired;
+
+  /// No description provided for @invalidFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Only JPG and PNG files are allowed'**
+  String get invalidFileType;
+
+  /// No description provided for @invalidFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'File size must be under 10 MB'**
+  String get invalidFileSize;
+
+  /// No description provided for @invalidFileBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid File: Please upload image files (JPG/PNG) under 10 MB.'**
+  String get invalidFileBanner;
+
+  /// No description provided for @requiredFieldsBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Fields: Title, category, and location are required.'**
+  String get requiredFieldsBanner;
+
+  /// No description provided for @photoRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get photoRejected;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @reportCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Created Successfully!'**
+  String get reportCreatedTitle;
+
+  /// No description provided for @reportCreatedId.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report ID is {id}'**
+  String reportCreatedId(String id);
+
+  /// No description provided for @reportActiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report is Active and listed for matching.'**
+  String get reportActiveMessage;
+
+  /// No description provided for @viewMyReport.
+  ///
+  /// In en, this message translates to:
+  /// **'View my report'**
+  String get viewMyReport;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get backToHome;
 }
 
 class _AppLocalizationsDelegate

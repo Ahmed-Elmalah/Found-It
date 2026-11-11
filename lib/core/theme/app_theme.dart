@@ -40,6 +40,8 @@ abstract final class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
+          backgroundColor: scheme.primary,
+          foregroundColor: scheme.onPrimary,
           minimumSize: const Size(64, AppSizes.button),
           shape: shape,
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
