@@ -193,4 +193,44 @@ void main() {
       },
     );
   }
+
+  testWidgets('isRequired shows red asterisk next to label', (tester) async {
+    await pumpTestApp(
+      tester,
+      const AppTextField(label: 'Item title', isRequired: true),
+    );
+    expect(find.textContaining('Item title'), findsOneWidget);
+    expect(find.textContaining('*'), findsOneWidget);
+  });
+
+  testWidgets('maxLength shows end-aligned counter and updates on typing', (tester) async {
+    await pumpTestApp(
+      tester,
+      const AppTextField(label: 'Item title', maxLength: 50),
+    );
+    expect(find.text('0/50'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'Wallet');
+    await tester.pump();
+    expect(find.text('6/50'), findsOneWidget);
+  });
+
+  testWidgets('showErrorIcon displays error_outline icon before error message', (tester) async {
+    final formKey = GlobalKey<FormState>();
+    await pumpTestApp(
+      tester,
+      Form(
+        key: formKey,
+        child: AppTextField(
+          label: 'Item title',
+          showErrorIcon: true,
+          validator: (_) => 'Required',
+        ),
+      ),
+    );
+    expect(find.byIcon(Icons.error_outline), findsNothing);
+    formKey.currentState!.validate();
+    await tester.pump();
+    expect(find.text('Required'), findsOneWidget);
+    expect(find.byIcon(Icons.error_outline), findsOneWidget);
+  });
 }

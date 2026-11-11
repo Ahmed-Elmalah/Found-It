@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 
-/// A tappable field that opens a bottom-sheet list for picking a [district].
+/// A tappable field that opens a bottom-sheet list for picking an area / district.
 class DistrictSelectorField extends StatelessWidget {
-  final String? selectedValue;
+  final List<AreaEntity> areas;
+  final String? selectedId;
   final String? errorText;
   final ValueChanged<String> onSelected;
 
-  static const List<String> _districts = [
-    'Maadi',
-    'Zamalek',
-    'Heliopolis',
-    'Nasr City',
-    'New Cairo',
-    'October',
-    'Dokki',
-    'Mohandessin',
-    'Other',
-  ];
-
   const DistrictSelectorField({
     super.key,
-    required this.selectedValue,
+    required this.areas,
+    required this.selectedId,
     required this.onSelected,
     this.errorText,
   });
@@ -32,17 +23,32 @@ class DistrictSelectorField extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
     final hasError = errorText != null;
+
+    final selectedArea = areas.where((a) => a.id == selectedId).firstOrNull;
+    final displayText = selectedArea?.localizedName(locale) ?? l10n.selectDistrict;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.locationDistrict,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: hasError ? colors.error : colors.onSurface,
+        Text.rich(
+          TextSpan(
+            text: l10n.locationDistrict,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: hasError ? colors.error : colors.onSurface,
+            ),
+            children: [
+              TextSpan(
+                text: ' *',
+                style: TextStyle(
+                  color: colors.error,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 6.h),
@@ -71,10 +77,10 @@ class DistrictSelectorField extends StatelessWidget {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Text(
-                    selectedValue ?? l10n.selectDistrict,
+                    displayText,
                     style: TextStyle(
                       fontSize: 15.sp,
-                      color: selectedValue != null
+                      color: selectedArea != null
                           ? colors.onSurface
                           : colors.onSurfaceVariant,
                     ),
@@ -93,8 +99,11 @@ class DistrictSelectorField extends StatelessWidget {
           SizedBox(height: 4.h),
           Row(
             children: [
-              Icon(Icons.error_outline_rounded,
-                  size: 14.r, color: colors.error),
+              Icon(
+                Icons.error_outline_rounded,
+                size: 14.r,
+                color: colors.error,
+              ),
               SizedBox(width: 4.w),
               Text(
                 errorText!,
@@ -110,6 +119,7 @@ class DistrictSelectorField extends StatelessWidget {
   void _showSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
 
     showModalBottomSheet<void>(
       context: context,
@@ -124,7 +134,7 @@ class DistrictSelectorField extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 12.h),
+                padding: EdgeInsetsDirectional.fromSTEB(20.w, 4.h, 20.w, 12.h),
                 child: Text(
                   l10n.locationDistrict,
                   style: TextStyle(
@@ -138,25 +148,31 @@ class DistrictSelectorField extends StatelessWidget {
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: _districts.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1, indent: 16, endIndent: 16),
+                  itemCount: areas.length,
+                  separatorBuilder: (_, _) =>
+                      const Divider(height: 1, indent: 16, endIndent: 16),
                   itemBuilder: (ctx, index) {
-                    final district = _districts[index];
-                    final isSelected = selectedValue == district;
+                    final area = areas[index];
+                    final isSelected = selectedId == area.id;
                     return ListTile(
                       title: Text(
-                        district,
+                        area.localizedName(locale),
                         style: TextStyle(
                           fontSize: 15.sp,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w400,
                           color: isSelected ? colors.primary : colors.onSurface,
                         ),
                       ),
                       trailing: isSelected
-                          ? Icon(Icons.check_rounded, color: colors.primary, size: 20.r)
+                          ? Icon(
+                              Icons.check_rounded,
+                              color: colors.primary,
+                              size: 20.r,
+                            )
                           : null,
                       onTap: () {
-                        onSelected(district);
+                        onSelected(area.id);
                         Navigator.pop(context);
                       },
                     );

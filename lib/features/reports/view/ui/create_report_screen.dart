@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:found_it/core/constants/app_limits.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/core/widgets/app_button.dart';
+import 'package:found_it/core/widgets/app_text_field.dart';
+import 'package:found_it/core/widgets/error_banner.dart';
+import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
-import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
 import 'package:found_it/features/reports/view/ui/widgets/category_selector_field.dart';
 import 'package:found_it/features/reports/view/ui/widgets/date_picker_field.dart';
 import 'package:found_it/features/reports/view/ui/widgets/district_selector_field.dart';
@@ -22,9 +29,40 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   final _titleController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final lang = Localizations.localeOf(context).languageCode;
+        context.read<CreateReportCubit>().loadInitialData(lang: lang);
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _titleController.dispose();
     super.dispose();
+  }
+
+  void _onClose() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(AppRoutes.home);
+    }
+  }
+
+  String? _mapTitleError(ReportFieldError? error, AppLocalizations l10n) {
+    if (error == null) return null;
+    switch (error) {
+      case ReportFieldError.required:
+        return l10n.fieldRequired;
+      case ReportFieldError.tooShort:
+        return l10n.titleTooShort;
+      case ReportFieldError.tooLong:
+        return l10n.titleTooLong;
+    }
   }
 
   @override
@@ -35,16 +73,13 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     return BlocConsumer<CreateReportCubit, CreateReportState>(
       listener: (context, state) {
         if (state is CreateReportSuccess) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) =>
-                  ReportCreatedScreen(referenceId: state.referenceId),
-            ),
-          );
-        } else if (state is CreateReportFailure) {
+          context.go(AppRoutes.reportCreated, extra: state.referenceId);
+        } else if (state is CreateReportFormState &&
+            state.submitError != null &&
+            state.submitError!.isNotEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message),
+              content: Text(state.submitError!),
               backgroundColor: colors.error,
             ),
           );
@@ -53,22 +88,20 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
       builder: (context, state) {
         final cubit = context.read<CreateReportCubit>();
 
-        // Extract form data from state
-        final form = state is CreateReportFormUpdated
+        final form = state is CreateReportFormState
             ? state
-            : CreateReportFormUpdated(
+            : CreateReportFormState(
                 isLost: true,
                 title: '',
                 date: DateTime.now(),
-                photos: [],
-                rejectedPhotoIndices: {},
-                errors: {},
+                photos: const [],
+                rejectedPhotoIndices: const {},
+                errors: const {},
               );
 
-        final isSubmitting = state is CreateReportSubmitting;
+        final isSubmitting = form.isSubmitting;
         final errors = form.errors;
 
-        // Sync title controller without resetting cursor
         if (_titleController.text != form.title) {
           _titleController.value = _titleController.value.copyWith(
             text: form.title,
@@ -76,7 +109,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
           );
         }
 
-        final hasRejectedPhotos = form.rejectedPhotoIndices.isNotEmpty;
+        final hasRejectedPhotos =
+            form.hasInvalidFile || form.rejectedPhotoIndices.isNotEmpty;
         final hasValidationErrors = errors.isNotEmpty;
 
         return Scaffold(
@@ -87,7 +121,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
             scrolledUnderElevation: 0,
             leading: IconButton(
               icon: const Icon(Icons.close_rounded),
-              onPressed: () => Navigator.of(context).maybePop(),
+              onPressed: _onClose,
             ),
             titleSpacing: 0,
             title: Text(
@@ -105,46 +139,31 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 children: [
-                  // ── Top Error Banner (Fixed at top below AppBar - P25 & P26 in Figma) ──
-                  if (hasRejectedPhotos || hasValidationErrors)
+                  // ── Top Error Banner (Fixed at top below AppBar - P25 & P26) ──
+                  if (hasRejectedPhotos)
                     Padding(
-                      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 4.h),
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 14.w, vertical: 12.h),
-                        decoration: BoxDecoration(
-                          color: colors.error.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(
-                            color: colors.error.withOpacity(0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.error_outline_rounded,
-                              size: 18.r,
-                              color: colors.error,
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: Text(
-                                hasRejectedPhotos
-                                    ? l10n.invalidFileBanner
-                                    : l10n.requiredFieldsBanner,
-                                style: TextStyle(
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w500,
-                                  color: colors.error,
-                                  height: 1.3,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        8.h,
+                        16.w,
+                        4.h,
+                      ),
+                      child: ErrorBanner(
+                        title: l10n.invalidFileBannerTitle,
+                        message: l10n.invalidFileBannerMessage,
+                      ),
+                    )
+                  else if (hasValidationErrors)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        8.h,
+                        16.w,
+                        4.h,
+                      ),
+                      child: ErrorBanner(
+                        title: l10n.requiredFieldsBannerTitle,
+                        message: l10n.requiredFieldsBannerMessage,
                       ),
                     ),
 
@@ -152,7 +171,11 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                   Expanded(
                     child: SingleChildScrollView(
                       padding: EdgeInsetsDirectional.fromSTEB(
-                          16.w, 8.h, 16.w, 40.h),
+                        16.w,
+                        8.h,
+                        16.w,
+                        40.h,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -164,25 +187,36 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           SizedBox(height: 20.h),
 
                           // ── Item title ──────────────────────────────────────
-                          _TitleField(
+                          AppTextField(
+                            label: l10n.itemTitle,
+                            hint: l10n.itemTitleHint,
                             controller: _titleController,
-                            errorText: errors['title'],
+                            isRequired: true,
+                            maxLength: AppLimits.reportTitleMaxLength,
+                            showErrorIcon: true,
+                            errorText: _mapTitleError(errors['title'], l10n),
                             onChanged: cubit.updateTitle,
                           ),
                           SizedBox(height: 16.h),
 
                           // ── Category ────────────────────────────────────────
                           CategorySelectorField(
-                            selectedValue: form.category,
-                            errorText: errors['category'],
+                            categories: form.categories,
+                            selectedId: form.categoryId,
+                            errorText: errors.containsKey('category')
+                                ? l10n.categoryRequired
+                                : null,
                             onSelected: cubit.selectCategory,
                           ),
                           SizedBox(height: 16.h),
 
-                          // ── District ────────────────────────────────────────
+                          // ── District / Area ─────────────────────────────────
                           DistrictSelectorField(
-                            selectedValue: form.district,
-                            errorText: errors['district'],
+                            areas: form.areas,
+                            selectedId: form.areaId,
+                            errorText: errors.containsKey('district')
+                                ? l10n.districtRequired
+                                : null,
                             onSelected: cubit.selectDistrict,
                           ),
                           SizedBox(height: 16.h),
@@ -198,8 +232,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           PhotoUploaderWidget(
                             photos: form.photos,
                             rejectedIndices: form.rejectedPhotoIndices,
-                            errorText: errors['photos'],
-                            onAddPhoto: (source) => cubit.pickPhoto(source),
+                            errorText: errors.containsKey('photos')
+                                ? l10n.photosRequired
+                                : null,
+                            onAddPhoto: cubit.pickPhoto,
                             onRemovePhoto: cubit.removePhoto,
                           ),
                           SizedBox(height: 16.h),
@@ -208,42 +244,20 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                     ),
                   ),
 
-                  // ── Sticky submit button (Centered and responsive) ──────────
+                  // ── Sticky submit button ────────────────────────────────────
                   SafeArea(
                     top: false,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 12.h),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 52.h,
-                        child: FilledButton(
-                          onPressed: isSubmitting
-                              ? null
-                              : () => cubit.validateAndSubmit(
-                                    titleTooShort: l10n.titleTooShort,
-                                    titleTooLong: l10n.titleTooLong,
-                                    categoryRequired: l10n.categoryRequired,
-                                    districtRequired: l10n.districtRequired,
-                                    photosRequired: l10n.photosRequired,
-                                  ),
-                          child: isSubmitting
-                              ? SizedBox(
-                                  height: 20.r,
-                                  width: 20.r,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.r,
-                                    color: colors.onPrimary,
-                                  ),
-                                )
-                              : Text(
-                                  l10n.submitReport,
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                        ),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        12.h,
+                        16.w,
+                        12.h,
+                      ),
+                      child: AppButton(
+                        label: l10n.submitReport,
+                        isLoading: isSubmitting,
+                        onPressed: cubit.submit,
                       ),
                     ),
                   ),
@@ -253,90 +267,6 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
           ),
         );
       },
-    );
-  }
-}
-
-// ── Title field widget ──────────────────────────────────────────────────────
-
-class _TitleField extends StatelessWidget {
-  final TextEditingController controller;
-  final String? errorText;
-  final ValueChanged<String> onChanged;
-
-  const _TitleField({
-    required this.controller,
-    required this.onChanged,
-    this.errorText,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
-    final charCount = controller.text.length;
-    final hasError = errorText != null;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.itemTitle,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: hasError ? colors.error : colors.onSurface,
-              ),
-            ),
-            Text(
-              l10n.itemTitleCounter(charCount),
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
-                color: colors.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 6.h),
-        TextField(
-          controller: controller,
-          onChanged: onChanged,
-          maxLength: 50,
-          buildCounter: (_, {required currentLength, required isFocused, maxLength}) =>
-              null,
-          style: TextStyle(
-            fontSize: 15.sp,
-            color: colors.onSurface,
-          ),
-          decoration: InputDecoration(
-            hintText: l10n.itemTitleHint,
-            hintStyle: TextStyle(
-              fontSize: 15.sp,
-              color: colors.onSurfaceVariant,
-            ),
-          ),
-        ),
-        if (hasError) ...[
-          SizedBox(height: 4.h),
-          Row(
-            children: [
-              Icon(Icons.error_outline_rounded,
-                  size: 14.r, color: colors.error),
-              SizedBox(width: 4.w),
-              Expanded(
-                child: Text(
-                  errorText!,
-                  style: TextStyle(fontSize: 12.sp, color: colors.error),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ],
     );
   }
 }

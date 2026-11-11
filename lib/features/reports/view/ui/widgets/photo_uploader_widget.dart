@@ -33,7 +33,9 @@ class PhotoUploaderWidget extends StatelessWidget {
     final hasError = errorText != null;
 
     // Count of valid (non-rejected) photos
-    final validCount = photos.asMap().entries
+    final validCount = photos
+        .asMap()
+        .entries
         .where((e) => !rejectedIndices.contains(e.key))
         .length;
 
@@ -46,18 +48,31 @@ class PhotoUploaderWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              l10n.photos,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: hasError ? colors.error : colors.onSurface,
+            Text.rich(
+              TextSpan(
+                text: l10n.photos,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: hasError ? colors.error : colors.onSurface,
+                ),
+                children: [
+                  TextSpan(
+                    text: ' *',
+                    style: TextStyle(
+                      color: colors.error,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             Text(
               l10n.photoCounter(validCount),
               style: TextStyle(
-                  fontSize: 13.sp, color: colors.onSurfaceVariant),
+                fontSize: 13.sp,
+                color: colors.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -100,8 +115,11 @@ class PhotoUploaderWidget extends StatelessWidget {
           SizedBox(height: 4.h),
           Row(
             children: [
-              Icon(Icons.error_outline_rounded,
-                  size: 14.r, color: colors.error),
+              Icon(
+                Icons.error_outline_rounded,
+                size: 14.r,
+                color: colors.error,
+              ),
               SizedBox(width: 4.w),
               Text(
                 errorText!,
@@ -125,22 +143,34 @@ class PhotoUploaderWidget extends StatelessWidget {
           children: [
             SizedBox(height: 4.h),
             ListTile(
-              leading: Icon(Icons.camera_alt_outlined,
-                  color: colors.onSurface),
-              title: Text(l10n.takePhoto,
-                  style: TextStyle(
-                      fontSize: 15.sp, color: colors.onSurface)),
+              leading: Icon(
+                Icons.camera_alt_outlined,
+                color: colors.onSurface,
+              ),
+              title: Text(
+                l10n.takePhoto,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: colors.onSurface,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 onAddPhoto(ImageSource.camera);
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library_outlined,
-                  color: colors.onSurface),
-              title: Text(l10n.chooseFromGallery,
-                  style: TextStyle(
-                      fontSize: 15.sp, color: colors.onSurface)),
+              leading: Icon(
+                Icons.photo_library_outlined,
+                color: colors.onSurface,
+              ),
+              title: Text(
+                l10n.chooseFromGallery,
+                style: TextStyle(
+                  fontSize: 15.sp,
+                  color: colors.onSurface,
+                ),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 onAddPhoto(ImageSource.gallery);
@@ -186,22 +216,26 @@ class _PhotoTile extends StatelessWidget {
                     width: size,
                     height: size,
                     decoration: BoxDecoration(
-                      color: colors.error.withOpacity(0.1),
+                      color: colors.error.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(color: colors.error, width: 1.5),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.error_outline_rounded,
-                            color: colors.error, size: 22.r),
+                        Icon(
+                          Icons.error_outline_rounded,
+                          color: colors.error,
+                          size: 22.r,
+                        ),
                         SizedBox(height: 4.h),
                         Text(
                           l10n.photoRejected,
                           style: TextStyle(
-                              fontSize: 11.sp,
-                              fontWeight: FontWeight.w600,
-                              color: colors.error),
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w600,
+                            color: colors.error,
+                          ),
                         ),
                       ],
                     ),
@@ -212,12 +246,14 @@ class _PhotoTile extends StatelessWidget {
                         width: size,
                         height: size,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
+                        errorBuilder: (_, _, _) => Container(
                           width: size,
                           height: size,
                           color: colors.surfaceContainerHighest,
-                          child: Icon(Icons.broken_image_rounded,
-                              color: colors.onSurfaceVariant),
+                          child: Icon(
+                            Icons.broken_image_rounded,
+                            color: colors.onSurfaceVariant,
+                          ),
                         ),
                       )
                     : Image.file(
@@ -225,12 +261,14 @@ class _PhotoTile extends StatelessWidget {
                         width: size,
                         height: size,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
+                        errorBuilder: (_, _, _) => Container(
                           width: size,
                           height: size,
                           color: colors.surfaceContainerHighest,
-                          child: Icon(Icons.broken_image_rounded,
-                              color: colors.onSurfaceVariant),
+                          child: Icon(
+                            Icons.broken_image_rounded,
+                            color: colors.onSurfaceVariant,
+                          ),
                         ),
                       ),
           ),
@@ -244,12 +282,15 @@ class _PhotoTile extends StatelessWidget {
               child: Container(
                 width: 20.r,
                 height: 20.r,
-                decoration: const BoxDecoration(
-                  color: Colors.black87,
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.close_rounded,
-                    color: Colors.white, size: 13.r),
+                child: Icon(
+                  Icons.close_rounded,
+                  color: colors.onSurface,
+                  size: 13.r,
+                ),
               ),
             ),
           ),
@@ -277,15 +318,19 @@ class _AddTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.camera_alt_outlined,
-                color: colors.onSurfaceVariant, size: 24.r),
+            Icon(
+              Icons.camera_alt_outlined,
+              color: colors.onSurfaceVariant,
+              size: 24.r,
+            ),
             SizedBox(height: 4.h),
             Text(
               l10n.addPhoto,
               style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: colors.onSurface),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w500,
+                color: colors.onSurface,
+              ),
             ),
           ],
         ),
@@ -299,8 +344,11 @@ class DottedBorderContainer extends StatelessWidget {
   final double size;
   final Widget child;
 
-  const DottedBorderContainer(
-      {super.key, required this.size, required this.child});
+  const DottedBorderContainer({
+    super.key,
+    required this.size,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -335,8 +383,12 @@ class _DashedBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-          Offset.zero & size, const Radius.circular(radius)));
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          Offset.zero & size,
+          const Radius.circular(radius),
+        ),
+      );
 
     final dashPath = _dashPath(path, dashWidth, dashSpace);
     canvas.drawPath(dashPath, paint);

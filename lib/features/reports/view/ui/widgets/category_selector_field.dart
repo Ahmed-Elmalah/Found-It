@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 
 /// A tappable field that opens a bottom-sheet list for picking a [category].
 class CategorySelectorField extends StatelessWidget {
-  final String? selectedValue;
+  final List<CategoryEntity> categories;
+  final String? selectedId;
   final String? errorText;
   final ValueChanged<String> onSelected;
 
-  static const List<String> _categories = [
-    'Wallet',
-    'Phone',
-    'Keys',
-    'Bag',
-    'Electronics',
-    'Documents',
-    'Jewelry',
-    'Clothing',
-    'Other',
-  ];
-
   const CategorySelectorField({
     super.key,
-    required this.selectedValue,
+    required this.categories,
+    required this.selectedId,
     required this.onSelected,
     this.errorText,
   });
@@ -32,17 +23,34 @@ class CategorySelectorField extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
     final hasError = errorText != null;
+
+    final selectedCategory = categories
+        .where((c) => c.id == selectedId)
+        .firstOrNull;
+    final displayText = selectedCategory?.localizedName(locale) ?? l10n.selectCategory;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.category,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: hasError ? colors.error : colors.onSurface,
+        Text.rich(
+          TextSpan(
+            text: l10n.category,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: hasError ? colors.error : colors.onSurface,
+            ),
+            children: [
+              TextSpan(
+                text: ' *',
+                style: TextStyle(
+                  color: colors.error,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 6.h),
@@ -71,10 +79,10 @@ class CategorySelectorField extends StatelessWidget {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Text(
-                    selectedValue ?? l10n.selectCategory,
+                    displayText,
                     style: TextStyle(
                       fontSize: 15.sp,
-                      color: selectedValue != null
+                      color: selectedCategory != null
                           ? colors.onSurface
                           : colors.onSurfaceVariant,
                     ),
@@ -93,8 +101,11 @@ class CategorySelectorField extends StatelessWidget {
           SizedBox(height: 4.h),
           Row(
             children: [
-              Icon(Icons.error_outline_rounded,
-                  size: 14.r, color: colors.error),
+              Icon(
+                Icons.error_outline_rounded,
+                size: 14.r,
+                color: colors.error,
+              ),
               SizedBox(width: 4.w),
               Text(
                 errorText!,
@@ -110,6 +121,7 @@ class CategorySelectorField extends StatelessWidget {
   void _showSheet(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
 
     showModalBottomSheet<void>(
       context: context,
@@ -124,7 +136,7 @@ class CategorySelectorField extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 12.h),
+                padding: EdgeInsetsDirectional.fromSTEB(20.w, 4.h, 20.w, 12.h),
                 child: Text(
                   l10n.category,
                   style: TextStyle(
@@ -138,25 +150,31 @@ class CategorySelectorField extends StatelessWidget {
               Flexible(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  itemCount: _categories.length,
-                  separatorBuilder: (_, __) => const Divider(height: 1, indent: 16, endIndent: 16),
+                  itemCount: categories.length,
+                  separatorBuilder: (_, _) =>
+                      const Divider(height: 1, indent: 16, endIndent: 16),
                   itemBuilder: (ctx, index) {
-                    final cat = _categories[index];
-                    final isSelected = selectedValue == cat;
+                    final cat = categories[index];
+                    final isSelected = selectedId == cat.id;
                     return ListTile(
                       title: Text(
-                        cat,
+                        cat.localizedName(locale),
                         style: TextStyle(
                           fontSize: 15.sp,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                          fontWeight:
+                              isSelected ? FontWeight.w600 : FontWeight.w400,
                           color: isSelected ? colors.primary : colors.onSurface,
                         ),
                       ),
                       trailing: isSelected
-                          ? Icon(Icons.check_rounded, color: colors.primary, size: 20.r)
+                          ? Icon(
+                              Icons.check_rounded,
+                              color: colors.primary,
+                              size: 20.r,
+                            )
                           : null,
                       onTap: () {
-                        onSelected(cat);
+                        onSelected(cat.id);
                         Navigator.pop(context);
                       },
                     );

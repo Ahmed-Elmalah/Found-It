@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/core/widgets/app_button.dart';
 
 class ReportCreatedScreen extends StatelessWidget {
   /// The reference ID returned from the backend, e.g. "#RPT-8092".
@@ -27,16 +30,18 @@ class ReportCreatedScreen extends StatelessWidget {
                   SizedBox(height: 70.h),
 
                   // ── Success icon ──────────────────────────────────────────
+                  // NOTE: Needs AppColors.success from Youssef (light ≈ #DDF5E7 bg, dark ≈ #113020 bg).
+                  // Using theme colorScheme to avoid hardcoded Color values per review.
                   Container(
                     width: 88.r,
                     height: 88.r,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF10B981), // emerald green — fixed in both light/dark
+                    decoration: BoxDecoration(
+                      color: colors.primaryContainer,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.check_rounded,
-                      color: Colors.white,
+                      color: colors.onPrimaryContainer,
                       size: 48.r,
                     ),
                   ),
@@ -55,14 +60,18 @@ class ReportCreatedScreen extends StatelessWidget {
                   SizedBox(height: 10.h),
 
                   // ── Reference ID ──────────────────────────────────────────
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
+                  Text.rich(
+                    TextSpan(
                       style: TextStyle(
-                          fontSize: 15.sp, color: colors.onSurfaceVariant),
+                        fontSize: 15.sp,
+                        color: colors.onSurfaceVariant,
+                      ),
                       children: [
                         TextSpan(
-                          text: l10n.reportCreatedId(referenceId).split(referenceId).first,
+                          text: l10n
+                              .reportCreatedId(referenceId)
+                              .split(referenceId)
+                              .first,
                         ),
                         TextSpan(
                           text: referenceId,
@@ -73,6 +82,7 @@ class ReportCreatedScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8.h),
 
@@ -89,41 +99,23 @@ class ReportCreatedScreen extends StatelessWidget {
                   const Spacer(),
 
                   // ── View my report button ─────────────────────────────────
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52.h,
-                    child: FilledButton(
-                      onPressed: () {
-                        // Navigates or pops back
-                        Navigator.of(context).maybePop();
-                      },
-                      child: Text(
-                        l10n.viewMyReport,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                  AppButton(
+                    label: l10n.viewMyReport,
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go(AppRoutes.home);
+                      }
+                    },
                   ),
                   SizedBox(height: 12.h),
 
                   // ── Back to home button ───────────────────────────────────
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52.h,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.of(context).maybePop();
-                      },
-                      child: Text(
-                        l10n.backToHome,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                  AppButton(
+                    label: l10n.backToHome,
+                    variant: AppButtonVariant.outlined,
+                    onPressed: () => context.go(AppRoutes.home),
                   ),
                   SizedBox(height: 24.h),
                 ],

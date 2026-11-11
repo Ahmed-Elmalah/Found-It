@@ -1,62 +1,120 @@
-part of 'create_report_cubit.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:equatable/equatable.dart';
 
-@immutable
-sealed class CreateReportState {}
+import 'package:found_it/features/reports/domain/entities/area_entity.dart';
+import 'package:found_it/features/reports/domain/entities/category_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
 
-final class CreateReportInitial extends CreateReportState {}
+sealed class CreateReportState extends Equatable {
+  const CreateReportState();
 
-final class CreateReportFormUpdated extends CreateReportState {
+  @override
+  List<Object?> get props => [];
+}
+
+class CreateReportInitial extends CreateReportState {
+  const CreateReportInitial();
+}
+
+class CreateReportFormState extends CreateReportState {
   final bool isLost;
   final String title;
-  final String? category;
-  final String? district;
+  final String? categoryId;
+  final String? areaId;
+  final String? cityId;
   final DateTime date;
   final List<XFile> photos;
   final Set<int> rejectedPhotoIndices;
-  final Map<String, String?> errors;
+  final Map<String, ReportFieldError> errors;
+  final List<CategoryEntity> categories;
+  final List<AreaEntity> areas;
+  final bool isLoadingData;
+  final bool isSubmitting;
+  final String? submitError;
+  final bool hasInvalidFile;
 
-  CreateReportFormUpdated({
+  const CreateReportFormState({
     required this.isLost,
     required this.title,
-    this.category,
-    this.district,
+    this.categoryId,
+    this.areaId,
+    this.cityId,
     required this.date,
     required this.photos,
     required this.rejectedPhotoIndices,
     required this.errors,
+    this.categories = const [],
+    this.areas = const [],
+    this.isLoadingData = false,
+    this.isSubmitting = false,
+    this.submitError,
+    this.hasInvalidFile = false,
   });
 
-  CreateReportFormUpdated copyWith({
+  CreateReportFormState copyWith({
     bool? isLost,
     String? title,
-    String? category,
-    String? district,
+    String? categoryId,
+    bool clearCategory = false,
+    String? areaId,
+    bool clearArea = false,
+    String? cityId,
     DateTime? date,
     List<XFile>? photos,
     Set<int>? rejectedPhotoIndices,
-    Map<String, String?>? errors,
+    Map<String, ReportFieldError>? errors,
+    List<CategoryEntity>? categories,
+    List<AreaEntity>? areas,
+    bool? isLoadingData,
+    bool? isSubmitting,
+    String? submitError,
+    bool clearSubmitError = false,
+    bool? hasInvalidFile,
   }) {
-    return CreateReportFormUpdated(
+    return CreateReportFormState(
       isLost: isLost ?? this.isLost,
       title: title ?? this.title,
-      category: category ?? this.category,
-      district: district ?? this.district,
+      categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+      areaId: clearArea ? null : (areaId ?? this.areaId),
+      cityId: cityId ?? this.cityId,
       date: date ?? this.date,
       photos: photos ?? this.photos,
       rejectedPhotoIndices: rejectedPhotoIndices ?? this.rejectedPhotoIndices,
       errors: errors ?? this.errors,
+      categories: categories ?? this.categories,
+      areas: areas ?? this.areas,
+      isLoadingData: isLoadingData ?? this.isLoadingData,
+      isSubmitting: isSubmitting ?? this.isSubmitting,
+      submitError: clearSubmitError ? null : (submitError ?? this.submitError),
+      hasInvalidFile: hasInvalidFile ?? this.hasInvalidFile,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        isLost,
+        title,
+        categoryId,
+        areaId,
+        cityId,
+        date,
+        photos,
+        rejectedPhotoIndices,
+        errors,
+        categories,
+        areas,
+        isLoadingData,
+        isSubmitting,
+        submitError,
+        hasInvalidFile,
+      ];
 }
 
-final class CreateReportSubmitting extends CreateReportState {}
-
-final class CreateReportSuccess extends CreateReportState {
+class CreateReportSuccess extends CreateReportState {
   final String referenceId;
-  CreateReportSuccess({required this.referenceId});
-}
 
-final class CreateReportFailure extends CreateReportState {
-  final String message;
-  CreateReportFailure({required this.message});
+  const CreateReportSuccess(this.referenceId);
+
+  @override
+  List<Object?> get props => [referenceId];
 }
