@@ -72,7 +72,10 @@ class VerifyEmailScreen extends StatelessWidget {
                         horizontal: 24.w,
                       ),
                       child: Text(
-                        l10n.verifyEmailBody(email),
+                        // The email is wrapped in Unicode isolates (LRI \u2066 ... PDI \u2069)
+                        // so it stays one left-to-right piece inside the Arabic sentence
+                        // and the period stays at the end.
+                        l10n.verifyEmailBody('\u2066$email\u2069'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15.sp,
