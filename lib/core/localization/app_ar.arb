@@ -35,5 +35,26 @@
   "connectionErrorTitle": "خطأ في الاتصال:",
   "connectionErrorMessage": "تحقق من اتصالك وحاول مرة أخرى.",
   "genericErrorTitle": "حدث خطأ:",
-  "genericErrorMessage": "حاول مرة أخرى."
+  "genericErrorMessage": "حاول مرة أخرى.",
+
+  "signUpTitle": "إنشاء حساب",
+  "fullNameLabel": "الاسم الكامل",
+  "fullNameHint": "اسمك الكامل",
+  "phoneLabel": "رقم الهاتف",
+  "phoneHint": "10 1234 5678",
+  "addressLabel": "العنوان",
+  "addressHint": "اختياري",
+  "passwordHelper": "8 أحرف على الأقل",
+  "createAccountButton": "إنشاء حساب",
+  "haveAccount": "لديك حساب بالفعل؟",
+  "logInLink": "تسجيل الدخول",
+
+  "nameTooShort": "يجب أن يكون الاسم حرفين على الأقل",
+  "invalidPhone": "أدخل رقم موبايل مصري صحيح",
+  "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+
+  "registrationFailedTitle": "فشل التسجيل:",
+  "emailInUseMessage": "يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.",
+  "weakPasswordTitle": "كلمة مرور ضعيفة:",
+  "weakPasswordMessage": "اختر كلمة مرور أقوى."
 }

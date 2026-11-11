@@ -21,4 +21,29 @@ abstract final class Validators {
   /// At least [AppLimits.passwordMinLength] characters (used on sign up).
   static bool isValidPassword(String? value) =>
       value != null && value.length >= AppLimits.passwordMinLength;
+
+  /// At least [AppLimits.fullNameMinLength] characters (spaces ignored).
+  static bool isValidFullName(String? value) =>
+      value != null && value.trim().length >= AppLimits.fullNameMinLength;
+
+  // Egyptian mobile after the country code: 10, 11, 12 or 15 + 8 digits.
+  static final RegExp _egyptMobile = RegExp(r'^1[0125]\d{8}$');
+
+  /// Egyptian mobile number typed in the field after the fixed "+20":
+  /// "10 1234 5678", "01012345678", "+201012345678" are all valid.
+  static bool isValidEgyptianPhone(String? value) =>
+      normalizeEgyptianPhone(value) != null;
+
+  /// The number in one fixed format, `+201012345678`, or null if invalid.
+  /// This is the value saved in the database.
+  static String? normalizeEgyptianPhone(String? value) {
+    if (value == null) return null;
+    var digits = value.replaceAll(RegExp(r'\D'), '');
+    if (digits.length == 12 && digits.startsWith('20')) {
+      digits = digits.substring(2);
+    } else if (digits.length == 11 && digits.startsWith('0')) {
+      digits = digits.substring(1);
+    }
+    return _egyptMobile.hasMatch(digits) ? '+20$digits' : null;
+  }
 }

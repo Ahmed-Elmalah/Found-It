@@ -102,4 +102,59 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get genericErrorMessage => 'حاول مرة أخرى.';
+
+  @override
+  String get signUpTitle => 'إنشاء حساب';
+
+  @override
+  String get fullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get fullNameHint => 'اسمك الكامل';
+
+  @override
+  String get phoneLabel => 'رقم الهاتف';
+
+  @override
+  String get phoneHint => '10 1234 5678';
+
+  @override
+  String get addressLabel => 'العنوان';
+
+  @override
+  String get addressHint => 'اختياري';
+
+  @override
+  String get passwordHelper => '8 أحرف على الأقل';
+
+  @override
+  String get createAccountButton => 'إنشاء حساب';
+
+  @override
+  String get haveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get logInLink => 'تسجيل الدخول';
+
+  @override
+  String get nameTooShort => 'يجب أن يكون الاسم حرفين على الأقل';
+
+  @override
+  String get invalidPhone => 'أدخل رقم موبايل مصري صحيح';
+
+  @override
+  String get passwordTooShort => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل';
+
+  @override
+  String get registrationFailedTitle => 'فشل التسجيل:';
+
+  @override
+  String get emailInUseMessage =>
+      'يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.';
+
+  @override
+  String get weakPasswordTitle => 'كلمة مرور ضعيفة:';
+
+  @override
+  String get weakPasswordMessage => 'اختر كلمة مرور أقوى.';
 }

@@ -35,5 +35,26 @@
   "connectionErrorTitle": "Connection error:",
   "connectionErrorMessage": "Check your connection and try again.",
   "genericErrorTitle": "Something went wrong:",
-  "genericErrorMessage": "Please try again."
+  "genericErrorMessage": "Please try again.",
+
+  "signUpTitle": "Create account",
+  "fullNameLabel": "Full name",
+  "fullNameHint": "Your full name",
+  "phoneLabel": "Phone number",
+  "phoneHint": "10 1234 5678",
+  "addressLabel": "Address",
+  "addressHint": "Optional",
+  "passwordHelper": "At least 8 characters",
+  "createAccountButton": "Create account",
+  "haveAccount": "Already have an account?",
+  "logInLink": "Log in",
+
+  "nameTooShort": "Name must be at least 2 characters",
+  "invalidPhone": "Enter a valid Egyptian mobile number",
+  "passwordTooShort": "Password must be at least 8 characters",
+
+  "registrationFailedTitle": "Registration Failed:",
+  "emailInUseMessage": "An account with this email address already exists.",
+  "weakPasswordTitle": "Weak password:",
+  "weakPasswordMessage": "Choose a stronger password."
 }
