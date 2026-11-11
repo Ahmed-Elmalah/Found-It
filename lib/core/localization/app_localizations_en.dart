@@ -102,4 +102,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genericErrorMessage => 'Please try again.';
+
+  @override
+  String get signUpTitle => 'Create account';
+
+  @override
+  String get fullNameLabel => 'Full name';
+
+  @override
+  String get fullNameHint => 'Your full name';
+
+  @override
+  String get phoneLabel => 'Phone number';
+
+  @override
+  String get phoneHint => '10 1234 5678';
+
+  @override
+  String get addressLabel => 'Address';
+
+  @override
+  String get addressHint => 'Optional';
+
+  @override
+  String get passwordHelper => 'At least 8 characters';
+
+  @override
+  String get createAccountButton => 'Create account';
+
+  @override
+  String get haveAccount => 'Already have an account?';
+
+  @override
+  String get logInLink => 'Log in';
+
+  @override
+  String get nameTooShort => 'Name must be at least 2 characters';
+
+  @override
+  String get invalidPhone => 'Enter a valid Egyptian mobile number';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get registrationFailedTitle => 'Registration Failed:';
+
+  @override
+  String get emailInUseMessage =>
+      'An account with this email address already exists.';
+
+  @override
+  String get weakPasswordTitle => 'Weak password:';
+
+  @override
+  String get weakPasswordMessage => 'Choose a stronger password.';
 }

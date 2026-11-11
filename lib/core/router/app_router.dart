@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
+import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -37,10 +39,17 @@ final GoRouter appRouter = GoRouter(
         child: const LoginScreen(),
       ),
     ),
-    // TEMP: replaced by the real Sign up screen (Ahmed, stage 6).
     GoRoute(
       path: AppRoutes.signUp,
-      builder: (context, state) => const _ComingSoon('Sign up'),
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<SignUpCubit>(),
+        child: const SignUpScreen(),
+      ),
+    ),
+    // TEMP: replaced by the real Choose City screen (Youssef, story #4).
+    GoRoute(
+      path: AppRoutes.city,
+      builder: (context, state) => const _ComingSoon('City'),
     ),
     // TEMP: replaced by the real Forgot password screen (Ahmed, stage 7).
     GoRoute(

@@ -193,4 +193,42 @@ void main() {
       },
     );
   }
+
+  testWidgets('forceLtr keeps phone numbers left-to-right in Arabic', (
+    tester,
+  ) async {
+    final controller = TextEditingController(text: '10 1234 5678');
+    addTearDown(controller.dispose);
+    await pumpTestApp(
+      tester,
+      AppTextField(
+        label: 'رقم الهاتف',
+        prefixIcon: Icons.phone_iphone,
+        prefixText: '+20',
+        controller: controller,
+        forceLtr: true,
+      ),
+      rtl: true,
+    );
+
+    final editable = tester.widget<EditableText>(find.byType(EditableText));
+    expect(editable.textDirection, TextDirection.ltr);
+    expect(editable.textAlign, TextAlign.right); // stays on the icon side
+    final prefix = tester.widget<Text>(find.text('+20'));
+    expect(prefix.textDirection, TextDirection.ltr);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('without forceLtr the text follows the app direction', (
+    tester,
+  ) async {
+    await pumpTestApp(tester, const AppTextField(label: 'الاسم'), rtl: true);
+    final editable = tester.widget<EditableText>(find.byType(EditableText));
+    // null = inherited from the screen (Arabic -> right-to-left)
+    expect(editable.textDirection, isNull);
+    expect(
+      Directionality.of(tester.element(find.byType(EditableText))),
+      TextDirection.rtl,
+    );
+  });
 }

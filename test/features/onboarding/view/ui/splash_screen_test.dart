@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
+import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
 import 'package:found_it/features/onboarding/domain/is_first_launch_use_case.dart';
 import 'package:found_it/features/onboarding/domain/onboarding_repository.dart';
@@ -25,6 +26,10 @@ class _FakeOnboardingRepo implements OnboardingRepository {
 }
 
 class _FakeAuthRepo implements AuthRepository {
+  // Sign up is not used by this test.
+  @override
+  Future<void> signUp(SignUpParams params) => throw UnimplementedError();
+
   _FakeAuthRepo(this.session);
   final bool session;
 
