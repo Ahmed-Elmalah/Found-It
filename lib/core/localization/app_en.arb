@@ -14,5 +14,26 @@
   "onboardingReportTitle": "Report what you found",
   "onboardingReportBody": "Publish a report with photos and details so the owner can reach you.",
   "onboardingChatTitle": "Chat and get it back",
-  "onboardingChatBody": "Message the other side inside the app and arrange a safe handover."
+  "onboardingChatBody": "Message the other side inside the app and arrange a safe handover.",
+
+  "fieldRequired": "Required",
+  "invalidEmail": "Enter a valid email",
+
+  "loginTitle": "Welcome back",
+  "loginSubtitle": "Log in to continue.",
+  "emailLabel": "Email",
+  "emailHint": "name@example.com",
+  "passwordLabel": "Password",
+  "passwordHint": "Enter your password",
+  "forgotPassword": "Forgot password?",
+  "loginButton": "Log in",
+  "noAccount": "Don’t have an account?",
+  "signUpLink": "Sign up",
+
+  "invalidCredentialsTitle": "Invalid Credentials:",
+  "invalidCredentialsMessage": "Please check your email and password.",
+  "connectionErrorTitle": "Connection error:",
+  "connectionErrorMessage": "Check your connection and try again.",
+  "genericErrorTitle": "Something went wrong:",
+  "genericErrorMessage": "Please try again."
 }

@@ -47,4 +47,59 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get onboardingChatBody =>
       'راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.';
+
+  @override
+  String get fieldRequired => 'مطلوب';
+
+  @override
+  String get invalidEmail => 'أدخل بريدًا إلكترونيًا صحيحًا';
+
+  @override
+  String get loginTitle => 'مرحبًا بعودتك';
+
+  @override
+  String get loginSubtitle => 'سجّل الدخول للمتابعة.';
+
+  @override
+  String get emailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get passwordLabel => 'كلمة المرور';
+
+  @override
+  String get passwordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get loginButton => 'تسجيل الدخول';
+
+  @override
+  String get noAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signUpLink => 'إنشاء حساب';
+
+  @override
+  String get invalidCredentialsTitle => 'بيانات غير صحيحة:';
+
+  @override
+  String get invalidCredentialsMessage =>
+      'تأكد من البريد الإلكتروني وكلمة المرور.';
+
+  @override
+  String get connectionErrorTitle => 'خطأ في الاتصال:';
+
+  @override
+  String get connectionErrorMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get genericErrorTitle => 'حدث خطأ:';
+
+  @override
+  String get genericErrorMessage => 'حاول مرة أخرى.';
 }
