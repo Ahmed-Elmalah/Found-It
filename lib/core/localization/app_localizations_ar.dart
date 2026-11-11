@@ -10,7 +10,43 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get appName => 'FOUND IT';
+
+  @override
+  String get appTagline => 'فقدت شيئًا؟ دعنا نُعيده إليك.';
+
+  @override
   String get chooseCityTitle => 'اختر مدينتك';
+
+  @override
+  String get onboardingSkip => 'تخطي';
+
+  @override
+  String get onboardingNext => 'التالي';
+
+  @override
+  String get onboardingGetStarted => 'ابدأ الآن';
+
+  @override
+  String get onboardingFindTitle => 'ابحث عمّا فقدته';
+
+  @override
+  String get onboardingFindBody =>
+      'ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.';
+
+  @override
+  String get onboardingReportTitle => 'أبلِغ عمّا وجدته';
+
+  @override
+  String get onboardingReportBody =>
+      'انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.';
+
+  @override
+  String get onboardingChatTitle => 'تواصَل واستعِده';
+
+  @override
+  String get onboardingChatBody =>
+      'راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.';
 
   @override
   String get createReport => 'إنشاء بلاغ';
@@ -22,10 +58,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get lost => 'مفقود';
 
   @override
-  String get found => 'موجود';
+  String get found => 'عُثر عليه';
 
   @override
-  String get itemTitle => 'عنوان الغرضة *';
+  String get itemTitle => 'اسم الغرض';
 
   @override
   String get itemTitleHint => 'مثال: محفظة جلدية سوداء';
@@ -36,13 +72,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get category => 'الفئة *';
+  String get category => 'الفئة';
 
   @override
   String get selectCategory => 'اختر فئة';
 
   @override
-  String get locationDistrict => 'الموقع (المنطقة) *';
+  String get locationDistrict => 'الموقع (المنطقة)';
 
   @override
   String get selectDistrict => 'اختر المنطقة';
@@ -51,7 +87,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get date => 'التاريخ';
 
   @override
-  String get photos => 'الصور *';
+  String get photos => 'الصور';
 
   @override
   String photoCounter(int count) {
@@ -92,12 +128,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidFileSize => 'يجب أن يكون حجم الملف أقل من 10 ميجا';
 
   @override
-  String get invalidFileBanner =>
-      'ملف غير صالح: يرجى رفع صور بصيغة JPG أو PNG وحجم أقل من 10 ميجا.';
+  String get requiredFieldsBannerTitle => 'حقول مطلوبة:';
 
   @override
-  String get requiredFieldsBanner =>
-      'حقول مطلوبة: العنوان والفئة والموقع مطلوبة.';
+  String get requiredFieldsBannerMessage => 'العنوان والفئة والموقع مطلوبة.';
+
+  @override
+  String get invalidFileBannerTitle => 'ملف غير صالح:';
+
+  @override
+  String get invalidFileBannerMessage =>
+      'يرجى رفع صور بصيغة JPG أو PNG وحجم أقل من 10 ميجا.';
 
   @override
   String get photoRejected => 'مرفوض';

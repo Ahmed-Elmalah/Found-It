@@ -98,11 +98,77 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'FOUND IT'**
+  String get appName;
+
+  /// No description provided for @appTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost something? Let’s bring it back.'**
+  String get appTagline;
+
   /// No description provided for @chooseCityTitle.
   ///
   /// In en, this message translates to:
   /// **'Choose your city'**
   String get chooseCityTitle;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboardingGetStarted;
+
+  /// No description provided for @onboardingFindTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find what you lost'**
+  String get onboardingFindTitle;
+
+  /// No description provided for @onboardingFindBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search reports in your city and filter by category and date.'**
+  String get onboardingFindBody;
+
+  /// No description provided for @onboardingReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report what you found'**
+  String get onboardingReportTitle;
+
+  /// No description provided for @onboardingReportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish a report with photos and details so the owner can reach you.'**
+  String get onboardingReportBody;
+
+  /// No description provided for @onboardingChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat and get it back'**
+  String get onboardingChatTitle;
+
+  /// No description provided for @onboardingChatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Message the other side inside the app and arrange a safe handover.'**
+  String get onboardingChatBody;
 
   /// No description provided for @createReport.
   ///
@@ -131,7 +197,7 @@ abstract class AppLocalizations {
   /// No description provided for @itemTitle.
   ///
   /// In en, this message translates to:
-  /// **'Item title *'**
+  /// **'Item title'**
   String get itemTitle;
 
   /// No description provided for @itemTitleHint.
@@ -149,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @category.
   ///
   /// In en, this message translates to:
-  /// **'Category *'**
+  /// **'Category'**
   String get category;
 
   /// No description provided for @selectCategory.
@@ -161,7 +227,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationDistrict.
   ///
   /// In en, this message translates to:
-  /// **'Location (district) *'**
+  /// **'Location (district)'**
   String get locationDistrict;
 
   /// No description provided for @selectDistrict.
@@ -179,7 +245,7 @@ abstract class AppLocalizations {
   /// No description provided for @photos.
   ///
   /// In en, this message translates to:
-  /// **'Photos *'**
+  /// **'Photos'**
   String get photos;
 
   /// No description provided for @photoCounter.
@@ -254,17 +320,29 @@ abstract class AppLocalizations {
   /// **'File size must be under 10 MB'**
   String get invalidFileSize;
 
-  /// No description provided for @invalidFileBanner.
+  /// No description provided for @requiredFieldsBannerTitle.
   ///
   /// In en, this message translates to:
-  /// **'Invalid File: Please upload image files (JPG/PNG) under 10 MB.'**
-  String get invalidFileBanner;
+  /// **'Required Fields:'**
+  String get requiredFieldsBannerTitle;
 
-  /// No description provided for @requiredFieldsBanner.
+  /// No description provided for @requiredFieldsBannerMessage.
   ///
   /// In en, this message translates to:
-  /// **'Required Fields: Title, category, and location are required.'**
-  String get requiredFieldsBanner;
+  /// **'Title, category, and location are required.'**
+  String get requiredFieldsBannerMessage;
+
+  /// No description provided for @invalidFileBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid File:'**
+  String get invalidFileBannerTitle;
+
+  /// No description provided for @invalidFileBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload image files (JPG/PNG) under 10 MB.'**
+  String get invalidFileBannerMessage;
 
   /// No description provided for @photoRejected.
   ///

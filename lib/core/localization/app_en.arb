@@ -1,14 +1,27 @@
 {
   "@@locale": "en",
 
+  "appName": "FOUND IT",
+  "appTagline": "Lost something? Let’s bring it back.",
+
   "chooseCityTitle": "Choose your city",
+
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingGetStarted": "Get started",
+  "onboardingFindTitle": "Find what you lost",
+  "onboardingFindBody": "Search reports in your city and filter by category and date.",
+  "onboardingReportTitle": "Report what you found",
+  "onboardingReportBody": "Publish a report with photos and details so the owner can reach you.",
+  "onboardingChatTitle": "Chat and get it back",
+  "onboardingChatBody": "Message the other side inside the app and arrange a safe handover.",
 
   "createReport": "Create report",
   "reportType": "Report type",
   "lost": "Lost",
   "found": "Found",
 
-  "itemTitle": "Item title *",
+  "itemTitle": "Item title",
   "itemTitleHint": "e.g., Black leather wallet",
   "itemTitleCounter": "{count}/50",
   "@itemTitleCounter": {
@@ -17,15 +30,15 @@
     }
   },
 
-  "category": "Category *",
+  "category": "Category",
   "selectCategory": "Select category",
 
-  "locationDistrict": "Location (district) *",
+  "locationDistrict": "Location (district)",
   "selectDistrict": "Select district",
 
   "date": "Date",
 
-  "photos": "Photos *",
+  "photos": "Photos",
   "photoCounter": "{count}/4",
   "@photoCounter": {
     "placeholders": {
@@ -46,8 +59,10 @@
   "invalidFileType": "Only JPG and PNG files are allowed",
   "invalidFileSize": "File size must be under 10 MB",
 
-  "invalidFileBanner": "Invalid File: Please upload image files (JPG/PNG) under 10 MB.",
-  "requiredFieldsBanner": "Required Fields: Title, category, and location are required.",
+  "requiredFieldsBannerTitle": "Required Fields:",
+  "requiredFieldsBannerMessage": "Title, category, and location are required.",
+  "invalidFileBannerTitle": "Invalid File:",
+  "invalidFileBannerMessage": "Please upload image files (JPG/PNG) under 10 MB.",
 
   "photoRejected": "Rejected",
   "takePhoto": "Take a photo",

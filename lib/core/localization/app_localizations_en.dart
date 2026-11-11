@@ -10,7 +10,43 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get appName => 'FOUND IT';
+
+  @override
+  String get appTagline => 'Lost something? Let’s bring it back.';
+
+  @override
   String get chooseCityTitle => 'Choose your city';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingGetStarted => 'Get started';
+
+  @override
+  String get onboardingFindTitle => 'Find what you lost';
+
+  @override
+  String get onboardingFindBody =>
+      'Search reports in your city and filter by category and date.';
+
+  @override
+  String get onboardingReportTitle => 'Report what you found';
+
+  @override
+  String get onboardingReportBody =>
+      'Publish a report with photos and details so the owner can reach you.';
+
+  @override
+  String get onboardingChatTitle => 'Chat and get it back';
+
+  @override
+  String get onboardingChatBody =>
+      'Message the other side inside the app and arrange a safe handover.';
 
   @override
   String get createReport => 'Create report';
@@ -25,7 +61,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get found => 'Found';
 
   @override
-  String get itemTitle => 'Item title *';
+  String get itemTitle => 'Item title';
 
   @override
   String get itemTitleHint => 'e.g., Black leather wallet';
@@ -36,13 +72,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get category => 'Category *';
+  String get category => 'Category';
 
   @override
   String get selectCategory => 'Select category';
 
   @override
-  String get locationDistrict => 'Location (district) *';
+  String get locationDistrict => 'Location (district)';
 
   @override
   String get selectDistrict => 'Select district';
@@ -51,7 +87,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get date => 'Date';
 
   @override
-  String get photos => 'Photos *';
+  String get photos => 'Photos';
 
   @override
   String photoCounter(int count) {
@@ -92,12 +128,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invalidFileSize => 'File size must be under 10 MB';
 
   @override
-  String get invalidFileBanner =>
-      'Invalid File: Please upload image files (JPG/PNG) under 10 MB.';
+  String get requiredFieldsBannerTitle => 'Required Fields:';
 
   @override
-  String get requiredFieldsBanner =>
-      'Required Fields: Title, category, and location are required.';
+  String get requiredFieldsBannerMessage =>
+      'Title, category, and location are required.';
+
+  @override
+  String get invalidFileBannerTitle => 'Invalid File:';
+
+  @override
+  String get invalidFileBannerMessage =>
+      'Please upload image files (JPG/PNG) under 10 MB.';
 
   @override
   String get photoRejected => 'Rejected';
