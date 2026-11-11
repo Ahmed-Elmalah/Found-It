@@ -157,4 +157,39 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get weakPasswordMessage => 'اختر كلمة مرور أقوى.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيينها.';
+
+  @override
+  String get sendResetLinkButton => 'إرسال رابط إعادة التعيين';
+
+  @override
+  String get rememberedIt => 'تذكرتها؟';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get resetComingSoon => 'ستتوفر إعادة تعيين كلمة المرور قريبًا.';
+
+  @override
+  String get verifyEmailTitle => 'تحقق من بريدك الإلكتروني';
+
+  @override
+  String verifyEmailBody(String email) {
+    return 'أرسلنا رابط التحقق إلى $email. افتحه لتفعيل حسابك.';
+  }
+
+  @override
+  String get verifiedButton => 'لقد فعّلت بريدي';
+
+  @override
+  String get resendEmail => 'إعادة الإرسال';
+
+  @override
+  String resendEmailIn(String time) {
+    return 'إعادة الإرسال · $time';
+  }
 }
