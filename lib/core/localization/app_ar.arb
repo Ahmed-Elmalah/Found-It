@@ -2,19 +2,61 @@
   "@@locale": "ar",
 
   "appName": "FOUND IT",
-  "appTagline": "فقدت شيئًا؟ دعنا نُعيده إليك.",
+  "appTagline": "ضايع منك حاجة؟ هنرجعهالك.",
 
   "chooseCityTitle": "اختر مدينتك",
 
   "onboardingSkip": "تخطي",
   "onboardingNext": "التالي",
   "onboardingGetStarted": "ابدأ الآن",
-  "onboardingFindTitle": "ابحث عمّا فقدته",
-  "onboardingFindBody": "ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.",
-  "onboardingReportTitle": "أبلِغ عمّا وجدته",
-  "onboardingReportBody": "انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.",
-  "onboardingChatTitle": "تواصَل واستعِده",
-  "onboardingChatBody": "راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.",
+  "onboardingFindTitle": "دوّر على اللي ضاع منك",
+  "onboardingFindBody": "تصفح البلاغات في مدينتك وصنّف حسب الفئة والتاريخ.",
+  "onboardingReportTitle": "بلّغ عن حاجة لقيتها",
+  "onboardingReportBody": "انشر بلاغ بصور وتفاصيل عشان صاحبها يقدر يوصلك.",
+  "onboardingChatTitle": "تواصل ورجّع الأمانة",
+  "onboardingChatBody": "اتكلم مع الطرف التاني جوة التطبيق ورتّبوا التسليم بأمان.",
+
+  "fieldRequired": "مطلوب",
+  "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا",
+
+  "loginTitle": "مرحبًا بعودتك",
+  "loginSubtitle": "سجّل الدخول للمتابعة.",
+  "emailLabel": "البريد الإلكتروني",
+  "emailHint": "name@example.com",
+  "passwordLabel": "كلمة المرور",
+  "passwordHint": "أدخل كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "loginButton": "تسجيل الدخول",
+  "noAccount": "ليس لديك حساب؟",
+  "signUpLink": "إنشاء حساب",
+
+  "invalidCredentialsTitle": "بيانات غير صحيحة:",
+  "invalidCredentialsMessage": "تأكد من البريد الإلكتروني وكلمة المرور.",
+  "connectionErrorTitle": "خطأ في الاتصال:",
+  "connectionErrorMessage": "تحقق من اتصالك وحاول مرة أخرى.",
+  "genericErrorTitle": "حدث خطأ:",
+  "genericErrorMessage": "حاول مرة أخرى.",
+
+  "signUpTitle": "إنشاء حساب",
+  "fullNameLabel": "الاسم الكامل",
+  "fullNameHint": "اسمك الكامل",
+  "phoneLabel": "رقم الهاتف",
+  "phoneHint": "10 1234 5678",
+  "addressLabel": "العنوان",
+  "addressHint": "اختياري",
+  "passwordHelper": "8 أحرف على الأقل",
+  "createAccountButton": "إنشاء حساب",
+  "haveAccount": "لديك حساب بالفعل؟",
+  "logInLink": "تسجيل الدخول",
+
+  "nameTooShort": "يجب أن يكون الاسم حرفين على الأقل",
+  "invalidPhone": "أدخل رقم موبايل مصري صحيح",
+  "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+
+  "registrationFailedTitle": "فشل التسجيل:",
+  "emailInUseMessage": "يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.",
+  "weakPasswordTitle": "كلمة مرور ضعيفة:",
+  "weakPasswordMessage": "اختر كلمة مرور أقوى.",
 
   "createReport": "إنشاء بلاغ",
   "reportType": "نوع البلاغ",
@@ -22,7 +64,7 @@
   "found": "عُثر عليه",
 
   "itemTitle": "اسم الغرض",
-  "itemTitleHint": "مثال: محفظة جلدية سوداء",
+  "itemTitleHint": "مثال: محفظة جلد سوداء",
   "itemTitleCounter": "{count}/50",
   "@itemTitleCounter": {
     "placeholders": {
@@ -31,7 +73,7 @@
   },
 
   "category": "الفئة",
-  "selectCategory": "اختر فئة",
+  "selectCategory": "اختر الفئة",
 
   "locationDistrict": "الموقع (المنطقة)",
   "selectDistrict": "اختر المنطقة",
@@ -50,7 +92,6 @@
 
   "submitReport": "رفع البلاغ",
 
-  "fieldRequired": "مطلوب",
   "titleTooShort": "يجب أن يكون العنوان 3 أحرف على الأقل",
   "titleTooLong": "يجب أن يكون العنوان 50 حرفاً كحد أقصى",
   "categoryRequired": "يرجى اختيار فئة",
@@ -77,5 +118,11 @@
   },
   "reportActiveMessage": "بلاغك نشط ومُدرج للمطابقة.",
   "viewMyReport": "عرض بلاغي",
-  "backToHome": "العودة للرئيسية"
+  "backToHome": "العودة للرئيسية",
+
+  "notLoggedInTitle": "تسجيل الدخول مطلوب:",
+  "notLoggedInMessage": "يجب تسجيل الدخول لإنشاء بلاغ.",
+  "invalidDataTitle": "بيانات غير صالحة:",
+  "invalidDataMessage": "يرجى التحقق من تفاصيل البلاغ المدخلة.",
+  "retry": "إعادة المحاولة"
 }

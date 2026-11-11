@@ -13,7 +13,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'FOUND IT';
 
   @override
-  String get appTagline => 'فقدت شيئًا؟ دعنا نُعيده إليك.';
+  String get appTagline => 'ضايع منك حاجة؟ هنرجعهالك.';
 
   @override
   String get chooseCityTitle => 'اختر مدينتك';
@@ -28,25 +28,135 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingGetStarted => 'ابدأ الآن';
 
   @override
-  String get onboardingFindTitle => 'ابحث عمّا فقدته';
+  String get onboardingFindTitle => 'دوّر على اللي ضاع منك';
 
   @override
   String get onboardingFindBody =>
-      'ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.';
+      'تصفح البلاغات في مدينتك وصنّف حسب الفئة والتاريخ.';
 
   @override
-  String get onboardingReportTitle => 'أبلِغ عمّا وجدته';
+  String get onboardingReportTitle => 'بلّغ عن حاجة لقيتها';
 
   @override
   String get onboardingReportBody =>
-      'انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.';
+      'انشر بلاغ بصور وتفاصيل عشان صاحبها يقدر يوصلك.';
 
   @override
-  String get onboardingChatTitle => 'تواصَل واستعِده';
+  String get onboardingChatTitle => 'تواصل ورجّع الأمانة';
 
   @override
   String get onboardingChatBody =>
-      'راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.';
+      'اتكلم مع الطرف التاني جوة التطبيق ورتّبوا التسليم بأمان.';
+
+  @override
+  String get fieldRequired => 'مطلوب';
+
+  @override
+  String get invalidEmail => 'أدخل بريدًا إلكترونيًا صحيحًا';
+
+  @override
+  String get loginTitle => 'مرحبًا بعودتك';
+
+  @override
+  String get loginSubtitle => 'سجّل الدخول للمتابعة.';
+
+  @override
+  String get emailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get passwordLabel => 'كلمة المرور';
+
+  @override
+  String get passwordHint => 'أدخل كلمة المرور';
+
+  @override
+  String get forgotPassword => 'نسيت كلمة المرور؟';
+
+  @override
+  String get loginButton => 'تسجيل الدخول';
+
+  @override
+  String get noAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get signUpLink => 'إنشاء حساب';
+
+  @override
+  String get invalidCredentialsTitle => 'بيانات غير صحيحة:';
+
+  @override
+  String get invalidCredentialsMessage =>
+      'تأكد من البريد الإلكتروني وكلمة المرور.';
+
+  @override
+  String get connectionErrorTitle => 'خطأ في الاتصال:';
+
+  @override
+  String get connectionErrorMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get genericErrorTitle => 'حدث خطأ:';
+
+  @override
+  String get genericErrorMessage => 'حاول مرة أخرى.';
+
+  @override
+  String get signUpTitle => 'إنشاء حساب';
+
+  @override
+  String get fullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get fullNameHint => 'اسمك الكامل';
+
+  @override
+  String get phoneLabel => 'رقم الهاتف';
+
+  @override
+  String get phoneHint => '10 1234 5678';
+
+  @override
+  String get addressLabel => 'العنوان';
+
+  @override
+  String get addressHint => 'اختياري';
+
+  @override
+  String get passwordHelper => '8 أحرف على الأقل';
+
+  @override
+  String get createAccountButton => 'إنشاء حساب';
+
+  @override
+  String get haveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get logInLink => 'تسجيل الدخول';
+
+  @override
+  String get nameTooShort => 'يجب أن يكون الاسم حرفين على الأقل';
+
+  @override
+  String get invalidPhone => 'أدخل رقم موبايل مصري صحيح';
+
+  @override
+  String get passwordTooShort => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل';
+
+  @override
+  String get registrationFailedTitle => 'فشل التسجيل:';
+
+  @override
+  String get emailInUseMessage =>
+      'يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.';
+
+  @override
+  String get weakPasswordTitle => 'كلمة مرور ضعيفة:';
+
+  @override
+  String get weakPasswordMessage => 'اختر كلمة مرور أقوى.';
 
   @override
   String get createReport => 'إنشاء بلاغ';
@@ -64,7 +174,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemTitle => 'اسم الغرض';
 
   @override
-  String get itemTitleHint => 'مثال: محفظة جلدية سوداء';
+  String get itemTitleHint => 'مثال: محفظة جلد سوداء';
 
   @override
   String itemTitleCounter(int count) {
@@ -75,7 +185,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get category => 'الفئة';
 
   @override
-  String get selectCategory => 'اختر فئة';
+  String get selectCategory => 'اختر الفئة';
 
   @override
   String get locationDistrict => 'الموقع (المنطقة)';
@@ -102,9 +212,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitReport => 'رفع البلاغ';
-
-  @override
-  String get fieldRequired => 'مطلوب';
 
   @override
   String get titleTooShort => 'يجب أن يكون العنوان 3 أحرف على الأقل';
@@ -165,4 +272,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backToHome => 'العودة للرئيسية';
+
+  @override
+  String get notLoggedInTitle => 'تسجيل الدخول مطلوب:';
+
+  @override
+  String get notLoggedInMessage => 'يجب تسجيل الدخول لإنشاء بلاغ.';
+
+  @override
+  String get invalidDataTitle => 'بيانات غير صالحة:';
+
+  @override
+  String get invalidDataMessage => 'يرجى التحقق من تفاصيل البلاغ المدخلة.';
+
+  @override
+  String get retry => 'إعادة المحاولة';
 }

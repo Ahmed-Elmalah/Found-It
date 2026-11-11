@@ -39,7 +39,7 @@ class AppTextField extends StatefulWidget {
     this.isRequired = false,
     this.maxLength,
     this.showErrorIcon = false,
-    this.hasErrorIcon,
+    this.forceLtr = false,
   });
 
   final String label;
@@ -74,7 +74,11 @@ class AppTextField extends StatefulWidget {
 
   /// When true, renders a small error icon before the error text.
   final bool showErrorIcon;
-  final bool? hasErrorIcon;
+
+  /// Always shows the typed text (and [prefixText]) left-to-right, also in
+  /// Arabic — for phone numbers: "+20 10 1234 5678", never "5678 1234 10 20+".
+  /// The text still sits next to the icon (right side in Arabic).
+  final bool forceLtr;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -98,6 +102,10 @@ class _AppTextFieldState extends State<AppTextField> {
     final colors = Theme.of(context).colorScheme;
 
     final hasPrefix = widget.prefixIcon != null || widget.prefixText != null;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    // forceLtr: text runs left-to-right but stays aligned to the icon side.
+    final ltrDirection = widget.forceLtr ? TextDirection.ltr : null;
+    final ltrAlign = isRtl ? TextAlign.right : TextAlign.left;
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppSizes.radius.r),
       borderSide: BorderSide(color: colors.error, width: 1.5),
@@ -139,6 +147,8 @@ class _AppTextFieldState extends State<AppTextField> {
               buildCounter: widget.maxLength != null
                   ? (_, {required currentLength, required isFocused, maxLength}) => null
                   : null,
+              textDirection: ltrDirection,
+              textAlign: widget.forceLtr ? ltrAlign : TextAlign.start,
               keyboardType: widget.keyboardType,
               textInputAction: widget.textInputAction,
               onChanged: (value) {
@@ -155,6 +165,7 @@ class _AppTextFieldState extends State<AppTextField> {
               style: TextStyle(fontSize: 16.sp, color: colors.onSurface),
               decoration: InputDecoration(
                 hintText: widget.hint,
+                hintTextDirection: ltrDirection,
                 hintStyle: TextStyle(
                   fontSize: 16.sp,
                   color: colors.onSurfaceVariant,
@@ -182,6 +193,7 @@ class _AppTextFieldState extends State<AppTextField> {
                             if (widget.prefixText != null)
                               Text(
                                 widget.prefixText!,
+                                textDirection: ltrDirection,
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   color: colors.onSurface,
@@ -219,8 +231,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   children: [
                     if (footer != null)
                       Expanded(
-                        child: (widget.hasErrorIcon ?? widget.showErrorIcon) &&
-                                errorText != null
+                        child: widget.showErrorIcon && errorText != null
                             ? Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
