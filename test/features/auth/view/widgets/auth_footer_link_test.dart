@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:found_it/features/auth/view/widgets/auth_footer_link.dart';
@@ -51,11 +52,34 @@ void main() {
     testWidgets('renders in dark theme', (tester) async {
       await pumpTestApp(
         tester,
-        AuthFooterLink(text: 'Have an account?', actionText: 'Log in', onTap: () {}),
+        AuthFooterLink(
+          text: 'Have an account?',
+          actionText: 'Log in',
+          onTap: () {},
+        ),
         dark: true,
       );
       expect(tester.takeException(), isNull);
       expect(find.text('Log in'), findsOneWidget);
+    });
+
+    testWidgets('line is centered horizontally (design)', (tester) async {
+      await pumpTestApp(
+        tester,
+        // short text: the test font makes every letter 15 px wide, so a long
+        // text would wrap to 2 lines and the check below would be meaningless
+        AuthFooterLink(
+          text: 'No account?',
+          actionText: 'Sign up',
+          onTap: () {},
+        ),
+      );
+      // the line spans from the start of the text to the end of the action
+      final left = tester.getTopLeft(find.text('No account?')).dx;
+      final right = tester.getTopRight(find.byType(TextButton)).dx;
+      final lineCenter = (left + right) / 2;
+      // pumpTestApp: screen 390 wide with 16 padding -> content center = 195
+      expect(lineCenter, closeTo(195, 2));
     });
   });
 }

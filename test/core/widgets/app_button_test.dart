@@ -16,8 +16,9 @@ void main() {
     expect(taps, 1);
   });
 
-  testWidgets('loading shows spinner, hides label, ignores taps',
-      (tester) async {
+  testWidgets('loading shows spinner, hides label, ignores taps', (
+    tester,
+  ) async {
     var taps = 0;
     await pumpTestApp(
       tester,

@@ -34,6 +34,7 @@ class AppTextField extends StatefulWidget {
     this.onFieldSubmitted,
     this.autofillHints,
     this.enabled = true,
+    this.autovalidateMode,
   });
 
   final String label;
@@ -54,12 +55,25 @@ class AppTextField extends StatefulWidget {
   final Iterable<String>? autofillHints;
   final bool enabled;
 
+  /// When the validator runs (default: only on `Form.validate()`).
+  final AutovalidateMode? autovalidateMode;
+
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
 
 class _AppTextFieldState extends State<AppTextField> {
   bool _obscured = true;
+  TextEditingController? _ownController;
+
+  TextEditingController get _controller =>
+      widget.controller ?? (_ownController ??= TextEditingController());
+
+  @override
+  void dispose() {
+    _ownController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,91 +85,117 @@ class _AppTextFieldState extends State<AppTextField> {
       borderSide: BorderSide(color: colors.error, width: 1.5),
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          widget.label,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
-            color: colors.onSurface,
-          ),
-        ),
-        SizedBox(height: 8.h),
-        TextFormField(
-          controller: widget.controller,
-          validator: widget.validator,
-          keyboardType: widget.keyboardType,
-          textInputAction: widget.textInputAction,
-          onChanged: widget.onChanged,
-          onFieldSubmitted: widget.onFieldSubmitted,
-          autofillHints: widget.autofillHints,
-          enabled: widget.enabled,
-          obscureText: widget.isPassword && _obscured,
-          // keyboards must not learn / suggest passwords
-          enableSuggestions: !widget.isPassword,
-          autocorrect: !widget.isPassword,
-          style: TextStyle(fontSize: 16.sp, color: colors.onSurface),
-          decoration: InputDecoration(
-            hintText: widget.hint,
-            hintStyle: TextStyle(fontSize: 16.sp, color: colors.onSurfaceVariant),
-            helperText: widget.helperText,
-            helperStyle:
-                TextStyle(fontSize: 13.sp, color: colors.onSurfaceVariant),
-            errorStyle: TextStyle(fontSize: 13.sp, color: colors.error),
-            prefixIcon: hasPrefix
-                ? Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      start: 16.w,
-                      // Flutter adds a 4px gap after the prefix, so 12 + 4
-                      // gives the 16 gap from the design (text at 52).
-                      end: 12.w,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (widget.prefixIcon != null)
-                          Icon(
-                            widget.prefixIcon,
-                            size: 20.r,
-                            color: colors.onSurfaceVariant,
-                          ),
-                        if (widget.prefixIcon != null &&
-                            widget.prefixText != null)
-                          SizedBox(width: 12.w),
-                        if (widget.prefixText != null)
-                          Text(
-                            widget.prefixText!,
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              color: colors.onSurface,
-                            ),
-                          ),
-                      ],
-                    ),
-                  )
-                : null,
-            prefixIconConstraints:
-                const BoxConstraints(minWidth: 0, minHeight: 0),
-            suffixIcon: widget.isPassword
-                ? IconButton(
-                    onPressed: () => setState(() => _obscured = !_obscured),
-                    icon: Icon(
-                      _obscured
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      size: 22.r,
-                      color: colors.onSurfaceVariant,
-                    ),
-                  )
-                : null,
-            enabledBorder: widget.hasError ? errorBorder : null,
-            focusedBorder: widget.hasError ? errorBorder : null,
-          ),
-        ),
-      ],
+    return FormField<String>(
+      validator: (_) => widget.validator?.call(_controller.text),
+      autovalidateMode: widget.autovalidateMode,
+      enabled: widget.enabled,
+      builder: (field) {
+        final showError = widget.hasError || field.hasError;
+        final errorText = field.errorText;
+        final footer = errorText ?? widget.helperText;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.label,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+                color: colors.onSurface,
+              ),
+            ),
+            SizedBox(height: 8.h),
+            TextField(
+              controller: _controller,
+              keyboardType: widget.keyboardType,
+              textInputAction: widget.textInputAction,
+              onChanged: (value) {
+                field.didChange(value);
+                widget.onChanged?.call(value);
+              },
+              onSubmitted: widget.onFieldSubmitted,
+              autofillHints: widget.autofillHints,
+              enabled: widget.enabled,
+              obscureText: widget.isPassword && _obscured,
+              // keyboards must not learn / suggest passwords
+              enableSuggestions: !widget.isPassword,
+              autocorrect: !widget.isPassword,
+              style: TextStyle(fontSize: 16.sp, color: colors.onSurface),
+              decoration: InputDecoration(
+                hintText: widget.hint,
+                hintStyle: TextStyle(
+                  fontSize: 16.sp,
+                  color: colors.onSurfaceVariant,
+                ),
+                prefixIcon: hasPrefix
+                    ? Padding(
+                        padding: EdgeInsetsDirectional.only(
+                          start: 16.w,
+                          // Flutter adds a 4px gap after the prefix, so 12 + 4
+                          // gives the 16 gap from the design (text at 52).
+                          end: 12.w,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.prefixIcon != null)
+                              Icon(
+                                widget.prefixIcon,
+                                size: 20.r,
+                                color: colors.onSurfaceVariant,
+                              ),
+                            if (widget.prefixIcon != null &&
+                                widget.prefixText != null)
+                              SizedBox(width: 12.w),
+                            if (widget.prefixText != null)
+                              Text(
+                                widget.prefixText!,
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: colors.onSurface,
+                                ),
+                              ),
+                          ],
+                        ),
+                      )
+                    : null,
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 0,
+                  minHeight: 0,
+                ),
+                suffixIcon: widget.isPassword
+                    ? IconButton(
+                        onPressed: () => setState(() => _obscured = !_obscured),
+                        icon: Icon(
+                          _obscured
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          size: 22.r,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      )
+                    : null,
+                enabledBorder: showError ? errorBorder : null,
+                focusedBorder: showError ? errorBorder : null,
+              ),
+            ),
+            if (footer != null)
+              Padding(
+                padding: EdgeInsetsDirectional.only(top: 8.h),
+                child: Text(
+                  footer,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: errorText != null
+                        ? colors.error
+                        : colors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

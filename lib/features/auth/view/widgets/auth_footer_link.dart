@@ -26,33 +26,38 @@ class AuthFooterLink extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text(
-          text,
-          style: TextStyle(fontSize: 15.sp, color: colors.onSurfaceVariant),
-        ),
-        SizedBox(width: 4.w),
-        TextButton(
-          onPressed: onTap,
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 8.h),
-            minimumSize: Size.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            foregroundColor: colors.primary,
+    // Full width so WrapAlignment.center can actually center the line
+    // (a Wrap alone shrinks to its content and sits at the start).
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text(
+            text,
+            style: TextStyle(fontSize: 15.sp, color: colors.onSurfaceVariant),
           ),
-          child: Text(
-            actionText,
-            style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w600,
-              color: colors.primary,
+          SizedBox(width: 4.w),
+          TextButton(
+            onPressed: onTap,
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 8.h),
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              foregroundColor: colors.primary,
+            ),
+            child: Text(
+              actionText,
+              style: TextStyle(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w600,
+                color: colors.primary,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

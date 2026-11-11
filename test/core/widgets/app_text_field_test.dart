@@ -36,14 +36,19 @@ void main() {
     expect(obscure(), isTrue);
   });
 
-  testWidgets('hasError uses the theme error color for borders',
-      (tester) async {
+  testWidgets('hasError uses the theme error color for borders', (
+    tester,
+  ) async {
     await pumpTestApp(
       tester,
       const AppTextField(label: 'Email', hasError: true),
     );
-    final errorColor = Theme.of(tester.element(find.byType(TextField))).colorScheme.error;
-    final decoration = tester.widget<TextField>(find.byType(TextField)).decoration!;
+    final errorColor = Theme.of(tester.element(find.byType(TextField)))
+        .colorScheme
+        .error;
+    final decoration = tester
+        .widget<TextField>(find.byType(TextField))
+        .decoration!;
     final enabled = decoration.enabledBorder! as OutlineInputBorder;
     final focused = decoration.focusedBorder! as OutlineInputBorder;
     expect(enabled.borderSide.color, errorColor);
@@ -80,8 +85,9 @@ void main() {
     expect(find.text('+20'), findsOneWidget);
   });
 
-  testWidgets('field is 56 high and text starts 52 after the start edge',
-      (tester) async {
+  testWidgets('field is 56 high and text starts 52 after the start edge', (
+    tester,
+  ) async {
     await pumpTestApp(
       tester,
       const AppTextField(label: 'Email', prefixIcon: Icons.mail_outline),
@@ -92,8 +98,9 @@ void main() {
     expect(text.left - field.left, closeTo(52, 2));
   });
 
-  testWidgets('RTL: prefix icon is right of the text, no overflow',
-      (tester) async {
+  testWidgets('RTL: prefix icon is right of the text, no overflow', (
+    tester,
+  ) async {
     await pumpTestApp(
       tester,
       const AppTextField(label: 'Email', prefixIcon: Icons.mail_outline),
@@ -104,4 +111,86 @@ void main() {
     expect(icon.center.dx, greaterThan(text.center.dx));
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('helper text aligns with field start, 8 below', (tester) async {
+    await pumpTestApp(
+      tester,
+      const AppTextField(
+        label: 'Password',
+        prefixIcon: Icons.lock_outline,
+        helperText: 'At least 8 characters',
+      ),
+    );
+    final field = tester.getRect(find.byType(TextField));
+    final helper = tester.getRect(find.text('At least 8 characters'));
+    expect(helper.left, closeTo(field.left, 1));
+    expect(helper.top - field.bottom, closeTo(8, 2));
+  });
+
+  testWidgets('error text aligns with field start and border is red', (
+    tester,
+  ) async {
+    final formKey = GlobalKey<FormState>();
+    await pumpTestApp(
+      tester,
+      Form(
+        key: formKey,
+        child: AppTextField(label: 'Email', validator: (_) => 'Required'),
+      ),
+    );
+    formKey.currentState!.validate();
+    await tester.pump();
+    final field = tester.getRect(find.byType(TextField));
+    expect(tester.getRect(find.text('Required')).left, closeTo(field.left, 1));
+    final errorColor = Theme.of(tester.element(find.byType(TextField)))
+        .colorScheme
+        .error;
+    final decoration = tester
+        .widget<TextField>(find.byType(TextField))
+        .decoration!;
+    expect(
+      (decoration.enabledBorder! as OutlineInputBorder).borderSide.color,
+      errorColor,
+    );
+  });
+
+  testWidgets('RTL: helper text right edge equals field right edge', (
+    tester,
+  ) async {
+    await pumpTestApp(
+      tester,
+      const AppTextField(label: 'Password', helperText: 'At least 8'),
+      rtl: true,
+    );
+    final field = tester.getRect(find.byType(TextField));
+    final helper = tester.getRect(find.text('At least 8'));
+    expect(helper.right, closeTo(field.right, 1));
+  });
+
+  for (final external in [false, true]) {
+    testWidgets(
+      'validator receives typed value (external controller: $external)',
+      (tester) async {
+        final formKey = GlobalKey<FormState>();
+        String? received;
+        await pumpTestApp(
+          tester,
+          Form(
+            key: formKey,
+            child: AppTextField(
+              label: 'Email',
+              controller: external ? TextEditingController() : null,
+              validator: (v) {
+                received = v;
+                return null;
+              },
+            ),
+          ),
+        );
+        await tester.enterText(find.byType(TextField), 'abc@x.com');
+        formKey.currentState!.validate();
+        expect(received, 'abc@x.com');
+      },
+    );
+  }
 }
