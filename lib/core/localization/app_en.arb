@@ -1,5 +1,18 @@
 {
   "@@locale": "en",
 
-  "chooseCityTitle": "Choose your city"
+  "chooseCityTitle": "Choose your city",
+
+  "appName": "FOUND IT",
+  "appTagline": "Lost something? Let’s bring it back.",
+
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingGetStarted": "Get started",
+  "onboardingFindTitle": "Find what you lost",
+  "onboardingFindBody": "Search reports in your city and filter by category and date.",
+  "onboardingReportTitle": "Report what you found",
+  "onboardingReportBody": "Publish a report with photos and details so the owner can reach you.",
+  "onboardingChatTitle": "Chat and get it back",
+  "onboardingChatBody": "Message the other side inside the app and arrange a safe handover."
 }

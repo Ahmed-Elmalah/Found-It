@@ -103,6 +103,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose your city'**
   String get chooseCityTitle;
+
+  /// No description provided for @appName.
+  ///
+  /// In en, this message translates to:
+  /// **'FOUND IT'**
+  String get appName;
+
+  /// No description provided for @appTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost something? Let’s bring it back.'**
+  String get appTagline;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get onboardingGetStarted;
+
+  /// No description provided for @onboardingFindTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find what you lost'**
+  String get onboardingFindTitle;
+
+  /// No description provided for @onboardingFindBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search reports in your city and filter by category and date.'**
+  String get onboardingFindBody;
+
+  /// No description provided for @onboardingReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report what you found'**
+  String get onboardingReportTitle;
+
+  /// No description provided for @onboardingReportBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish a report with photos and details so the owner can reach you.'**
+  String get onboardingReportBody;
+
+  /// No description provided for @onboardingChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat and get it back'**
+  String get onboardingChatTitle;
+
+  /// No description provided for @onboardingChatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Message the other side inside the app and arrange a safe handover.'**
+  String get onboardingChatBody;
 }
 
 class _AppLocalizationsDelegate
