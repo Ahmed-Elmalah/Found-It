@@ -1,4 +1,10 @@
-enum AuthFailureType { invalidCredentials, network, unknown }
+enum AuthFailureType {
+  invalidCredentials,
+  emailAlreadyInUse,
+  weakPassword,
+  network,
+  unknown,
+}
 
 class AuthFailure implements Exception {
   const AuthFailure(this.type);
