@@ -38,12 +38,16 @@ Design frame: **390 x 844**. Always check the Figma file for sizes and spacing.
 ## Getting started
 
 ```bash
+cp .env.example .env  # then fill in the Supabase values (ask Ahmed, shared privately)
 flutter pub get
 flutter gen-l10n      # generates the translations class
 flutter run
 ```
 
 > Run `flutter gen-l10n` again every time you add or edit text in the `.arb` files.
+>
+> The app won't build without a `.env` file. Never commit it.
+> Database guide (tables, functions, Dart examples): [docs/database.md](docs/database.md)
 
 ---
 

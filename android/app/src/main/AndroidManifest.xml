@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Needed in release builds to reach Supabase (debug adds it automatically) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="foundit"
         android:name="${applicationName}"
