@@ -241,11 +241,92 @@ screen because it needs the translations.
 
 ---
 
+## Auth & session (for teammates)
+
+Login, sign up and the session are already done. You **use** them, you don't rebuild them.
+
+### Who is logged in: `AuthCubit`
+
+One `AuthCubit` exists for the whole app. It is started in `main.dart` and provided
+above every screen, so any screen can read it:
+
+```dart
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+
+final auth = context.read<AuthCubit>().state;
+auth.isLoggedIn   // true / false (null while the app is starting)
+auth.user         // UserEntity? -> id, email, fullName, phone, address, cityId
+auth.hasCity      // true / false (null = unknown, e.g. offline)
+
+// Rebuild when it changes:
+BlocBuilder<AuthCubit, AuthState>(builder: (context, auth) => Text(auth.user?.fullName ?? ''))
+```
+
+> This is the **only** cubit registered as a singleton (`registerLazySingleton`).
+> Every other cubit stays `registerFactory` (one per screen).
+
+### Log out (Profile screen)
+
+```dart
+try {
+  await context.read<AuthCubit>().logout();
+  // Nothing else to do: the router sends the user to Login.
+} on AuthFailure {
+  // show an error (e.g. no internet)
+}
+```
+
+### After the user picks a city (City screen)
+
+Save the city (`set_my_city` + `StorageKeys.selectedCity`, see `docs/database.md`), then:
+
+```dart
+context.read<AuthCubit>().cityChanged(cityId); // the router now lets them into Home
+```
+
+### Page protection: automatic
+
+`lib/core/router/auth_redirect.dart` decides where a user may go. It runs on every
+navigation and every time `AuthCubit` changes:
+
+| User | Opens | Goes to |
+|---|---|---|
+| not logged in | any protected page | Login |
+| logged in, no city yet | anything except City | City |
+| logged in | Login / Sign up / Forgot password | Home |
+
+- **Every new page is protected by default.** You don't have to register it anywhere.
+  Only Splash, Onboarding and Verify email are open to everyone.
+- **Don't navigate yourself after login, sign up or logout.** The router does it.
+- **Temporary pages to replace** in `lib/core/router/app_router.dart`:
+  `AppRoutes.city` and `AppRoutes.home` (Youssef). Remove the TEMP "Log out" button too.
+
+### Tests
+
+- Helpers: `test/helpers/test_app.dart` → `pumpTestApp(tester, widget, dark:, rtl:)` and
+  `pumpTestRouterApp(tester, router)`.
+- If you write a fake that `implements AuthRepository`, implement **all** its methods
+  (unused ones can `throw UnimplementedError()`).
+
+### Not built yet (needs SMTP)
+
+Password reset (the email + a new-password screen through a deep link) and the real
+email verification. Today "Send reset link" shows a "coming soon" message, and
+"Confirm email" is **off** in Supabase. It must be turned on before release.
+
+---
+
 ## Before you push
 
 ```bash
 flutter gen-l10n    # only if you touched the .arb files
 flutter analyze
+flutter test        # every test must pass, not only yours
 ```
 
-Run the app once in **Light** and **Dark** mode.
+Run the app once in **Light** and **Dark** mode, and once in **Arabic**.
+
+> Line endings are LF for everyone (`.gitattributes`). If, after pulling, the generated
+> files in `linux/`, `macos/`, `windows/` still show as modified (no real change), run once:
+> `git checkout -- linux/flutter macos/Flutter windows/flutter`
+> (it only resets those generated files, your own work is not touched).
