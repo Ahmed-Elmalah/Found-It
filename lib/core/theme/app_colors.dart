@@ -38,4 +38,11 @@ abstract final class AppColors {
   // light / dark pair. Used by the report status colors (see ReportStatus).
   static const Color successLight = Color(0xFF047857);
   static const Color successDark = Color(0xFF6EE7B7);
+
+  // Custom bottom navigation bar (Figma): the bar design's own exact
+  // shades, intentionally separate from the color schemes above since the
+  // bar follows its own palette (light mode only for now).
+  static const Color bottomNavActive = Color(0xFF2563EB);
+  static const Color bottomNavInactive = Color(0xFF6B7280);
+  static const Color bottomNavBadge = Color(0xFFEF4444);
 }

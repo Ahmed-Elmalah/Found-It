@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/theme/app_colors.dart';
 
 /// Custom bottom navigation bar of the main shell (Figma design).
 ///
-/// Layout: four evenly spaced items - Home and Explore on the left, Messages
-/// and Profile on the right - with a prominent circular Report button
-/// floating in the exact center, half elevated above the bar line, its label
-/// right below it. The Messages item shows an unread count badge (mock value
-/// until the chat feature lands).
-class MainBottomNavBar extends StatelessWidget {
-  const MainBottomNavBar({
+/// Clean white bar with a subtle top shadow. Four evenly spaced items -
+/// Home and Explore on the left, Messages and Profile on the right - and a
+/// prominent circular Report button floating in the exact center, elevated
+/// above the bar line, with its label right below it. The Messages item
+/// carries a red unread badge (mock count until the chat feature lands).
+class CustomBottomNavBar extends StatelessWidget {
+  const CustomBottomNavBar({
     super.key,
     required this.selectedIndex,
     required this.onDestinationSelected,
@@ -24,11 +25,14 @@ class MainBottomNavBar extends StatelessWidget {
   /// Called with the tapped branch index.
   final ValueChanged<int> onDestinationSelected;
 
-  /// Height of the bar surface below the elevated Report button.
-  static const double _barHeight = 64;
+  /// Height of the white bar surface.
+  static const double _barHeight = 75;
 
-  /// Diameter of the center Report button.
+  /// Size of the circular Report button.
   static const double _buttonSize = 56;
+
+  /// How far the Report button rises above the bar line.
+  static const double _buttonElevation = 20;
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +41,10 @@ class MainBottomNavBar extends StatelessWidget {
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
 
     return SizedBox(
-      // The Report button rises half of its size above the bar line.
-      height: _buttonSize.r / 2 + _barHeight.h + bottomPadding,
+      height: _buttonElevation.h + _barHeight.h + bottomPadding,
       child: Stack(
+        // Let the Report button's shadow paint over the content above.
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             left: 0,
@@ -50,7 +55,12 @@ class MainBottomNavBar extends StatelessWidget {
               padding: EdgeInsets.only(bottom: bottomPadding),
               decoration: BoxDecoration(
                 color: colors.surface,
-                border: Border(top: BorderSide(color: colors.outlineVariant)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 12.r,
+                  ),
+                ],
               ),
               child: Row(
                 children: [
@@ -97,13 +107,13 @@ class MainBottomNavBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _ReportButton(onTap: () => onDestinationSelected(2)),
-                SizedBox(height: 10.h),
+                SizedBox(height: 8.h),
                 Text(
                   l10n.tabReport,
                   style: TextStyle(
-                    color: colors.primary,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
+                    color: _itemColor(2),
+                    fontSize: 11.sp,
+                    fontWeight: _itemWeight(2),
                   ),
                 ),
               ],
@@ -113,6 +123,13 @@ class MainBottomNavBar extends StatelessWidget {
       ),
     );
   }
+
+  Color _itemColor(int index) => selectedIndex == index
+      ? AppColors.bottomNavActive
+      : AppColors.bottomNavInactive;
+
+  FontWeight _itemWeight(int index) =>
+      selectedIndex == index ? FontWeight.w600 : FontWeight.w500;
 }
 
 /// One of the four corner items: icon above its label, colored by the
@@ -138,8 +155,9 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final color = selected ? colors.primary : colors.onSurfaceVariant;
+    final color = selected
+        ? AppColors.bottomNavActive
+        : AppColors.bottomNavInactive;
 
     return Expanded(
       child: InkWell(
@@ -147,14 +165,14 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildIcon(colors, color),
+            _buildIcon(color),
             SizedBox(height: 4.h),
             Text(
               label,
               maxLines: 1,
               style: TextStyle(
                 color: color,
-                fontSize: 12.sp,
+                fontSize: 11.sp,
                 fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
               ),
             ),
@@ -164,7 +182,7 @@ class _NavItem extends StatelessWidget {
     );
   }
 
-  Widget _buildIcon(ColorScheme colors, Color color) {
+  Widget _buildIcon(Color color) {
     final iconWidget = Icon(
       selected ? activeIcon : icon,
       size: 24.r,
@@ -185,13 +203,13 @@ class _NavItem extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 4.w),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: colors.error,
+              color: AppColors.bottomNavBadge,
               borderRadius: BorderRadius.circular(100.r),
             ),
             child: Text(
               badgeCount.toString(),
               style: TextStyle(
-                color: colors.onError,
+                color: Colors.white,
                 fontSize: 10.sp,
                 fontWeight: FontWeight.w700,
               ),
@@ -204,7 +222,7 @@ class _NavItem extends StatelessWidget {
 }
 
 /// Prominent circular Report action floating above the bar line in the
-/// exact center of the bar.
+/// exact center of the bar, with a soft blue shadow.
 class _ReportButton extends StatelessWidget {
   const _ReportButton({required this.onTap});
 
@@ -212,19 +230,29 @@ class _ReportButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    return Material(
-      color: colors.primary,
-      elevation: 6,
-      shape: const CircleBorder(),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          width: MainBottomNavBar._buttonSize.r,
-          height: MainBottomNavBar._buttonSize.r,
-          child: Icon(Icons.add, size: 28.r, color: colors.onPrimary),
+    return Container(
+      width: CustomBottomNavBar._buttonSize.r,
+      height: CustomBottomNavBar._buttonSize.r,
+      decoration: BoxDecoration(
+        color: AppColors.bottomNavActive,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.bottomNavActive.withValues(alpha: 0.35),
+            offset: Offset(0, 6.h),
+            blurRadius: 16.r,
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Center(
+            child: Icon(Icons.add, size: 28.r, color: Colors.white),
+          ),
         ),
       ),
     );

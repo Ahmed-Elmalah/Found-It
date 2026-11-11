@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:found_it/features/main/presentation/widgets/main_bottom_nav_bar.dart';
+import 'package:found_it/features/main/presentation/widgets/custom_bottom_nav_bar.dart';
 
 /// Persistent navigation shell of the app.
 ///
@@ -17,7 +17,7 @@ class MainShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: MainBottomNavBar(
+      bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: (index) => navigationShell.goBranch(
           index,
