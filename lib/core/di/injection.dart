@@ -9,6 +9,7 @@ import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
 import 'package:found_it/features/auth/domain/login_use_case.dart';
 import 'package:found_it/features/auth/domain/signup_use_case.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
@@ -67,7 +68,8 @@ void _registerAuth() {
     ..registerLazySingleton(() => LoginUseCase(sl()))
     ..registerLazySingleton(() => SignUpUseCase(sl()))
     ..registerFactory(() => LoginCubit(sl()))
-    ..registerFactory(() => SignUpCubit(sl()));
+    ..registerFactory(() => SignUpCubit(sl()))
+    ..registerFactory(() => ResendTimerCubit());
 }
 
 // ---------------------------------------------------------------------

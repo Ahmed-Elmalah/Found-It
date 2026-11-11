@@ -5,9 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
+import 'package:found_it/features/auth/view/ui/verify_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -51,10 +54,19 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.city,
       builder: (context, state) => const _ComingSoon('City'),
     ),
-    // TEMP: replaced by the real Forgot password screen (Ahmed, stage 7).
+    // UI only for now (no SMTP yet): shows a "coming soon" message.
     GoRoute(
       path: AppRoutes.forgotPassword,
-      builder: (context, state) => const _ComingSoon('Forgot password'),
+      builder: (context, state) => const ForgotPasswordScreen(),
+    ),
+    // Not in the flow yet (email confirmation is off). Pass the email:
+    //   context.go(AppRoutes.verifyEmail, extra: email)
+    GoRoute(
+      path: AppRoutes.verifyEmail,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<ResendTimerCubit>(),
+        child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
+      ),
     ),
     // TEMP: replaced by the real Home screen (Youssef, story #4).
     GoRoute(

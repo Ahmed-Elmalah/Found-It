@@ -157,4 +157,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weakPasswordMessage => 'Choose a stronger password.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email and we’ll send you a link to reset it.';
+
+  @override
+  String get sendResetLinkButton => 'Send reset link';
+
+  @override
+  String get rememberedIt => 'Remembered it?';
+
+  @override
+  String get backToLogin => 'Back to login';
+
+  @override
+  String get resetComingSoon => 'Password reset will be available soon.';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String verifyEmailBody(String email) {
+    return 'We sent a verification link to $email. Open it to activate your account.';
+  }
+
+  @override
+  String get verifiedButton => 'I’ve verified my email';
+
+  @override
+  String get resendEmail => 'Resend email';
+
+  @override
+  String resendEmailIn(String time) {
+    return 'Resend email · $time';
+  }
 }
