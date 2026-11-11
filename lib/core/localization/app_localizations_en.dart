@@ -47,4 +47,59 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get onboardingChatBody =>
       'Message the other side inside the app and arrange a safe handover.';
+
+  @override
+  String get fieldRequired => 'Required';
+
+  @override
+  String get invalidEmail => 'Enter a valid email';
+
+  @override
+  String get loginTitle => 'Welcome back';
+
+  @override
+  String get loginSubtitle => 'Log in to continue.';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get emailHint => 'name@example.com';
+
+  @override
+  String get passwordLabel => 'Password';
+
+  @override
+  String get passwordHint => 'Enter your password';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get loginButton => 'Log in';
+
+  @override
+  String get noAccount => 'Don’t have an account?';
+
+  @override
+  String get signUpLink => 'Sign up';
+
+  @override
+  String get invalidCredentialsTitle => 'Invalid Credentials:';
+
+  @override
+  String get invalidCredentialsMessage =>
+      'Please check your email and password.';
+
+  @override
+  String get connectionErrorTitle => 'Connection error:';
+
+  @override
+  String get connectionErrorMessage => 'Check your connection and try again.';
+
+  @override
+  String get genericErrorTitle => 'Something went wrong:';
+
+  @override
+  String get genericErrorMessage => 'Please try again.';
 }

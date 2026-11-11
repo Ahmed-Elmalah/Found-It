@@ -14,5 +14,26 @@
   "onboardingReportTitle": "أبلِغ عمّا وجدته",
   "onboardingReportBody": "انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.",
   "onboardingChatTitle": "تواصَل واستعِده",
-  "onboardingChatBody": "راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن."
+  "onboardingChatBody": "راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.",
+
+  "fieldRequired": "مطلوب",
+  "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا",
+
+  "loginTitle": "مرحبًا بعودتك",
+  "loginSubtitle": "سجّل الدخول للمتابعة.",
+  "emailLabel": "البريد الإلكتروني",
+  "emailHint": "name@example.com",
+  "passwordLabel": "كلمة المرور",
+  "passwordHint": "أدخل كلمة المرور",
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "loginButton": "تسجيل الدخول",
+  "noAccount": "ليس لديك حساب؟",
+  "signUpLink": "إنشاء حساب",
+
+  "invalidCredentialsTitle": "بيانات غير صحيحة:",
+  "invalidCredentialsMessage": "تأكد من البريد الإلكتروني وكلمة المرور.",
+  "connectionErrorTitle": "خطأ في الاتصال:",
+  "connectionErrorMessage": "تحقق من اتصالك وحاول مرة أخرى.",
+  "genericErrorTitle": "حدث خطأ:",
+  "genericErrorMessage": "حاول مرة أخرى."
 }
