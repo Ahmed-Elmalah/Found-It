@@ -1,5 +1,18 @@
 {
   "@@locale": "ar",
 
-  "chooseCityTitle": "اختر مدينتك"
+  "chooseCityTitle": "اختر مدينتك",
+
+  "appName": "FOUND IT",
+  "appTagline": "فقدت شيئًا؟ دعنا نُعيده إليك.",
+
+  "onboardingSkip": "تخطي",
+  "onboardingNext": "التالي",
+  "onboardingGetStarted": "ابدأ الآن",
+  "onboardingFindTitle": "ابحث عمّا فقدته",
+  "onboardingFindBody": "ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.",
+  "onboardingReportTitle": "أبلِغ عمّا وجدته",
+  "onboardingReportBody": "انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.",
+  "onboardingChatTitle": "تواصَل واستعِده",
+  "onboardingChatBody": "راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن."
 }
