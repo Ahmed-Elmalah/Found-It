@@ -181,6 +181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   hint: l10n.phoneHint,
                                   prefixIcon: Icons.phone_iphone,
                                   prefixText: '+20',
+                                  forceLtr: true,
                                   controller: _phone,
                                   keyboardType: TextInputType.phone,
                                   textInputAction: TextInputAction.next,
