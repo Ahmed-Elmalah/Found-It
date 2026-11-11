@@ -13,6 +13,7 @@ class EmptyState extends StatelessWidget {
     required this.title,
     required this.message,
     this.icon = Icons.search_off,
+    this.action,
   });
 
   /// Bold heading line, e.g. "No matching reports found."
@@ -23,6 +24,9 @@ class EmptyState extends StatelessWidget {
 
   /// Icon shown inside the circular container.
   final IconData icon;
+
+  /// Optional call-to-action shown below the message, e.g. "Create report".
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +69,7 @@ class EmptyState extends StatelessWidget {
                 height: 1.4,
               ),
             ),
+            if (action != null) ...[SizedBox(height: 24.h), action!],
           ],
         ),
       ),

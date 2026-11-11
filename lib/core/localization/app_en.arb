@@ -3,6 +3,31 @@
 
   "chooseCityTitle": "Choose your city",
 
+  "tabHome": "Home",
+  "tabExplore": "Explore",
+  "tabReport": "Report",
+  "tabMessages": "Messages",
+  "tabProfile": "Profile",
+
+  "homeSearchHint": "Search lost or found items",
+  "actionLost": "I lost something",
+  "actionFound": "I found something",
+  "latestInCity": "Latest in {city}",
+  "@latestInCity": {
+    "placeholders": {
+      "city": {"type": "String"}
+    }
+  },
+  "seeAll": "See all",
+  "noReportsInCity": "No reports in {city} yet",
+  "@noReportsInCity": {
+    "placeholders": {
+      "city": {"type": "String"}
+    }
+  },
+  "beFirstToReport": "Be the first to report a lost or found item in your city.",
+  "createReport": "Create report",
+
   "statusLost": "Lost",
   "statusFound": "Found",
   "statusActive": "Active",

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/theme/app_theme.dart';
 import 'package:found_it/core/widgets/empty_state.dart';
 import 'package:found_it/core/widgets/report_card.dart';
 import 'package:found_it/core/widgets/report_category.dart';
 import 'package:found_it/core/widgets/report_status.dart';
-import 'package:found_it/features/explore/view/ui/widgets/active_filter_chip.dart';
-import 'package:found_it/features/explore/view/ui/widgets/filter_bottom_sheet.dart';
+import 'package:found_it/features/search/presentation/widgets/active_filter_chip.dart';
+import 'package:found_it/features/search/presentation/widgets/filters_bottom_sheet.dart';
 
 /// Explore / Smart Search screen (Figma P19, light mode).
 ///
@@ -26,32 +28,35 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   static final List<_MockReport> _mockReports = [
     _MockReport(
-      title: 'Black wireless earbuds',
+      title: 'AirPods Pro with a white case',
       status: ReportStatus.lost,
       category: ReportCategory.electronics,
       location: 'Nasr City, Cairo',
       date: DateTime(2026, 11, 6),
-      imageUrl: 'https://picsum.photos/seed/found-it-earbuds/200',
+      imageUrl: 'https://picsum.photos/seed/found-it-airpods-pro/200',
     ),
     _MockReport(
-      title: 'Silver laptop charger',
+      title: 'AirPods 3rd generation',
       status: ReportStatus.found,
       category: ReportCategory.electronics,
       location: 'Dokki, Giza',
       date: DateTime(2026, 11, 4),
-      imageUrl: 'https://picsum.photos/seed/found-it-charger/200',
+      imageUrl: 'https://picsum.photos/seed/found-it-airpods-3/200',
     ),
     _MockReport(
-      title: 'Smartphone with a blue case',
+      title: 'AirPods Max in silver',
       status: ReportStatus.lost,
       category: ReportCategory.electronics,
       location: 'Maadi, Cairo',
       date: DateTime(2026, 11, 2),
-      imageUrl: 'https://picsum.photos/seed/found-it-phone/200',
+      imageUrl: 'https://picsum.photos/seed/found-it-airpods-max/200',
     ),
   ];
 
-  final TextEditingController _searchController = TextEditingController();
+  /// Prefilled with the P19 example query.
+  final TextEditingController _searchController = TextEditingController(
+    text: 'AirPods',
+  );
 
   /// Mock filters matching the P19/P20 example: Electronics, Nov 1-7, Cairo.
   ExploreFilters _filters = ExploreFilters(
@@ -85,7 +90,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final results = _matchingReports;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.exploreTitle)),
+      appBar: AppBar(
+        // Explore is a root tab of the shell, so the back arrow returns to
+        // the Home tab instead of popping the stack (per the P19 app bar).
+        leading: BackButton(onPressed: () => context.go(AppRoutes.home)),
+        title: Text(l10n.exploreTitle),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -13,6 +13,50 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chooseCityTitle => 'اختر مدينتك';
 
   @override
+  String get tabHome => 'الرئيسية';
+
+  @override
+  String get tabExplore => 'استكشاف';
+
+  @override
+  String get tabReport => 'بلاغ';
+
+  @override
+  String get tabMessages => 'الرسائل';
+
+  @override
+  String get tabProfile => 'حسابي';
+
+  @override
+  String get homeSearchHint => 'ابحث عن عنصر مفقود أو تم العثور عليه';
+
+  @override
+  String get actionLost => 'فقدت شيئًا';
+
+  @override
+  String get actionFound => 'وجدت شيئًا';
+
+  @override
+  String latestInCity(String city) {
+    return 'أحدث التقارير في $city';
+  }
+
+  @override
+  String get seeAll => 'عرض الكل';
+
+  @override
+  String noReportsInCity(String city) {
+    return 'لا توجد تقارير في $city بعد';
+  }
+
+  @override
+  String get beFirstToReport =>
+      'كن أول من يبلّغ عن عنصر مفقود أو تم العثور عليه في مدينتك.';
+
+  @override
+  String get createReport => 'إنشاء بلاغ';
+
+  @override
   String get statusLost => 'مفقود';
 
   @override

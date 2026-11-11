@@ -13,6 +13,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseCityTitle => 'Choose your city';
 
   @override
+  String get tabHome => 'Home';
+
+  @override
+  String get tabExplore => 'Explore';
+
+  @override
+  String get tabReport => 'Report';
+
+  @override
+  String get tabMessages => 'Messages';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
+  String get homeSearchHint => 'Search lost or found items';
+
+  @override
+  String get actionLost => 'I lost something';
+
+  @override
+  String get actionFound => 'I found something';
+
+  @override
+  String latestInCity(String city) {
+    return 'Latest in $city';
+  }
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String noReportsInCity(String city) {
+    return 'No reports in $city yet';
+  }
+
+  @override
+  String get beFirstToReport =>
+      'Be the first to report a lost or found item in your city.';
+
+  @override
+  String get createReport => 'Create report';
+
+  @override
   String get statusLost => 'Lost';
 
   @override

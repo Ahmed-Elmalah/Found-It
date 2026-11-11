@@ -104,6 +104,84 @@ abstract class AppLocalizations {
   /// **'Choose your city'**
   String get chooseCityTitle;
 
+  /// No description provided for @tabHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get tabHome;
+
+  /// No description provided for @tabExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get tabExplore;
+
+  /// No description provided for @tabReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get tabReport;
+
+  /// No description provided for @tabMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get tabMessages;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search lost or found items'**
+  String get homeSearchHint;
+
+  /// No description provided for @actionLost.
+  ///
+  /// In en, this message translates to:
+  /// **'I lost something'**
+  String get actionLost;
+
+  /// No description provided for @actionFound.
+  ///
+  /// In en, this message translates to:
+  /// **'I found something'**
+  String get actionFound;
+
+  /// No description provided for @latestInCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest in {city}'**
+  String latestInCity(String city);
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @noReportsInCity.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports in {city} yet'**
+  String noReportsInCity(String city);
+
+  /// No description provided for @beFirstToReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to report a lost or found item in your city.'**
+  String get beFirstToReport;
+
+  /// No description provided for @createReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Create report'**
+  String get createReport;
+
   /// No description provided for @statusLost.
   ///
   /// In en, this message translates to:

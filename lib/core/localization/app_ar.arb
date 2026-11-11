@@ -3,6 +3,31 @@
 
   "chooseCityTitle": "اختر مدينتك",
 
+  "tabHome": "الرئيسية",
+  "tabExplore": "استكشاف",
+  "tabReport": "بلاغ",
+  "tabMessages": "الرسائل",
+  "tabProfile": "حسابي",
+
+  "homeSearchHint": "ابحث عن عنصر مفقود أو تم العثور عليه",
+  "actionLost": "فقدت شيئًا",
+  "actionFound": "وجدت شيئًا",
+  "latestInCity": "أحدث التقارير في {city}",
+  "@latestInCity": {
+    "placeholders": {
+      "city": {"type": "String"}
+    }
+  },
+  "seeAll": "عرض الكل",
+  "noReportsInCity": "لا توجد تقارير في {city} بعد",
+  "@noReportsInCity": {
+    "placeholders": {
+      "city": {"type": "String"}
+    }
+  },
+  "beFirstToReport": "كن أول من يبلّغ عن عنصر مفقود أو تم العثور عليه في مدينتك.",
+  "createReport": "إنشاء بلاغ",
+
   "statusLost": "مفقود",
   "statusFound": "تم العثور عليه",
   "statusActive": "نشط",
