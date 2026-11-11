@@ -38,9 +38,11 @@ class AppLogo extends StatelessWidget {
         ),
         child: LineIcon(
           LineIconType.searchCheck,
-          size: size.r * 0.6,
+          // measured on the design: the glyph is ~37% of the tile
+          // (the search-check glyph fills 18/24 of the icon box)
+          size: size.r * 0.45,
           color: icon,
-          strokeWidth: 2.5,
+          strokeWidth: 2,
         ),
       ),
     );

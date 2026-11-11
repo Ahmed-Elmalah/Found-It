@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/theme/app_theme.dart';
@@ -51,6 +52,42 @@ Future<void> pumpTestApp(
                 )
               : child,
         ),
+      ),
+    ),
+  );
+}
+
+/// Like [pumpTestApp] but for whole screens that navigate with go_router
+/// (`context.go(...)`). Build a small GoRouter in the test with the screen
+/// under test plus simple stand-in pages for the destinations:
+///
+///   final router = GoRouter(initialLocation: AppRoutes.onboarding, routes: [
+///     GoRoute(path: AppRoutes.onboarding, builder: (_, __) => const OnboardingScreen()),
+///     GoRoute(path: AppRoutes.login, builder: (_, __) => const Text('LOGIN PAGE')),
+///   ]);
+///   await pumpTestRouterApp(tester, router);
+Future<void> pumpTestRouterApp(
+  WidgetTester tester,
+  GoRouter router, {
+  bool dark = false,
+  bool rtl = false,
+}) async {
+  tester.view.physicalSize = const Size(390, 844);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
+  addTearDown(router.dispose);
+
+  await tester.pumpWidget(
+    ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      builder: (context, _) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: dark ? AppTheme.dark : AppTheme.light,
+        locale: Locale(rtl ? 'ar' : 'en'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        routerConfig: router,
       ),
     ),
   );
