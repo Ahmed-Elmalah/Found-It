@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/theme/app_theme.dart';
+import 'package:found_it/core/widgets/empty_state.dart';
 import 'package:found_it/core/widgets/report_card.dart';
 import 'package:found_it/core/widgets/report_status.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
@@ -75,6 +78,25 @@ class WidgetsPreviewScreen extends StatelessWidget {
             title: 'ReportCard - Dark',
             theme: AppTheme.dark,
             builder: _buildReportCards,
+          ),
+          _section(
+            title: 'Empty State (P56 / P17)',
+            theme: AppTheme.light,
+            builder: (context) {
+              final l10n = AppLocalizations.of(context);
+              return EmptyState(
+                title: l10n.emptySearchTitle,
+                message: l10n.emptySearchMessage,
+              );
+            },
+          ),
+          _section(
+            title: 'Explore Screen (P19)',
+            theme: AppTheme.light,
+            builder: (context) => FilledButton(
+              onPressed: () => context.push(AppRoutes.explore),
+              child: const Text('Open Explore screen'),
+            ),
           ),
         ],
       ),

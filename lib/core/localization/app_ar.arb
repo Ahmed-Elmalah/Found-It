@@ -6,5 +6,29 @@
   "statusLost": "مفقود",
   "statusFound": "تم العثور عليه",
   "statusActive": "نشط",
-  "statusResolved": "تم الحل"
+  "statusResolved": "تم الحل",
+
+  "exploreTitle": "استكشاف",
+  "searchHint": "ابحث",
+  "activeReportsCount": "{count} تقارير نشطة",
+  "mostRecentFirst": "الأحدث أولاً",
+
+  "filtersTitle": "الفلاتر",
+  "categoryLabel": "التصنيف",
+  "dateRangeLabel": "نطاق التاريخ",
+  "cityLabel": "المدينة",
+  "startDate": "تاريخ البدء",
+  "endDate": "تاريخ الانتهاء",
+  "reset": "إعادة تعيين",
+  "showResults": "عرض النتائج",
+
+  "emptySearchTitle": "لا توجد تقارير مطابقة.",
+  "emptySearchMessage": "جرّب تعديل فلاتر البحث.",
+
+  "categoryElectronics": "إلكترونيات",
+  "categoryValuables": "أشياء ثمينة",
+  "categoryKeys": "مفاتيح",
+  "categoryBags": "حقائب",
+  "categoryDocuments": "مستندات",
+  "categoryPets": "حيوانات أليفة"
 }

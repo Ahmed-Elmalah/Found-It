@@ -127,6 +127,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resolved'**
   String get statusResolved;
+
+  /// No description provided for @exploreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get exploreTitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchHint;
+
+  /// No description provided for @activeReportsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} active reports'**
+  String activeReportsCount(int count);
+
+  /// No description provided for @mostRecentFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Most recent first'**
+  String get mostRecentFirst;
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filtersTitle;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @dateRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get dateRangeLabel;
+
+  /// No description provided for @cityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get cityLabel;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @showResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Show results'**
+  String get showResults;
+
+  /// No description provided for @emptySearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching reports found.'**
+  String get emptySearchTitle;
+
+  /// No description provided for @emptySearchMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search filters.'**
+  String get emptySearchMessage;
+
+  /// No description provided for @categoryElectronics.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronics'**
+  String get categoryElectronics;
+
+  /// No description provided for @categoryValuables.
+  ///
+  /// In en, this message translates to:
+  /// **'Valuables'**
+  String get categoryValuables;
+
+  /// No description provided for @categoryKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Keys'**
+  String get categoryKeys;
+
+  /// No description provided for @categoryBags.
+  ///
+  /// In en, this message translates to:
+  /// **'Bags'**
+  String get categoryBags;
+
+  /// No description provided for @categoryDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get categoryDocuments;
+
+  /// No description provided for @categoryPets.
+  ///
+  /// In en, this message translates to:
+  /// **'Pets'**
+  String get categoryPets;
 }
 
 class _AppLocalizationsDelegate

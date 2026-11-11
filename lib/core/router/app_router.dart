@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/widgets/widgets_preview_screen.dart';
+import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   // TEMPORARY: start on the Task #1 widget preview for design sign-off.
@@ -17,6 +18,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.widgetsPreview,
       builder: (context, state) => const WidgetsPreviewScreen(),
+    ),
+    GoRoute(
+      path: AppRoutes.explore,
+      builder: (context, state) => const ExploreScreen(),
     ),
   ],
 );

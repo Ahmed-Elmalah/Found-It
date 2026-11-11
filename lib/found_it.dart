@@ -19,9 +19,11 @@ class FoundIt extends StatelessWidget {
         routerConfig: appRouter,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.system,
+        // TEMPORARY: User Story #2 screens are built against the Light mode
+        // designs only. Revert to ThemeMode.system when Dark mode work starts.
+        themeMode: ThemeMode.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
   }

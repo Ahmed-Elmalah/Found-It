@@ -6,5 +6,34 @@
   "statusLost": "Lost",
   "statusFound": "Found",
   "statusActive": "Active",
-  "statusResolved": "Resolved"
+  "statusResolved": "Resolved",
+
+  "exploreTitle": "Explore",
+  "searchHint": "Search",
+  "activeReportsCount": "{count} active reports",
+  "@activeReportsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "mostRecentFirst": "Most recent first",
+
+  "filtersTitle": "Filters",
+  "categoryLabel": "Category",
+  "dateRangeLabel": "Date range",
+  "cityLabel": "City",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "reset": "Reset",
+  "showResults": "Show results",
+
+  "emptySearchTitle": "No matching reports found.",
+  "emptySearchMessage": "Try adjusting your search filters.",
+
+  "categoryElectronics": "Electronics",
+  "categoryValuables": "Valuables",
+  "categoryKeys": "Keys",
+  "categoryBags": "Bags",
+  "categoryDocuments": "Documents",
+  "categoryPets": "Pets"
 }
