@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
 import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
+import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:found_it/features/onboarding/domain/is_first_launch_use_case.dart';
 import 'package:found_it/features/onboarding/domain/onboarding_repository.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
@@ -22,6 +23,15 @@ class _FakeOnboardingRepo implements OnboardingRepository {
 }
 
 class _FakeAuthRepo implements AuthRepository {
+  @override
+  Stream<bool> authStateChanges() => const Stream.empty();
+
+  @override
+  Future<UserEntity?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
   // Sign up is not used by this test.
   @override
   Future<void> signUp(SignUpParams params) => throw UnimplementedError();

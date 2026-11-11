@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:found_it/features/auth/data/auth_data_source.dart';
+import 'package:found_it/features/auth/data/auth_model.dart';
 import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
 import 'package:found_it/features/auth/domain/sign_up_params.dart';
+import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -13,6 +15,28 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   bool hasActiveSession() => _dataSource.hasActiveSession();
+
+  @override
+  Stream<bool> authStateChanges() => _dataSource.authStateChanges();
+
+  @override
+  Future<UserEntity?> getCurrentUser() async {
+    try {
+      final row = await _dataSource.getMyProfile();
+      return row == null ? null : AuthModel.fromJson(row);
+    } catch (e) {
+      throw AuthFailure(_map(e));
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await _dataSource.signOut();
+    } catch (e) {
+      throw AuthFailure(_map(e));
+    }
+  }
 
   @override
   Future<void> login({required String email, required String password}) async {

@@ -3,8 +3,18 @@ import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
 import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/signup_use_case.dart';
+import 'package:found_it/features/auth/domain/user_entity.dart';
 
 class _FakeAuthRepository implements AuthRepository {
+  @override
+  Stream<bool> authStateChanges() => const Stream.empty();
+
+  @override
+  Future<UserEntity?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
   SignUpParams? received;
   Object? error;
 

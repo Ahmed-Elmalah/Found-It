@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
-import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/utils/validators.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
@@ -67,11 +65,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<SignUpCubit>();
 
-    return BlocConsumer<SignUpCubit, SignUpState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == SignUpStatus.success,
-      listener: (context, state) => context.go(AppRoutes.city),
+    // No navigation here on success: the router's redirect sends the new
+    // user to City selection as soon as AuthCubit sees the login.
+    return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
         final failed = state.status == SignUpStatus.failure;
         final emailInUse =
