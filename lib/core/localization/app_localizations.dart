@@ -715,6 +715,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resend email · {time}'**
   String resendEmailIn(String time);
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get navExplore;
+
+  /// No description provided for @navReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get navReport;
+
+  /// No description provided for @navNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get navNotifications;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
 }
 
 class _AppLocalizationsDelegate

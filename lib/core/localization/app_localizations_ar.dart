@@ -334,4 +334,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'إعادة الإرسال · $time';
   }
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navExplore => 'استكشاف';
+
+  @override
+  String get navReport => 'إبلاغ';
+
+  @override
+  String get navNotifications => 'الإشعارات';
+
+  @override
+  String get navProfile => 'حسابي';
 }

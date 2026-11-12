@@ -337,4 +337,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'Resend email · $time';
   }
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navExplore => 'Explore';
+
+  @override
+  String get navReport => 'Report';
+
+  @override
+  String get navNotifications => 'Alerts';
+
+  @override
+  String get navProfile => 'Profile';
 }

@@ -139,5 +139,11 @@
   "verifyEmailBody": "أرسلنا رابط التحقق إلى {email}. افتحه لتفعيل حسابك.",
   "verifiedButton": "لقد فعّلت بريدي",
   "resendEmail": "إعادة الإرسال",
-  "resendEmailIn": "إعادة الإرسال · {time}"
+  "resendEmailIn": "إعادة الإرسال · {time}",
+
+  "navHome": "الرئيسية",
+  "navExplore": "استكشاف",
+  "navReport": "إبلاغ",
+  "navNotifications": "الإشعارات",
+  "navProfile": "حسابي"
 }

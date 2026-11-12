@@ -141,5 +141,11 @@
   "verifiedButton": "I’ve verified my email",
   "resendEmail": "Resend email",
   "resendEmailIn": "Resend email · {time}",
-  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}}
+  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}},
+
+  "navHome": "Home",
+  "navExplore": "Explore",
+  "navReport": "Report",
+  "navNotifications": "Alerts",
+  "navProfile": "Profile"
 }

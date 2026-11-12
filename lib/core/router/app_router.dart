@@ -6,6 +6,8 @@ import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/router/auth_redirect.dart';
 import 'package:found_it/core/router/stream_listenable.dart';
+import 'package:found_it/core/widgets/home_shell_preview.dart';
+import 'package:found_it/core/widgets/main_shell.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
@@ -93,11 +95,50 @@ final GoRouter appRouter = GoRouter(
         child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
       ),
     ),
-    // TEMP: replaced by the real Home screen (Youssef, story #4).
-    // Has a TEMP "Log out" button so the session can be tested.
-    GoRoute(
-      path: AppRoutes.home,
-      builder: (context, state) => const _ComingSoon('Home', withLogout: true),
+    // Persistent Application Shell with Liquid Glass Navigation Bar
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => MainShell(
+        navigationShell: navigationShell,
+      ),
+      branches: [
+        // Tab 0: Home
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.home,
+              builder: (context, state) => const HomeShellPreview(),
+            ),
+          ],
+        ),
+        // Tab 1: Explore
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.explore,
+              builder: (context, state) => const _ComingSoon('Explore'),
+            ),
+          ],
+        ),
+        // Tab 2: Notifications
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.notifications,
+              builder: (context, state) => const _ComingSoon('Notifications'),
+            ),
+          ],
+        ),
+        // Tab 3: Profile
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.profile,
+              builder: (context, state) =>
+                  const _ComingSoon('Profile', withLogout: true),
+            ),
+          ],
+        ),
+      ],
     ),
 
     // Reports routes
