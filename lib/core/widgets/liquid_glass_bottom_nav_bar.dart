@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,17 +6,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 
-/// A modern, high-performance Liquid Glass (Frosted Glassmorphic) Navigation Bar.
+/// An ultra-clear Liquid Glass (Crystal Glassmorphic) Navigation Bar
+/// with a gooey melting focal point centered at the Report Plus button.
 ///
 /// Features:
-/// - Floating capsule dock with [BackdropFilter] frosted blur (sigma: 18).
-/// - Translucent glass gradient with specular reflection border.
-/// - Fluid animated capsule indicator that smoothly glides behind the active tab.
-/// - Prominent center floating action button with vibrant gradient and glass glow for Report.
-/// - Multi-layered soft ambient drop shadows.
-/// - Tactile haptic feedback on interactions.
-/// - Full RTL/LTR and dark/light mode support.
-class LiquidGlassBottomNavBar extends StatelessWidget {
+/// - **Ultra-Clear Crystal Translucency:** Super-light glass tint with enhanced frosted blur (sigma: 24).
+/// - **Melting Point Origin (نقطة الدوبان):** The center Plus button acts as the liquid melting source.
+/// - **Liquid Goo Bridge:** A custom-painted organic liquid bridge that organically stretches between
+///   the center Plus button and the active tab capsule.
+/// - **Stretch & Squash Dynamics:** The active liquid bubble elongates in transit and snaps into place
+///   with an elastic spring bounce.
+/// - **Liquid Center Pulse:** Center Plus button pulses with a glowing liquid aura and spring rotation on tap.
+/// - **Tactile Feedback & RTL:** Full support for RTL/LTR, dark/light themes, and tactile haptics.
+class LiquidGlassBottomNavBar extends StatefulWidget {
   const LiquidGlassBottomNavBar({
     super.key,
     required this.currentIndex,
@@ -23,15 +26,137 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
     required this.onReportTap,
   });
 
-  /// The active tab index among the 4 main destinations:
+  /// Active tab index among the 4 destinations:
   /// 0: Home, 1: Explore, 2: Notifications, 3: Profile.
   final int currentIndex;
 
-  /// Callback when a navigation tab is selected.
+  /// Callback when a tab is tapped.
   final ValueChanged<int> onTap;
 
-  /// Callback when the center report action button is tapped.
+  /// Callback when the center Plus button is tapped.
   final VoidCallback onReportTap;
+
+  @override
+  State<LiquidGlassBottomNavBar> createState() => _LiquidGlassBottomNavBarState();
+}
+
+class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
+    with TickerProviderStateMixin {
+  late final AnimationController _motionController;
+  late final AnimationController _pulseController;
+  late final AnimationController _plusRotateController;
+
+  late Animation<double> _alignmentAnimation;
+  late Animation<double> _stretchAnimation;
+  late Animation<double> _pulseAnimation;
+
+  double _previousAlignmentX = -1.0;
+  double _currentAlignmentX = -1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentAlignmentX = _getAlignmentForIndex(widget.currentIndex);
+    _previousAlignmentX = _currentAlignmentX;
+
+    _motionController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _pulseAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0.0, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeOutQuad)),
+        weight: 40,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 0.0)
+            .chain(CurveTween(curve: Curves.easeInOutQuad)),
+        weight: 60,
+      ),
+    ]).animate(_pulseController);
+
+    _plusRotateController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _buildAnimations(_currentAlignmentX, _currentAlignmentX);
+  }
+
+  @override
+  void didUpdateWidget(covariant LiquidGlassBottomNavBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentIndex != widget.currentIndex) {
+      final newAlignmentX = _getAlignmentForIndex(widget.currentIndex);
+      _previousAlignmentX = _currentAlignmentX;
+      _currentAlignmentX = newAlignmentX;
+
+      _buildAnimations(_previousAlignmentX, _currentAlignmentX);
+      _pulseController.forward(from: 0.0);
+      _motionController.forward(from: 0.0);
+    }
+  }
+
+  void _buildAnimations(double fromX, double toX) {
+    _alignmentAnimation = Tween<double>(begin: fromX, end: toX).animate(
+      CurvedAnimation(
+        parent: _motionController,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    // Stretch curve: peaks in the middle of transit, then snaps back
+    _stretchAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.35)
+            .chain(CurveTween(curve: Curves.easeOutQuad)),
+        weight: 45,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.35, end: 0.90)
+            .chain(CurveTween(curve: Curves.easeInOutQuad)),
+        weight: 35,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 0.90, end: 1.0)
+            .chain(CurveTween(curve: Curves.elasticOut)),
+        weight: 20,
+      ),
+    ]).animate(_motionController);
+  }
+
+  double _getAlignmentForIndex(int index) {
+    // 5 slots: Tab 0 (-1.0), Tab 1 (-0.5), Center Plus (0.0), Tab 2 (0.5), Tab 3 (1.0)
+    return switch (index) {
+      0 => -1.0,
+      1 => -0.5,
+      2 => 0.5,
+      3 => 1.0,
+      _ => -1.0,
+    };
+  }
+
+  @override
+  void dispose() {
+    _motionController.dispose();
+    _pulseController.dispose();
+    _plusRotateController.dispose();
+    super.dispose();
+  }
+
+  void _handlePlusTap() {
+    HapticFeedback.mediumImpact();
+    _pulseController.forward(from: 0.0);
+    _plusRotateController.forward(from: 0.0);
+    widget.onReportTap();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,98 +165,144 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final primary = theme.colorScheme.primary;
 
-    // Map the 4 tab indices to their corresponding column index out of 5 slots:
-    // Slot 0: Home, Slot 1: Explore, Slot 2: Center Button, Slot 3: Notifications, Slot 4: Profile.
-    final targetCol = switch (currentIndex) {
-      0 => 0,
-      1 => 1,
-      2 => 3,
-      3 => 4,
-      _ => 0,
-    };
-
-    // Calculate alignment for the sliding liquid capsule:
-    // With 5 slots, column index 0 is at -1.0, 1 at -0.5, 2 at 0.0, 3 at +0.5, 4 at +1.0.
-    final alignmentX = switch (targetCol) {
-      0 => -1.0,
-      1 => -0.5,
-      3 => 0.5,
-      4 => 1.0,
-      _ => -1.0,
-    };
-
     return RepaintBoundary(
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
+          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 14.h),
           child: Container(
-            height: 68.h,
+            height: 70.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(34.r),
+              borderRadius: BorderRadius.circular(35.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.40 : 0.08),
-                  blurRadius: 24.r,
-                  offset: Offset(0, 8.h),
+                  color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.06),
+                  blurRadius: 28.r,
+                  offset: Offset(0, 10.h),
                 ),
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.03),
+                  color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.02),
                   blurRadius: 8.r,
                   offset: Offset(0, 2.h),
                 ),
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(34.r),
+              borderRadius: BorderRadius.circular(35.r),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(34.r),
+                    borderRadius: BorderRadius.circular(35.r),
+                    // Ultra-clear crystal translucency
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: isDark
                           ? [
-                              const Color(0xFF1C222D).withValues(alpha: 0.82),
-                              const Color(0xFF12161E).withValues(alpha: 0.68),
+                              const Color(0xFF1C222D).withValues(alpha: 0.36),
+                              const Color(0xFF10141D).withValues(alpha: 0.18),
                             ]
                           : [
-                              Colors.white.withValues(alpha: 0.82),
-                              Colors.white.withValues(alpha: 0.58),
+                              Colors.white.withValues(alpha: 0.26),
+                              Colors.white.withValues(alpha: 0.10),
                             ],
                     ),
                     border: Border.all(
                       color: isDark
-                          ? Colors.white.withValues(alpha: 0.14)
-                          : Colors.white.withValues(alpha: 0.75),
-                      width: 1.2,
+                          ? Colors.white.withValues(alpha: 0.16)
+                          : Colors.white.withValues(alpha: 0.70),
+                      width: 1.0,
                     ),
                   ),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Liquid morphing active capsule
-                      AnimatedAlign(
-                        duration: const Duration(milliseconds: 280),
-                        curve: Curves.easeOutCubic,
-                        alignment: Alignment(alignmentX, 0),
-                        child: FractionallySizedBox(
-                          widthFactor: 0.20,
-                          heightFactor: 0.82,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 4.w),
-                            decoration: BoxDecoration(
-                              color: primary.withValues(alpha: isDark ? 0.20 : 0.12),
-                              borderRadius: BorderRadius.circular(22.r),
-                              border: Border.all(
-                                color: primary.withValues(alpha: isDark ? 0.35 : 0.20),
-                                width: 1,
-                              ),
+                      // Specular top highlight bevel (crystal edge reflection)
+                      Positioned(
+                        top: 0,
+                        left: 20.w,
+                        right: 20.w,
+                        height: 1.2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Colors.white.withValues(alpha: 0.0),
+                                isDark
+                                    ? Colors.white.withValues(alpha: 0.35)
+                                    : Colors.white.withValues(alpha: 0.85),
+                                Colors.white.withValues(alpha: 0.0),
+                              ],
                             ),
                           ),
                         ),
+                      ),
+
+                      // Gooey Liquid Bridge & Melting Layer
+                      AnimatedBuilder(
+                        animation: Listenable.merge([
+                          _motionController,
+                          _pulseController,
+                        ]),
+                        builder: (context, _) {
+                          final currentX = _alignmentAnimation.value;
+                          final stretch = _stretchAnimation.value;
+                          final pulse = _pulseAnimation.value;
+
+                          return CustomPaint(
+                            size: Size.infinite,
+                            painter: _LiquidGooPainter(
+                              alignmentX: currentX,
+                              stretch: stretch,
+                              pulse: pulse,
+                              primaryColor: primary,
+                              isDark: isDark,
+                            ),
+                          );
+                        },
+                      ),
+
+                      // Animated Liquid Capsule (active tab indicator)
+                      AnimatedBuilder(
+                        animation: _motionController,
+                        builder: (context, _) {
+                          final currentX = _alignmentAnimation.value;
+                          final stretch = _stretchAnimation.value;
+
+                          return Align(
+                            alignment: AlignmentDirectional(currentX, 0),
+                            child: FractionallySizedBox(
+                              widthFactor: 0.20 * stretch,
+                              heightFactor: 0.82 / math.sqrt(stretch),
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                                decoration: BoxDecoration(
+                                  gradient: RadialGradient(
+                                    center: Alignment.center,
+                                    radius: 0.9,
+                                    colors: [
+                                      primary.withValues(alpha: isDark ? 0.30 : 0.18),
+                                      primary.withValues(alpha: isDark ? 0.12 : 0.06),
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(22.r),
+                                  border: Border.all(
+                                    color: primary.withValues(alpha: isDark ? 0.40 : 0.25),
+                                    width: 1.0,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: primary.withValues(alpha: isDark ? 0.25 : 0.14),
+                                      blurRadius: 10.r,
+                                      spreadRadius: -1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
 
                       // 5 Interactive slots
@@ -142,10 +313,10 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
                             child: _NavBarItem(
                               icon: Icons.home_rounded,
                               label: l10n.navHome,
-                              isSelected: currentIndex == 0,
+                              isSelected: widget.currentIndex == 0,
                               onTap: () {
                                 HapticFeedback.selectionClick();
-                                onTap(0);
+                                widget.onTap(0);
                               },
                             ),
                           ),
@@ -155,22 +326,21 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
                             child: _NavBarItem(
                               icon: Icons.explore_rounded,
                               label: l10n.navExplore,
-                              isSelected: currentIndex == 1,
+                              isSelected: widget.currentIndex == 1,
                               onTap: () {
                                 HapticFeedback.selectionClick();
-                                onTap(1);
+                                widget.onTap(1);
                               },
                             ),
                           ),
 
-                          // Center Slot: Elevated Report Button
+                          // Center Slot: Melting Point Origin (Report Plus Button)
                           Expanded(
-                            child: _CenterReportButton(
+                            child: _CenterMeltingPlusButton(
                               label: l10n.navReport,
-                              onTap: () {
-                                HapticFeedback.mediumImpact();
-                                onReportTap();
-                              },
+                              pulseAnimation: _pulseAnimation,
+                              rotateAnimation: _plusRotateController,
+                              onTap: _handlePlusTap,
                             ),
                           ),
 
@@ -179,10 +349,10 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
                             child: _NavBarItem(
                               icon: Icons.notifications_rounded,
                               label: l10n.navNotifications,
-                              isSelected: currentIndex == 2,
+                              isSelected: widget.currentIndex == 2,
                               onTap: () {
                                 HapticFeedback.selectionClick();
-                                onTap(2);
+                                widget.onTap(2);
                               },
                             ),
                           ),
@@ -192,10 +362,10 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
                             child: _NavBarItem(
                               icon: Icons.person_rounded,
                               label: l10n.navProfile,
-                              isSelected: currentIndex == 3,
+                              isSelected: widget.currentIndex == 3,
                               onTap: () {
                                 HapticFeedback.selectionClick();
-                                onTap(3);
+                                widget.onTap(3);
                               },
                             ),
                           ),
@@ -210,6 +380,98 @@ class LiquidGlassBottomNavBar extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Custom painter that renders the organic gooey liquid connector (metaball bridge)
+/// flowing out of the center Plus button (نقطة الدوبان) towards the moving tab.
+class _LiquidGooPainter extends CustomPainter {
+  _LiquidGooPainter({
+    required this.alignmentX,
+    required this.stretch,
+    required this.pulse,
+    required this.primaryColor,
+    required this.isDark,
+  });
+
+  final double alignmentX;
+  final double stretch;
+  final double pulse;
+  final Color primaryColor;
+  final bool isDark;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (size.width <= 0 || size.height <= 0) return;
+
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    // Convert normalized alignmentX (-1.0 to 1.0) to pixel position
+    final slotWidth = size.width / 5;
+    final targetX = centerX + (alignmentX * (size.width - slotWidth) / 2);
+
+    final distance = (targetX - centerX).abs();
+
+    // 1. Draw glowing liquid aura around the center melting core
+    final coreAuraPaint = Paint()
+      ..color = primaryColor.withValues(
+        alpha: (isDark ? 0.20 : 0.12) + (pulse * 0.12),
+      )
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 12.r + (pulse * 6.r));
+
+    canvas.drawCircle(Offset(centerX, centerY), 22.r, coreAuraPaint);
+
+    // 2. Draw the liquid connector bridge if not perfectly centered
+    if (distance > 4.0) {
+      final connectorPaint = Paint()
+        ..shader = LinearGradient(
+          colors: [
+            primaryColor.withValues(alpha: isDark ? 0.26 : 0.18),
+            primaryColor.withValues(alpha: isDark ? 0.14 : 0.08),
+          ],
+          begin: Alignment.center,
+          end: alignmentX < 0 ? Alignment.centerLeft : Alignment.centerRight,
+        ).createShader(Rect.fromLTRB(
+          math.min(centerX, targetX),
+          0,
+          math.max(centerX, targetX),
+          size.height,
+        ))
+        ..style = PaintingStyle.fill;
+
+      final path = Path();
+      final radius = 18.r;
+      final targetRadius = 16.r * stretch;
+
+      // Calculate organic neck height based on distance (thinner when stretched further)
+      final neckHeight = math.max(6.0, 18.0 - (distance / size.width) * 16.0);
+
+      path.moveTo(centerX, centerY - radius);
+      path.quadraticBezierTo(
+        (centerX + targetX) / 2,
+        centerY - neckHeight,
+        targetX,
+        centerY - targetRadius,
+      );
+      path.lineTo(targetX, centerY + targetRadius);
+      path.quadraticBezierTo(
+        (centerX + targetX) / 2,
+        centerY + neckHeight,
+        centerX,
+        centerY + radius,
+      );
+      path.close();
+
+      canvas.drawPath(path, connectorPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _LiquidGooPainter oldDelegate) {
+    return oldDelegate.alignmentX != alignmentX ||
+        oldDelegate.stretch != stretch ||
+        oldDelegate.pulse != pulse;
   }
 }
 
@@ -244,14 +506,19 @@ class _NavBarItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedScale(
-              scale: isSelected ? 1.08 : 1.0,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              child: Icon(
-                icon,
-                color: color,
-                size: 24.r,
+            AnimatedSlide(
+              offset: isSelected ? const Offset(0, -0.08) : Offset.zero,
+              duration: const Duration(milliseconds: 260),
+              curve: Curves.easeOutBack,
+              child: AnimatedScale(
+                scale: isSelected ? 1.14 : 1.0,
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutBack,
+                child: Icon(
+                  icon,
+                  color: color,
+                  size: 24.r,
+                ),
               ),
             ),
             SizedBox(height: 3.h),
@@ -276,13 +543,17 @@ class _NavBarItem extends StatelessWidget {
   }
 }
 
-class _CenterReportButton extends StatelessWidget {
-  const _CenterReportButton({
+class _CenterMeltingPlusButton extends StatelessWidget {
+  const _CenterMeltingPlusButton({
     required this.label,
+    required this.pulseAnimation,
+    required this.rotateAnimation,
     required this.onTap,
   });
 
   final String label;
+  final Animation<double> pulseAnimation;
+  final Animation<double> rotateAnimation;
   final VoidCallback onTap;
 
   @override
@@ -300,38 +571,51 @@ class _CenterReportButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 44.r,
-              height: 44.r,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF3B66FF),
-                    Color(0xFF1D4ED8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF2563EB).withValues(alpha: isDark ? 0.50 : 0.38),
-                    blurRadius: 12.r,
-                    offset: Offset(0, 3.h),
+            AnimatedBuilder(
+              animation: Listenable.merge([pulseAnimation, rotateAnimation]),
+              builder: (context, _) {
+                final pulse = pulseAnimation.value;
+                final rotation = rotateAnimation.value * (math.pi / 4); // 45 degree spring turn
+
+                return Container(
+                  width: 44.r,
+                  height: 44.r,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF4A74FF),
+                        Color(0xFF1D4ED8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF2563EB).withValues(
+                          alpha: (isDark ? 0.45 : 0.35) + (pulse * 0.20),
+                        ),
+                        blurRadius: 12.r + (pulse * 6.r),
+                        offset: Offset(0, 3.h),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.45),
+                      width: 1.5,
+                    ),
                   ),
-                ],
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                  width: 1.5,
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.add_rounded,
-                  color: Colors.white,
-                  size: 26.r,
-                ),
-              ),
+                  child: Center(
+                    child: Transform.rotate(
+                      angle: rotation,
+                      child: Icon(
+                        Icons.add_rounded,
+                        color: Colors.white,
+                        size: 26.r,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
             SizedBox(height: 2.h),
             Text(
