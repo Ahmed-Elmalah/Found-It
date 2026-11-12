@@ -75,8 +75,15 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.reportCreated,
+      redirect: (context, state) {
+        final extra = state.extra;
+        if (extra is! String || extra.isEmpty) {
+          return AppRoutes.home;
+        }
+        return null;
+      },
       builder: (context, state) {
-        final refCode = (state.extra as String?) ?? '#RPT-1001';
+        final refCode = state.extra! as String;
         return ReportCreatedScreen(referenceId: refCode);
       },
     ),

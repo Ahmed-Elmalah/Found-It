@@ -4,26 +4,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:found_it/core/constants/app_limits.dart';
 import 'package:found_it/features/reports/data/services/photo_picker_service.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
-import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
 import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
 
 class CreateReportCubit extends Cubit<CreateReportState> {
   final GetCategoriesUseCase getCategories;
   final GetCityAreasUseCase getCityAreas;
+  final GetSelectedCityIdUseCase getSelectedCityId;
   final CreateReportUseCase createReport;
   final PhotoPickerService photoPicker;
-  final ReportsRepository repository;
 
   CreateReportCubit({
     required this.getCategories,
     required this.getCityAreas,
+    required this.getSelectedCityId,
     required this.createReport,
     required this.photoPicker,
-    required this.repository,
   }) : super(const CreateReportInitial());
 
   CreateReportFormState get _currentForm {
@@ -40,11 +42,14 @@ class CreateReportCubit extends Cubit<CreateReportState> {
   }
 
   Future<void> loadInitialData({String lang = 'en'}) async {
-    final form = _currentForm.copyWith(isLoadingData: true);
+    final form = _currentForm.copyWith(
+      isLoadingData: true,
+      clearInitialDataFailure: true,
+    );
     emit(form);
 
     try {
-      final cityId = await repository.getSelectedCityId();
+      final cityId = await getSelectedCityId();
       final categories = await getCategories();
       final areas = await getCityAreas(cityId: cityId, lang: lang);
 
@@ -53,11 +58,17 @@ class CreateReportCubit extends Cubit<CreateReportState> {
         categories: categories,
         areas: areas,
         isLoadingData: false,
+        clearInitialDataFailure: true,
       ));
-    } catch (e) {
+    } on ReportFailure catch (failure) {
       emit(_currentForm.copyWith(
         isLoadingData: false,
-        submitError: e.toString(),
+        initialDataFailure: failure.type,
+      ));
+    } catch (_) {
+      emit(_currentForm.copyWith(
+        isLoadingData: false,
+        initialDataFailure: ReportFailureType.unknown,
       ));
     }
   }
@@ -70,21 +81,33 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     final form = _currentForm;
     final errors = Map<String, ReportFieldError>.from(form.errors)
       ..remove('title');
-    emit(form.copyWith(title: value, errors: errors));
+    emit(form.copyWith(
+      title: value,
+      errors: errors,
+      clearSubmitFailure: true,
+    ));
   }
 
   void selectCategory(String categoryId) {
     final form = _currentForm;
     final errors = Map<String, ReportFieldError>.from(form.errors)
       ..remove('category');
-    emit(form.copyWith(categoryId: categoryId, errors: errors));
+    emit(form.copyWith(
+      categoryId: categoryId,
+      errors: errors,
+      clearSubmitFailure: true,
+    ));
   }
 
   void selectDistrict(String areaId) {
     final form = _currentForm;
     final errors = Map<String, ReportFieldError>.from(form.errors)
       ..remove('district');
-    emit(form.copyWith(areaId: areaId, errors: errors));
+    emit(form.copyWith(
+      areaId: areaId,
+      errors: errors,
+      clearSubmitFailure: true,
+    ));
   }
 
   void selectDate(DateTime value) {
@@ -98,16 +121,16 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     final picked = await photoPicker.pickImage(source: source);
     if (picked == null) return;
 
-    final name = picked.name.isNotEmpty ? picked.name : picked.path;
+    final name = picked.name;
     final ext = name.contains('.') ? name.split('.').last.toLowerCase() : '';
-    final bytes = await picked.length();
+    final bytesCount = picked.bytes.lengthInBytes;
 
-    // 2. Only JPG/PNG (AppLimits.allowedImageExtensions) — remove webp. Max AppLimits.maxImageSizeBytes.
     final validType = AppLimits.allowedImageExtensions.contains(ext);
-    final validSize = bytes <= AppLimits.maxImageSizeBytes;
+    final validSize = bytesCount <= AppLimits.maxImageSizeBytes;
 
     final currentForm = _currentForm;
-    final updatedPhotos = List<XFile>.from(currentForm.photos)..add(picked);
+    final updatedPhotos = List<ReportImage>.from(currentForm.photos)
+      ..add(picked);
 
     if (!validType || !validSize) {
       final updatedRejected = Set<int>.from(currentForm.rejectedPhotoIndices)
@@ -116,6 +139,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
         photos: updatedPhotos,
         rejectedPhotoIndices: updatedRejected,
         hasInvalidFile: true,
+        clearSubmitFailure: true,
       ));
     } else {
       final updatedErrors =
@@ -124,6 +148,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       emit(currentForm.copyWith(
         photos: updatedPhotos,
         errors: updatedErrors,
+        clearSubmitFailure: true,
       ));
     }
   }
@@ -132,7 +157,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     final form = _currentForm;
     if (index < 0 || index >= form.photos.length) return;
 
-    final updatedPhotos = List<XFile>.from(form.photos)..removeAt(index);
+    final updatedPhotos = List<ReportImage>.from(form.photos)..removeAt(index);
     final updatedRejected = form.rejectedPhotoIndices
         .where((i) => i != index)
         .map((i) => i > index ? i - 1 : i)
@@ -146,6 +171,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       rejectedPhotoIndices: updatedRejected,
       hasInvalidFile: updatedRejected.isNotEmpty,
       errors: updatedErrors,
+      clearSubmitFailure: true,
     ));
   }
 
@@ -194,11 +220,11 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       title: trimmedTitle,
       errors: const {},
       isSubmitting: true,
-      clearSubmitError: true,
+      clearSubmitFailure: true,
     ));
 
     try {
-      final cityId = form.cityId ?? await repository.getSelectedCityId();
+      final cityId = form.cityId ?? await getSelectedCityId();
 
       final refCode = await createReport(CreateReportParams(
         type: form.isLost ? 'lost' : 'found',
@@ -211,10 +237,15 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       ));
 
       emit(CreateReportSuccess(refCode));
-    } catch (e) {
+    } on ReportFailure catch (failure) {
       emit(_currentForm.copyWith(
         isSubmitting: false,
-        submitError: e.toString(),
+        submitFailure: failure.type,
+      ));
+    } catch (_) {
+      emit(_currentForm.copyWith(
+        isSubmitting: false,
+        submitFailure: ReportFailureType.unknown,
       ));
     }
   }

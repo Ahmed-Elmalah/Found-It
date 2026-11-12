@@ -36,10 +36,10 @@ class AppTextField extends StatefulWidget {
     this.autofillHints,
     this.enabled = true,
     this.autovalidateMode,
+    this.forceLtr = false,
     this.isRequired = false,
     this.maxLength,
     this.showErrorIcon = false,
-    this.forceLtr = false,
   });
 
   final String label;
@@ -66,6 +66,11 @@ class AppTextField extends StatefulWidget {
   /// When the validator runs (default: only on `Form.validate()`).
   final AutovalidateMode? autovalidateMode;
 
+  /// Always shows the typed text (and [prefixText]) left-to-right, also in
+  /// Arabic — for phone numbers: "+20 10 1234 5678", never "5678 1234 10 20+".
+  /// The text still sits next to the icon (right side in Arabic).
+  final bool forceLtr;
+
   /// Shows a red " *" next to the label.
   final bool isRequired;
 
@@ -74,11 +79,6 @@ class AppTextField extends StatefulWidget {
 
   /// When true, renders a small error icon before the error text.
   final bool showErrorIcon;
-
-  /// Always shows the typed text (and [prefixText]) left-to-right, also in
-  /// Arabic — for phone numbers: "+20 10 1234 5678", never "5678 1234 10 20+".
-  /// The text still sits next to the icon (right side in Arabic).
-  final bool forceLtr;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -261,29 +261,20 @@ class _AppTextFieldState extends State<AppTextField> {
                                 footer,
                                 style: TextStyle(
                                   fontSize: 13.sp,
-                                  color: errorText != null
+                                  color: showError
                                       ? colors.error
                                       : colors.onSurfaceVariant,
                                 ),
                               ),
-                      )
-                    else
-                      const Spacer(),
-                    if (widget.maxLength != null) ...[
-                      SizedBox(width: 8.w),
-                      ValueListenableBuilder<TextEditingValue>(
-                        valueListenable: _controller,
-                        builder: (context, value, _) {
-                          return Text(
-                            '${value.text.length}/${widget.maxLength}',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              color: colors.onSurfaceVariant,
-                            ),
-                          );
-                        },
                       ),
-                    ],
+                    if (widget.maxLength != null)
+                      Text(
+                        '${_controller.text.length}/${widget.maxLength}',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
                   ],
                 ),
               ),

@@ -2,19 +2,19 @@
   "@@locale": "ar",
 
   "appName": "FOUND IT",
-  "appTagline": "ضايع منك حاجة؟ هنرجعهالك.",
+  "appTagline": "فقدت شيئًا؟ دعنا نُعيده إليك.",
 
   "chooseCityTitle": "اختر مدينتك",
 
   "onboardingSkip": "تخطي",
   "onboardingNext": "التالي",
   "onboardingGetStarted": "ابدأ الآن",
-  "onboardingFindTitle": "دوّر على اللي ضاع منك",
-  "onboardingFindBody": "تصفح البلاغات في مدينتك وصنّف حسب الفئة والتاريخ.",
-  "onboardingReportTitle": "بلّغ عن حاجة لقيتها",
-  "onboardingReportBody": "انشر بلاغ بصور وتفاصيل عشان صاحبها يقدر يوصلك.",
-  "onboardingChatTitle": "تواصل ورجّع الأمانة",
-  "onboardingChatBody": "اتكلم مع الطرف التاني جوة التطبيق ورتّبوا التسليم بأمان.",
+  "onboardingFindTitle": "ابحث عمّا فقدته",
+  "onboardingFindBody": "ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.",
+  "onboardingReportTitle": "أبلِغ عمّا وجدته",
+  "onboardingReportBody": "انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.",
+  "onboardingChatTitle": "تواصَل واستعِده",
+  "onboardingChatBody": "راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.",
 
   "fieldRequired": "مطلوب",
   "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا",
@@ -64,7 +64,7 @@
   "found": "عُثر عليه",
 
   "itemTitle": "اسم الغرض",
-  "itemTitleHint": "مثال: محفظة جلد سوداء",
+  "itemTitleHint": "مثال: محفظة جلدية سوداء",
   "itemTitleCounter": "{count}/50",
   "@itemTitleCounter": {
     "placeholders": {
@@ -73,7 +73,7 @@
   },
 
   "category": "الفئة",
-  "selectCategory": "اختر الفئة",
+  "selectCategory": "اختر فئة",
 
   "locationDistrict": "الموقع (المنطقة)",
   "selectDistrict": "اختر المنطقة",
@@ -123,6 +123,6 @@
   "notLoggedInTitle": "تسجيل الدخول مطلوب:",
   "notLoggedInMessage": "يجب تسجيل الدخول لإنشاء بلاغ.",
   "invalidDataTitle": "بيانات غير صالحة:",
-  "invalidDataMessage": "يرجى التحقق من تفاصيل البلاغ المدخلة.",
+  "invalidDataMessage": "يرجى التحقق من صحة تفاصيل البلاغ المدخلة.",
   "retry": "إعادة المحاولة"
 }

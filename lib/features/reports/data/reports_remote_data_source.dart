@@ -1,25 +1,40 @@
-import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:found_it/features/reports/data/models/area_model.dart';
 import 'package:found_it/features/reports/data/models/category_model.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
+
+class UploadedPhoto {
+  final String path;
+  final String publicUrl;
+
+  const UploadedPhoto({required this.path, required this.publicUrl});
+}
 
 abstract class ReportsRemoteDataSource {
+  String? currentUserId();
+
   Future<List<CategoryModel>> getCategories();
+
   Future<List<AreaModel>> getCityAreas({
     required String cityId,
     required String lang,
   });
-  Future<String> uploadPhoto({
-    required XFile file,
+
+  Future<UploadedPhoto> uploadPhoto({
+    required ReportImage image,
     required String userId,
     required int index,
   });
+
+  Future<void> deletePhotos(List<String> paths);
+
   Future<String> createReport({
     required CreateReportParams params,
     required List<String> imageUrls,
   });
+
   Future<String> getDefaultCityId();
 }
 
@@ -27,6 +42,9 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
   final SupabaseClient _supabase;
 
   const ReportsRemoteDataSourceImpl(this._supabase);
+
+  @override
+  String? currentUserId() => _supabase.auth.currentUser?.id;
 
   @override
   Future<List<CategoryModel>> getCategories() async {
@@ -58,26 +76,35 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
   }
 
   @override
-  Future<String> uploadPhoto({
-    required XFile file,
+  Future<UploadedPhoto> uploadPhoto({
+    required ReportImage image,
     required String userId,
     required int index,
   }) async {
-    final ext = file.name.contains('.')
-        ? file.name.split('.').last.toLowerCase()
+    final ext = image.name.contains('.')
+        ? image.name.split('.').last.toLowerCase()
         : 'jpg';
-    final path = '$userId/${DateTime.now().millisecondsSinceEpoch}_$index.$ext';
-    final bytes = await file.readAsBytes();
+    final path =
+        '$userId/${DateTime.now().millisecondsSinceEpoch}_$index.$ext';
 
     await _supabase.storage.from('report-images').uploadBinary(
           path,
-          bytes,
+          image.bytes,
           fileOptions: FileOptions(
             contentType: ext == 'png' ? 'image/png' : 'image/jpeg',
           ),
         );
 
-    return _supabase.storage.from('report-images').getPublicUrl(path);
+    final publicUrl =
+        _supabase.storage.from('report-images').getPublicUrl(path);
+
+    return UploadedPhoto(path: path, publicUrl: publicUrl);
+  }
+
+  @override
+  Future<void> deletePhotos(List<String> paths) async {
+    if (paths.isEmpty) return;
+    await _supabase.storage.from('report-images').remove(paths);
   }
 
   @override
@@ -115,6 +142,10 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
     }
     final first =
         await _supabase.from('cities').select('id').limit(1).maybeSingle();
-    return (first?['id'] as String?) ?? 'cairo';
+    final id = first?['id'] as String?;
+    if (id == null || id.isEmpty) {
+      throw const PostgrestException(message: 'No default city found');
+    }
+    return id;
   }
 }

@@ -1,9 +1,10 @@
-import 'package:image_picker/image_picker.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
 
 sealed class CreateReportState extends Equatable {
   const CreateReportState();
@@ -23,14 +24,15 @@ class CreateReportFormState extends CreateReportState {
   final String? areaId;
   final String? cityId;
   final DateTime date;
-  final List<XFile> photos;
+  final List<ReportImage> photos;
   final Set<int> rejectedPhotoIndices;
   final Map<String, ReportFieldError> errors;
   final List<CategoryEntity> categories;
   final List<AreaEntity> areas;
   final bool isLoadingData;
   final bool isSubmitting;
-  final String? submitError;
+  final ReportFailureType? submitFailure;
+  final ReportFailureType? initialDataFailure;
   final bool hasInvalidFile;
 
   const CreateReportFormState({
@@ -47,7 +49,8 @@ class CreateReportFormState extends CreateReportState {
     this.areas = const [],
     this.isLoadingData = false,
     this.isSubmitting = false,
-    this.submitError,
+    this.submitFailure,
+    this.initialDataFailure,
     this.hasInvalidFile = false,
   });
 
@@ -60,15 +63,17 @@ class CreateReportFormState extends CreateReportState {
     bool clearArea = false,
     String? cityId,
     DateTime? date,
-    List<XFile>? photos,
+    List<ReportImage>? photos,
     Set<int>? rejectedPhotoIndices,
     Map<String, ReportFieldError>? errors,
     List<CategoryEntity>? categories,
     List<AreaEntity>? areas,
     bool? isLoadingData,
     bool? isSubmitting,
-    String? submitError,
-    bool clearSubmitError = false,
+    ReportFailureType? submitFailure,
+    bool clearSubmitFailure = false,
+    ReportFailureType? initialDataFailure,
+    bool clearInitialDataFailure = false,
     bool? hasInvalidFile,
   }) {
     return CreateReportFormState(
@@ -85,7 +90,12 @@ class CreateReportFormState extends CreateReportState {
       areas: areas ?? this.areas,
       isLoadingData: isLoadingData ?? this.isLoadingData,
       isSubmitting: isSubmitting ?? this.isSubmitting,
-      submitError: clearSubmitError ? null : (submitError ?? this.submitError),
+      submitFailure: clearSubmitFailure
+          ? null
+          : (submitFailure ?? this.submitFailure),
+      initialDataFailure: clearInitialDataFailure
+          ? null
+          : (initialDataFailure ?? this.initialDataFailure),
       hasInvalidFile: hasInvalidFile ?? this.hasInvalidFile,
     );
   }
@@ -105,7 +115,8 @@ class CreateReportFormState extends CreateReportState {
         areas,
         isLoadingData,
         isSubmitting,
-        submitError,
+        submitFailure,
+        initialDataFailure,
         hasInvalidFile,
       ];
 }

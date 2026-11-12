@@ -7,11 +7,14 @@ import 'package:found_it/features/reports/data/services/photo_picker_service.dar
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
 
@@ -25,41 +28,46 @@ class _FakeReportsRepository implements ReportsRepository {
   final String cityId = 'city_cairo';
   final String returnedRefCode = 'RPT-1001';
   final bool shouldFail;
+  final bool failOnCreate;
 
   CreateReportParams? lastCreatedParams;
 
   _FakeReportsRepository({
     this.shouldFail = false,
+    this.failOnCreate = false,
   });
 
   @override
   Future<List<CategoryEntity>> getCategories() async {
-    if (shouldFail) throw Exception('Failed to load categories');
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
     return categories;
   }
 
   @override
   Future<List<AreaEntity>> getCityAreas({required String cityId, required String lang}) async {
-    if (shouldFail) throw Exception('Failed to load areas');
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
     return areas;
   }
 
   @override
-  Future<String> getSelectedCityId() async => cityId;
+  Future<String> getSelectedCityId() async {
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
+    return cityId;
+  }
 
   @override
   Future<String> createReport(CreateReportParams params) async {
-    if (shouldFail) throw Exception('Creation failed');
+    if (shouldFail || failOnCreate) throw const ReportFailure(ReportFailureType.invalidData);
     lastCreatedParams = params;
     return returnedRefCode;
   }
 }
 
 class _FakePhotoPickerService implements PhotoPickerService {
-  XFile? photoToReturn;
+  ReportImage? photoToReturn;
 
   @override
-  Future<XFile?> pickImage({required ImageSource source}) async => photoToReturn;
+  Future<ReportImage?> pickImage({required ImageSource source}) async => photoToReturn;
 }
 
 void main() {
@@ -73,9 +81,9 @@ void main() {
     cubit = CreateReportCubit(
       getCategories: GetCategoriesUseCase(repo),
       getCityAreas: GetCityAreasUseCase(repo),
+      getSelectedCityId: GetSelectedCityIdUseCase(repo),
       createReport: CreateReportUseCase(repo),
       photoPicker: picker,
-      repository: repo,
     );
   });
 
@@ -92,6 +100,26 @@ void main() {
     expect(form.areas.length, 1);
     expect(form.cityId, 'city_cairo');
     expect(form.isLoadingData, false);
+    expect(form.initialDataFailure, isNull);
+  });
+
+  test('loadInitialData handles failure', () async {
+    final failingRepo = _FakeReportsRepository(shouldFail: true);
+    final failCubit = CreateReportCubit(
+      getCategories: GetCategoriesUseCase(failingRepo),
+      getCityAreas: GetCityAreasUseCase(failingRepo),
+      getSelectedCityId: GetSelectedCityIdUseCase(failingRepo),
+      createReport: CreateReportUseCase(failingRepo),
+      photoPicker: picker,
+    );
+
+    await failCubit.loadInitialData();
+
+    final form = failCubit.state as CreateReportFormState;
+    expect(form.isLoadingData, false);
+    expect(form.initialDataFailure, ReportFailureType.network);
+
+    await failCubit.close();
   });
 
   test('toggleReportType switches between lost and found', () {
@@ -129,10 +157,9 @@ void main() {
   });
 
   test('photo picking accepts valid JPG and PNG', () async {
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'photo.jpg',
-      path: 'photo.jpg',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
 
     await cubit.pickPhoto(ImageSource.gallery);
@@ -144,10 +171,9 @@ void main() {
   });
 
   test('photo picking marks invalid extension as rejected', () async {
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'photo.webp',
-      path: 'photo.webp',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
 
     await cubit.pickPhoto(ImageSource.gallery);
@@ -159,10 +185,9 @@ void main() {
   });
 
   test('removing photo updates photo list and rejected indices', () async {
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'photo.webp',
-      path: 'photo.webp',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
     await cubit.pickPhoto(ImageSource.gallery);
 
@@ -181,10 +206,9 @@ void main() {
     cubit.selectCategory('cat_1');
     cubit.selectDistrict('area_1');
 
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'wallet.png',
-      path: 'wallet.png',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
     await cubit.pickPhoto(ImageSource.gallery);
 
@@ -196,31 +220,30 @@ void main() {
     expect(repo.lastCreatedParams?.title, 'Brown Leather Wallet');
   });
 
-  test('submit failure emits submitError in form state', () async {
-    final failingRepo = _FakeReportsRepository(shouldFail: true);
+  test('submit failure emits submitFailure in form state', () async {
+    final failingRepo = _FakeReportsRepository(failOnCreate: true);
     final failCubit = CreateReportCubit(
       getCategories: GetCategoriesUseCase(failingRepo),
       getCityAreas: GetCityAreasUseCase(failingRepo),
+      getSelectedCityId: GetSelectedCityIdUseCase(failingRepo),
       createReport: CreateReportUseCase(failingRepo),
       photoPicker: picker,
-      repository: failingRepo,
     );
 
     failCubit.updateTitle('Valid Title');
     failCubit.selectCategory('cat_1');
     failCubit.selectDistrict('area_1');
 
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'test.jpg',
-      path: 'test.jpg',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
     await failCubit.pickPhoto(ImageSource.gallery);
 
     await failCubit.submit();
 
     final form = failCubit.state as CreateReportFormState;
-    expect(form.submitError, isNotNull);
+    expect(form.submitFailure, ReportFailureType.invalidData);
     expect(form.isSubmitting, false);
 
     await failCubit.close();

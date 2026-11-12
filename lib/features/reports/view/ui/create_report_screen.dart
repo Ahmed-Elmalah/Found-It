@@ -9,6 +9,7 @@ import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
 import 'package:found_it/core/widgets/error_banner.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
@@ -65,6 +66,32 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
     }
   }
 
+  String _mapFailureTitle(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorTitle;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInTitle;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataTitle;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorTitle;
+    }
+  }
+
+  String _mapFailureMessage(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorMessage;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInMessage;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataMessage;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorMessage;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -74,15 +101,6 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
       listener: (context, state) {
         if (state is CreateReportSuccess) {
           context.go(AppRoutes.reportCreated, extra: state.referenceId);
-        } else if (state is CreateReportFormState &&
-            state.submitError != null &&
-            state.submitError!.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.submitError!),
-              backgroundColor: colors.error,
-            ),
-          );
         }
       },
       builder: (context, state) {
@@ -139,8 +157,55 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 children: [
-                  // ── Top Error Banner (Fixed at top below AppBar - P25 & P26) ──
-                  if (hasRejectedPhotos)
+                  // ── Top Error Banners ──
+                  if (form.initialDataFailure != null) ...[
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        8.h,
+                        16.w,
+                        4.h,
+                      ),
+                      child: ErrorBanner(
+                        title: _mapFailureTitle(form.initialDataFailure!, l10n),
+                        message:
+                            _mapFailureMessage(form.initialDataFailure!, l10n),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        0,
+                        16.w,
+                        4.h,
+                      ),
+                      child: Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            final lang =
+                                Localizations.localeOf(context).languageCode;
+                            cubit.loadInitialData(lang: lang);
+                          },
+                          icon: const Icon(Icons.refresh, size: 16),
+                          label: Text(l10n.retry),
+                        ),
+                      ),
+                    ),
+                  ] else if (form.submitFailure != null)
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        16.w,
+                        8.h,
+                        16.w,
+                        4.h,
+                      ),
+                      child: ErrorBanner(
+                        title: _mapFailureTitle(form.submitFailure!, l10n),
+                        message: _mapFailureMessage(form.submitFailure!, l10n),
+                      ),
+                    )
+                  else if (hasRejectedPhotos)
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(
                         16.w,
@@ -221,7 +286,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           ),
                           SizedBox(height: 16.h),
 
-                          // ── Date ────────────────────────────────────────────
+                          // ── Date ────────────────────────────────────
                           DatePickerField(
                             selectedDate: form.date,
                             onDateSelected: cubit.selectDate,

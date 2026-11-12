@@ -1,13 +1,14 @@
-import 'package:image_picker/image_picker.dart';
 import 'package:equatable/equatable.dart';
 
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
+
 class CreateReportParams extends Equatable {
-  final String type; // 'lost' or 'found'
+  final String type; // 'lost' | 'found'
   final String title;
   final String categoryId;
   final String cityId;
   final String areaId;
-  final List<XFile> images;
+  final List<ReportImage> images;
   final DateTime itemDate;
   final String? description;
 

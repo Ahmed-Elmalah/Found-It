@@ -1,17 +1,15 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:found_it/core/constants/app_limits.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
 
 /// Grid photo uploader (1–4 photos).
 /// Rejected photos (wrong type or size) are shown with a red "Rejected" badge.
 class PhotoUploaderWidget extends StatelessWidget {
-  final List<XFile> photos;
+  final List<ReportImage> photos;
   final Set<int> rejectedIndices;
   final String? errorText;
   final void Function(ImageSource source) onAddPhoto;
@@ -187,7 +185,7 @@ class PhotoUploaderWidget extends StatelessWidget {
 // ── Individual tiles ──────────────────────────────────────────────────────────
 
 class _PhotoTile extends StatelessWidget {
-  final XFile file;
+  final ReportImage file;
   final bool isRejected;
   final VoidCallback onRemove;
 
@@ -240,37 +238,21 @@ class _PhotoTile extends StatelessWidget {
                       ],
                     ),
                   )
-                : kIsWeb
-                    ? Image.network(
-                        file.path,
-                        width: size,
-                        height: size,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
-                          width: size,
-                          height: size,
-                          color: colors.surfaceContainerHighest,
-                          child: Icon(
-                            Icons.broken_image_rounded,
-                            color: colors.onSurfaceVariant,
-                          ),
-                        ),
-                      )
-                    : Image.file(
-                        File(file.path),
-                        width: size,
-                        height: size,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
-                          width: size,
-                          height: size,
-                          color: colors.surfaceContainerHighest,
-                          child: Icon(
-                            Icons.broken_image_rounded,
-                            color: colors.onSurfaceVariant,
-                          ),
-                        ),
+                : Image.memory(
+                    file.bytes,
+                    width: size,
+                    height: size,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => Container(
+                      width: size,
+                      height: size,
+                      color: colors.surfaceContainerHighest,
+                      child: Icon(
+                        Icons.broken_image_rounded,
+                        color: colors.onSurfaceVariant,
                       ),
+                    ),
+                  ),
           ),
 
           // ── Remove badge ───────────────────────────────────────────────

@@ -12,10 +12,13 @@ import 'package:found_it/features/reports/data/services/photo_picker_service.dar
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
+import 'package:found_it/features/reports/domain/entities/report_image.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
@@ -31,48 +34,63 @@ class _FakeReportsRepository implements ReportsRepository {
   ];
   final String cityId = 'city_cairo';
   final String returnedRefCode = '#RPT-1001';
+  final bool shouldFail;
 
-  _FakeReportsRepository();
-
-  @override
-  Future<List<CategoryEntity>> getCategories() async => categories;
+  _FakeReportsRepository({this.shouldFail = false});
 
   @override
-  Future<List<AreaEntity>> getCityAreas({required String cityId, required String lang}) async => areas;
+  Future<List<CategoryEntity>> getCategories() async {
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
+    return categories;
+  }
 
   @override
-  Future<String> getSelectedCityId() async => cityId;
+  Future<List<AreaEntity>> getCityAreas({required String cityId, required String lang}) async {
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
+    return areas;
+  }
 
   @override
-  Future<String> createReport(CreateReportParams params) async => returnedRefCode;
+  Future<String> getSelectedCityId() async {
+    if (shouldFail) throw const ReportFailure(ReportFailureType.network);
+    return cityId;
+  }
+
+  @override
+  Future<String> createReport(CreateReportParams params) async {
+    if (shouldFail) throw const ReportFailure(ReportFailureType.invalidData);
+    return returnedRefCode;
+  }
 }
 
 class _FakePhotoPickerService implements PhotoPickerService {
-  XFile? photoToReturn;
+  ReportImage? photoToReturn;
 
   @override
-  Future<XFile?> pickImage({required ImageSource source}) async => photoToReturn;
+  Future<ReportImage?> pickImage({required ImageSource source}) async => photoToReturn;
 }
 
 Future<CreateReportCubit> _pump(
   WidgetTester tester, {
   _FakePhotoPickerService? photoPicker,
+  _FakeReportsRepository? repository,
+  String initialLocation = AppRoutes.createReport,
   bool dark = false,
   bool rtl = false,
 }) async {
-  final repo = _FakeReportsRepository();
+  final repo = repository ?? _FakeReportsRepository();
   final picker = photoPicker ?? _FakePhotoPickerService();
   final cubit = CreateReportCubit(
     getCategories: GetCategoriesUseCase(repo),
     getCityAreas: GetCityAreasUseCase(repo),
+    getSelectedCityId: GetSelectedCityIdUseCase(repo),
     createReport: CreateReportUseCase(repo),
     photoPicker: picker,
-    repository: repo,
   );
   addTearDown(cubit.close);
 
   final router = GoRouter(
-    initialLocation: AppRoutes.createReport,
+    initialLocation: initialLocation,
     routes: [
       GoRoute(
         path: AppRoutes.createReport,
@@ -83,8 +101,15 @@ Future<CreateReportCubit> _pump(
       ),
       GoRoute(
         path: AppRoutes.reportCreated,
+        redirect: (context, state) {
+          final extra = state.extra;
+          if (extra is! String || extra.isEmpty) {
+            return AppRoutes.home;
+          }
+          return null;
+        },
         builder: (_, state) {
-          final id = (state.extra as String?) ?? '#RPT-0000';
+          final id = state.extra! as String;
           return ReportCreatedScreen(referenceId: id);
         },
       ),
@@ -131,10 +156,9 @@ void main() {
 
   testWidgets('picking invalid photo shows Invalid File banner (P26)', (tester) async {
     final picker = _FakePhotoPickerService();
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'bad_image.webp',
-      path: 'bad_image.webp',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
 
     final cubit = await _pump(tester, photoPicker: picker);
@@ -158,10 +182,9 @@ void main() {
     cubit.selectCategory('cat_1');
     cubit.selectDistrict('area_1');
 
-    picker.photoToReturn = XFile.fromData(
-      Uint8List.fromList([1, 2, 3]),
+    picker.photoToReturn = ReportImage(
       name: 'photo.jpg',
-      path: 'photo.jpg',
+      bytes: Uint8List.fromList([1, 2, 3]),
     );
     await cubit.pickPhoto(ImageSource.gallery);
     await tester.pumpAndSettle();
@@ -174,5 +197,20 @@ void main() {
     expect(find.textContaining('#RPT-1001'), findsOneWidget);
     expect(find.text('View my report'), findsOneWidget);
     expect(find.text('Back to home'), findsOneWidget);
+  });
+
+  testWidgets('initialDataFailure shows translated ErrorBanner and retry button', (tester) async {
+    final failingRepo = _FakeReportsRepository(shouldFail: true);
+    await _pump(tester, repository: failingRepo);
+
+    expect(find.byType(ErrorBanner), findsOneWidget);
+    expect(find.textContaining('Connection error:'), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
+  });
+
+  testWidgets('reportCreated route redirects to home if extra is missing', (tester) async {
+    await _pump(tester, initialLocation: AppRoutes.reportCreated);
+
+    expect(find.text('HOME PAGE'), findsOneWidget);
   });
 }

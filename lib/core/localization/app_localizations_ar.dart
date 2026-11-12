@@ -13,7 +13,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'FOUND IT';
 
   @override
-  String get appTagline => 'ضايع منك حاجة؟ هنرجعهالك.';
+  String get appTagline => 'فقدت شيئًا؟ دعنا نُعيده إليك.';
 
   @override
   String get chooseCityTitle => 'اختر مدينتك';
@@ -28,25 +28,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get onboardingGetStarted => 'ابدأ الآن';
 
   @override
-  String get onboardingFindTitle => 'دوّر على اللي ضاع منك';
+  String get onboardingFindTitle => 'ابحث عمّا فقدته';
 
   @override
   String get onboardingFindBody =>
-      'تصفح البلاغات في مدينتك وصنّف حسب الفئة والتاريخ.';
+      'ابحث في البلاغات داخل مدينتك وصفِّها حسب الفئة والتاريخ.';
 
   @override
-  String get onboardingReportTitle => 'بلّغ عن حاجة لقيتها';
+  String get onboardingReportTitle => 'أبلِغ عمّا وجدته';
 
   @override
   String get onboardingReportBody =>
-      'انشر بلاغ بصور وتفاصيل عشان صاحبها يقدر يوصلك.';
+      'انشر بلاغًا بالصور والتفاصيل ليتمكن صاحبه من الوصول إليك.';
 
   @override
-  String get onboardingChatTitle => 'تواصل ورجّع الأمانة';
+  String get onboardingChatTitle => 'تواصَل واستعِده';
 
   @override
   String get onboardingChatBody =>
-      'اتكلم مع الطرف التاني جوة التطبيق ورتّبوا التسليم بأمان.';
+      'راسل الطرف الآخر داخل التطبيق ورتّب لتسليم آمن.';
 
   @override
   String get fieldRequired => 'مطلوب';
@@ -174,7 +174,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get itemTitle => 'اسم الغرض';
 
   @override
-  String get itemTitleHint => 'مثال: محفظة جلد سوداء';
+  String get itemTitleHint => 'مثال: محفظة جلدية سوداء';
 
   @override
   String itemTitleCounter(int count) {
@@ -185,7 +185,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get category => 'الفئة';
 
   @override
-  String get selectCategory => 'اختر الفئة';
+  String get selectCategory => 'اختر فئة';
 
   @override
   String get locationDistrict => 'الموقع (المنطقة)';
@@ -283,7 +283,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invalidDataTitle => 'بيانات غير صالحة:';
 
   @override
-  String get invalidDataMessage => 'يرجى التحقق من تفاصيل البلاغ المدخلة.';
+  String get invalidDataMessage => 'يرجى التحقق من صحة تفاصيل البلاغ المدخلة.';
 
   @override
   String get retry => 'إعادة المحاولة';
