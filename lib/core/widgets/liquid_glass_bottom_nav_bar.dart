@@ -6,18 +6,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 
-/// An ultra-clear Liquid Glass (Crystal Glassmorphic) Navigation Bar
-/// with a gooey melting focal point centered at the Report Plus button.
+/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar inspired by moza.flutter,
+/// featuring optical glass refraction, a convex Glass Loupe active lens, and an organic
+/// metaball melting bridge centered at the Report Plus button (نقطة الدوبان).
 ///
-/// Features:
-/// - **Ultra-Clear Crystal Translucency:** Super-light glass tint with enhanced frosted blur (sigma: 24).
-/// - **Melting Point Origin (نقطة الدوبان):** The center Plus button acts as the liquid melting source.
-/// - **Liquid Goo Bridge:** A custom-painted organic liquid bridge that organically stretches between
-///   the center Plus button and the active tab capsule.
-/// - **Stretch & Squash Dynamics:** The active liquid bubble elongates in transit and snaps into place
-///   with an elastic spring bounce.
-/// - **Liquid Center Pulse:** Center Plus button pulses with a glowing liquid aura and spring rotation on tap.
-/// - **Tactile Feedback & RTL:** Full support for RTL/LTR, dark/light themes, and tactile haptics.
+/// Key Architectural & Visual Mechanics:
+/// 1. **Ultra-Clear Crystal Dock:** High-transparency frosted glass (~18% tint) with heavy blur (sigma: 24).
+/// 2. **Specular Bevel Glint (اللمعة):** Physical light reflection sheen along the top-left beveled glass rim.
+/// 3. **The Glass Loupe (عدسة الإزاز):** Circular convex optical lens that glides over the active tab,
+///    featuring outer refraction rings and an inner specular glint.
+/// 4. **Metaball Melting Furnace (نقطة الدوبان):** The center Plus button is the liquid source.
+///    When switching tabs, a viscous organic liquid bridge (concave metaball neck) organically
+///    stretches out of the Plus button, preserving volume with stretch-and-squash dynamics.
+/// 5. **Spring Dynamics:** Elastic bounce physics on settling and tactile haptic reactions.
 class LiquidGlassBottomNavBar extends StatefulWidget {
   const LiquidGlassBottomNavBar({
     super.key,
@@ -61,30 +62,30 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
 
     _motionController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 440),
     );
 
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 550),
     );
 
     _pulseAnimation = TweenSequence<double>([
       TweenSequenceItem(
         tween: Tween<double>(begin: 0.0, end: 1.0)
             .chain(CurveTween(curve: Curves.easeOutQuad)),
-        weight: 40,
+        weight: 35,
       ),
       TweenSequenceItem(
         tween: Tween<double>(begin: 1.0, end: 0.0)
             .chain(CurveTween(curve: Curves.easeInOutQuad)),
-        weight: 60,
+        weight: 65,
       ),
     ]).animate(_pulseController);
 
     _plusRotateController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 320),
     );
 
     _buildAnimations(_currentAlignmentX, _currentAlignmentX);
@@ -112,20 +113,20 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
       ),
     );
 
-    // Stretch curve: peaks in the middle of transit, then snaps back
+    // Stretch-and-squash physics: elongates during flight, then spring rebounds
     _stretchAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 1.35)
+        tween: Tween<double>(begin: 1.0, end: 1.38)
             .chain(CurveTween(curve: Curves.easeOutQuad)),
-        weight: 45,
+        weight: 42,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.35, end: 0.90)
+        tween: Tween<double>(begin: 1.38, end: 0.88)
             .chain(CurveTween(curve: Curves.easeInOutQuad)),
-        weight: 35,
+        weight: 38,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 0.90, end: 1.0)
+        tween: Tween<double>(begin: 0.88, end: 1.0)
             .chain(CurveTween(curve: Curves.elasticOut)),
         weight: 20,
       ),
@@ -171,9 +172,9 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 14.h),
           child: Container(
-            height: 70.h,
+            height: 68.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(35.r),
+              borderRadius: BorderRadius.circular(34.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.06),
@@ -188,50 +189,50 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(35.r),
+              borderRadius: BorderRadius.circular(34.r),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(35.r),
+                    borderRadius: BorderRadius.circular(34.r),
                     // Ultra-clear crystal translucency
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: isDark
                           ? [
-                              const Color(0xFF1C222D).withValues(alpha: 0.36),
-                              const Color(0xFF10141D).withValues(alpha: 0.18),
+                              const Color(0xFF1C222D).withValues(alpha: 0.32),
+                              const Color(0xFF10141D).withValues(alpha: 0.16),
                             ]
                           : [
-                              Colors.white.withValues(alpha: 0.26),
-                              Colors.white.withValues(alpha: 0.10),
+                              Colors.white.withValues(alpha: 0.22),
+                              Colors.white.withValues(alpha: 0.08),
                             ],
                     ),
                     border: Border.all(
                       color: isDark
-                          ? Colors.white.withValues(alpha: 0.16)
-                          : Colors.white.withValues(alpha: 0.70),
+                          ? Colors.white.withValues(alpha: 0.18)
+                          : Colors.white.withValues(alpha: 0.75),
                       width: 1.0,
                     ),
                   ),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Specular top highlight bevel (crystal edge reflection)
+                      // Specular top-left bevel glint (اللمعة الكريستالية)
                       Positioned(
                         top: 0,
-                        left: 20.w,
-                        right: 20.w,
-                        height: 1.2,
+                        left: 24.w,
+                        right: 24.w,
+                        height: 1.5,
                         child: Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
                                 Colors.white.withValues(alpha: 0.0),
                                 isDark
-                                    ? Colors.white.withValues(alpha: 0.35)
-                                    : Colors.white.withValues(alpha: 0.85),
+                                    ? Colors.white.withValues(alpha: 0.45)
+                                    : Colors.white.withValues(alpha: 0.90),
                                 Colors.white.withValues(alpha: 0.0),
                               ],
                             ),
@@ -239,7 +240,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                         ),
                       ),
 
-                      // Gooey Liquid Bridge & Melting Layer
+                      // Organic Gooey Metaball Melting Bridge (وصلة السائل المذاب)
                       AnimatedBuilder(
                         animation: Listenable.merge([
                           _motionController,
@@ -249,13 +250,15 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                           final currentX = _alignmentAnimation.value;
                           final stretch = _stretchAnimation.value;
                           final pulse = _pulseAnimation.value;
+                          final progress = _motionController.value;
 
                           return CustomPaint(
                             size: Size.infinite,
-                            painter: _LiquidGooPainter(
+                            painter: _MetaballMeltingPainter(
                               alignmentX: currentX,
                               stretch: stretch,
                               pulse: pulse,
+                              progress: progress,
                               primaryColor: primary,
                               isDark: isDark,
                             ),
@@ -263,7 +266,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                         },
                       ),
 
-                      // Animated Liquid Capsule (active tab indicator)
+                      // The "Glass Loupe" (عدسة الإزاز) Active Tab Lens
                       AnimatedBuilder(
                         animation: _motionController,
                         builder: (context, _) {
@@ -274,30 +277,63 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             alignment: AlignmentDirectional(currentX, 0),
                             child: FractionallySizedBox(
                               widthFactor: 0.20 * stretch,
-                              heightFactor: 0.82 / math.sqrt(stretch),
+                              heightFactor: 0.84 / math.sqrt(stretch),
                               child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 4.w),
                                 decoration: BoxDecoration(
+                                  // Convex optical lens gradient
                                   gradient: RadialGradient(
-                                    center: Alignment.center,
-                                    radius: 0.9,
-                                    colors: [
-                                      primary.withValues(alpha: isDark ? 0.30 : 0.18),
-                                      primary.withValues(alpha: isDark ? 0.12 : 0.06),
-                                    ],
+                                    center: const Alignment(-0.35, -0.35),
+                                    radius: 0.85,
+                                    colors: isDark
+                                        ? [
+                                            Colors.white.withValues(alpha: 0.25),
+                                            primary.withValues(alpha: 0.20),
+                                            primary.withValues(alpha: 0.06),
+                                          ]
+                                        : [
+                                            Colors.white.withValues(alpha: 0.65),
+                                            primary.withValues(alpha: 0.16),
+                                            primary.withValues(alpha: 0.04),
+                                          ],
                                   ),
-                                  borderRadius: BorderRadius.circular(22.r),
+                                  borderRadius: BorderRadius.circular(24.r),
                                   border: Border.all(
-                                    color: primary.withValues(alpha: isDark ? 0.40 : 0.25),
-                                    width: 1.0,
+                                    color: isDark
+                                        ? Colors.white.withValues(alpha: 0.35)
+                                        : Colors.white.withValues(alpha: 0.85),
+                                    width: 1.2,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primary.withValues(alpha: isDark ? 0.25 : 0.14),
-                                      blurRadius: 10.r,
+                                      color: primary.withValues(
+                                        alpha: isDark ? 0.35 : 0.18,
+                                      ),
+                                      blurRadius: 12.r,
                                       spreadRadius: -1,
                                     ),
+                                    BoxShadow(
+                                      color: Colors.white.withValues(
+                                        alpha: isDark ? 0.15 : 0.40,
+                                      ),
+                                      blurRadius: 4.r,
+                                      offset: const Offset(-1, -1),
+                                    ),
                                   ],
+                                ),
+                                // Inner convex specular crescent highlight
+                                child: Align(
+                                  alignment: const Alignment(-0.5, -0.6),
+                                  child: Container(
+                                    width: 8.r,
+                                    height: 4.r,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: isDark ? 0.50 : 0.85,
+                                      ),
+                                      borderRadius: BorderRadius.circular(4.r),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -383,13 +419,14 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   }
 }
 
-/// Custom painter that renders the organic gooey liquid connector (metaball bridge)
-/// flowing out of the center Plus button (نقطة الدوبان) towards the moving tab.
-class _LiquidGooPainter extends CustomPainter {
-  _LiquidGooPainter({
+/// Custom painter that renders the organic gooey metaball connector bridge
+/// flowing from the center Plus button (نقطة الدوبان) to the moving Glass Loupe.
+class _MetaballMeltingPainter extends CustomPainter {
+  _MetaballMeltingPainter({
     required this.alignmentX,
     required this.stretch,
     required this.pulse,
+    required this.progress,
     required this.primaryColor,
     required this.isDark,
   });
@@ -397,6 +434,7 @@ class _LiquidGooPainter extends CustomPainter {
   final double alignmentX;
   final double stretch;
   final double pulse;
+  final double progress;
   final Color primaryColor;
   final bool isDark;
 
@@ -410,28 +448,29 @@ class _LiquidGooPainter extends CustomPainter {
     // Convert normalized alignmentX (-1.0 to 1.0) to pixel position
     final slotWidth = size.width / 5;
     final targetX = centerX + (alignmentX * (size.width - slotWidth) / 2);
-
     final distance = (targetX - centerX).abs();
 
-    // 1. Draw glowing liquid aura around the center melting core
+    // 1. Draw glowing liquid aura around the center Plus melting furnace
     final coreAuraPaint = Paint()
       ..color = primaryColor.withValues(
-        alpha: (isDark ? 0.20 : 0.12) + (pulse * 0.12),
+        alpha: (isDark ? 0.22 : 0.14) + (pulse * 0.16),
       )
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 12.r + (pulse * 6.r));
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 14.r + (pulse * 8.r));
 
-    canvas.drawCircle(Offset(centerX, centerY), 22.r, coreAuraPaint);
+    canvas.drawCircle(Offset(centerX, centerY), 23.r, coreAuraPaint);
 
-    // 2. Draw the liquid connector bridge if not perfectly centered
-    if (distance > 4.0) {
-      final connectorPaint = Paint()
+    // 2. Draw the organic concave metaball neck bridge
+    if (distance > 6.0) {
+      final isMovingToLeft = targetX < centerX;
+
+      final bridgePaint = Paint()
         ..shader = LinearGradient(
           colors: [
-            primaryColor.withValues(alpha: isDark ? 0.26 : 0.18),
-            primaryColor.withValues(alpha: isDark ? 0.14 : 0.08),
+            primaryColor.withValues(alpha: isDark ? 0.32 : 0.22),
+            primaryColor.withValues(alpha: isDark ? 0.16 : 0.09),
           ],
           begin: Alignment.center,
-          end: alignmentX < 0 ? Alignment.centerLeft : Alignment.centerRight,
+          end: isMovingToLeft ? Alignment.centerLeft : Alignment.centerRight,
         ).createShader(Rect.fromLTRB(
           math.min(centerX, targetX),
           0,
@@ -441,37 +480,67 @@ class _LiquidGooPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
 
       final path = Path();
-      final radius = 18.r;
-      final targetRadius = 16.r * stretch;
+      final plusRadius = 22.r;
+      final targetRadius = 18.r * stretch;
 
-      // Calculate organic neck height based on distance (thinner when stretched further)
-      final neckHeight = math.max(6.0, 18.0 - (distance / size.width) * 16.0);
+      // Dynamic concave neck height (thinner during peak stretch, organic taper)
+      final midX = (centerX + targetX) / 2;
+      final neckPinch = math.max(4.0, 16.0 - (distance / size.width) * 18.0);
 
-      path.moveTo(centerX, centerY - radius);
+      path.moveTo(centerX, centerY - plusRadius);
       path.quadraticBezierTo(
-        (centerX + targetX) / 2,
-        centerY - neckHeight,
+        midX,
+        centerY - neckPinch,
         targetX,
         centerY - targetRadius,
       );
       path.lineTo(targetX, centerY + targetRadius);
       path.quadraticBezierTo(
-        (centerX + targetX) / 2,
-        centerY + neckHeight,
+        midX,
+        centerY + neckPinch,
         centerX,
-        centerY + radius,
+        centerY + plusRadius,
       );
       path.close();
 
-      canvas.drawPath(path, connectorPaint);
+      canvas.drawPath(path, bridgePaint);
+
+      // Specular highlight line along the upper liquid bridge rim
+      final rimPaint = Paint()
+        ..shader = LinearGradient(
+          colors: [
+            Colors.white.withValues(alpha: 0.0),
+            Colors.white.withValues(alpha: isDark ? 0.35 : 0.70),
+            Colors.white.withValues(alpha: 0.0),
+          ],
+        ).createShader(Rect.fromLTRB(
+          math.min(centerX, targetX),
+          centerY - 10,
+          math.max(centerX, targetX),
+          centerY + 10,
+        ))
+        ..strokeWidth = 1.0
+        ..style = PaintingStyle.stroke;
+
+      final rimPath = Path()
+        ..moveTo(centerX, centerY - plusRadius)
+        ..quadraticBezierTo(
+          midX,
+          centerY - neckPinch,
+          targetX,
+          centerY - targetRadius,
+        );
+
+      canvas.drawPath(rimPath, rimPaint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _LiquidGooPainter oldDelegate) {
+  bool shouldRepaint(covariant _MetaballMeltingPainter oldDelegate) {
     return oldDelegate.alignmentX != alignmentX ||
         oldDelegate.stretch != stretch ||
-        oldDelegate.pulse != pulse;
+        oldDelegate.pulse != pulse ||
+        oldDelegate.progress != progress;
   }
 }
 
@@ -494,7 +563,7 @@ class _NavBarItem extends StatelessWidget {
     final primary = theme.colorScheme.primary;
     final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
 
-    final color = isSelected ? primary : onSurfaceVariant;
+    final color = isSelected ? primary : onSurfaceVariant.withValues(alpha: 0.65);
 
     return InkWell(
       onTap: onTap,
@@ -511,7 +580,7 @@ class _NavBarItem extends StatelessWidget {
               duration: const Duration(milliseconds: 260),
               curve: Curves.easeOutBack,
               child: AnimatedScale(
-                scale: isSelected ? 1.14 : 1.0,
+                scale: isSelected ? 1.15 : 1.0,
                 duration: const Duration(milliseconds: 240),
                 curve: Curves.easeOutBack,
                 child: Icon(
@@ -593,14 +662,14 @@ class _CenterMeltingPlusButton extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0xFF2563EB).withValues(
-                          alpha: (isDark ? 0.45 : 0.35) + (pulse * 0.20),
+                          alpha: (isDark ? 0.48 : 0.38) + (pulse * 0.22),
                         ),
-                        blurRadius: 12.r + (pulse * 6.r),
+                        blurRadius: 14.r + (pulse * 6.r),
                         offset: Offset(0, 3.h),
                       ),
                     ],
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.45),
+                      color: Colors.white.withValues(alpha: 0.50),
                       width: 1.5,
                     ),
                   ),
