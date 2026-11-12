@@ -18,6 +18,9 @@ import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
 import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
+import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
+import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -91,6 +94,29 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const _ComingSoon('Home', withLogout: true),
+    ),
+
+    // Reports routes
+    GoRoute(
+      path: AppRoutes.createReport,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<CreateReportCubit>(),
+        child: const CreateReportScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.reportCreated,
+      redirect: (context, state) {
+        final extra = state.extra;
+        if (extra is! String || extra.isEmpty) {
+          return AppRoutes.home;
+        }
+        return null;
+      },
+      builder: (context, state) {
+        final refCode = state.extra! as String;
+        return ReportCreatedScreen(referenceId: refCode);
+      },
     ),
   ],
 );
