@@ -12,6 +12,15 @@ import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
 import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
+import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
+import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
+import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
+import 'package:found_it/features/profile/view/ui/profile_screen.dart';
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
+import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
+import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -60,6 +69,49 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const _ComingSoon('Home'),
+    ),
+
+    // My Reports (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.myReports,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<MyReportsCubit>(),
+        child: const MyReportsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.editReport,
+      builder: (context, state) {
+        final report = state.extra as ReportEntity;
+        return BlocProvider(
+          create: (_) => EditReportCubit(
+            report: report,
+            updateReportUseCase: sl(),
+            getCategoriesUseCase: sl(),
+            getCityAreasUseCase: sl(),
+          ),
+          child: EditReportScreen(report: report),
+        );
+      },
+    ),
+
+    // Profile & Settings (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.profile,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<ProfileCubit>(),
+        child: const ProfileScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.editProfile,
+      builder: (context, state) {
+        final profile = state.extra as UserProfileEntity;
+        return BlocProvider(
+          create: (_) => sl<ProfileCubit>(),
+          child: EditProfileScreen(profile: profile),
+        );
+      },
     ),
   ],
 );

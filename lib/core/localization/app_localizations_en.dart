@@ -157,4 +157,173 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weakPasswordMessage => 'Choose a stronger password.';
+
+  @override
+  String get myReportsTitle => 'My Reports';
+
+  @override
+  String get tabAll => 'All';
+
+  @override
+  String get tabActive => 'Active';
+
+  @override
+  String get tabMatching => 'Matching';
+
+  @override
+  String get tabRecovered => 'Recovered';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusMatching => 'Matching';
+
+  @override
+  String get statusRecovered => 'Recovered';
+
+  @override
+  String get typeLost => 'Lost';
+
+  @override
+  String get typeFound => 'Found';
+
+  @override
+  String get noReportsTitle => 'No reports yet';
+
+  @override
+  String get noReportsSubtitle => 'Reports you publish will appear here.';
+
+  @override
+  String get createReport => 'Create report';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get reportDeletedSuccess => 'Report deleted successfully';
+
+  @override
+  String get reportUpdatedSuccess => 'Report updated successfully';
+
+  @override
+  String get deleteReportDialogTitle => 'Delete report?';
+
+  @override
+  String get deleteReportDialogMessage =>
+      'Are you sure you want to delete this report? It will no longer appear in search results.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirmDelete => 'Delete';
+
+  @override
+  String get editReportTitle => 'Edit Report';
+
+  @override
+  String get reportTitleLabel => 'Title';
+
+  @override
+  String get reportTitleHint => 'e.g. Black leather wallet';
+
+  @override
+  String get reportTypeLabel => 'Report type';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get areaLabel => 'Area / District';
+
+  @override
+  String get selectArea => 'Select area';
+
+  @override
+  String get itemDateLabel => 'Date';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get descriptionHint => 'Add details that help identify the item...';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get titleTooShort => 'Title must be between 3 and 50 characters';
+
+  @override
+  String get profileTitle => 'Profile & Settings';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get saveProfile => 'Save profile';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get preferencesSection => 'Preferences';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get selectCity => 'Select city';
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System default';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get logoutButton => 'Log out';
+
+  @override
+  String get logoutConfirmTitle => 'Log out?';
+
+  @override
+  String get logoutConfirmMessage => 'Are you sure you want to log out?';
+
+  @override
+  String get profileUpdatedSuccess => 'Profile updated successfully';
+
+  @override
+  String get cityUpdatedSuccess => 'City updated successfully';
+
+  @override
+  String get appVersion => 'Version 1.0.0';
+
+  @override
+  String get viewMyReports => 'My Reports';
 }
