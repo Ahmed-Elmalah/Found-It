@@ -15,6 +15,13 @@ import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/city/data/city_local_data_source.dart';
+import 'package:found_it/features/city/data/city_remote_data_source.dart';
+import 'package:found_it/features/city/data/city_repository_impl.dart';
+import 'package:found_it/features/city/domain/city_repository.dart';
+import 'package:found_it/features/city/domain/get_cities_use_case.dart';
+import 'package:found_it/features/city/domain/select_city_use_case.dart';
+import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -68,7 +75,35 @@ Future<void> configureDependencies() async {
 
   _registerAuth();
   _registerOnboarding();
+  _registerCity();
   _registerReports();
+}
+
+// ---------------------------------------------------------------------
+// City (Youssef) — story #4
+// ---------------------------------------------------------------------
+void _registerCity() {
+  sl
+    ..registerLazySingleton<CityRemoteDataSource>(
+      () => CityRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<CityLocalDataSource>(
+      () => CityLocalDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<CityRepository>(
+      () => CityRepositoryImpl(
+        remoteDataSource: sl(),
+        localDataSource: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetCitiesUseCase(sl()))
+    ..registerLazySingleton(() => SelectCityUseCase(sl()))
+    ..registerFactory(
+      () => CityCubit(
+        getCitiesUseCase: sl(),
+        selectCityUseCase: sl(),
+      ),
+    );
 }
 
 // ---------------------------------------------------------------------

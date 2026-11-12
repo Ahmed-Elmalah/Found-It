@@ -14,6 +14,8 @@ import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
+import 'package:found_it/features/city/view/cubit/city_cubit.dart';
+import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -70,10 +72,12 @@ final GoRouter appRouter = GoRouter(
         child: const SignUpScreen(),
       ),
     ),
-    // TEMP: replaced by the real Choose City screen (Youssef, story #4).
     GoRoute(
       path: AppRoutes.city,
-      builder: (context, state) => const _ComingSoon('City'),
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<CityCubit>()..loadCities(),
+        child: const ChooseCityScreen(),
+      ),
     ),
     // UI only for now (no SMTP yet): shows a "coming soon" message.
     GoRoute(
