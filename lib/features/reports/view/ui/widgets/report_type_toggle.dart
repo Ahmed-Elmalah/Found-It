@@ -19,6 +19,12 @@ class ReportTypeToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final lostColor = colors.error;
+    final onLostColor = colors.onError;
+    final foundColor = isDark ? const Color(0xFF4ADE80) : const Color(0xFF1E8E3E);
+    final onFoundColor = isDark ? const Color(0xFF0F1218) : Colors.white;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,11 +50,15 @@ class ReportTypeToggle extends StatelessWidget {
               _Tab(
                 label: l10n.lost,
                 isActive: isLost,
+                activeColor: lostColor,
+                onActiveColor: onLostColor,
                 onTap: () => onChanged(true),
               ),
               _Tab(
                 label: l10n.found,
                 isActive: !isLost,
+                activeColor: foundColor,
+                onActiveColor: onFoundColor,
                 onTap: () => onChanged(false),
               ),
             ],
@@ -62,11 +72,15 @@ class ReportTypeToggle extends StatelessWidget {
 class _Tab extends StatelessWidget {
   final String label;
   final bool isActive;
+  final Color activeColor;
+  final Color onActiveColor;
   final VoidCallback onTap;
 
   const _Tab({
     required this.label,
     required this.isActive,
+    required this.activeColor,
+    required this.onActiveColor,
     required this.onTap,
   });
 
@@ -81,12 +95,12 @@ class _Tab extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            color: isActive ? colors.primary : Colors.transparent,
+            color: isActive ? activeColor : Colors.transparent,
             borderRadius: BorderRadius.circular(8.r),
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: colors.primary.withValues(alpha: 0.25),
+                      color: activeColor.withValues(alpha: 0.25),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -99,7 +113,7 @@ class _Tab extends StatelessWidget {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
-              color: isActive ? colors.onPrimary : colors.onSurfaceVariant,
+              color: isActive ? onActiveColor : colors.onSurfaceVariant,
             ),
           ),
         ),
