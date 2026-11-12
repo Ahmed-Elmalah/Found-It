@@ -19,6 +19,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chooseCityTitle => 'اختر مدينتك';
 
   @override
+  String get chooseCitySubtitle => 'اختر مدينتك لعرض البلاغات القريبة منك.';
+
+  @override
+  String get locationRequiredTitle => 'الموقع مطلوب:';
+
+  @override
+  String get locationRequiredMessage => 'يرجى اختيار مدينة للمتابعة.';
+
+  @override
+  String get continueButton => 'متابعة';
+
+  @override
   String get onboardingSkip => 'تخطي';
 
   @override

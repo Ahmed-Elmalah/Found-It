@@ -5,6 +5,10 @@
   "appTagline": "فقدت شيئًا؟ دعنا نُعيده إليك.",
 
   "chooseCityTitle": "اختر مدينتك",
+  "chooseCitySubtitle": "اختر مدينتك لعرض البلاغات القريبة منك.",
+  "locationRequiredTitle": "الموقع مطلوب:",
+  "locationRequiredMessage": "يرجى اختيار مدينة للمتابعة.",
+  "continueButton": "متابعة",
 
   "onboardingSkip": "تخطي",
   "onboardingNext": "التالي",

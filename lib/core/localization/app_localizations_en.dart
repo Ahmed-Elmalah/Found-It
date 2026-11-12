@@ -19,6 +19,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseCityTitle => 'Choose your city';
 
   @override
+  String get chooseCitySubtitle =>
+      'Select your city to see lost and found reports near you.';
+
+  @override
+  String get locationRequiredTitle => 'Location Required:';
+
+  @override
+  String get locationRequiredMessage => 'Please select a city to continue.';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
   String get onboardingSkip => 'Skip';
 
   @override

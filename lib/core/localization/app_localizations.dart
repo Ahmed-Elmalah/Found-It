@@ -116,6 +116,30 @@ abstract class AppLocalizations {
   /// **'Choose your city'**
   String get chooseCityTitle;
 
+  /// No description provided for @chooseCitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your city to see lost and found reports near you.'**
+  String get chooseCitySubtitle;
+
+  /// No description provided for @locationRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Required:'**
+  String get locationRequiredTitle;
+
+  /// No description provided for @locationRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a city to continue.'**
+  String get locationRequiredMessage;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
   /// No description provided for @onboardingSkip.
   ///
   /// In en, this message translates to:
