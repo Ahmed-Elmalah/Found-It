@@ -6,8 +6,6 @@ import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/router/auth_redirect.dart';
 import 'package:found_it/core/router/stream_listenable.dart';
-import 'package:found_it/features/main/view/ui/main_shell.dart';
-import 'package:found_it/features/main/view/widgets/home_shell_preview.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
@@ -25,6 +23,9 @@ import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+
+import '../../features/main/view/ui/main_shell.dart';
+import '../../features/main/view/widgets/home_shell_preview.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,

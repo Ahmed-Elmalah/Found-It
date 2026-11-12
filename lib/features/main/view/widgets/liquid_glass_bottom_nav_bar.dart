@@ -1,20 +1,20 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 
-/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar.
+/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar powered by [liquid_glass_renderer].
 ///
 /// Features:
-/// - **Ultra-Clear Crystal Dock:** Pure, high-transparency frosted glass (~18% tint) with heavy blur (sigma: 24).
-/// - **Specular Bevel Glint (اللمعة):** High-intensity white light reflection sheen along the top-left beveled glass rim.
-/// - **The Glass Loupe (عدسة الإزاز):** Optical convex circular lens that glides over the active tab,
-///   featuring inner crescent specular highlights and light refraction rings with ZERO colored lines.
-/// - **5 Slots:** Home, Explore, Center Report Button (with 'X' icon), Messages (with unread badge), Profile.
-/// - **Stretch & Squash Dynamics:** Fluid liquid droplet elongation during transit with elastic spring rebound.
+/// - **Native iOS 27 Glass:** Uses [LiquidGlassLayer] with [LiquidGlassSettings.ios27RegularLight]
+///   and [LiquidGlassSettings.ios27RegularDark] for optical refraction and specular edge glint.
+/// - **Metaball Melting Blend Group:** [LiquidGlassBlendGroup] groups the outer capsule dock,
+///   the center Plus button, and the sliding Glass Loupe so their SDF fields organically melt together.
+/// - **5 Slots:** Home, Explore, Center Report Button (with Plus `+` icon), Messages (with badge `2`), Profile.
+/// - **Spring Physics:** Elastic bounce transitions when switching tabs.
 class LiquidGlassBottomNavBar extends StatefulWidget {
   const LiquidGlassBottomNavBar({
     super.key,
@@ -30,7 +30,7 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
   /// Callback when a tab is tapped.
   final ValueChanged<int> onTap;
 
-  /// Callback when the center Report 'X' button is tapped.
+  /// Callback when the center Plus button is tapped.
   final VoidCallback onReportTap;
 
   @override
@@ -40,7 +40,7 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
 class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     with TickerProviderStateMixin {
   late final AnimationController _motionController;
-  late final AnimationController _buttonTapController;
+  late final AnimationController _plusTapController;
 
   late Animation<double> _alignmentAnimation;
   late Animation<double> _stretchAnimation;
@@ -56,10 +56,10 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
 
     _motionController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 380),
     );
 
-    _buttonTapController = AnimationController(
+    _plusTapController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
@@ -88,20 +88,19 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
       ),
     );
 
-    // Fluid droplet stretch & squash: elongates in transit, snaps back with elastic rebound
     _stretchAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 1.34)
+        tween: Tween<double>(begin: 1.0, end: 1.28)
             .chain(CurveTween(curve: Curves.easeOutQuad)),
         weight: 40,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.34, end: 0.90)
+        tween: Tween<double>(begin: 1.28, end: 0.92)
             .chain(CurveTween(curve: Curves.easeInOutQuad)),
         weight: 40,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 0.90, end: 1.0)
+        tween: Tween<double>(begin: 0.92, end: 1.0)
             .chain(CurveTween(curve: Curves.elasticOut)),
         weight: 20,
       ),
@@ -109,7 +108,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   }
 
   double _getAlignmentForIndex(int index) {
-    // 5 slots: Tab 0 (-1.0), Tab 1 (-0.5), Center Button (0.0), Tab 2 (0.5), Tab 3 (1.0)
+    // 5 slots: Tab 0 (-1.0), Tab 1 (-0.5), Center Plus (0.0), Tab 2 (0.5), Tab 3 (1.0)
     return switch (index) {
       0 => -1.0,
       1 => -0.5,
@@ -122,13 +121,13 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   @override
   void dispose() {
     _motionController.dispose();
-    _buttonTapController.dispose();
+    _plusTapController.dispose();
     super.dispose();
   }
 
-  void _handleReportTap() {
+  void _handlePlusTap() {
     HapticFeedback.mediumImpact();
-    _buttonTapController.forward(from: 0.0);
+    _plusTapController.forward(from: 0.0);
     widget.onReportTap();
   }
 
@@ -138,81 +137,44 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
 
+    final glassSettings = isDark
+        ? LiquidGlassSettings.ios27RegularDark()
+        : LiquidGlassSettings.ios27RegularLight();
+
     return RepaintBoundary(
       child: SafeArea(
         top: false,
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 14.h),
-          child: Container(
-            height: 68.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(34.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.45 : 0.06),
-                  blurRadius: 28.r,
-                  offset: Offset(0, 10.h),
-                ),
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.02),
-                  blurRadius: 8.r,
-                  offset: Offset(0, 2.h),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(34.r),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(34.r),
-                    // Ultra-clear crystal glass tint (pure, no colored lines)
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: isDark
-                          ? [
-                              const Color(0xFF1C222D).withValues(alpha: 0.32),
-                              const Color(0xFF10141D).withValues(alpha: 0.16),
-                            ]
-                          : [
-                              Colors.white.withValues(alpha: 0.22),
-                              Colors.white.withValues(alpha: 0.08),
-                            ],
+          child: LiquidGlassLayer(
+            settings: glassSettings,
+            child: LiquidGlassBlendGroup(
+              blend: 26.0, // Melting threshold distance
+              child: Container(
+                height: 68.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(34.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.40 : 0.06),
+                      blurRadius: 28.r,
+                      offset: Offset(0, 10.h),
                     ),
-                    border: Border.all(
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.18)
-                          : Colors.white.withValues(alpha: 0.75),
-                      width: 1.0,
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: isDark ? 0.20 : 0.02),
+                      blurRadius: 8.r,
+                      offset: Offset(0, 2.h),
                     ),
+                  ],
+                ),
+                child: LiquidGlass.grouped(
+                  shape: LiquidRoundedRectangle(
+                    borderRadius: 34.r,
                   ),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Specular top-left bevel glint (اللمعة الكريستالية)
-                      Positioned(
-                        top: 0,
-                        left: 24.w,
-                        right: 24.w,
-                        height: 1.5,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.white.withValues(alpha: 0.0),
-                                isDark
-                                    ? Colors.white.withValues(alpha: 0.45)
-                                    : Colors.white.withValues(alpha: 0.90),
-                                Colors.white.withValues(alpha: 0.0),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // The "Glass Loupe" (عدسة الإزاز) Active Tab Lens - Pure crystal optical glass
+                      // Active Glass Loupe lens that slides and melts with other shapes
                       AnimatedBuilder(
                         animation: _motionController,
                         builder: (context, _) {
@@ -226,60 +188,9 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                               heightFactor: 0.84 / math.sqrt(stretch),
                               child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 4.w),
-                                decoration: BoxDecoration(
-                                  // Optical glass lens gradient
-                                  gradient: RadialGradient(
-                                    center: const Alignment(-0.35, -0.35),
-                                    radius: 0.85,
-                                    colors: isDark
-                                        ? [
-                                            Colors.white.withValues(alpha: 0.22),
-                                            Colors.white.withValues(alpha: 0.08),
-                                            Colors.white.withValues(alpha: 0.02),
-                                          ]
-                                        : [
-                                            Colors.white.withValues(alpha: 0.65),
-                                            Colors.white.withValues(alpha: 0.25),
-                                            Colors.white.withValues(alpha: 0.08),
-                                          ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(24.r),
-                                  border: Border.all(
-                                    color: isDark
-                                        ? Colors.white.withValues(alpha: 0.35)
-                                        : Colors.white.withValues(alpha: 0.85),
-                                    width: 1.2,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: isDark
-                                          ? Colors.white.withValues(alpha: 0.12)
-                                          : Colors.white.withValues(alpha: 0.40),
-                                      blurRadius: 10.r,
-                                      spreadRadius: -1,
-                                    ),
-                                    BoxShadow(
-                                      color: Colors.white.withValues(
-                                        alpha: isDark ? 0.15 : 0.40,
-                                      ),
-                                      blurRadius: 4.r,
-                                      offset: const Offset(-1, -1),
-                                    ),
-                                  ],
-                                ),
-                                // Inner convex specular crescent highlight
-                                child: Align(
-                                  alignment: const Alignment(-0.5, -0.6),
-                                  child: Container(
-                                    width: 8.r,
-                                    height: 4.r,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha: isDark ? 0.50 : 0.85,
-                                      ),
-                                      borderRadius: BorderRadius.circular(4.r),
-                                    ),
-                                  ),
+                                child: LiquidGlass.grouped(
+                                  shape: LiquidOval(),
+                                  child: const SizedBox.expand(),
                                 ),
                               ),
                             ),
@@ -316,16 +227,16 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             ),
                           ),
 
-                          // Center Slot: Report Button with 'X' Icon
+                          // Center Slot: Report Button with Plus '+' Icon
                           Expanded(
-                            child: _CenterReportXButton(
+                            child: _CenterReportPlusButton(
                               label: l10n.navReport,
-                              tapAnimation: _buttonTapController,
-                              onTap: _handleReportTap,
+                              tapAnimation: _plusTapController,
+                              onTap: _handlePlusTap,
                             ),
                           ),
 
-                          // Tab 2: Messages (with badge)
+                          // Tab 2: Messages (with badge '2')
                           Expanded(
                             child: _NavBarItem(
                               icon: Icons.chat_bubble_rounded,
@@ -474,8 +385,8 @@ class _NavBarItem extends StatelessWidget {
   }
 }
 
-class _CenterReportXButton extends StatelessWidget {
-  const _CenterReportXButton({
+class _CenterReportPlusButton extends StatelessWidget {
+  const _CenterReportPlusButton({
     required this.label,
     required this.tapAnimation,
     required this.onTap,
@@ -503,7 +414,7 @@ class _CenterReportXButton extends StatelessWidget {
             AnimatedBuilder(
               animation: tapAnimation,
               builder: (context, _) {
-                final tapScale = 1.0 - (tapAnimation.value * 0.12);
+                final tapScale = 1.0 - (tapAnimation.value * 0.10);
 
                 return Transform.scale(
                   scale: tapScale,
@@ -534,11 +445,11 @@ class _CenterReportXButton extends StatelessWidget {
                         width: 1.5,
                       ),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
-                        Icons.close_rounded, // Exact 'X' icon as requested
+                        Icons.add_rounded, // Plus '+' icon as requested
                         color: Colors.white,
-                        size: 26.r,
+                        size: 26,
                       ),
                     ),
                   ),
