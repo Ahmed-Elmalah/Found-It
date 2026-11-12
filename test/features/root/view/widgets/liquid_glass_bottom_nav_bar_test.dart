@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:found_it/features/main/view/widgets/liquid_glass_bottom_nav_bar.dart';
+import 'package:found_it/features/root/view/widgets/liquid_glass_bottom_nav_bar.dart';
 import '../../../../helpers/test_app.dart';
 
 void main() {

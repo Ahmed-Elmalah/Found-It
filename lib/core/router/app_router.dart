@@ -24,8 +24,8 @@ import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
 
-import '../../features/main/view/ui/main_shell.dart';
-import '../../features/main/view/widgets/home_shell_preview.dart';
+import '../../features/root/view/ui/main_shell.dart';
+import '../../features/root/view/widgets/home_shell_preview.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
