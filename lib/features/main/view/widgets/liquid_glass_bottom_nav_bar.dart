@@ -138,8 +138,8 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     final l10n = AppLocalizations.of(context);
 
     final glassSettings = isDark
-        ? LiquidGlassSettings.ios27RegularDark()
-        : LiquidGlassSettings.ios27RegularLight();
+        ? LiquidGlassSettings.ios27RegularDark(frost: 1.5)
+        : LiquidGlassSettings.ios27RegularLight(frost: 1.5);
 
     return RepaintBoundary(
       child: SafeArea(
@@ -185,12 +185,65 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             alignment: AlignmentDirectional(currentX, 0),
                             child: FractionallySizedBox(
                               widthFactor: 0.20 * stretch,
-                              heightFactor: 0.84 / math.sqrt(stretch),
-                              child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                              heightFactor: 0.86 / math.sqrt(stretch),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 3.w,
+                                  vertical: 2.h,
+                                ),
                                 child: LiquidGlass.grouped(
-                                  shape: LiquidOval(),
-                                  child: const SizedBox.expand(),
+                                  shape: LiquidRoundedRectangle(
+                                    borderRadius: 22.r,
+                                  ),
+                                  appearance: LiquidGlassAppearance(
+                                    tint: isDark
+                                        ? Colors.white.withValues(alpha: 0.16)
+                                        : theme.colorScheme.primary.withValues(alpha: 0.12),
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(22.r),
+                                      // Frosted glass capsule: less transparent so selected item stands out clearly
+                                      color: isDark
+                                          ? Colors.white.withValues(alpha: 0.12)
+                                          : theme.colorScheme.primary.withValues(alpha: 0.08),
+                                      border: Border.all(
+                                        color: isDark
+                                            ? Colors.white.withValues(alpha: 0.28)
+                                            : theme.colorScheme.primary.withValues(alpha: 0.22),
+                                        width: 1.2,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: (isDark ? Colors.black : theme.colorScheme.primary)
+                                              .withValues(alpha: isDark ? 0.20 : 0.10),
+                                          blurRadius: 10.r,
+                                          offset: Offset(0, 2.h),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: 3.h),
+                                        child: Container(
+                                          width: 5.r,
+                                          height: 5.r,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: theme.colorScheme.primary,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                                                blurRadius: 5.r,
+                                                spreadRadius: 1.r,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
