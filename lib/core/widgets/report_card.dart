@@ -18,9 +18,10 @@ class ReportCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.type,
-    required this.status,
-    required this.location,
+    required this.areaName,
+    required this.cityName,
     required this.date,
+    this.status,
     this.imageUrl,
     this.onTap,
   });
@@ -32,10 +33,13 @@ class ReportCard extends StatelessWidget {
   final ReportType type;
 
   /// Report status - a chip is added only when it is not active.
-  final ReportStatus status;
+  final ReportStatus? status;
 
-  /// Already localized location, e.g. "Zamalek, Cairo".
-  final String location;
+  /// Already localized area name, e.g. "Zamalek".
+  final String areaName;
+
+  /// Already localized city name, e.g. "Cairo".
+  final String cityName;
 
   /// The day the item was lost / found.
   final DateTime date;
@@ -55,10 +59,14 @@ class ReportCard extends StatelessWidget {
         ? StatusChipTone.error
         : StatusChipTone.success;
     final statusChip = switch (status) {
-      ReportStatus.active => null,
+      null || ReportStatus.active => null,
       ReportStatus.matching => (l10n.statusMatching, StatusChipTone.primary),
       ReportStatus.recovered => (l10n.statusRecovered, StatusChipTone.success),
     };
+    final location = [
+      areaName,
+      cityName,
+    ].where((part) => part.isNotEmpty).join(', ');
     final dateLabel = intl.DateFormat.MMMd(l10n.localeName).format(date);
     final metaStyle = TextStyle(
       color: colors.onSurfaceVariant,

@@ -34,9 +34,4 @@ abstract final class AppColors {
     outline: Color(0xFF2C3342),
     surfaceContainerHighest: Color(0xFF252B38),
   );
-
-  // The color schemes have no 'success' slot; used by the 'Found' report type
-  // chip and the 'Recovered' status chip (see StatusChip).
-  static const Color successLight = Color(0xFF047857);
-  static const Color successDark = Color(0xFF6EE7B7);
 }

@@ -178,7 +178,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
           title: report.title,
           type: report.type,
           status: report.status,
-          location: report.location(l10n.localeName),
+          areaName: report.areaName(l10n.localeName),
+          cityName: report.cityName(l10n.localeName),
           date: report.itemDate,
           imageUrl: report.primaryImageUrl,
         );

@@ -104,6 +104,96 @@ class AppLocalizationsAr extends AppLocalizations {
   String get genericErrorMessage => 'حاول مرة أخرى.';
 
   @override
+  String get signUpTitle => 'إنشاء حساب';
+
+  @override
+  String get fullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get fullNameHint => 'اسمك الكامل';
+
+  @override
+  String get phoneLabel => 'رقم الهاتف';
+
+  @override
+  String get phoneHint => '10 1234 5678';
+
+  @override
+  String get addressLabel => 'العنوان';
+
+  @override
+  String get addressHint => 'اختياري';
+
+  @override
+  String get passwordHelper => '8 أحرف على الأقل';
+
+  @override
+  String get createAccountButton => 'إنشاء حساب';
+
+  @override
+  String get haveAccount => 'لديك حساب بالفعل؟';
+
+  @override
+  String get logInLink => 'تسجيل الدخول';
+
+  @override
+  String get nameTooShort => 'يجب أن يكون الاسم حرفين على الأقل';
+
+  @override
+  String get invalidPhone => 'أدخل رقم موبايل مصري صحيح';
+
+  @override
+  String get passwordTooShort => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل';
+
+  @override
+  String get registrationFailedTitle => 'فشل التسجيل:';
+
+  @override
+  String get emailInUseMessage =>
+      'يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.';
+
+  @override
+  String get weakPasswordTitle => 'كلمة مرور ضعيفة:';
+
+  @override
+  String get weakPasswordMessage => 'اختر كلمة مرور أقوى.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيينها.';
+
+  @override
+  String get sendResetLinkButton => 'إرسال رابط إعادة التعيين';
+
+  @override
+  String get rememberedIt => 'تذكرتها؟';
+
+  @override
+  String get backToLogin => 'العودة لتسجيل الدخول';
+
+  @override
+  String get resetComingSoon => 'ستتوفر إعادة تعيين كلمة المرور قريبًا.';
+
+  @override
+  String get verifyEmailTitle => 'تحقق من بريدك الإلكتروني';
+
+  @override
+  String verifyEmailBody(String email) {
+    return 'أرسلنا رابط التحقق إلى $email. افتحه لتفعيل حسابك.';
+  }
+
+  @override
+  String get verifiedButton => 'لقد فعّلت بريدي';
+
+  @override
+  String get resendEmail => 'إعادة الإرسال';
+
+  @override
+  String resendEmailIn(String time) {
+    return 'إعادة الإرسال · $time';
+  }
+
+  @override
   String get exploreTitle => 'استكشاف';
 
   @override
@@ -164,14 +254,8 @@ class AppLocalizationsAr extends AppLocalizations {
   String get typeFound => 'تم العثور عليه';
 
   @override
-  String get statusActive => 'نشط';
-
-  @override
   String get statusMatching => 'قيد المطابقة';
 
   @override
   String get statusRecovered => 'تم استرجاعه';
-
-  @override
-  String get retry => 'حاول مرة أخرى';
 }

@@ -104,6 +104,96 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genericErrorMessage => 'Please try again.';
 
   @override
+  String get signUpTitle => 'Create account';
+
+  @override
+  String get fullNameLabel => 'Full name';
+
+  @override
+  String get fullNameHint => 'Your full name';
+
+  @override
+  String get phoneLabel => 'Phone number';
+
+  @override
+  String get phoneHint => '10 1234 5678';
+
+  @override
+  String get addressLabel => 'Address';
+
+  @override
+  String get addressHint => 'Optional';
+
+  @override
+  String get passwordHelper => 'At least 8 characters';
+
+  @override
+  String get createAccountButton => 'Create account';
+
+  @override
+  String get haveAccount => 'Already have an account?';
+
+  @override
+  String get logInLink => 'Log in';
+
+  @override
+  String get nameTooShort => 'Name must be at least 2 characters';
+
+  @override
+  String get invalidPhone => 'Enter a valid Egyptian mobile number';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get registrationFailedTitle => 'Registration Failed:';
+
+  @override
+  String get emailInUseMessage =>
+      'An account with this email address already exists.';
+
+  @override
+  String get weakPasswordTitle => 'Weak password:';
+
+  @override
+  String get weakPasswordMessage => 'Choose a stronger password.';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email and we’ll send you a link to reset it.';
+
+  @override
+  String get sendResetLinkButton => 'Send reset link';
+
+  @override
+  String get rememberedIt => 'Remembered it?';
+
+  @override
+  String get backToLogin => 'Back to login';
+
+  @override
+  String get resetComingSoon => 'Password reset will be available soon.';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String verifyEmailBody(String email) {
+    return 'We sent a verification link to $email. Open it to activate your account.';
+  }
+
+  @override
+  String get verifiedButton => 'I’ve verified my email';
+
+  @override
+  String get resendEmail => 'Resend email';
+
+  @override
+  String resendEmailIn(String time) {
+    return 'Resend email · $time';
+  }
+
+  @override
   String get exploreTitle => 'Explore';
 
   @override
@@ -164,14 +254,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get typeFound => 'Found';
 
   @override
-  String get statusActive => 'Active';
-
-  @override
   String get statusMatching => 'Matching';
 
   @override
   String get statusRecovered => 'Recovered';
-
-  @override
-  String get retry => 'Try again';
 }

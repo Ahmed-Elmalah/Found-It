@@ -56,14 +56,13 @@ class ReportEntity extends Equatable {
   /// First photo, or `null` when the report has none.
   String? get primaryImageUrl => images.isEmpty ? null : images.first;
 
-  /// "Area, City" in the app language, e.g. "Zamalek, Cairo".
-  String location(String languageCode) {
-    final area = languageCode == 'ar' ? areaNameAr : areaNameEn;
-    final city = languageCode == 'ar' ? cityNameAr : cityNameEn;
-    if (area.isEmpty) return city;
-    if (city.isEmpty) return area;
-    return '$area, $city';
-  }
+  /// The area name in the app language, e.g. "Zamalek".
+  String areaName(String languageCode) =>
+      languageCode == 'ar' ? areaNameAr : areaNameEn;
+
+  /// The city name in the app language, e.g. "Cairo".
+  String cityName(String languageCode) =>
+      languageCode == 'ar' ? cityNameAr : cityNameEn;
 
   /// The category name in the app language.
   String categoryName(String languageCode) =>

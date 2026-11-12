@@ -35,6 +35,7 @@ class AppTextField extends StatefulWidget {
     this.autofillHints,
     this.enabled = true,
     this.autovalidateMode,
+    this.forceLtr = false,
   });
 
   final String label;
@@ -58,6 +59,11 @@ class AppTextField extends StatefulWidget {
   /// When the validator runs (default: only on `Form.validate()`).
   final AutovalidateMode? autovalidateMode;
 
+  /// Always shows the typed text (and [prefixText]) left-to-right, also in
+  /// Arabic — for phone numbers: "+20 10 1234 5678", never "5678 1234 10 20+".
+  /// The text still sits next to the icon (right side in Arabic).
+  final bool forceLtr;
+
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -80,6 +86,10 @@ class _AppTextFieldState extends State<AppTextField> {
     final colors = Theme.of(context).colorScheme;
 
     final hasPrefix = widget.prefixIcon != null || widget.prefixText != null;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    // forceLtr: text runs left-to-right but stays aligned to the icon side.
+    final ltrDirection = widget.forceLtr ? TextDirection.ltr : null;
+    final ltrAlign = isRtl ? TextAlign.right : TextAlign.left;
     final errorBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppSizes.radius.r),
       borderSide: BorderSide(color: colors.error, width: 1.5),
@@ -108,6 +118,8 @@ class _AppTextFieldState extends State<AppTextField> {
             SizedBox(height: 8.h),
             TextField(
               controller: _controller,
+              textDirection: ltrDirection,
+              textAlign: widget.forceLtr ? ltrAlign : TextAlign.start,
               keyboardType: widget.keyboardType,
               textInputAction: widget.textInputAction,
               onChanged: (value) {
@@ -124,6 +136,7 @@ class _AppTextFieldState extends State<AppTextField> {
               style: TextStyle(fontSize: 16.sp, color: colors.onSurface),
               decoration: InputDecoration(
                 hintText: widget.hint,
+                hintTextDirection: ltrDirection,
                 hintStyle: TextStyle(
                   fontSize: 16.sp,
                   color: colors.onSurfaceVariant,
@@ -151,6 +164,7 @@ class _AppTextFieldState extends State<AppTextField> {
                             if (widget.prefixText != null)
                               Text(
                                 widget.prefixText!,
+                                textDirection: ltrDirection,
                                 style: TextStyle(
                                   fontSize: 16.sp,
                                   color: colors.onSurface,

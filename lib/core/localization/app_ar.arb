@@ -37,6 +37,38 @@
   "genericErrorTitle": "حدث خطأ:",
   "genericErrorMessage": "حاول مرة أخرى.",
 
+  "signUpTitle": "إنشاء حساب",
+  "fullNameLabel": "الاسم الكامل",
+  "fullNameHint": "اسمك الكامل",
+  "phoneLabel": "رقم الهاتف",
+  "phoneHint": "10 1234 5678",
+  "addressLabel": "العنوان",
+  "addressHint": "اختياري",
+  "passwordHelper": "8 أحرف على الأقل",
+  "createAccountButton": "إنشاء حساب",
+  "haveAccount": "لديك حساب بالفعل؟",
+  "logInLink": "تسجيل الدخول",
+
+  "nameTooShort": "يجب أن يكون الاسم حرفين على الأقل",
+  "invalidPhone": "أدخل رقم موبايل مصري صحيح",
+  "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+
+  "registrationFailedTitle": "فشل التسجيل:",
+  "emailInUseMessage": "يوجد حساب مسجّل بهذا البريد الإلكتروني بالفعل.",
+  "weakPasswordTitle": "كلمة مرور ضعيفة:",
+  "weakPasswordMessage": "اختر كلمة مرور أقوى.",
+
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيينها.",
+  "sendResetLinkButton": "إرسال رابط إعادة التعيين",
+  "rememberedIt": "تذكرتها؟",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "resetComingSoon": "ستتوفر إعادة تعيين كلمة المرور قريبًا.",
+  "verifyEmailTitle": "تحقق من بريدك الإلكتروني",
+  "verifyEmailBody": "أرسلنا رابط التحقق إلى {email}. افتحه لتفعيل حسابك.",
+  "verifiedButton": "لقد فعّلت بريدي",
+  "resendEmail": "إعادة الإرسال",
+  "resendEmailIn": "إعادة الإرسال · {time}",
+
   "exploreTitle": "استكشاف",
   "searchHint": "ابحث",
   "activeReportsCount": "{count} تقارير نشطة",
@@ -58,8 +90,6 @@
 
   "typeLost": "مفقود",
   "typeFound": "تم العثور عليه",
-  "statusActive": "نشط",
   "statusMatching": "قيد المطابقة",
-  "statusRecovered": "تم استرجاعه",
-  "retry": "حاول مرة أخرى"
+  "statusRecovered": "تم استرجاعه"
 }

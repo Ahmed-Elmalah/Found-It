@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/router/app_routes.dart';
@@ -11,6 +12,7 @@ import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
 import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
+import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/login_use_case.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
@@ -18,6 +20,19 @@ import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import '../../../../helpers/test_app.dart';
 
 class FakeAuthRepository implements AuthRepository {
+  @override
+  Stream<bool> authStateChanges() => const Stream.empty();
+
+  @override
+  Future<UserEntity?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
+  // Sign up is not used by this test.
+  @override
+  Future<void> signUp(SignUpParams params) => throw UnimplementedError();
+
   int loginCalls = 0;
   AuthFailure? failure;
   Completer<void>? pending;
@@ -165,23 +180,26 @@ void main() {
     expect(_enabledBorderColors(tester).contains(error), isFalse);
   });
 
-  testWidgets('shows loader while pending, then goes home on success', (
-    tester,
-  ) async {
-    final pending = Completer<void>();
-    await _pump(tester, pending: pending);
-    await _fillAndSubmit(tester);
-    expect(
-      find.descendant(
-        of: find.byType(AppButton),
-        matching: find.byType(CircularProgressIndicator),
-      ),
-      findsOneWidget,
-    );
-    pending.complete();
-    await tester.pumpAndSettle();
-    expect(find.text('HOME PAGE'), findsOneWidget);
-  });
+  testWidgets(
+    'shows loader while pending; success does not navigate by itself',
+    (tester) async {
+      final pending = Completer<void>();
+      await _pump(tester, pending: pending);
+      await _fillAndSubmit(tester);
+      expect(
+        find.descendant(
+          of: find.byType(AppButton),
+          matching: find.byType(CircularProgressIndicator),
+        ),
+        findsOneWidget,
+      );
+      pending.complete();
+      await tester.pumpAndSettle();
+      // Where to go next is the router's job (auth redirect), not the screen's.
+      expect(find.text('HOME PAGE'), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    },
+  );
 
   testWidgets('Sign up navigates to sign up page', (tester) async {
     await _pump(tester);
