@@ -7,4 +7,5 @@ abstract final class AppRoutes {
   static const verifyEmail = '/verify-email';
   static const city = '/city';
   static const home = '/home';
+  static const explore = '/explore';
 }

@@ -102,4 +102,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genericErrorMessage => 'Please try again.';
+
+  @override
+  String get exploreTitle => 'Explore';
+
+  @override
+  String get searchHint => 'Search';
+
+  @override
+  String activeReportsCount(int count) {
+    return '$count active reports';
+  }
+
+  @override
+  String get mostRecentFirst => 'Most recent first';
+
+  @override
+  String get filtersTitle => 'Filters';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get dateRangeLabel => 'Date range';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String dateFromValue(String date) {
+    return 'From $date';
+  }
+
+  @override
+  String dateUntilValue(String date) {
+    return 'Until $date';
+  }
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get showResults => 'Show results';
+
+  @override
+  String get emptySearchTitle => 'No matching reports found.';
+
+  @override
+  String get emptySearchMessage => 'Try adjusting your search filters.';
+
+  @override
+  String get typeLost => 'Lost';
+
+  @override
+  String get typeFound => 'Found';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusMatching => 'Matching';
+
+  @override
+  String get statusRecovered => 'Recovered';
+
+  @override
+  String get retry => 'Try again';
 }

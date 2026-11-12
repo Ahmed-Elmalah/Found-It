@@ -35,5 +35,46 @@
   "connectionErrorTitle": "Connection error:",
   "connectionErrorMessage": "Check your connection and try again.",
   "genericErrorTitle": "Something went wrong:",
-  "genericErrorMessage": "Please try again."
+  "genericErrorMessage": "Please try again.",
+
+  "exploreTitle": "Explore",
+  "searchHint": "Search",
+  "activeReportsCount": "{count} active reports",
+  "@activeReportsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "mostRecentFirst": "Most recent first",
+
+  "filtersTitle": "Filters",
+  "categoryLabel": "Category",
+  "dateRangeLabel": "Date range",
+  "cityLabel": "City",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "dateFromValue": "From {date}",
+  "@dateFromValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "dateUntilValue": "Until {date}",
+  "@dateUntilValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "reset": "Reset",
+  "showResults": "Show results",
+
+  "emptySearchTitle": "No matching reports found.",
+  "emptySearchMessage": "Try adjusting your search filters.",
+
+  "typeLost": "Lost",
+  "typeFound": "Found",
+  "statusActive": "Active",
+  "statusMatching": "Matching",
+  "statusRecovered": "Recovered",
+  "retry": "Try again"
 }

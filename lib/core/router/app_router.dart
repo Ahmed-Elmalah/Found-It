@@ -6,6 +6,7 @@ import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
+import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -51,6 +52,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.home,
       builder: (context, state) => const _ComingSoon('Home'),
+    ),
+
+    // Explore + smart search (Figma P19 / P20) — Phase 1, mock data only.
+    GoRoute(
+      path: AppRoutes.explore,
+      builder: (context, state) => const ExploreScreen(),
     ),
   ],
 );

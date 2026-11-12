@@ -277,6 +277,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please try again.'**
   String get genericErrorMessage;
+
+  /// No description provided for @exploreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get exploreTitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchHint;
+
+  /// No description provided for @activeReportsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} active reports'**
+  String activeReportsCount(int count);
+
+  /// No description provided for @mostRecentFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Most recent first'**
+  String get mostRecentFirst;
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filtersTitle;
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @dateRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get dateRangeLabel;
+
+  /// No description provided for @cityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get cityLabel;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// No description provided for @dateFromValue.
+  ///
+  /// In en, this message translates to:
+  /// **'From {date}'**
+  String dateFromValue(String date);
+
+  /// No description provided for @dateUntilValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Until {date}'**
+  String dateUntilValue(String date);
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @showResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Show results'**
+  String get showResults;
+
+  /// No description provided for @emptySearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching reports found.'**
+  String get emptySearchTitle;
+
+  /// No description provided for @emptySearchMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search filters.'**
+  String get emptySearchMessage;
+
+  /// No description provided for @typeLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get typeLost;
+
+  /// No description provided for @typeFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get typeFound;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get statusActive;
+
+  /// No description provided for @statusMatching.
+  ///
+  /// In en, this message translates to:
+  /// **'Matching'**
+  String get statusMatching;
+
+  /// No description provided for @statusRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered'**
+  String get statusRecovered;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retry;
 }
 
 class _AppLocalizationsDelegate

@@ -35,5 +35,31 @@
   "connectionErrorTitle": "خطأ في الاتصال:",
   "connectionErrorMessage": "تحقق من اتصالك وحاول مرة أخرى.",
   "genericErrorTitle": "حدث خطأ:",
-  "genericErrorMessage": "حاول مرة أخرى."
+  "genericErrorMessage": "حاول مرة أخرى.",
+
+  "exploreTitle": "استكشاف",
+  "searchHint": "ابحث",
+  "activeReportsCount": "{count} تقارير نشطة",
+  "mostRecentFirst": "الأحدث أولاً",
+
+  "filtersTitle": "الفلاتر",
+  "categoryLabel": "التصنيف",
+  "dateRangeLabel": "نطاق التاريخ",
+  "cityLabel": "المدينة",
+  "startDate": "تاريخ البدء",
+  "endDate": "تاريخ الانتهاء",
+  "dateFromValue": "من {date}",
+  "dateUntilValue": "حتى {date}",
+  "reset": "إعادة تعيين",
+  "showResults": "عرض النتائج",
+
+  "emptySearchTitle": "لا توجد تقارير مطابقة.",
+  "emptySearchMessage": "جرّب تعديل فلاتر البحث.",
+
+  "typeLost": "مفقود",
+  "typeFound": "تم العثور عليه",
+  "statusActive": "نشط",
+  "statusMatching": "قيد المطابقة",
+  "statusRecovered": "تم استرجاعه",
+  "retry": "حاول مرة أخرى"
 }
