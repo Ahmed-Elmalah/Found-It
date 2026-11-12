@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:found_it/features/city/domain/entities/city_entity.dart';
-import 'package:found_it/features/city/domain/repositories/city_repository.dart';
-import 'package:found_it/features/city/domain/usecases/get_cities_use_case.dart';
-import 'package:found_it/features/city/domain/usecases/select_city_use_case.dart';
+import 'package:found_it/features/city/domain/city_entity.dart';
+import 'package:found_it/features/city/domain/city_repository.dart';
+import 'package:found_it/features/city/domain/get_cities_use_case.dart';
+import 'package:found_it/features/city/domain/select_city_use_case.dart';
 
 class _FakeCityRepository implements CityRepository {
   List<CityEntity> cities = [];

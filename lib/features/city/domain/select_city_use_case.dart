@@ -1,4 +1,4 @@
-import 'package:found_it/features/city/domain/repositories/city_repository.dart';
+import 'package:found_it/features/city/domain/city_repository.dart';
 
 class SelectCityUseCase {
   const SelectCityUseCase(this._repository);

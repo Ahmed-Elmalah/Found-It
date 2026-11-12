@@ -1,4 +1,4 @@
-import 'package:found_it/features/city/domain/entities/city_entity.dart';
+import 'package:found_it/features/city/domain/city_entity.dart';
 
 abstract interface class CityRepository {
   /// Fetches all active cities sorted by their sort order.
