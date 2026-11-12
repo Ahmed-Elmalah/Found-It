@@ -14,6 +14,26 @@ class _FakeAuthDataSource implements AuthDataSource {
   String? email;
   String? password;
   Map<String, dynamic>? data;
+  Map<String, dynamic>? profile;
+  int signOutCalls = 0;
+  final authController = StreamController<bool>();
+
+  @override
+  Stream<bool> authStateChanges() => authController.stream;
+
+  @override
+  Future<Map<String, dynamic>?> getMyProfile() async {
+    final e = error;
+    if (e != null) throw e;
+    return profile;
+  }
+
+  @override
+  Future<void> signOut() async {
+    signOutCalls++;
+    final e = error;
+    if (e != null) throw e;
+  }
 
   @override
   bool hasActiveSession() => session;
@@ -44,6 +64,68 @@ class _FakeAuthDataSource implements AuthDataSource {
 }
 
 void main() {
+  group('getCurrentUser', () {
+    test('maps the profile row to a user', () async {
+      final source = _FakeAuthDataSource(true)
+        ..profile = {
+          'id': 'u1',
+          'email': 'a@b.com',
+          'full_name': 'Ahmed',
+          'city_id': 'c1',
+        };
+      final user = await AuthRepositoryImpl(source).getCurrentUser();
+      expect(user?.id, 'u1');
+      expect(user?.fullName, 'Ahmed');
+      expect(user?.cityId, 'c1');
+    });
+
+    test('returns null when there is no profile', () async {
+      final user = await AuthRepositoryImpl(_FakeAuthDataSource(false))
+          .getCurrentUser();
+      expect(user, isNull);
+    });
+
+    test('network error -> AuthFailure(network)', () {
+      final repo = AuthRepositoryImpl(
+        _FakeAuthDataSource(true, error: AuthRetryableFetchException()),
+      );
+      expect(
+        repo.getCurrentUser(),
+        throwsA(
+          isA<AuthFailure>().having(
+            (f) => f.type,
+            'type',
+            AuthFailureType.network,
+          ),
+        ),
+      );
+    });
+  });
+
+  group('logout', () {
+    test('calls signOut on the data source', () async {
+      final source = _FakeAuthDataSource(true);
+      await AuthRepositoryImpl(source).logout();
+      expect(source.signOutCalls, 1);
+    });
+
+    test('error -> AuthFailure', () {
+      final repo = AuthRepositoryImpl(
+        _FakeAuthDataSource(true, error: Exception('x')),
+      );
+      expect(repo.logout(), throwsA(isA<AuthFailure>()));
+    });
+  });
+
+  test('authStateChanges passes the data source stream through', () {
+    final source = _FakeAuthDataSource(false);
+    final stream = AuthRepositoryImpl(source).authStateChanges();
+    expectLater(stream, emitsInOrder([true, false]));
+    source.authController
+      ..add(true)
+      ..add(false);
+  });
+
   test('hasActiveSession true when data source has a session', () {
     expect(
       AuthRepositoryImpl(_FakeAuthDataSource(true)).hasActiveSession(),

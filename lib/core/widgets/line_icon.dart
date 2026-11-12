@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// The thin line icons used in the design (Lucide style, 24 x 24 grid).
-enum LineIconType { search, searchCheck, plus, messageCircle }
+enum LineIconType { search, searchCheck, plus, messageCircle, mail }
 
 /// Draws a design line icon at any size and color, crisp on every screen.
 ///
@@ -85,6 +85,23 @@ class _LineIconPainter extends CustomPainter {
             ..close(),
           paint,
         );
+      case LineIconType.mail:
+        // Lucide "mail": envelope + the V of the flap
+        canvas
+          ..drawRRect(
+            RRect.fromRectAndRadius(
+              const Rect.fromLTWH(2, 4, 20, 16),
+              const Radius.circular(2),
+            ),
+            paint,
+          )
+          ..drawPath(
+            Path()
+              ..moveTo(22, 7)
+              ..lineTo(12, 13)
+              ..lineTo(2, 7),
+            paint,
+          );
     }
   }
 

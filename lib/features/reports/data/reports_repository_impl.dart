@@ -46,6 +46,10 @@ class ReportsRepositoryImpl implements ReportsRepository {
     try {
       final saved = prefs.getString(StorageKeys.selectedCity);
       if (saved != null && saved.isNotEmpty) return saved;
+
+      final userCity = await remoteDataSource.getUserCityId();
+      if (userCity != null && userCity.isNotEmpty) return userCity;
+
       return await remoteDataSource.getDefaultCityId();
     } catch (e) {
       throw _mapFailure(e);

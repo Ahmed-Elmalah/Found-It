@@ -36,6 +36,8 @@ abstract class ReportsRemoteDataSource {
   });
 
   Future<String> getDefaultCityId();
+
+  Future<String?> getUserCityId();
 }
 
 class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
@@ -147,5 +149,23 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
       throw const PostgrestException(message: 'No default city found');
     }
     return id;
+  }
+
+  @override
+  Future<String?> getUserCityId() async {
+    final uid = _supabase.auth.currentUser?.id;
+    if (uid == null) return null;
+    try {
+      final res = await _supabase
+          .from('profiles')
+          .select('city_id')
+          .eq('id', uid)
+          .maybeSingle();
+      final cityId = res?['city_id'] as String?;
+      if (cityId != null && cityId.isNotEmpty) {
+        return cityId;
+      }
+    } catch (_) {}
+    return null;
   }
 }

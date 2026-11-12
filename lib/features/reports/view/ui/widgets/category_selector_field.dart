@@ -10,6 +10,7 @@ class CategorySelectorField extends StatelessWidget {
   final String? selectedId;
   final String? errorText;
   final ValueChanged<String> onSelected;
+  final bool isLoading;
 
   const CategorySelectorField({
     super.key,
@@ -17,7 +18,44 @@ class CategorySelectorField extends StatelessWidget {
     required this.selectedId,
     required this.onSelected,
     this.errorText,
+    this.isLoading = false,
   });
+
+  static IconData mapCategoryIcon(String icon) {
+    switch (icon.toLowerCase().trim()) {
+      case 'devices':
+      case 'electronics':
+      case 'phone_iphone':
+        return Icons.devices_rounded;
+      case 'account_balance_wallet':
+      case 'wallet':
+      case 'wallets':
+        return Icons.account_balance_wallet_rounded;
+      case 'vpn_key':
+      case 'key':
+      case 'keys':
+        return Icons.vpn_key_rounded;
+      case 'backpack':
+      case 'bag':
+      case 'bags':
+      case 'shopping_bag':
+        return Icons.shopping_bag_rounded;
+      case 'description':
+      case 'document':
+      case 'documents':
+      case 'folder':
+        return Icons.description_rounded;
+      case 'pets':
+      case 'pet':
+        return Icons.pets_rounded;
+      case 'watch':
+        return Icons.watch_rounded;
+      case 'glasses':
+        return Icons.visibility_rounded;
+      default:
+        return Icons.category_rounded;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +93,7 @@ class CategorySelectorField extends StatelessWidget {
         ),
         SizedBox(height: 6.h),
         GestureDetector(
-          onTap: () => _showSheet(context),
+          onTap: isLoading ? null : () => _showSheet(context),
           child: Container(
             height: 56.h,
             padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w),
@@ -70,11 +108,15 @@ class CategorySelectorField extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.grid_view_rounded,
+                  selectedCategory != null
+                      ? mapCategoryIcon(selectedCategory.icon)
+                      : Icons.grid_view_rounded,
                   size: 20.r,
                   color: hasError
                       ? colors.error
-                      : colors.onSurfaceVariant,
+                      : (selectedCategory != null
+                          ? colors.primary
+                          : colors.onSurfaceVariant),
                 ),
                 SizedBox(width: 10.w),
                 Expanded(
@@ -88,11 +130,21 @@ class CategorySelectorField extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 22.r,
-                  color: colors.onSurfaceVariant,
-                ),
+                if (isLoading)
+                  SizedBox(
+                    width: 18.r,
+                    height: 18.r,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: colors.primary,
+                    ),
+                  )
+                else
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 22.r,
+                    color: colors.onSurfaceVariant,
+                  ),
               ],
             ),
           ),
@@ -157,6 +209,21 @@ class CategorySelectorField extends StatelessWidget {
                     final cat = categories[index];
                     final isSelected = selectedId == cat.id;
                     return ListTile(
+                      leading: Container(
+                        width: 36.r,
+                        height: 36.r,
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? colors.primary.withValues(alpha: 0.12)
+                              : colors.surfaceContainerHighest.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Icon(
+                          mapCategoryIcon(cat.icon),
+                          color: isSelected ? colors.primary : colors.onSurfaceVariant,
+                          size: 20.r,
+                        ),
+                      ),
                       title: Text(
                         cat.localizedName(locale),
                         style: TextStyle(

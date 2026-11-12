@@ -5,10 +5,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
+import 'package:found_it/features/auth/domain/get_current_user_use_case.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
 import 'package:found_it/features/auth/domain/login_use_case.dart';
+import 'package:found_it/features/auth/domain/logout_use_case.dart';
 import 'package:found_it/features/auth/domain/signup_use_case.dart';
+import 'package:found_it/features/auth/domain/watch_auth_state_use_case.dart';
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
@@ -109,7 +114,22 @@ void _registerAuth() {
     ..registerLazySingleton(() => LoginUseCase(sl()))
     ..registerLazySingleton(() => SignUpUseCase(sl()))
     ..registerFactory(() => LoginCubit(sl()))
-    ..registerFactory(() => SignUpCubit(sl()));
+    ..registerFactory(() => SignUpCubit(sl()))
+    ..registerFactory(() => ResendTimerCubit())
+    // Session: login state + profile for the whole app.
+    ..registerLazySingleton(() => WatchAuthStateUseCase(sl()))
+    ..registerLazySingleton(() => GetCurrentUserUseCase(sl()))
+    ..registerLazySingleton(() => LogoutUseCase(sl()))
+    // EXCEPTION to the "cubits are factories" rule: AuthCubit is ONE
+    // app-wide instance (started in main.dart, provided in found_it.dart).
+    ..registerLazySingleton(
+      () => AuthCubit(
+        watchAuthState: sl(),
+        getCurrentUser: sl(),
+        logout: sl(),
+        hasActiveSession: sl(),
+      ),
+    );
 }
 
 // ---------------------------------------------------------------------

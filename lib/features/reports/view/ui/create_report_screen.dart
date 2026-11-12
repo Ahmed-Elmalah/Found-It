@@ -268,6 +268,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           CategorySelectorField(
                             categories: form.categories,
                             selectedId: form.categoryId,
+                            isLoading: form.isLoadingData,
                             errorText: errors.containsKey('category')
                                 ? l10n.categoryRequired
                                 : null,
@@ -279,6 +280,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           DistrictSelectorField(
                             areas: form.areas,
                             selectedId: form.areaId,
+                            isLoading: form.isLoadingData,
                             errorText: errors.containsKey('district')
                                 ? l10n.districtRequired
                                 : null,

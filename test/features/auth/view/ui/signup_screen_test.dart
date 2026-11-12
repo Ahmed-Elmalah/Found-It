@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/router/app_routes.dart';
@@ -19,6 +20,15 @@ import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import '../../../../helpers/test_app.dart';
 
 class FakeAuthRepository implements AuthRepository {
+  @override
+  Stream<bool> authStateChanges() => const Stream.empty();
+
+  @override
+  Future<UserEntity?> getCurrentUser() async => null;
+
+  @override
+  Future<void> logout() async {}
+
   int signUpCalls = 0;
   SignUpParams? lastParams;
   AuthFailure? failure;
@@ -177,9 +187,7 @@ void main() {
     expect(repo.signUpCalls, 0);
   });
 
-  testWidgets('valid input normalizes phone, nulls address, goes to city', (
-    tester,
-  ) async {
+  testWidgets('valid input normalizes phone and nulls address', (tester) async {
     final repo = await _pump(tester);
     await _fillAndSubmit(tester);
     await tester.pumpAndSettle();
@@ -189,7 +197,6 @@ void main() {
     expect(repo.lastParams!.phone, '+201012345678');
     expect(repo.lastParams!.address, isNull);
     expect(repo.lastParams!.password, 'secret123');
-    expect(find.text('CITY PAGE'), findsOneWidget);
   });
 
   testWidgets(
@@ -230,23 +237,26 @@ void main() {
     );
   });
 
-  testWidgets('shows loader while pending, then goes to city on success', (
-    tester,
-  ) async {
-    final pending = Completer<void>();
-    await _pump(tester, pending: pending);
-    await _fillAndSubmit(tester);
-    expect(
-      find.descendant(
-        of: find.byType(AppButton),
-        matching: find.byType(CircularProgressIndicator),
-      ),
-      findsOneWidget,
-    );
-    pending.complete();
-    await tester.pumpAndSettle();
-    expect(find.text('CITY PAGE'), findsOneWidget);
-  });
+  testWidgets(
+    'shows loader while pending; success does not navigate by itself',
+    (tester) async {
+      final pending = Completer<void>();
+      await _pump(tester, pending: pending);
+      await _fillAndSubmit(tester);
+      expect(
+        find.descendant(
+          of: find.byType(AppButton),
+          matching: find.byType(CircularProgressIndicator),
+        ),
+        findsOneWidget,
+      );
+      pending.complete();
+      await tester.pumpAndSettle();
+      // Where to go next is the router's job (auth redirect), not the screen's.
+      expect(find.text('CITY PAGE'), findsNothing);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+    },
+  );
 
   testWidgets('back button returns to login page', (tester) async {
     await _pump(tester);

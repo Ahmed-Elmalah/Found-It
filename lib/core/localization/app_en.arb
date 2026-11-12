@@ -124,5 +124,18 @@
   "notLoggedInMessage": "You must be logged in to create a report.",
   "invalidDataTitle": "Invalid Data:",
   "invalidDataMessage": "Please check the entered report details.",
-  "retry": "Retry"
+  "retry": "Retry",
+
+  "forgotPasswordSubtitle": "Enter your email and we’ll send you a link to reset it.",
+  "sendResetLinkButton": "Send reset link",
+  "rememberedIt": "Remembered it?",
+  "backToLogin": "Back to login",
+  "resetComingSoon": "Password reset will be available soon.",
+  "verifyEmailTitle": "Verify your email",
+  "verifyEmailBody": "We sent a verification link to {email}. Open it to activate your account.",
+  "@verifyEmailBody": {"placeholders": {"email": {"type": "String"}}},
+  "verifiedButton": "I’ve verified my email",
+  "resendEmail": "Resend email",
+  "resendEmailIn": "Resend email · {time}",
+  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}}
 }

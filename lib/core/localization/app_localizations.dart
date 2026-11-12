@@ -631,6 +631,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get retry;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we’ll send you a link to reset it.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @sendResetLinkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
+  String get sendResetLinkButton;
+
+  /// No description provided for @rememberedIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Remembered it?'**
+  String get rememberedIt;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get backToLogin;
+
+  /// No description provided for @resetComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset will be available soon.'**
+  String get resetComingSoon;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a verification link to {email}. Open it to activate your account.'**
+  String verifyEmailBody(String email);
+
+  /// No description provided for @verifiedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I’ve verified my email'**
+  String get verifiedButton;
+
+  /// No description provided for @resendEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend email'**
+  String get resendEmail;
+
+  /// No description provided for @resendEmailIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend email · {time}'**
+  String resendEmailIn(String time);
 }
 
 class _AppLocalizationsDelegate
