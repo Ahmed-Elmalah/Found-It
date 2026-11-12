@@ -734,11 +734,11 @@ abstract class AppLocalizations {
   /// **'Report'**
   String get navReport;
 
-  /// No description provided for @navNotifications.
+  /// No description provided for @navMessages.
   ///
   /// In en, this message translates to:
-  /// **'Alerts'**
-  String get navNotifications;
+  /// **'Messages'**
+  String get navMessages;
 
   /// No description provided for @navProfile.
   ///

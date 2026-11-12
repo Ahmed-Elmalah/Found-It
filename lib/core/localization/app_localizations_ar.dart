@@ -345,7 +345,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navReport => 'إبلاغ';
 
   @override
-  String get navNotifications => 'الإشعارات';
+  String get navMessages => 'الرسائل';
 
   @override
   String get navProfile => 'حسابي';

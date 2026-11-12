@@ -348,7 +348,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navReport => 'Report';
 
   @override
-  String get navNotifications => 'Alerts';
+  String get navMessages => 'Messages';
 
   @override
   String get navProfile => 'Profile';

@@ -6,8 +6,8 @@ import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/router/auth_redirect.dart';
 import 'package:found_it/core/router/stream_listenable.dart';
-import 'package:found_it/core/widgets/home_shell_preview.dart';
-import 'package:found_it/core/widgets/main_shell.dart';
+import 'package:found_it/features/main/view/ui/main_shell.dart';
+import 'package:found_it/features/main/view/widgets/home_shell_preview.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
@@ -119,12 +119,12 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        // Tab 2: Notifications
+        // Tab 2: Messages
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.notifications,
-              builder: (context, state) => const _ComingSoon('Notifications'),
+              path: AppRoutes.messages,
+              builder: (context, state) => const _ComingSoon('Messages'),
             ),
           ],
         ),

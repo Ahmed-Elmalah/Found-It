@@ -6,19 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 
-/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar inspired by moza.flutter,
-/// featuring optical glass refraction, a convex Glass Loupe active lens, and an organic
-/// metaball melting bridge centered at the Report Plus button (نقطة الدوبان).
+/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar.
 ///
-/// Key Architectural & Visual Mechanics:
-/// 1. **Ultra-Clear Crystal Dock:** High-transparency frosted glass (~18% tint) with heavy blur (sigma: 24).
-/// 2. **Specular Bevel Glint (اللمعة):** Physical light reflection sheen along the top-left beveled glass rim.
-/// 3. **The Glass Loupe (عدسة الإزاز):** Circular convex optical lens that glides over the active tab,
-///    featuring outer refraction rings and an inner specular glint.
-/// 4. **Metaball Melting Furnace (نقطة الدوبان):** The center Plus button is the liquid source.
-///    When switching tabs, a viscous organic liquid bridge (concave metaball neck) organically
-///    stretches out of the Plus button, preserving volume with stretch-and-squash dynamics.
-/// 5. **Spring Dynamics:** Elastic bounce physics on settling and tactile haptic reactions.
+/// Features:
+/// - **Ultra-Clear Crystal Dock:** Pure, high-transparency frosted glass (~18% tint) with heavy blur (sigma: 24).
+/// - **Specular Bevel Glint (اللمعة):** High-intensity white light reflection sheen along the top-left beveled glass rim.
+/// - **The Glass Loupe (عدسة الإزاز):** Optical convex circular lens that glides over the active tab,
+///   featuring inner crescent specular highlights and light refraction rings with ZERO colored lines.
+/// - **5 Slots:** Home, Explore, Center Report Button (with 'X' icon), Messages (with unread badge), Profile.
+/// - **Stretch & Squash Dynamics:** Fluid liquid droplet elongation during transit with elastic spring rebound.
 class LiquidGlassBottomNavBar extends StatefulWidget {
   const LiquidGlassBottomNavBar({
     super.key,
@@ -28,13 +24,13 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
   });
 
   /// Active tab index among the 4 destinations:
-  /// 0: Home, 1: Explore, 2: Notifications, 3: Profile.
+  /// 0: Home, 1: Explore, 2: Messages, 3: Profile.
   final int currentIndex;
 
   /// Callback when a tab is tapped.
   final ValueChanged<int> onTap;
 
-  /// Callback when the center Plus button is tapped.
+  /// Callback when the center Report 'X' button is tapped.
   final VoidCallback onReportTap;
 
   @override
@@ -44,12 +40,10 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
 class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     with TickerProviderStateMixin {
   late final AnimationController _motionController;
-  late final AnimationController _pulseController;
-  late final AnimationController _plusRotateController;
+  late final AnimationController _buttonTapController;
 
   late Animation<double> _alignmentAnimation;
   late Animation<double> _stretchAnimation;
-  late Animation<double> _pulseAnimation;
 
   double _previousAlignmentX = -1.0;
   double _currentAlignmentX = -1.0;
@@ -62,30 +56,12 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
 
     _motionController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 440),
+      duration: const Duration(milliseconds: 400),
     );
 
-    _pulseController = AnimationController(
+    _buttonTapController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 550),
-    );
-
-    _pulseAnimation = TweenSequence<double>([
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 0.0, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeOutQuad)),
-        weight: 35,
-      ),
-      TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 0.0)
-            .chain(CurveTween(curve: Curves.easeInOutQuad)),
-        weight: 65,
-      ),
-    ]).animate(_pulseController);
-
-    _plusRotateController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 320),
+      duration: const Duration(milliseconds: 250),
     );
 
     _buildAnimations(_currentAlignmentX, _currentAlignmentX);
@@ -100,7 +76,6 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
       _currentAlignmentX = newAlignmentX;
 
       _buildAnimations(_previousAlignmentX, _currentAlignmentX);
-      _pulseController.forward(from: 0.0);
       _motionController.forward(from: 0.0);
     }
   }
@@ -113,20 +88,20 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
       ),
     );
 
-    // Stretch-and-squash physics: elongates during flight, then spring rebounds
+    // Fluid droplet stretch & squash: elongates in transit, snaps back with elastic rebound
     _stretchAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.0, end: 1.38)
+        tween: Tween<double>(begin: 1.0, end: 1.34)
             .chain(CurveTween(curve: Curves.easeOutQuad)),
-        weight: 42,
+        weight: 40,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 1.38, end: 0.88)
+        tween: Tween<double>(begin: 1.34, end: 0.90)
             .chain(CurveTween(curve: Curves.easeInOutQuad)),
-        weight: 38,
+        weight: 40,
       ),
       TweenSequenceItem(
-        tween: Tween<double>(begin: 0.88, end: 1.0)
+        tween: Tween<double>(begin: 0.90, end: 1.0)
             .chain(CurveTween(curve: Curves.elasticOut)),
         weight: 20,
       ),
@@ -134,7 +109,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   }
 
   double _getAlignmentForIndex(int index) {
-    // 5 slots: Tab 0 (-1.0), Tab 1 (-0.5), Center Plus (0.0), Tab 2 (0.5), Tab 3 (1.0)
+    // 5 slots: Tab 0 (-1.0), Tab 1 (-0.5), Center Button (0.0), Tab 2 (0.5), Tab 3 (1.0)
     return switch (index) {
       0 => -1.0,
       1 => -0.5,
@@ -147,15 +122,13 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   @override
   void dispose() {
     _motionController.dispose();
-    _pulseController.dispose();
-    _plusRotateController.dispose();
+    _buttonTapController.dispose();
     super.dispose();
   }
 
-  void _handlePlusTap() {
+  void _handleReportTap() {
     HapticFeedback.mediumImpact();
-    _pulseController.forward(from: 0.0);
-    _plusRotateController.forward(from: 0.0);
+    _buttonTapController.forward(from: 0.0);
     widget.onReportTap();
   }
 
@@ -164,7 +137,6 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
-    final primary = theme.colorScheme.primary;
 
     return RepaintBoundary(
       child: SafeArea(
@@ -195,7 +167,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(34.r),
-                    // Ultra-clear crystal translucency
+                    // Ultra-clear crystal glass tint (pure, no colored lines)
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -240,33 +212,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                         ),
                       ),
 
-                      // Organic Gooey Metaball Melting Bridge (وصلة السائل المذاب)
-                      AnimatedBuilder(
-                        animation: Listenable.merge([
-                          _motionController,
-                          _pulseController,
-                        ]),
-                        builder: (context, _) {
-                          final currentX = _alignmentAnimation.value;
-                          final stretch = _stretchAnimation.value;
-                          final pulse = _pulseAnimation.value;
-                          final progress = _motionController.value;
-
-                          return CustomPaint(
-                            size: Size.infinite,
-                            painter: _MetaballMeltingPainter(
-                              alignmentX: currentX,
-                              stretch: stretch,
-                              pulse: pulse,
-                              progress: progress,
-                              primaryColor: primary,
-                              isDark: isDark,
-                            ),
-                          );
-                        },
-                      ),
-
-                      // The "Glass Loupe" (عدسة الإزاز) Active Tab Lens
+                      // The "Glass Loupe" (عدسة الإزاز) Active Tab Lens - Pure crystal optical glass
                       AnimatedBuilder(
                         animation: _motionController,
                         builder: (context, _) {
@@ -281,20 +227,20 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                               child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 4.w),
                                 decoration: BoxDecoration(
-                                  // Convex optical lens gradient
+                                  // Optical glass lens gradient
                                   gradient: RadialGradient(
                                     center: const Alignment(-0.35, -0.35),
                                     radius: 0.85,
                                     colors: isDark
                                         ? [
-                                            Colors.white.withValues(alpha: 0.25),
-                                            primary.withValues(alpha: 0.20),
-                                            primary.withValues(alpha: 0.06),
+                                            Colors.white.withValues(alpha: 0.22),
+                                            Colors.white.withValues(alpha: 0.08),
+                                            Colors.white.withValues(alpha: 0.02),
                                           ]
                                         : [
                                             Colors.white.withValues(alpha: 0.65),
-                                            primary.withValues(alpha: 0.16),
-                                            primary.withValues(alpha: 0.04),
+                                            Colors.white.withValues(alpha: 0.25),
+                                            Colors.white.withValues(alpha: 0.08),
                                           ],
                                   ),
                                   borderRadius: BorderRadius.circular(24.r),
@@ -306,10 +252,10 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primary.withValues(
-                                        alpha: isDark ? 0.35 : 0.18,
-                                      ),
-                                      blurRadius: 12.r,
+                                      color: isDark
+                                          ? Colors.white.withValues(alpha: 0.12)
+                                          : Colors.white.withValues(alpha: 0.40),
+                                      blurRadius: 10.r,
                                       spreadRadius: -1,
                                     ),
                                     BoxShadow(
@@ -370,22 +316,22 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             ),
                           ),
 
-                          // Center Slot: Melting Point Origin (Report Plus Button)
+                          // Center Slot: Report Button with 'X' Icon
                           Expanded(
-                            child: _CenterMeltingPlusButton(
+                            child: _CenterReportXButton(
                               label: l10n.navReport,
-                              pulseAnimation: _pulseAnimation,
-                              rotateAnimation: _plusRotateController,
-                              onTap: _handlePlusTap,
+                              tapAnimation: _buttonTapController,
+                              onTap: _handleReportTap,
                             ),
                           ),
 
-                          // Tab 2: Notifications
+                          // Tab 2: Messages (with badge)
                           Expanded(
                             child: _NavBarItem(
-                              icon: Icons.notifications_rounded,
-                              label: l10n.navNotifications,
+                              icon: Icons.chat_bubble_rounded,
+                              label: l10n.navMessages,
                               isSelected: widget.currentIndex == 2,
+                              badgeCount: 2,
                               onTap: () {
                                 HapticFeedback.selectionClick();
                                 widget.onTap(2);
@@ -419,143 +365,20 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
   }
 }
 
-/// Custom painter that renders the organic gooey metaball connector bridge
-/// flowing from the center Plus button (نقطة الدوبان) to the moving Glass Loupe.
-class _MetaballMeltingPainter extends CustomPainter {
-  _MetaballMeltingPainter({
-    required this.alignmentX,
-    required this.stretch,
-    required this.pulse,
-    required this.progress,
-    required this.primaryColor,
-    required this.isDark,
-  });
-
-  final double alignmentX;
-  final double stretch;
-  final double pulse;
-  final double progress;
-  final Color primaryColor;
-  final bool isDark;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.width <= 0 || size.height <= 0) return;
-
-    final centerX = size.width / 2;
-    final centerY = size.height / 2;
-
-    // Convert normalized alignmentX (-1.0 to 1.0) to pixel position
-    final slotWidth = size.width / 5;
-    final targetX = centerX + (alignmentX * (size.width - slotWidth) / 2);
-    final distance = (targetX - centerX).abs();
-
-    // 1. Draw glowing liquid aura around the center Plus melting furnace
-    final coreAuraPaint = Paint()
-      ..color = primaryColor.withValues(
-        alpha: (isDark ? 0.22 : 0.14) + (pulse * 0.16),
-      )
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 14.r + (pulse * 8.r));
-
-    canvas.drawCircle(Offset(centerX, centerY), 23.r, coreAuraPaint);
-
-    // 2. Draw the organic concave metaball neck bridge
-    if (distance > 6.0) {
-      final isMovingToLeft = targetX < centerX;
-
-      final bridgePaint = Paint()
-        ..shader = LinearGradient(
-          colors: [
-            primaryColor.withValues(alpha: isDark ? 0.32 : 0.22),
-            primaryColor.withValues(alpha: isDark ? 0.16 : 0.09),
-          ],
-          begin: Alignment.center,
-          end: isMovingToLeft ? Alignment.centerLeft : Alignment.centerRight,
-        ).createShader(Rect.fromLTRB(
-          math.min(centerX, targetX),
-          0,
-          math.max(centerX, targetX),
-          size.height,
-        ))
-        ..style = PaintingStyle.fill;
-
-      final path = Path();
-      final plusRadius = 22.r;
-      final targetRadius = 18.r * stretch;
-
-      // Dynamic concave neck height (thinner during peak stretch, organic taper)
-      final midX = (centerX + targetX) / 2;
-      final neckPinch = math.max(4.0, 16.0 - (distance / size.width) * 18.0);
-
-      path.moveTo(centerX, centerY - plusRadius);
-      path.quadraticBezierTo(
-        midX,
-        centerY - neckPinch,
-        targetX,
-        centerY - targetRadius,
-      );
-      path.lineTo(targetX, centerY + targetRadius);
-      path.quadraticBezierTo(
-        midX,
-        centerY + neckPinch,
-        centerX,
-        centerY + plusRadius,
-      );
-      path.close();
-
-      canvas.drawPath(path, bridgePaint);
-
-      // Specular highlight line along the upper liquid bridge rim
-      final rimPaint = Paint()
-        ..shader = LinearGradient(
-          colors: [
-            Colors.white.withValues(alpha: 0.0),
-            Colors.white.withValues(alpha: isDark ? 0.35 : 0.70),
-            Colors.white.withValues(alpha: 0.0),
-          ],
-        ).createShader(Rect.fromLTRB(
-          math.min(centerX, targetX),
-          centerY - 10,
-          math.max(centerX, targetX),
-          centerY + 10,
-        ))
-        ..strokeWidth = 1.0
-        ..style = PaintingStyle.stroke;
-
-      final rimPath = Path()
-        ..moveTo(centerX, centerY - plusRadius)
-        ..quadraticBezierTo(
-          midX,
-          centerY - neckPinch,
-          targetX,
-          centerY - targetRadius,
-        );
-
-      canvas.drawPath(rimPath, rimPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _MetaballMeltingPainter oldDelegate) {
-    return oldDelegate.alignmentX != alignmentX ||
-        oldDelegate.stretch != stretch ||
-        oldDelegate.pulse != pulse ||
-        oldDelegate.progress != progress;
-  }
-}
-
 class _NavBarItem extends StatelessWidget {
   const _NavBarItem({
     required this.icon,
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.badgeCount,
   });
 
   final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final int? badgeCount;
 
   @override
   Widget build(BuildContext context) {
@@ -575,20 +398,59 @@ class _NavBarItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AnimatedSlide(
-              offset: isSelected ? const Offset(0, -0.08) : Offset.zero,
-              duration: const Duration(milliseconds: 260),
-              curve: Curves.easeOutBack,
-              child: AnimatedScale(
-                scale: isSelected ? 1.15 : 1.0,
-                duration: const Duration(milliseconds: 240),
-                curve: Curves.easeOutBack,
-                child: Icon(
-                  icon,
-                  color: color,
-                  size: 24.r,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                AnimatedSlide(
+                  offset: isSelected ? const Offset(0, -0.08) : Offset.zero,
+                  duration: const Duration(milliseconds: 260),
+                  curve: Curves.easeOutBack,
+                  child: AnimatedScale(
+                    scale: isSelected ? 1.15 : 1.0,
+                    duration: const Duration(milliseconds: 240),
+                    curve: Curves.easeOutBack,
+                    child: Icon(
+                      icon,
+                      color: color,
+                      size: 24.r,
+                    ),
+                  ),
                 ),
-              ),
+                if (badgeCount != null && badgeCount! > 0)
+                  Positioned(
+                    top: -2.h,
+                    right: -6.w,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 5.w,
+                        vertical: 1.5.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEF4444),
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1.2,
+                        ),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16.r,
+                        minHeight: 16.r,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '$badgeCount',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.w700,
+                            height: 1.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             SizedBox(height: 3.h),
             AnimatedDefaultTextStyle(
@@ -612,17 +474,15 @@ class _NavBarItem extends StatelessWidget {
   }
 }
 
-class _CenterMeltingPlusButton extends StatelessWidget {
-  const _CenterMeltingPlusButton({
+class _CenterReportXButton extends StatelessWidget {
+  const _CenterReportXButton({
     required this.label,
-    required this.pulseAnimation,
-    required this.rotateAnimation,
+    required this.tapAnimation,
     required this.onTap,
   });
 
   final String label;
-  final Animation<double> pulseAnimation;
-  final Animation<double> rotateAnimation;
+  final Animation<double> tapAnimation;
   final VoidCallback onTap;
 
   @override
@@ -641,43 +501,42 @@ class _CenterMeltingPlusButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedBuilder(
-              animation: Listenable.merge([pulseAnimation, rotateAnimation]),
+              animation: tapAnimation,
               builder: (context, _) {
-                final pulse = pulseAnimation.value;
-                final rotation = rotateAnimation.value * (math.pi / 4); // 45 degree spring turn
+                final tapScale = 1.0 - (tapAnimation.value * 0.12);
 
-                return Container(
-                  width: 44.r,
-                  height: 44.r,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color(0xFF4A74FF),
-                        Color(0xFF1D4ED8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF2563EB).withValues(
-                          alpha: (isDark ? 0.48 : 0.38) + (pulse * 0.22),
-                        ),
-                        blurRadius: 14.r + (pulse * 6.r),
-                        offset: Offset(0, 3.h),
+                return Transform.scale(
+                  scale: tapScale,
+                  child: Container(
+                    width: 44.r,
+                    height: 44.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF3B66FF),
+                          Color(0xFF1D4ED8),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                    ],
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.50),
-                      width: 1.5,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF2563EB).withValues(
+                            alpha: isDark ? 0.45 : 0.35,
+                          ),
+                          blurRadius: 12.r,
+                          offset: Offset(0, 3.h),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.50),
+                        width: 1.5,
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Transform.rotate(
-                      angle: rotation,
+                    child: Center(
                       child: Icon(
-                        Icons.add_rounded,
+                        Icons.close_rounded, // Exact 'X' icon as requested
                         color: Colors.white,
                         size: 26.r,
                       ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:found_it/core/widgets/liquid_glass_bottom_nav_bar.dart';
-import '../../helpers/test_app.dart';
+import 'package:found_it/features/main/view/widgets/liquid_glass_bottom_nav_bar.dart';
+import '../../../../helpers/test_app.dart';
 
 void main() {
-  testWidgets('renders all 4 tabs and center report button in English', (tester) async {
+  testWidgets('renders all 4 tabs and center report X button in English', (tester) async {
     int selectedIndex = 0;
     bool reportTapped = false;
 
@@ -22,9 +22,9 @@ void main() {
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Explore'), findsOneWidget);
     expect(find.text('Report'), findsOneWidget);
-    expect(find.text('Alerts'), findsOneWidget);
+    expect(find.text('Messages'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
-    expect(find.byIcon(Icons.add_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.close_rounded), findsOneWidget);
 
     // Tap Explore (index 1)
     await tester.tap(find.text('Explore'));
@@ -32,9 +32,14 @@ void main() {
     expect(selectedIndex, 1);
 
     // Tap Report
-    await tester.tap(find.byIcon(Icons.add_rounded));
+    await tester.tap(find.byIcon(Icons.close_rounded));
     await tester.pumpAndSettle();
     expect(reportTapped, isTrue);
+
+    // Tap Messages (index 2)
+    await tester.tap(find.text('Messages'));
+    await tester.pumpAndSettle();
+    expect(selectedIndex, 2);
 
     // Tap Profile (index 3)
     await tester.tap(find.text('Profile'));
@@ -57,7 +62,7 @@ void main() {
     expect(find.text('الرئيسية'), findsOneWidget);
     expect(find.text('استكشاف'), findsOneWidget);
     expect(find.text('إبلاغ'), findsOneWidget);
-    expect(find.text('الإشعارات'), findsOneWidget);
+    expect(find.text('الرسائل'), findsOneWidget);
     expect(find.text('حسابي'), findsOneWidget);
   });
 
