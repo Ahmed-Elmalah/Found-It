@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:found_it/core/widgets/app_button.dart';
+
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
@@ -123,6 +125,8 @@ void main() {
       expect(find.text('Edit Report'), findsOneWidget);
       expect(find.text('Black Leather Wallet'), findsOneWidget);
       expect(find.text('Lost near subway'), findsOneWidget);
+      expect(find.text('16/1000'), findsOneWidget);
+      expect(find.byType(AppButton), findsOneWidget);
       expect(find.text('Save changes'), findsOneWidget);
     });
 
@@ -140,7 +144,9 @@ void main() {
 
       // Test title too short (< 3)
       await tester.enterText(titleFinder, 'ab');
-      await tester.tap(find.text('Save changes'));
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(AppButton));
       await tester.pumpAndSettle();
 
       expect(find.text('Title must be at least 3 characters'), findsOneWidget);
@@ -148,7 +154,9 @@ void main() {
       // Test title too long (> 50)
       final tooLongText = 'A' * 51;
       await tester.enterText(titleFinder, tooLongText);
-      await tester.tap(find.text('Save changes'));
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(AppButton));
       await tester.pumpAndSettle();
 
       expect(find.text('Title must be at most 50 characters'), findsOneWidget);
@@ -179,7 +187,9 @@ void main() {
       final titleFinder = find.byType(TextField).first;
       await tester.enterText(titleFinder, 'Updated Brown Wallet');
 
-      await tester.tap(find.text('Save changes'));
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(AppButton));
       await tester.pumpAndSettle();
 
       expect(repo.updatedTitle, 'Updated Brown Wallet');

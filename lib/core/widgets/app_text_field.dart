@@ -39,6 +39,8 @@ class AppTextField extends StatefulWidget {
     this.forceLtr = false,
     this.isRequired = false,
     this.maxLength,
+    this.maxLines = 1,
+    this.minLines,
     this.showErrorIcon = false,
   });
 
@@ -76,6 +78,13 @@ class AppTextField extends StatefulWidget {
 
   /// Maximum characters allowed; displays an end-aligned "current/max" counter.
   final int? maxLength;
+
+  /// The maximum number of lines the text field can show.
+  /// Defaults to 1. If [isPassword] is true, [maxLines] is forced to 1.
+  final int? maxLines;
+
+  /// The minimum number of lines the text field will take up.
+  final int? minLines;
 
   /// When true, renders a small error icon before the error text.
   final bool showErrorIcon;
@@ -147,6 +156,8 @@ class _AppTextFieldState extends State<AppTextField> {
               buildCounter: widget.maxLength != null
                   ? (_, {required currentLength, required isFocused, maxLength}) => null
                   : null,
+              maxLines: widget.isPassword ? 1 : widget.maxLines,
+              minLines: widget.minLines,
               textDirection: ltrDirection,
               textAlign: widget.forceLtr ? ltrAlign : TextAlign.start,
               keyboardType: widget.keyboardType,
