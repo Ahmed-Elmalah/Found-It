@@ -195,5 +195,37 @@
   "verifiedButton": "I’ve verified my email",
   "resendEmail": "Resend email",
   "resendEmailIn": "Resend email · {time}",
-  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}}
+  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}},
+
+  "exploreTitle": "Explore",
+  "searchHint": "Search",
+  "activeReportsCount": "{count} active reports",
+  "@activeReportsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "mostRecentFirst": "Most recent first",
+
+  "filtersTitle": "Filters",
+  "dateRangeLabel": "Date range",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "dateFromValue": "From {date}",
+  "@dateFromValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "dateUntilValue": "Until {date}",
+  "@dateUntilValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "reset": "Reset",
+  "showResults": "Show results",
+
+  "emptySearchTitle": "No matching reports found.",
+  "emptySearchMessage": "Try adjusting your search filters."
 }

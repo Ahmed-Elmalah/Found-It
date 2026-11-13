@@ -487,4 +487,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'Resend email · $time';
   }
+
+  @override
+  String get exploreTitle => 'Explore';
+
+  @override
+  String get searchHint => 'Search';
+
+  @override
+  String activeReportsCount(int count) {
+    return '$count active reports';
+  }
+
+  @override
+  String get mostRecentFirst => 'Most recent first';
+
+  @override
+  String get filtersTitle => 'Filters';
+
+  @override
+  String get dateRangeLabel => 'Date range';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String dateFromValue(String date) {
+    return 'From $date';
+  }
+
+  @override
+  String dateUntilValue(String date) {
+    return 'Until $date';
+  }
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get showResults => 'Show results';
+
+  @override
+  String get emptySearchTitle => 'No matching reports found.';
+
+  @override
+  String get emptySearchMessage => 'Try adjusting your search filters.';
 }

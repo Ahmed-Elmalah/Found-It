@@ -485,4 +485,52 @@ class AppLocalizationsAr extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'إعادة الإرسال · $time';
   }
+
+  @override
+  String get exploreTitle => 'استكشاف';
+
+  @override
+  String get searchHint => 'ابحث';
+
+  @override
+  String activeReportsCount(int count) {
+    return '$count تقارير نشطة';
+  }
+
+  @override
+  String get mostRecentFirst => 'الأحدث أولاً';
+
+  @override
+  String get filtersTitle => 'الفلاتر';
+
+  @override
+  String get dateRangeLabel => 'نطاق التاريخ';
+
+  @override
+  String get startDate => 'تاريخ البدء';
+
+  @override
+  String get endDate => 'تاريخ الانتهاء';
+
+  @override
+  String dateFromValue(String date) {
+    return 'من $date';
+  }
+
+  @override
+  String dateUntilValue(String date) {
+    return 'حتى $date';
+  }
+
+  @override
+  String get reset => 'إعادة تعيين';
+
+  @override
+  String get showResults => 'عرض النتائج';
+
+  @override
+  String get emptySearchTitle => 'لا توجد تقارير مطابقة.';
+
+  @override
+  String get emptySearchMessage => 'جرّب تعديل فلاتر البحث.';
 }

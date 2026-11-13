@@ -1015,6 +1015,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resend email · {time}'**
   String resendEmailIn(String time);
+
+  /// No description provided for @exploreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get exploreTitle;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchHint;
+
+  /// No description provided for @activeReportsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} active reports'**
+  String activeReportsCount(int count);
+
+  /// No description provided for @mostRecentFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Most recent first'**
+  String get mostRecentFirst;
+
+  /// No description provided for @filtersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filters'**
+  String get filtersTitle;
+
+  /// No description provided for @dateRangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date range'**
+  String get dateRangeLabel;
+
+  /// No description provided for @startDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get startDate;
+
+  /// No description provided for @endDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End date'**
+  String get endDate;
+
+  /// No description provided for @dateFromValue.
+  ///
+  /// In en, this message translates to:
+  /// **'From {date}'**
+  String dateFromValue(String date);
+
+  /// No description provided for @dateUntilValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Until {date}'**
+  String dateUntilValue(String date);
+
+  /// No description provided for @reset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get reset;
+
+  /// No description provided for @showResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Show results'**
+  String get showResults;
+
+  /// No description provided for @emptySearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching reports found.'**
+  String get emptySearchTitle;
+
+  /// No description provided for @emptySearchMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search filters.'**
+  String get emptySearchMessage;
 }
 
 class _AppLocalizationsDelegate
