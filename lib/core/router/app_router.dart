@@ -16,16 +16,25 @@ import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
+import 'package:found_it/features/explore/view/ui/explore_screen.dart';
+import 'package:found_it/features/home/view/ui/home_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
 import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
+import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
+import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
+import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
+import 'package:found_it/features/profile/view/ui/profile_screen.dart';
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
+import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
+import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
-
-import '../../features/root/view/ui/main_shell.dart';
-import '../../features/home/view/ui/home_screen.dart';
+import 'package:found_it/features/root/view/ui/main_shell.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -96,6 +105,7 @@ final GoRouter appRouter = GoRouter(
         child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
       ),
     ),
+
     // Persistent Application Shell with Liquid Glass Navigation Bar
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => MainShell(
@@ -111,12 +121,12 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        // Tab 1: Explore
+        // Tab 1: Explore (Phase 1, mock data)
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.explore,
-              builder: (context, state) => const _ComingSoon('Explore'),
+              builder: (context, state) => const ExploreScreen(),
             ),
           ],
         ),
@@ -129,20 +139,22 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        // Tab 3: Profile
+        // Tab 3: Profile & Settings
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.profile,
-              builder: (context, state) =>
-                  const _ComingSoon('Profile', withLogout: true),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<ProfileCubit>(),
+                child: const ProfileScreen(),
+              ),
             ),
           ],
         ),
       ],
     ),
 
-    // Reports routes
+    // Reports routes (Ziad, story #3)
     GoRoute(
       path: AppRoutes.createReport,
       builder: (context, state) => BlocProvider(
@@ -162,6 +174,54 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final refCode = state.extra! as String;
         return ReportCreatedScreen(referenceId: refCode);
+      },
+    ),
+
+    // My Reports (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.myReports,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<MyReportsCubit>(),
+        child: const MyReportsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.editReport,
+      redirect: (context, state) {
+        if (state.extra is! ReportEntity) {
+          return AppRoutes.myReports;
+        }
+        return null;
+      },
+      builder: (context, state) {
+        final report = state.extra! as ReportEntity;
+        return BlocProvider(
+          create: (_) => EditReportCubit(
+            report,
+            sl(),
+            sl(),
+            sl(),
+          ),
+          child: EditReportScreen(report: report),
+        );
+      },
+    ),
+
+    // Edit Profile (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.editProfile,
+      redirect: (context, state) {
+        if (state.extra is! UserProfileEntity) {
+          return AppRoutes.profile;
+        }
+        return null;
+      },
+      builder: (context, state) {
+        final profile = state.extra! as UserProfileEntity;
+        return BlocProvider(
+          create: (_) => sl<ProfileCubit>(),
+          child: EditProfileScreen(profile: profile),
+        );
       },
     ),
   ],
@@ -184,8 +244,6 @@ class _ComingSoon extends StatelessWidget {
             Text('$name — coming soon'),
             if (withLogout) ...[
               const SizedBox(height: 24),
-              // The real logout button lives in Profile (Adham):
-              //   context.read<AuthCubit>().logout()
               OutlinedButton(
                 onPressed: () => context.read<AuthCubit>().logout(),
                 child: const Text('Log out'),

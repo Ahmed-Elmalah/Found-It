@@ -1,14 +1,14 @@
 {
   "@@locale": "en",
 
+  "chooseCityTitle": "Choose your city",
+  "chooseCitySubtitle": "Select your city to see nearby reports.",
+  "locationRequiredTitle": "Location Required:",
+  "locationRequiredMessage": "Please choose a city to continue.",
+  "continueButton": "Continue",
+
   "appName": "FOUND IT",
   "appTagline": "Lost something? Let’s bring it back.",
-
-  "chooseCityTitle": "Choose your city",
-  "chooseCitySubtitle": "Select your city to see lost and found reports near you.",
-  "locationRequiredTitle": "Location Required:",
-  "locationRequiredMessage": "Please select a city to continue.",
-  "continueButton": "Continue",
 
   "onboardingSkip": "Skip",
   "onboardingNext": "Next",
@@ -62,7 +62,74 @@
   "weakPasswordTitle": "Weak password:",
   "weakPasswordMessage": "Choose a stronger password.",
 
+  "myReportsTitle": "My Reports",
+  "tabAll": "All",
+  "tabActive": "Active",
+  "tabMatching": "Matching",
+  "tabRecovered": "Recovered",
+  "statusActive": "Active",
+  "statusMatching": "Matching",
+  "statusRecovered": "Recovered",
+  "typeLost": "Lost",
+  "typeFound": "Found",
+  "noReportsTitle": "No reports yet",
+  "noReportsSubtitle": "Reports you publish will appear here.",
   "createReport": "Create report",
+  "edit": "Edit",
+  "delete": "Delete",
+  "deleteReport": "Delete Report",
+  "reportDeletedSuccess": "Report deleted successfully",
+  "reportUpdatedSuccess": "Report updated successfully",
+  "locationSeparator": ", ",
+
+  "deleteReportDialogTitle": "Delete this report?",
+  "deleteReportDialogMessage": "Your report will be removed from public search results.",
+  "cancel": "Cancel",
+  "confirmDelete": "Delete",
+
+  "editReportTitle": "Edit Report",
+  "reportTitleLabel": "Title",
+  "reportTitleHint": "e.g. Black leather wallet",
+  "reportTypeLabel": "Report type",
+  "categoryLabel": "Category",
+  "selectCategory": "Select category",
+  "areaLabel": "Area / District",
+  "selectArea": "Select area",
+  "itemDateLabel": "Date",
+  "descriptionLabel": "Description",
+  "descriptionHint": "Add details that help identify the item...",
+  "saveChanges": "Save changes",
+  "saving": "Saving...",
+  "titleTooShort": "Title must be at least 3 characters",
+  "titleTooLong": "Title must be at most 50 characters",
+
+  "profileTitle": "Profile & Settings",
+  "editProfile": "Edit profile",
+  "saveProfile": "Save profile",
+  "accountSection": "Account",
+  "activitySection": "Activity",
+  "savedReports": "Saved Reports",
+  "potentialMatches": "Potential Matches",
+  "comingSoon": "Coming soon",
+  "preferencesSection": "Preferences",
+  "cityLabel": "City",
+  "selectCity": "Select city",
+  "languageLabel": "Language",
+  "themeLabel": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System default",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "languageSystem": "System default",
+  "logoutButton": "Log out",
+  "logoutConfirmTitle": "Log out?",
+  "logoutConfirmMessage": "Are you sure you want to log out?",
+  "profileUpdatedSuccess": "Profile updated successfully",
+  "cityUpdatedSuccess": "City updated successfully",
+  "appVersion": "Version 1.0.0",
+  "viewMyReports": "My Reports",
+
   "reportType": "Report type",
   "lost": "Lost",
   "found": "Found",
@@ -77,7 +144,6 @@
   },
 
   "category": "Category",
-  "selectCategory": "Select category",
 
   "locationDistrict": "Location (district)",
   "selectDistrict": "Select district",
@@ -96,8 +162,6 @@
 
   "submitReport": "Submit report",
 
-  "titleTooShort": "Title must be at least 3 characters",
-  "titleTooLong": "Title must be at most 50 characters",
   "categoryRequired": "Please select a category",
   "districtRequired": "Please select a district",
   "photosRequired": "Please add at least 1 photo",
@@ -177,5 +241,37 @@
   "homeSelectCityTitle": "Select City",
   "homeSelectCitySubtitle": "Browse found items in your governorate",
   "homeSearchCityHint": "Search city or governorate...",
-  "homeNoCitiesFound": "No cities found matching your search"
+  "homeNoCitiesFound": "No cities found matching your search",
+
+  "exploreTitle": "Explore",
+  "searchHint": "Search",
+  "activeReportsCount": "{count} active reports",
+  "@activeReportsCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "mostRecentFirst": "Most recent first",
+
+  "filtersTitle": "Filters",
+  "dateRangeLabel": "Date range",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "dateFromValue": "From {date}",
+  "@dateFromValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "dateUntilValue": "Until {date}",
+  "@dateUntilValue": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "reset": "Reset",
+  "showResults": "Show results",
+
+  "emptySearchTitle": "No matching reports found.",
+  "emptySearchMessage": "Try adjusting your search filters."
 }

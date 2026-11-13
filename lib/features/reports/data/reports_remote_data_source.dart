@@ -1,7 +1,10 @@
+// ignore_for_file: use_null_aware_elements
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:found_it/features/reports/data/models/area_model.dart';
 import 'package:found_it/features/reports/data/models/category_model.dart';
+import 'package:found_it/features/reports/data/models/report_counts_model.dart';
+import 'package:found_it/features/reports/data/models/report_model.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
 import 'package:found_it/features/reports/domain/entities/report_image.dart';
 
@@ -38,6 +41,22 @@ abstract class ReportsRemoteDataSource {
   Future<String> getDefaultCityId();
 
   Future<String?> getUserCityId();
+
+  Future<List<ReportModel>> getMyReports({String? status});
+
+  Future<ReportCountsModel> getMyReportsCounts();
+
+  Future<ReportModel> updateReport({
+    required String reportId,
+    String? title,
+    String? description,
+    String? type,
+    String? categoryId,
+    String? areaId,
+    DateTime? itemDate,
+  });
+
+  Future<void> softDeleteReport(String reportId);
 }
 
 class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
@@ -167,5 +186,57 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
       }
     } catch (_) {}
     return null;
+  }
+
+  @override
+  Future<List<ReportModel>> getMyReports({String? status}) async {
+    final response = await _supabase.rpc(
+      'get_my_reports',
+      params: {
+        if (status != null && status.isNotEmpty && status != 'all')
+          'p_status': status,
+      },
+    );
+    final list = response as List<dynamic>;
+    return list
+        .map((row) => ReportModel.fromJson(row as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<ReportCountsModel> getMyReportsCounts() async {
+    final response = await _supabase.rpc('get_my_reports_counts').single();
+    return ReportCountsModel.fromJson(response);
+  }
+
+  @override
+  Future<ReportModel> updateReport({
+    required String reportId,
+    String? title,
+    String? description,
+    String? type,
+    String? categoryId,
+    String? areaId,
+    DateTime? itemDate,
+  }) async {
+    final params = <String, dynamic>{
+      'p_report_id': reportId,
+      if (title != null) 'p_title': title.trim(),
+      if (description != null) 'p_description': description.trim(),
+      if (type != null) 'p_type': type,
+      if (categoryId != null) 'p_category_id': categoryId,
+      if (areaId != null) 'p_area_id': areaId,
+      if (itemDate != null)
+        'p_item_date': itemDate.toIso8601String().split('T').first,
+    };
+
+    final response =
+        await _supabase.rpc('update_report', params: params).single();
+    return ReportModel.fromJson(response);
+  }
+
+  @override
+  Future<void> softDeleteReport(String reportId) async {
+    await _supabase.rpc('soft_delete_report', params: {'p_report_id': reportId});
   }
 }

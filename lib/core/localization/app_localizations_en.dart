@@ -10,26 +10,25 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'FOUND IT';
-
-  @override
-  String get appTagline => 'Lost something? Let’s bring it back.';
-
-  @override
   String get chooseCityTitle => 'Choose your city';
 
   @override
-  String get chooseCitySubtitle =>
-      'Select your city to see lost and found reports near you.';
+  String get chooseCitySubtitle => 'Select your city to see nearby reports.';
 
   @override
   String get locationRequiredTitle => 'Location Required:';
 
   @override
-  String get locationRequiredMessage => 'Please select a city to continue.';
+  String get locationRequiredMessage => 'Please choose a city to continue.';
 
   @override
   String get continueButton => 'Continue';
+
+  @override
+  String get appName => 'FOUND IT';
+
+  @override
+  String get appTagline => 'Lost something? Let’s bring it back.';
 
   @override
   String get onboardingSkip => 'Skip';
@@ -172,7 +171,197 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weakPasswordMessage => 'Choose a stronger password.';
 
   @override
+  String get myReportsTitle => 'My Reports';
+
+  @override
+  String get tabAll => 'All';
+
+  @override
+  String get tabActive => 'Active';
+
+  @override
+  String get tabMatching => 'Matching';
+
+  @override
+  String get tabRecovered => 'Recovered';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusMatching => 'Matching';
+
+  @override
+  String get statusRecovered => 'Recovered';
+
+  @override
+  String get typeLost => 'Lost';
+
+  @override
+  String get typeFound => 'Found';
+
+  @override
+  String get noReportsTitle => 'No reports yet';
+
+  @override
+  String get noReportsSubtitle => 'Reports you publish will appear here.';
+
+  @override
   String get createReport => 'Create report';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteReport => 'Delete Report';
+
+  @override
+  String get reportDeletedSuccess => 'Report deleted successfully';
+
+  @override
+  String get reportUpdatedSuccess => 'Report updated successfully';
+
+  @override
+  String get locationSeparator => ', ';
+
+  @override
+  String get deleteReportDialogTitle => 'Delete this report?';
+
+  @override
+  String get deleteReportDialogMessage =>
+      'Your report will be removed from public search results.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirmDelete => 'Delete';
+
+  @override
+  String get editReportTitle => 'Edit Report';
+
+  @override
+  String get reportTitleLabel => 'Title';
+
+  @override
+  String get reportTitleHint => 'e.g. Black leather wallet';
+
+  @override
+  String get reportTypeLabel => 'Report type';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get areaLabel => 'Area / District';
+
+  @override
+  String get selectArea => 'Select area';
+
+  @override
+  String get itemDateLabel => 'Date';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get descriptionHint => 'Add details that help identify the item...';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get titleTooShort => 'Title must be at least 3 characters';
+
+  @override
+  String get titleTooLong => 'Title must be at most 50 characters';
+
+  @override
+  String get profileTitle => 'Profile & Settings';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get saveProfile => 'Save profile';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get activitySection => 'Activity';
+
+  @override
+  String get savedReports => 'Saved Reports';
+
+  @override
+  String get potentialMatches => 'Potential Matches';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get preferencesSection => 'Preferences';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get selectCity => 'Select city';
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System default';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageSystem => 'System default';
+
+  @override
+  String get logoutButton => 'Log out';
+
+  @override
+  String get logoutConfirmTitle => 'Log out?';
+
+  @override
+  String get logoutConfirmMessage => 'Are you sure you want to log out?';
+
+  @override
+  String get profileUpdatedSuccess => 'Profile updated successfully';
+
+  @override
+  String get cityUpdatedSuccess => 'City updated successfully';
+
+  @override
+  String get appVersion => 'Version 1.0.0';
+
+  @override
+  String get viewMyReports => 'My Reports';
 
   @override
   String get reportType => 'Report type';
@@ -196,9 +385,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get category => 'Category';
-
-  @override
-  String get selectCategory => 'Select category';
 
   @override
   String get locationDistrict => 'Location (district)';
@@ -225,12 +411,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitReport => 'Submit report';
-
-  @override
-  String get titleTooShort => 'Title must be at least 3 characters';
-
-  @override
-  String get titleTooLong => 'Title must be at most 50 characters';
 
   @override
   String get categoryRequired => 'Please select a category';
@@ -415,4 +595,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeNoCitiesFound => 'No cities found matching your search';
+
+  @override
+  String get exploreTitle => 'Explore';
+
+  @override
+  String get searchHint => 'Search';
+
+  @override
+  String activeReportsCount(int count) {
+    return '$count active reports';
+  }
+
+  @override
+  String get mostRecentFirst => 'Most recent first';
+
+  @override
+  String get filtersTitle => 'Filters';
+
+  @override
+  String get dateRangeLabel => 'Date range';
+
+  @override
+  String get startDate => 'Start date';
+
+  @override
+  String get endDate => 'End date';
+
+  @override
+  String dateFromValue(String date) {
+    return 'From $date';
+  }
+
+  @override
+  String dateUntilValue(String date) {
+    return 'Until $date';
+  }
+
+  @override
+  String get reset => 'Reset';
+
+  @override
+  String get showResults => 'Show results';
+
+  @override
+  String get emptySearchTitle => 'No matching reports found.';
+
+  @override
+  String get emptySearchMessage => 'Try adjusting your search filters.';
 }
