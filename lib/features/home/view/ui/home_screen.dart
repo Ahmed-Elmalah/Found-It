@@ -12,6 +12,13 @@ import '../widgets/home_header.dart';
 import '../widgets/home_shimmer_view.dart';
 import '../widgets/home_success_view.dart';
 
+enum HomeViewState {
+  success,
+  loading,
+  empty,
+  error,
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
@@ -65,15 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  HomeViewState _mapStatusToViewState(HomeStatus status, bool isEmpty) {
-    return switch (status) {
-      HomeStatus.loading => HomeViewState.loading,
-      HomeStatus.failure => HomeViewState.error,
-      HomeStatus.success || HomeStatus.initial =>
-        isEmpty ? HomeViewState.empty : HomeViewState.success,
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -94,24 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               HomeHeader(
                 cityName: cityName,
-                currentState: _mapStatusToViewState(state.status, state.reports.isEmpty),
-                onStateChanged: (newState) {
-                  if (newState == HomeViewState.loading) {
-                    cubit.setPreviewStatus(HomeStatus.loading);
-                  } else if (newState == HomeViewState.error) {
-                    cubit.setPreviewStatus(
-                      HomeStatus.failure,
-                      errorMessage: 'Preview error',
-                    );
-                  } else if (newState == HomeViewState.empty) {
-                    cubit.setPreviewStatus(
-                      HomeStatus.success,
-                      reports: const [],
-                    );
-                  } else {
-                    cubit.refresh();
-                  }
-                },
                 onCityTap: () => _openCityPicker(context, cityName, cubit),
               ),
               Expanded(
@@ -157,10 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             HomeHeader(
               cityName: _previewCityName,
-              currentState: _previewState,
-              onStateChanged: (newState) {
-                setState(() => _previewState = newState);
-              },
               onCityTap: () => _openCityPicker(context, _previewCityName),
             ),
             Expanded(

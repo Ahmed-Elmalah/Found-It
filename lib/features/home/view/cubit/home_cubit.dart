@@ -10,17 +10,14 @@ import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
-    required GetHomeFeedUseCase getHomeFeedUseCase,
-    required CityLocalDataSource cityLocalDataSource,
-    required GetCitiesUseCase getCitiesUseCase,
-  })  : _getHomeFeedUseCase = getHomeFeedUseCase,
-        _cityLocalDataSource = cityLocalDataSource,
-        _getCitiesUseCase = getCitiesUseCase,
-        super(const HomeState());
+    required this.getHomeFeedUseCase,
+    required this.cityLocalDataSource,
+    required this.getCitiesUseCase,
+  }) : super(const HomeState());
 
-  final GetHomeFeedUseCase _getHomeFeedUseCase;
-  final CityLocalDataSource _cityLocalDataSource;
-  final GetCitiesUseCase _getCitiesUseCase;
+  final GetHomeFeedUseCase getHomeFeedUseCase;
+  final CityLocalDataSource cityLocalDataSource;
+  final GetCitiesUseCase getCitiesUseCase;
 
   List<CityEntity> _cachedCities = const [];
   List<CityEntity> get cachedCities => _cachedCities;
@@ -33,13 +30,13 @@ class HomeCubit extends Cubit<HomeState> {
     String cityName = initialCityName ?? state.selectedCityName;
 
     try {
-      _cachedCities = await _getCitiesUseCase();
+      _cachedCities = await getCitiesUseCase();
     } catch (_) {
       // In offline/fallback mode, keep cachedCities empty
     }
 
     if (cityId.isEmpty) {
-      final savedId = _cityLocalDataSource.getSelectedCityId();
+      final savedId = cityLocalDataSource.getSelectedCityId();
       if (savedId != null && savedId.isNotEmpty) {
         cityId = savedId;
       }
@@ -74,7 +71,7 @@ class HomeCubit extends Cubit<HomeState> {
     ));
 
     try {
-      await _cityLocalDataSource.saveSelectedCityId(city.id);
+      await cityLocalDataSource.saveSelectedCityId(city.id);
     } catch (_) {
       // Ignore local storage error
     }
@@ -106,7 +103,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     try {
-      final reports = await _getHomeFeedUseCase(
+      final reports = await getHomeFeedUseCase(
         cityId: cityId,
         type: 'found',
       );

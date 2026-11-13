@@ -64,7 +64,7 @@ class HomeShimmerView extends StatelessWidget {
 
   Widget _buildCardSkeleton(Color baseColor, Color cardBg, bool isDark) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 7.h),
+      margin: EdgeInsets.fromLTRB(20.w, 0, 20.w, 12.h),
       padding: EdgeInsets.all(14.r),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.r),

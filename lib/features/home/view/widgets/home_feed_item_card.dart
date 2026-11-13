@@ -80,7 +80,6 @@ class _HomeFeedItemCardState extends State<HomeFeedItemCard> {
         duration: const Duration(milliseconds: 140),
         curve: Curves.easeOutQuad,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 7.h),
           padding: EdgeInsets.all(14.r),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),

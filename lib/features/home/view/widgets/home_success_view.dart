@@ -24,7 +24,9 @@ class HomeSuccessView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
 
     return RefreshIndicator(
       onRefresh: onRefresh,
@@ -39,7 +41,7 @@ class HomeSuccessView extends StatelessWidget {
           // 1. Hero Action Banner
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 8.h, 20.w, 18.h),
+              padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 16.h),
               child: const HomeHeroBanner()
                   .animate()
                   .fadeIn(duration: 400.ms, curve: Curves.easeOutCubic)
@@ -47,18 +49,80 @@ class HomeSuccessView extends StatelessWidget {
             ),
           ),
 
-          // 2. Section Header: Recent Activity in [City]
+          // 2. Section Header: Recent Activity in [City] + Community Trust Badge
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Text(
-                l10n.homeRecentActivity(cityName),
-                style: TextStyle(
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.w800,
-                  color: theme.colorScheme.onSurface,
-                  letterSpacing: -0.3,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.homeRecentActivity(cityName),
+                          style: TextStyle(
+                            fontSize: 16.5.sp,
+                            fontWeight: FontWeight.w800,
+                            color: theme.colorScheme.onSurface,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                      ),
+                      // Community Trust Badge
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 4.5.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF10B981).withValues(
+                            alpha: isDark ? 0.16 : 0.10,
+                          ),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: const Color(0xFF10B981).withValues(
+                              alpha: isDark ? 0.28 : 0.18,
+                            ),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.verified_user_rounded,
+                              size: 13.5.r,
+                              color: const Color(0xFF10B981),
+                            ),
+                            SizedBox(width: 4.5.w),
+                            Text(
+                              locale == 'ar' ? 'مجتمع موثوق' : 'Verified Community',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF10B981),
+                                letterSpacing: 0.1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    locale == 'ar'
+                        ? 'كل المعثورات مؤمنة ومعلنة من أفراد المجتمع في $cityName'
+                        : 'All found items are securely reported by the community in $cityName',
+                    style: TextStyle(
+                      fontSize: 11.5.sp,
+                      color: theme.colorScheme.onSurfaceVariant
+                          .withValues(alpha: 0.70),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -91,7 +155,7 @@ class HomeSuccessView extends StatelessWidget {
                   padding: EdgeInsets.only(
                     left: 20.w,
                     right: 20.w,
-                    bottom: 14.h,
+                    bottom: 12.h,
                   ),
                   child: HomeFeedItemCard(
                     item: item,
