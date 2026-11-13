@@ -204,17 +204,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get deleteReport => 'Delete Report';
+
+  @override
   String get reportDeletedSuccess => 'Report deleted successfully';
 
   @override
   String get reportUpdatedSuccess => 'Report updated successfully';
 
   @override
-  String get deleteReportDialogTitle => 'Delete report?';
+  String get locationSeparator => ', ';
+
+  @override
+  String get deleteReportDialogTitle => 'Delete this report?';
 
   @override
   String get deleteReportDialogMessage =>
-      'Are you sure you want to delete this report? It will no longer appear in search results.';
+      'Your report will be removed from public search results.';
 
   @override
   String get cancel => 'Cancel';
@@ -278,6 +284,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSection => 'Account';
+
+  @override
+  String get activitySection => 'Activity';
+
+  @override
+  String get savedReports => 'Saved Reports';
+
+  @override
+  String get potentialMatches => 'Potential Matches';
+
+  @override
+  String get comingSoon => 'Coming soon';
 
   @override
   String get preferencesSection => 'Preferences';

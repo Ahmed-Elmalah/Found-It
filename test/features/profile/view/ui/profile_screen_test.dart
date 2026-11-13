@@ -21,6 +21,13 @@ import 'package:found_it/features/profile/domain/use_cases/update_profile_use_ca
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/ui/profile_screen.dart';
 import 'package:found_it/features/profile/view/widgets/profile_header.dart';
+import 'package:found_it/features/reports/domain/entities/area_entity.dart';
+import 'package:found_it/features/reports/domain/entities/category_entity.dart';
+import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
 
 import '../../../../helpers/test_app.dart';
 
@@ -58,6 +65,41 @@ class _FakeProfileRepo implements ProfileRepository {
   Future<void> setMyCity(String cityId) async {}
 }
 
+class _FakeReportsRepoForProfileScreen implements ReportsRepository {
+  @override
+  Future<ReportCountsEntity> getMyReportsCounts() async => const ReportCountsEntity(
+        total: 3,
+        active: 2,
+        matching: 1,
+        recovered: 0,
+      );
+
+  @override
+  Future<String> createReport(CreateReportParams params) => throw UnimplementedError();
+  @override
+  Future<List<CategoryEntity>> getCategories() => throw UnimplementedError();
+  @override
+  Future<List<AreaEntity>> getCityAreas({required String cityId, required String lang}) =>
+      throw UnimplementedError();
+  @override
+  Future<List<ReportEntity>> getMyReports({String? status}) => throw UnimplementedError();
+  @override
+  Future<String> getSelectedCityId() => throw UnimplementedError();
+  @override
+  Future<void> softDeleteReport(String reportId) => throw UnimplementedError();
+  @override
+  Future<ReportEntity> updateReport({
+    required String reportId,
+    String? title,
+    String? description,
+    String? type,
+    String? categoryId,
+    String? areaId,
+    DateTime? itemDate,
+  }) =>
+      throw UnimplementedError();
+}
+
 class _FakeAuthRepo implements AuthRepository {
   @override
   Future<void> login({required String email, required String password}) async {}
@@ -83,6 +125,7 @@ void main() {
 
   group('ProfileScreen Widget Test', () {
     late _FakeProfileRepo profileRepo;
+    late _FakeReportsRepoForProfileScreen reportsRepo;
     late ProfileCubit profileCubit;
     late AuthCubit authCubit;
     late AppPreferencesCubit prefsCubit;
@@ -101,11 +144,13 @@ void main() {
       );
 
       profileRepo = _FakeProfileRepo();
+      reportsRepo = _FakeReportsRepoForProfileScreen();
       profileCubit = ProfileCubit(
         GetProfileUseCase(profileRepo),
         UpdateProfileUseCase(profileRepo),
         SetMyCityUseCase(profileRepo),
         GetActiveCitiesUseCase(profileRepo),
+        GetMyReportsCountsUseCase(reportsRepo),
       );
     });
 
@@ -133,8 +178,17 @@ void main() {
       expect(find.byType(ProfileHeader), findsOneWidget);
       expect(find.text('Adham Alrefaay'), findsOneWidget);
       expect(find.text('adham@example.com'), findsOneWidget);
-      expect(find.text('Edit profile'), findsOneWidget);
+
+      // Activity section
+      expect(find.text('Activity'), findsOneWidget);
       expect(find.text('My Reports'), findsOneWidget);
+      expect(find.text('3'), findsOneWidget);
+      expect(find.text('Saved Reports'), findsOneWidget);
+      expect(find.text('Potential Matches'), findsOneWidget);
+
+      // Account & Preferences
+      await tester.scrollUntilVisible(find.text('Theme'), 200);
+      expect(find.text('Edit profile'), findsOneWidget);
       expect(find.text('City'), findsOneWidget);
       expect(find.text('Language'), findsOneWidget);
       expect(find.text('Theme'), findsOneWidget);

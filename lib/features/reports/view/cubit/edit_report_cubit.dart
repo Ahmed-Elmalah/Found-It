@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
@@ -25,7 +26,10 @@ class EditReportCubit extends Cubit<EditReportState> {
   final GetCityAreasUseCase _getCityAreasUseCase;
 
   Future<void> init({String lang = 'en'}) async {
-    emit(state.copyWith(status: EditReportStatus.loading));
+    emit(state.copyWith(
+      status: EditReportStatus.loading,
+      failure: () => null,
+    ));
     try {
       final results = await Future.wait([
         _getCategoriesUseCase(),
@@ -40,10 +44,15 @@ class EditReportCubit extends Cubit<EditReportState> {
         categories: categories,
         areas: areas,
       ));
-    } catch (e) {
+    } on ReportFailure catch (e) {
       emit(state.copyWith(
         status: EditReportStatus.failure,
-        errorMessage: e.toString(),
+        failure: () => e.type,
+      ));
+    } catch (_) {
+      emit(state.copyWith(
+        status: EditReportStatus.failure,
+        failure: () => ReportFailureType.unknown,
       ));
     }
   }
@@ -70,7 +79,7 @@ class EditReportCubit extends Cubit<EditReportState> {
   }) async {
     emit(state.copyWith(
       status: EditReportStatus.submitting,
-      errorMessage: null,
+      failure: () => null,
     ));
 
     try {
@@ -89,10 +98,16 @@ class EditReportCubit extends Cubit<EditReportState> {
         report: updatedReport,
       ));
       return true;
-    } catch (e) {
+    } on ReportFailure catch (e) {
       emit(state.copyWith(
         status: EditReportStatus.failure,
-        errorMessage: e.toString(),
+        failure: () => e.type,
+      ));
+      return false;
+    } catch (_) {
+      emit(state.copyWith(
+        status: EditReportStatus.failure,
+        failure: () => ReportFailureType.unknown,
       ));
       return false;
     }

@@ -30,10 +30,15 @@ class ReportCard extends StatelessWidget {
     final locationText = [
       report.localizedArea(locale),
       report.localizedCity(locale),
-    ].where((part) => part.isNotEmpty).join('، ');
+    ].where((part) => part.isNotEmpty).join(l10n.locationSeparator);
 
     final formattedDate = DateFormat.yMMMd(locale).format(report.itemDate);
+    final metaLine = locationText.isNotEmpty
+        ? '$locationText · $formattedDate'
+        : formattedDate;
+
     final hasImage = report.images.isNotEmpty;
+    final isRecovered = report.isRecovered || report.status == 'recovered';
 
     return Container(
       decoration: BoxDecoration(
@@ -49,169 +54,157 @@ class ReportCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           child: Padding(
             padding: EdgeInsetsDirectional.all(12.r),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Thumbnail
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
-                  child: Container(
-                    width: 86.w,
-                    height: 86.w,
-                    color: colors.surfaceContainerHighest,
-                    child: hasImage
-                        ? Image.network(
-                            report.images.first,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Icon(
-                              Icons.broken_image_outlined,
-                              color: colors.onSurfaceVariant,
-                              size: 28.r,
-                            ),
-                          )
-                        : Icon(
-                            Icons.image_outlined,
-                            color: colors.onSurfaceVariant,
-                            size: 28.r,
-                          ),
-                  ),
-                ),
-                SizedBox(width: 12.w),
+                // Top section: thumbnail + info
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Thumbnail
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Container(
+                        width: 86.w,
+                        height: 86.w,
+                        color: colors.surfaceContainerHighest,
+                        child: hasImage
+                            ? Image.network(
+                                report.images.first,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, _, _) => Icon(
+                                  Icons.broken_image_outlined,
+                                  color: colors.onSurfaceVariant,
+                                  size: 28.r,
+                                ),
+                              )
+                            : Icon(
+                                Icons.image_outlined,
+                                color: colors.onSurfaceVariant,
+                                size: 28.r,
+                              ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
 
-                // Details
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Badges row + Popup menu
-                      Row(
+                    // Details
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ReportTypeBadge(type: report.type),
-                          SizedBox(width: 6.w),
-                          StatusBadge(status: report.status),
-                          const Spacer(),
-                          SizedBox(
-                            width: 24.r,
-                            height: 24.r,
-                            child: PopupMenuButton<String>(
-                              icon: Icon(
-                                Icons.more_vert_rounded,
-                                size: 20.r,
+                          // Badges row
+                          Wrap(
+                            spacing: 6.w,
+                            runSpacing: 4.h,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              ReportTypeBadge(type: report.type),
+                              StatusBadge(status: report.status),
+                            ],
+                          ),
+                          SizedBox(height: 6.h),
+
+                          // Title
+                          Text(
+                            report.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: colors.onSurface,
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+
+                          // Meta line: "Maadi, Cairo · Nov 6"
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.location_on_outlined,
+                                size: 14.r,
                                 color: colors.onSurfaceVariant,
                               ),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              onSelected: (value) {
-                                if (value == 'edit') onEdit?.call();
-                                if (value == 'delete') onDelete?.call();
-                              },
-                              itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 'edit',
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.edit_outlined,
-                                      size: 18.r,
-                                      color: colors.onSurface,
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Text(
-                                      l10n.edit,
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: colors.onSurface,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.delete_outline_rounded,
-                                      size: 18.r,
-                                      color: colors.error,
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Text(
-                                      l10n.delete,
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: colors.error,
-                                      ),
-                                    ),
-                                  ],
+                              SizedBox(width: 4.w),
+                              Expanded(
+                                child: Text(
+                                  metaLine,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: colors.onSurfaceVariant,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                      ),
-                      SizedBox(height: 4.h),
-
-                      // Title
-                      Text(
-                        report.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 15.sp,
-                          fontWeight: FontWeight.w600,
-                          color: colors.onSurface,
-                        ),
-                      ),
-                      SizedBox(height: 6.h),
-
-                      // Location & Date
-                      if (locationText.isNotEmpty)
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 14.r,
-                              color: colors.onSurfaceVariant,
-                            ),
-                            SizedBox(width: 4.w),
-                            Expanded(
-                              child: Text(
-                                locationText,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: colors.onSurfaceVariant,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      SizedBox(height: 2.h),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today_outlined,
-                            size: 13.r,
-                            color: colors.onSurfaceVariant,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            formattedDate,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: colors.onSurfaceVariant,
-                            ),
-                          ),
                         ],
                       ),
+                    ),
+                  ],
+                ),
+
+                // Action buttons under the card
+                SizedBox(height: 12.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: onEdit,
+                        icon: Icon(
+                          Icons.edit_outlined,
+                          size: 16.r,
+                          color: colors.onSurface,
+                        ),
+                        label: Text(
+                          l10n.edit,
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            color: colors.onSurface,
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(0, 38.h),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          side: BorderSide(color: colors.outline),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (!isRecovered) ...[
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          onPressed: onDelete,
+                          icon: Icon(
+                            Icons.delete_outline_rounded,
+                            size: 16.r,
+                            color: colors.error,
+                          ),
+                          label: Text(
+                            l10n.deleteReport,
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w600,
+                              color: colors.error,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: Size(0, 38.h),
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            side: BorderSide(color: colors.error),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.r),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               ],
             ),

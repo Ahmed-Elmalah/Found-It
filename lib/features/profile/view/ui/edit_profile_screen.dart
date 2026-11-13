@@ -8,6 +8,7 @@ import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/utils/validators.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
+import 'package:found_it/features/profile/domain/entities/profile_failure.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/cubit/profile_state.dart';
@@ -84,10 +85,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
-          if (state.errorMessage != null) {
+          if (state.failure != null) {
+            final l10n = AppLocalizations.of(context);
+            final msg = state.failure == ProfileFailureType.network
+                ? l10n.connectionErrorMessage
+                : l10n.genericErrorMessage;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage!),
+                content: Text(msg),
                 backgroundColor: Theme.of(context).colorScheme.error,
               ),
             );

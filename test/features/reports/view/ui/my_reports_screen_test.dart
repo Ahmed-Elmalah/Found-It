@@ -18,7 +18,8 @@ import 'package:found_it/features/reports/view/widgets/report_card.dart';
 import '../../../../helpers/test_app.dart';
 
 class _FakeReportsRepo implements ReportsRepository {
-  _FakeReportsRepo({this.reports = const []});
+  _FakeReportsRepo({List<ReportEntity>? reports})
+      : reports = reports ?? [];
 
   final List<ReportEntity> reports;
 
@@ -34,7 +35,9 @@ class _FakeReportsRepo implements ReportsRepository {
       );
 
   @override
-  Future<void> softDeleteReport(String reportId) async {}
+  Future<void> softDeleteReport(String reportId) async {
+    reports.removeWhere((r) => r.id == reportId);
+  }
 
   @override
   Future<String> createReport(CreateReportParams params) => throw UnimplementedError();
@@ -127,6 +130,106 @@ void main() {
 
       expect(find.byType(ReportCard), findsOneWidget);
       expect(find.text('Black Leather Wallet'), findsOneWidget);
+      expect(find.text('Edit'), findsOneWidget);
+      expect(find.text('Delete Report'), findsOneWidget);
+
+      await cubit.close();
+    });
+
+    testWidgets('delete flow opens dialog, deletes report, and refreshes list', (tester) async {
+      final reports = [
+        ReportEntity(
+          id: 'rep_1',
+          refCode: '#RPT-1001',
+          userId: 'user_1',
+          cityId: 'city_cairo',
+          areaId: 'area_1',
+          categoryId: 'cat_1',
+          title: 'Black Leather Wallet',
+          type: 'lost',
+          status: 'active',
+          itemDate: DateTime(2026, 11, 10),
+          createdAt: DateTime(2026, 11, 10),
+          updatedAt: DateTime(2026, 11, 10),
+          images: const [],
+        ),
+      ];
+
+      final repo = _FakeReportsRepo(reports: reports);
+      final cubit = MyReportsCubit(
+        GetMyReportsUseCase(repo),
+        GetMyReportsCountsUseCase(repo),
+        SoftDeleteReportUseCase(repo),
+      );
+
+      await pumpTestApp(
+        tester,
+        BlocProvider<MyReportsCubit>.value(
+          value: cubit,
+          child: const MyReportsScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Black Leather Wallet'), findsOneWidget);
+      expect(find.text('Delete Report'), findsOneWidget);
+
+      // Tap Delete Report button
+      await tester.tap(find.text('Delete Report'));
+      await tester.pumpAndSettle();
+
+      // Delete dialog should be open with P22 texts
+      expect(find.text('Delete this report?'), findsOneWidget);
+      expect(find.text('Your report will be removed from public search results.'), findsOneWidget);
+
+      // Confirm delete in dialog
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+
+      // List refreshed and item removed from repo
+      expect(repo.reports.isEmpty, isTrue);
+      expect(find.text('No reports yet'), findsOneWidget);
+
+      await cubit.close();
+    });
+
+    testWidgets('recovered report does not show delete button', (tester) async {
+      final reports = [
+        ReportEntity(
+          id: 'rep_2',
+          refCode: '#RPT-1002',
+          userId: 'user_1',
+          cityId: 'city_cairo',
+          areaId: 'area_1',
+          categoryId: 'cat_1',
+          title: 'Recovered Keys',
+          type: 'lost',
+          status: 'recovered',
+          itemDate: DateTime(2026, 11, 10),
+          createdAt: DateTime(2026, 11, 10),
+          updatedAt: DateTime(2026, 11, 10),
+          images: const [],
+        ),
+      ];
+
+      final repo = _FakeReportsRepo(reports: reports);
+      final cubit = MyReportsCubit(
+        GetMyReportsUseCase(repo),
+        GetMyReportsCountsUseCase(repo),
+        SoftDeleteReportUseCase(repo),
+      );
+
+      await pumpTestApp(
+        tester,
+        BlocProvider<MyReportsCubit>.value(
+          value: cubit,
+          child: const MyReportsScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit'), findsOneWidget);
+      expect(find.text('Delete Report'), findsNothing);
 
       await cubit.close();
     });

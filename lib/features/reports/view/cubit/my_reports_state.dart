@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 
 enum MyReportsStatus { initial, loading, success, failure }
 
@@ -27,7 +28,7 @@ class MyReportsState extends Equatable {
     this.selectedFilter = MyReportsFilter.all,
     this.isDeleting = false,
     this.deletingReportId,
-    this.errorMessage,
+    this.failure,
   });
 
   final MyReportsStatus status;
@@ -36,7 +37,7 @@ class MyReportsState extends Equatable {
   final MyReportsFilter selectedFilter;
   final bool isDeleting;
   final String? deletingReportId;
-  final String? errorMessage;
+  final ReportFailureType? failure;
 
   bool get isLoading => status == MyReportsStatus.loading;
   bool get isSuccess => status == MyReportsStatus.success;
@@ -49,7 +50,7 @@ class MyReportsState extends Equatable {
     MyReportsFilter? selectedFilter,
     bool? isDeleting,
     String? deletingReportId,
-    String? errorMessage,
+    ReportFailureType? Function()? failure,
   }) {
     return MyReportsState(
       status: status ?? this.status,
@@ -58,7 +59,7 @@ class MyReportsState extends Equatable {
       selectedFilter: selectedFilter ?? this.selectedFilter,
       isDeleting: isDeleting ?? this.isDeleting,
       deletingReportId: deletingReportId ?? this.deletingReportId,
-      errorMessage: errorMessage,
+      failure: failure != null ? failure() : this.failure,
     );
   }
 
@@ -70,6 +71,6 @@ class MyReportsState extends Equatable {
         selectedFilter,
         isDeleting,
         deletingReportId,
-        errorMessage,
+        failure,
       ];
 }

@@ -8,6 +8,7 @@ import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+import 'package:found_it/features/profile/domain/entities/profile_failure.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/cubit/profile_state.dart';
@@ -65,6 +66,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  static String _mapProfileFailureMessage(
+    ProfileFailureType type,
+    AppLocalizations l10n,
+  ) {
+    switch (type) {
+      case ProfileFailureType.network:
+        return l10n.connectionErrorMessage;
+      case ProfileFailureType.unknown:
+        return l10n.genericErrorMessage;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -97,10 +110,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
-          if (state.errorMessage != null) {
+          if (state.failure != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage!),
+                content: Text(_mapProfileFailureMessage(state.failure!, l10n)),
                 backgroundColor: colors.error,
               ),
             );
@@ -116,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return Center(
               child: FilledButton.tonal(
                 onPressed: () => context.read<ProfileCubit>().loadProfile(),
-                child: Text(l10n.genericErrorTitle),
+                child: Text(l10n.retry),
               ),
             );
           }
@@ -135,17 +148,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onEdit: () => _onEditProfile(profile),
               ),
 
+              // Activity Section (Figma P33)
+              SettingsSectionTitle(title: l10n.activitySection),
+              SettingsTile(
+                icon: Icons.assignment_outlined,
+                title: l10n.viewMyReports,
+                value: '${state.reportsCount}',
+                onTap: () => context.push(AppRoutes.myReports),
+              ),
+              SettingsTile(
+                icon: Icons.bookmark_outline_rounded,
+                title: l10n.savedReports,
+                value: l10n.comingSoon,
+              ),
+              SettingsTile(
+                icon: Icons.compare_arrows_rounded,
+                title: l10n.potentialMatches,
+                value: l10n.comingSoon,
+              ),
+
               // Account Section
               SettingsSectionTitle(title: l10n.accountSection),
               SettingsTile(
                 icon: Icons.person_outline_rounded,
                 title: l10n.editProfile,
                 onTap: () => _onEditProfile(profile),
-              ),
-              SettingsTile(
-                icon: Icons.assignment_outlined,
-                title: l10n.viewMyReports,
-                onTap: () => context.push(AppRoutes.myReports),
               ),
 
               // Preferences Section

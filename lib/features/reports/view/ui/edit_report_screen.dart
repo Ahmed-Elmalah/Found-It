@@ -6,9 +6,10 @@ import 'package:intl/intl.dart';
 
 import 'package:found_it/core/constants/app_limits.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
-import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
+import 'package:found_it/core/widgets/error_banner.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_state.dart';
 
@@ -35,7 +36,12 @@ class _EditReportScreenState extends State<EditReportScreen> {
     _titleController = TextEditingController(text: widget.report.title);
     _descriptionController =
         TextEditingController(text: widget.report.description ?? '');
-    context.read<EditReportCubit>().init();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final lang = Localizations.localeOf(context).languageCode;
+        context.read<EditReportCubit>().init(lang: lang);
+      }
+    });
   }
 
   @override
@@ -77,6 +83,32 @@ class _EditReportScreenState extends State<EditReportScreen> {
     }
   }
 
+  static String _mapFailureTitle(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorTitle;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInTitle;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataTitle;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorTitle;
+    }
+  }
+
+  static String _mapFailureMessage(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorMessage;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInMessage;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataMessage;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorMessage;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -95,11 +127,12 @@ class _EditReportScreenState extends State<EditReportScreen> {
       ),
       body: BlocConsumer<EditReportCubit, EditReportState>(
         listener: (context, state) {
-          if (state.errorMessage != null) {
+          if (state.status == EditReportStatus.failure && state.failure != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage!),
+                content: Text(_mapFailureMessage(state.failure!, l10n)),
                 backgroundColor: colors.error,
+                behavior: SnackBarBehavior.floating,
               ),
             );
           }
@@ -118,6 +151,14 @@ class _EditReportScreenState extends State<EditReportScreen> {
             child: ListView(
               padding: EdgeInsetsDirectional.all(16.r),
               children: [
+                if (state.failure != null) ...[
+                  ErrorBanner(
+                    title: _mapFailureTitle(state.failure!, l10n),
+                    message: _mapFailureMessage(state.failure!, l10n),
+                  ),
+                  SizedBox(height: 16.h),
+                ],
+
                 // Type selector
                 Text(
                   l10n.reportTypeLabel,
@@ -155,9 +196,11 @@ class _EditReportScreenState extends State<EditReportScreen> {
                   hint: l10n.reportTitleHint,
                   validator: (value) {
                     final text = value?.trim() ?? '';
-                    if (text.length < AppLimits.reportTitleMinLength ||
-                        text.length > AppLimits.reportTitleMaxLength) {
+                    if (text.length < AppLimits.reportTitleMinLength) {
                       return l10n.titleTooShort;
+                    }
+                    if (text.length > AppLimits.reportTitleMaxLength) {
+                      return l10n.titleTooLong;
                     }
                     return null;
                   },
@@ -177,10 +220,11 @@ class _EditReportScreenState extends State<EditReportScreen> {
                 DropdownButtonFormField<String>(
                   initialValue: state.selectedCategoryId,
                   hint: Text(l10n.selectCategory),
-                  items: state.categories.map((c) {
+                  items: state.categories.map((cat) {
+                    final name = cat.localizedName(locale);
                     return DropdownMenuItem(
-                      value: c.id,
-                      child: Text(c.localizedName(locale)),
+                      value: cat.id,
+                      child: Text(name),
                     );
                   }).toList(),
                   onChanged: (id) {
@@ -206,10 +250,11 @@ class _EditReportScreenState extends State<EditReportScreen> {
                 DropdownButtonFormField<String>(
                   initialValue: state.selectedAreaId,
                   hint: Text(l10n.selectArea),
-                  items: state.areas.map((a) {
+                  items: state.areas.map((area) {
+                    final name = area.localizedName(locale);
                     return DropdownMenuItem(
-                      value: a.id,
-                      child: Text(a.localizedName(locale)),
+                      value: area.id,
+                      child: Text(name),
                     );
                   }).toList(),
                   onChanged: (id) {
@@ -235,64 +280,48 @@ class _EditReportScreenState extends State<EditReportScreen> {
                 InkWell(
                   onTap: () => _pickDate(selectedDate),
                   borderRadius: BorderRadius.circular(14.r),
-                  child: Container(
-                    padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      suffixIcon: Icon(Icons.calendar_today_rounded),
                     ),
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.circular(14.r),
-                      border: Border.all(color: colors.outline),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          formattedDate,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: colors.onSurface,
-                          ),
-                        ),
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 20.r,
-                          color: colors.onSurfaceVariant,
-                        ),
-                      ],
+                    child: Text(
+                      formattedDate,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: colors.onSurface,
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(height: 16.h),
 
                 // Description
-                Text(
-                  l10n.descriptionLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                TextFormField(
+                AppTextField(
+                  label: l10n.descriptionLabel,
                   controller: _descriptionController,
-                  maxLines: 4,
-                  maxLength: 1000,
-                  decoration: InputDecoration(
-                    hintText: l10n.descriptionHint,
-                  ),
+                  hint: l10n.descriptionHint,
                 ),
                 SizedBox(height: 24.h),
 
-                // Save button
-                AppButton(
-                  label: l10n.saveChanges,
-                  isLoading: state.isSubmitting,
-                  onPressed: _submit,
+                // Submit button
+                FilledButton(
+                  onPressed: state.isSubmitting ? null : _submit,
+                  child: state.isSubmitting
+                      ? SizedBox.square(
+                          dimension: 20.r,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: colors.onPrimary,
+                          ),
+                        )
+                      : Text(
+                          l10n.saveChanges,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
-                SizedBox(height: 24.h),
               ],
             ),
           );

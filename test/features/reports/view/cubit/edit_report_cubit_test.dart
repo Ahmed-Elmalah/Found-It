@@ -5,6 +5,7 @@ import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
@@ -30,13 +31,13 @@ class _FakeEditReportsRepo implements ReportsRepository {
 
   @override
   Future<List<CategoryEntity>> getCategories() async {
-    if (shouldFailInit) throw Exception('Failed to load categories');
+    if (shouldFailInit) throw const ReportFailure(ReportFailureType.network);
     return categories;
   }
 
   @override
   Future<List<AreaEntity>> getCityAreas({required String cityId, required String lang}) async {
-    if (shouldFailInit) throw Exception('Failed to load areas');
+    if (shouldFailInit) throw const ReportFailure(ReportFailureType.network);
     return areas;
   }
 
@@ -50,7 +51,7 @@ class _FakeEditReportsRepo implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
   }) async {
-    if (shouldFailUpdate) throw Exception('Update failed');
+    if (shouldFailUpdate) throw const ReportFailure(ReportFailureType.invalidData);
     lastUpdatedTitle = title;
     return ReportEntity(
       id: reportId,
@@ -128,6 +129,7 @@ void main() {
       expect(cubit.state.selectedAreaId, 'area_1');
       expect(cubit.state.selectedDate, initialReport.itemDate);
       expect(cubit.state.status, EditReportStatus.initial);
+      expect(cubit.state.failure, isNull);
     });
 
     test('init loads categories and areas successfully', () async {
@@ -144,7 +146,7 @@ void main() {
       await cubit.init();
 
       expect(cubit.state.status, EditReportStatus.failure);
-      expect(cubit.state.errorMessage, isNotNull);
+      expect(cubit.state.failure, ReportFailureType.network);
     });
 
     test('field change methods update selected values in state', () {
@@ -181,7 +183,7 @@ void main() {
 
       expect(success, isFalse);
       expect(cubit.state.status, EditReportStatus.failure);
-      expect(cubit.state.errorMessage, contains('Update failed'));
+      expect(cubit.state.failure, ReportFailureType.invalidData);
     });
   });
 }
