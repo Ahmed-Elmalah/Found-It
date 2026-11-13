@@ -310,6 +310,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageEnglish => 'English';
 
   @override
+  String get languageSystem => 'System default';
+
+  @override
   String get logoutButton => 'Log out';
 
   @override
@@ -484,16 +487,4 @@ class AppLocalizationsEn extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'Resend email · $time';
   }
-
-  @override
-  String get navHome => 'Home';
-
-  @override
-  String get navMyReports => 'My Reports';
-
-  @override
-  String get navProfile => 'Profile';
-
-  @override
-  String get homeComingSoon => 'Home — coming soon';
 }

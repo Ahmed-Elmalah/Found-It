@@ -28,7 +28,6 @@ import 'package:found_it/features/profile/data/profile_repository_impl.dart';
 import 'package:found_it/features/profile/domain/repositories/profile_repository.dart';
 import 'package:found_it/features/profile/domain/use_cases/get_active_cities_use_case.dart';
 import 'package:found_it/features/profile/domain/use_cases/get_profile_use_case.dart';
-import 'package:found_it/features/profile/domain/use_cases/logout_use_case.dart' as profile_logout;
 import 'package:found_it/features/profile/domain/use_cases/set_my_city_use_case.dart';
 import 'package:found_it/features/profile/domain/use_cases/update_profile_use_case.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
@@ -50,6 +49,31 @@ import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 final GetIt sl = GetIt.instance;
 
 Future<void> configureDependencies() async {
+  // ---------------------------------------------------------------
+  // Rules (follow them in every feature):
+  //   registerLazySingleton -> data sources, repositories, use cases
+  //   registerFactory       -> Cubits (a fresh one per screen)
+  //   registerSingleton     -> things created at startup (e.g. SharedPreferences)
+  //
+  // Registration order inside a feature:
+  //   data source -> repository -> use cases -> cubit
+  //
+  // Example for a feature:
+  //   sl
+  //     ..registerLazySingleton<AuthDataSource>(() => AuthDataSourceImpl())
+  //     ..registerLazySingleton<AuthRepository>(
+  //         () => AuthRepositoryImpl(sl()))
+  //     ..registerLazySingleton(() => LoginUseCase(sl()))
+  //     ..registerFactory(() => LoginCubit(sl()));
+  // ---------------------------------------------------------------
+
+  // ---------------------------------------------------------------
+  // External: shared by ALL features. Registered once, here only.
+  //   Data sources get them with sl(), e.g.
+  //   ..registerLazySingleton<CityLocalDataSource>(
+  //       () => CityLocalDataSourceImpl(sl<SharedPreferences>()))
+  // Supabase.initialize() must run before this (see main.dart).
+  // ---------------------------------------------------------------
   final prefs = await SharedPreferences.getInstance();
 
   sl
@@ -167,10 +191,8 @@ void _registerProfile() {
     ..registerLazySingleton(() => UpdateProfileUseCase(sl()))
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
-    ..registerLazySingleton(() => profile_logout.LogoutUseCase(sl()))
     ..registerFactory(
       () => ProfileCubit(
-        sl(),
         sl(),
         sl(),
         sl(),

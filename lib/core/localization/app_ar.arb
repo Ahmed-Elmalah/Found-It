@@ -111,6 +111,7 @@
   "themeSystem": "تلقائي (حسب النظام)",
   "languageArabic": "العربية",
   "languageEnglish": "English",
+  "languageSystem": "تلقائي (حسب النظام)",
   "logoutButton": "تسجيل الخروج",
   "logoutConfirmTitle": "تسجيل الخروج؟",
   "logoutConfirmMessage": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
@@ -192,10 +193,5 @@
   "verifyEmailBody": "أرسلنا رابط التحقق إلى {email}. افتحه لتفعيل حسابك.",
   "verifiedButton": "لقد فعّلت بريدي",
   "resendEmail": "إعادة الإرسال",
-  "resendEmailIn": "إعادة الإرسال · {time}",
-
-  "navHome": "الرئيسية",
-  "navMyReports": "بلاغاتي",
-  "navProfile": "الحساب",
-  "homeComingSoon": "الرئيسية — قريبًا"
+  "resendEmailIn": "إعادة الإرسال · {time}"
 }

@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'English'**
   String get languageEnglish;
 
+  /// No description provided for @languageSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get languageSystem;
+
   /// No description provided for @logoutButton.
   ///
   /// In en, this message translates to:
@@ -1009,30 +1015,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resend email · {time}'**
   String resendEmailIn(String time);
-
-  /// No description provided for @navHome.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get navHome;
-
-  /// No description provided for @navMyReports.
-  ///
-  /// In en, this message translates to:
-  /// **'My Reports'**
-  String get navMyReports;
-
-  /// No description provided for @navProfile.
-  ///
-  /// In en, this message translates to:
-  /// **'Profile'**
-  String get navProfile;
-
-  /// No description provided for @homeComingSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Home — coming soon'**
-  String get homeComingSoon;
 }
 
 class _AppLocalizationsDelegate

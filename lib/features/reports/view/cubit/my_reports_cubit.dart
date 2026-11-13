@@ -62,6 +62,10 @@ class MyReportsCubit extends Cubit<MyReportsState> {
 
     try {
       await _softDeleteReportUseCase(reportId);
+      emit(state.copyWith(
+        isDeleting: false,
+        deletingReportId: null,
+      ));
       // Refresh current tab and counts
       await loadReports();
       return true;

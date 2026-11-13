@@ -18,7 +18,6 @@ import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
 import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
-import 'package:found_it/core/widgets/main_shell.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
@@ -99,48 +98,11 @@ final GoRouter appRouter = GoRouter(
         child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
       ),
     ),
-    // ---------------------------------------------------------------
-    // Main shell — BottomNavigationBar with 3 tabs
-    // ---------------------------------------------------------------
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) =>
-          MainShell(navigationShell: navigationShell),
-      branches: [
-        // Tab 0 — Home (placeholder)
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: AppRoutes.home,
-              builder: (context, state) =>
-                  const _ComingSoon('Home', withLogout: true),
-            ),
-          ],
-        ),
-        // Tab 1 — My Reports (Adham)
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: AppRoutes.myReports,
-              builder: (context, state) => BlocProvider(
-                create: (_) => sl<MyReportsCubit>(),
-                child: const MyReportsScreen(),
-              ),
-            ),
-          ],
-        ),
-        // Tab 2 — Profile & Settings (Adham)
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: AppRoutes.profile,
-              builder: (context, state) => BlocProvider(
-                create: (_) => sl<ProfileCubit>(),
-                child: const ProfileScreen(),
-              ),
-            ),
-          ],
-        ),
-      ],
+    // TEMP: replaced by the real Home screen (Youssef, story #4).
+    // Has a TEMP "Log out" button so the session can be tested.
+    GoRoute(
+      path: AppRoutes.home,
+      builder: (context, state) => const _ComingSoon('Home', withLogout: true),
     ),
 
     // Reports routes (Ziad, story #3)
@@ -166,11 +128,24 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Edit Report (Adham) — pushed on top of shell
+    // My Reports (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.myReports,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<MyReportsCubit>(),
+        child: const MyReportsScreen(),
+      ),
+    ),
     GoRoute(
       path: AppRoutes.editReport,
+      redirect: (context, state) {
+        if (state.extra is! ReportEntity) {
+          return AppRoutes.myReports;
+        }
+        return null;
+      },
       builder: (context, state) {
-        final report = state.extra as ReportEntity;
+        final report = state.extra! as ReportEntity;
         return BlocProvider(
           create: (_) => EditReportCubit(
             report,
@@ -183,11 +158,24 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Edit Profile (Adham) — pushed on top of shell
+    // Profile & Settings (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.profile,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<ProfileCubit>(),
+        child: const ProfileScreen(),
+      ),
+    ),
     GoRoute(
       path: AppRoutes.editProfile,
+      redirect: (context, state) {
+        if (state.extra is! UserProfileEntity) {
+          return AppRoutes.profile;
+        }
+        return null;
+      },
       builder: (context, state) {
-        final profile = state.extra as UserProfileEntity;
+        final profile = state.extra! as UserProfileEntity;
         return BlocProvider(
           create: (_) => sl<ProfileCubit>(),
           child: EditProfileScreen(profile: profile),

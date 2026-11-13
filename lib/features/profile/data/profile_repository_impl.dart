@@ -35,9 +35,4 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<List<CityEntity>> getActiveCities() {
     return _dataSource.getActiveCities();
   }
-
-  @override
-  Future<void> logout() {
-    return _dataSource.logout();
-  }
 }

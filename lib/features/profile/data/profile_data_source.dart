@@ -15,8 +15,6 @@ abstract interface class ProfileDataSource {
   Future<void> setMyCity(String cityId);
 
   Future<List<CityModel>> getActiveCities();
-
-  Future<void> logout();
 }
 
 class ProfileDataSourceImpl implements ProfileDataSource {
@@ -66,10 +64,5 @@ class ProfileDataSourceImpl implements ProfileDataSource {
     return list
         .map((row) => CityModel.fromJson(row as Map<String, dynamic>))
         .toList();
-  }
-
-  @override
-  Future<void> logout() async {
-    await _client.auth.signOut();
   }
 }

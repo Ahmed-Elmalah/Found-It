@@ -310,6 +310,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageEnglish => 'English';
 
   @override
+  String get languageSystem => 'تلقائي (حسب النظام)';
+
+  @override
   String get logoutButton => 'تسجيل الخروج';
 
   @override
@@ -482,16 +485,4 @@ class AppLocalizationsAr extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'إعادة الإرسال · $time';
   }
-
-  @override
-  String get navHome => 'الرئيسية';
-
-  @override
-  String get navMyReports => 'بلاغاتي';
-
-  @override
-  String get navProfile => 'الحساب';
-
-  @override
-  String get homeComingSoon => 'الرئيسية — قريبًا';
 }

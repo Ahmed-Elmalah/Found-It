@@ -21,12 +21,10 @@ class ReportTypeBadge extends StatelessWidget {
     final label = isLost ? l10n.typeLost : l10n.typeFound;
 
     final bgColor = isLost
-        ? (isDark ? const Color(0xFF3B1E22) : const Color(0xFFFFEBEE))
-        : colors.primary.withValues(alpha: isDark ? 0.2 : 0.1);
+        ? colors.error.withValues(alpha: isDark ? 0.2 : 0.12)
+        : colors.primary.withValues(alpha: isDark ? 0.2 : 0.12);
 
-    final fgColor = isLost
-        ? colors.error
-        : colors.primary;
+    final fgColor = isLost ? colors.error : colors.primary;
 
     return Container(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 8.w, vertical: 3.h),

@@ -8,19 +8,21 @@ import 'package:found_it/core/constants/storage_keys.dart';
 class AppPreferencesState extends Equatable {
   const AppPreferencesState({
     required this.themeMode,
-    required this.locale,
+    this.locale,
   });
 
   final ThemeMode themeMode;
-  final Locale locale;
+
+  /// Null means follow phone/system language.
+  final Locale? locale;
 
   AppPreferencesState copyWith({
     ThemeMode? themeMode,
-    Locale? locale,
+    Locale? Function()? locale,
   }) {
     return AppPreferencesState(
       themeMode: themeMode ?? this.themeMode,
-      locale: locale ?? this.locale,
+      locale: locale != null ? locale() : this.locale,
     );
   }
 
@@ -49,11 +51,11 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     }
   }
 
-  static Locale _loadLocale(SharedPreferences prefs) {
+  static Locale? _loadLocale(SharedPreferences prefs) {
     final code = prefs.getString(StorageKeys.languageCode);
     if (code == 'en') return const Locale('en');
     if (code == 'ar') return const Locale('ar');
-    return const Locale('ar'); // Default to Arabic as primary locale
+    return null; // System / phone default
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
@@ -66,8 +68,12 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
     emit(state.copyWith(themeMode: mode));
   }
 
-  Future<void> setLocale(Locale locale) async {
-    await _prefs.setString(StorageKeys.languageCode, locale.languageCode);
-    emit(state.copyWith(locale: locale));
+  Future<void> setLocale(Locale? locale) async {
+    if (locale == null) {
+      await _prefs.remove(StorageKeys.languageCode);
+    } else {
+      await _prefs.setString(StorageKeys.languageCode, locale.languageCode);
+    }
+    emit(state.copyWith(locale: () => locale));
   }
 }

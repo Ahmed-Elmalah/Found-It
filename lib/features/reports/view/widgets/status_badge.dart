@@ -14,40 +14,29 @@ class StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final (label, bgColor, fgColor) = switch (status) {
       'active' => (
           l10n.statusActive,
-          isDark
-              ? const Color(0xFF1E3A2F)
-              : const Color(0xFFE8F5E9),
-          isDark
-              ? const Color(0xFF81C784)
-              : const Color(0xFF2E7D32),
+          colors.primary.withValues(alpha: isDark ? 0.22 : 0.12),
+          colors.primary,
         ),
       'matching' => (
           l10n.statusMatching,
-          isDark
-              ? const Color(0xFF3E2F1B)
-              : const Color(0xFFFFF3E0),
-          isDark
-              ? const Color(0xFFFFB74D)
-              : const Color(0xFFE65100),
+          colors.secondary.withValues(alpha: isDark ? 0.22 : 0.12),
+          colors.secondary,
         ),
       'recovered' => (
           l10n.statusRecovered,
-          isDark
-              ? const Color(0xFF2A2D34)
-              : const Color(0xFFECEFF1),
-          isDark
-              ? const Color(0xFFB0BEC5)
-              : const Color(0xFF546E7A),
+          colors.surfaceContainerHighest,
+          colors.onSurfaceVariant,
         ),
       _ => (
           status,
-          Theme.of(context).colorScheme.surfaceContainerHighest,
-          Theme.of(context).colorScheme.onSurfaceVariant,
+          colors.surfaceContainerHighest,
+          colors.onSurfaceVariant,
         ),
     };
 

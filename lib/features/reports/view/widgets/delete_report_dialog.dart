@@ -106,6 +106,7 @@ class DeleteReportDialog extends StatelessWidget {
                     onPressed: isLoading ? null : onConfirm,
                     style: FilledButton.styleFrom(
                       backgroundColor: colors.error,
+                      foregroundColor: colors.onError,
                       minimumSize: Size(0, 48.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
@@ -114,9 +115,9 @@ class DeleteReportDialog extends StatelessWidget {
                     child: isLoading
                         ? SizedBox.square(
                             dimension: 20.r,
-                            child: const CircularProgressIndicator(
+                            child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: Colors.white,
+                              color: colors.onError,
                             ),
                           )
                         : Text(
@@ -124,7 +125,7 @@ class DeleteReportDialog extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                              color: colors.onError,
                             ),
                           ),
                   ),

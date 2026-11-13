@@ -20,11 +20,12 @@ class LanguageDialog extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final cubit = context.read<AppPreferencesCubit>();
-    final currentCode = cubit.state.locale.languageCode;
+    final currentLocale = cubit.state.locale;
 
     final options = [
-      (const Locale('ar'), l10n.languageArabic, '🇪🇬'),
+      (null, l10n.languageSystem, '🌐'),
       (const Locale('en'), l10n.languageEnglish, '🇺🇸'),
+      (const Locale('ar'), l10n.languageArabic, '🇪🇬'),
     ];
 
     return Dialog(
@@ -50,7 +51,9 @@ class LanguageDialog extends StatelessWidget {
             SizedBox(height: 16.h),
             ...options.map((option) {
               final (locale, title, flag) = option;
-              final isSelected = locale.languageCode == currentCode;
+              final isSelected = locale == null
+                  ? currentLocale == null
+                  : currentLocale?.languageCode == locale.languageCode;
 
               return ListTile(
                 shape: RoundedRectangleBorder(

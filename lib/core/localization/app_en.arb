@@ -111,6 +111,7 @@
   "themeSystem": "System default",
   "languageArabic": "العربية",
   "languageEnglish": "English",
+  "languageSystem": "System default",
   "logoutButton": "Log out",
   "logoutConfirmTitle": "Log out?",
   "logoutConfirmMessage": "Are you sure you want to log out?",
@@ -194,10 +195,5 @@
   "verifiedButton": "I’ve verified my email",
   "resendEmail": "Resend email",
   "resendEmailIn": "Resend email · {time}",
-  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}},
-
-  "navHome": "Home",
-  "navMyReports": "My Reports",
-  "navProfile": "Profile",
-  "homeComingSoon": "Home — coming soon"
+  "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}}
 }

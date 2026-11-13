@@ -90,21 +90,25 @@ class ReportCard extends StatelessWidget {
                           SizedBox(width: 6.w),
                           StatusBadge(status: report.status),
                           const Spacer(),
-                          PopupMenuButton<String>(
-                            icon: Icon(
-                              Icons.more_vert_rounded,
-                              size: 20.r,
-                              color: colors.onSurfaceVariant,
-                            ),
-                            padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            onSelected: (value) {
-                              if (value == 'edit') onEdit?.call();
-                              if (value == 'delete') onDelete?.call();
-                            },
-                            itemBuilder: (context) => [
+                          SizedBox(
+                            width: 24.r,
+                            height: 24.r,
+                            child: PopupMenuButton<String>(
+                              icon: Icon(
+                                Icons.more_vert_rounded,
+                                size: 20.r,
+                                color: colors.onSurfaceVariant,
+                              ),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              onSelected: (value) {
+                                if (value == 'edit') onEdit?.call();
+                                if (value == 'delete') onDelete?.call();
+                              },
+                              itemBuilder: (context) => [
                               PopupMenuItem(
                                 value: 'edit',
                                 child: Row(
@@ -147,7 +151,8 @@ class ReportCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ],
+                        ),
+                      ],
                       ),
                       SizedBox(height: 4.h),
 

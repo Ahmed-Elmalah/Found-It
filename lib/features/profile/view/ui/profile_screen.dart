@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/features/auth/domain/auth_failure.dart';
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/cubit/profile_state.dart';
@@ -17,7 +19,6 @@ import 'package:found_it/features/profile/view/widgets/settings_section_title.da
 import 'package:found_it/features/profile/view/widgets/settings_tile.dart';
 import 'package:found_it/features/profile/view/widgets/theme_dialog.dart';
 
-/// Profile & Settings Screen (Figma P33 Light / P67 Dark).
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -43,14 +44,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _onLogout() {
-    final cubit = context.read<ProfileCubit>();
     LogoutDialog.show(
       context,
       onConfirm: () async {
         Navigator.of(context).pop();
-        final success = await cubit.logout();
-        if (success && mounted) {
-          context.go(AppRoutes.login);
+        try {
+          await context.read<AuthCubit>().logout();
+          // The router redirects to Login automatically via authRedirect.
+        } on AuthFailure {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context).genericErrorMessage),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
         }
       },
     );
@@ -69,9 +78,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ThemeMode.system => l10n.themeSystem,
     };
 
-    final currentLanguageText = prefsState.locale.languageCode == 'ar'
-        ? l10n.languageArabic
-        : l10n.languageEnglish;
+    final currentLanguageText = prefsState.locale == null
+        ? l10n.languageSystem
+        : (prefsState.locale!.languageCode == 'ar'
+            ? l10n.languageArabic
+            : l10n.languageEnglish);
 
     return Scaffold(
       appBar: AppBar(
@@ -142,14 +153,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.location_city_rounded,
                 title: l10n.cityLabel,
-                value: currentCityName.isNotEmpty ? currentCityName : l10n.selectCity,
+                value: currentCityName.isNotEmpty
+                    ? currentCityName
+                    : l10n.selectCity,
                 onTap: () {
                   CityDialog.show(
                     context,
                     cities: state.activeCities,
                     selectedCityId: profile.cityId,
-                    onCitySelected: (cityId) {
-                      context.read<ProfileCubit>().changeCity(cityId);
+                    onCitySelected: (cityId) async {
+                      final success =
+                          await context.read<ProfileCubit>().changeCity(cityId);
+                      if (success && context.mounted) {
+                        context.read<AuthCubit>().cityChanged(cityId);
+                      }
                     },
                   );
                 },

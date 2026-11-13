@@ -13,6 +13,4 @@ abstract interface class ProfileRepository {
   Future<void> setMyCity(String cityId);
 
   Future<List<CityEntity>> getActiveCities();
-
-  Future<void> logout();
 }
