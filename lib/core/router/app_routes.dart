@@ -8,6 +8,7 @@ abstract final class AppRoutes {
   static const city = '/city';
   static const home = '/home';
   static const explore = '/explore';
+  static const messages = '/messages';
   static const createReport = '/create-report';
   static const reportCreated = '/report-created';
   static const myReports = '/my-reports';

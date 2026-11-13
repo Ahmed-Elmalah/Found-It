@@ -14,7 +14,11 @@ import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
+import 'package:found_it/features/city/view/cubit/city_cubit.dart';
+import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
+import 'package:found_it/features/home/view/cubit/home_cubit.dart';
+import 'package:found_it/features/home/view/ui/home_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -31,6 +35,7 @@ import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+import 'package:found_it/features/root/view/ui/main_shell.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -80,10 +85,12 @@ final GoRouter appRouter = GoRouter(
         child: const SignUpScreen(),
       ),
     ),
-    // TEMP: replaced by the real Choose City screen (Youssef, story #4).
     GoRoute(
       path: AppRoutes.city,
-      builder: (context, state) => const _ComingSoon('City'),
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<CityCubit>()..loadCities(),
+        child: const ChooseCityScreen(),
+      ),
     ),
     // UI only for now (no SMTP yet): shows a "coming soon" message.
     GoRoute(
@@ -99,17 +106,56 @@ final GoRouter appRouter = GoRouter(
         child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
       ),
     ),
-    // TEMP: replaced by the real Home screen (Youssef, story #4).
-    // Has a TEMP "Log out" button so the session can be tested.
-    GoRoute(
-      path: AppRoutes.home,
-      builder: (context, state) => const _ComingSoon('Home', withLogout: true),
-    ),
 
-    // Explore + smart search (Figma P19 / P20) — Phase 1, mock data only.
-    GoRoute(
-      path: AppRoutes.explore,
-      builder: (context, state) => const ExploreScreen(),
+    // Persistent Application Shell with Liquid Glass Navigation Bar
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) => MainShell(
+        navigationShell: navigationShell,
+      ),
+      branches: [
+        // Tab 0: Home
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.home,
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<HomeCubit>()..init(),
+                child: const HomeScreen(),
+              ),
+            ),
+          ],
+        ),
+        // Tab 1: Explore (Phase 1, mock data)
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.explore,
+              builder: (context, state) => const ExploreScreen(),
+            ),
+          ],
+        ),
+        // Tab 2: Messages
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.messages,
+              builder: (context, state) => const _ComingSoon('Messages'),
+            ),
+          ],
+        ),
+        // Tab 3: Profile & Settings
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.profile,
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<ProfileCubit>(),
+                child: const ProfileScreen(),
+              ),
+            ),
+          ],
+        ),
+      ],
     ),
 
     // Reports routes (Ziad, story #3)
@@ -165,14 +211,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Profile & Settings (Adham, story #1)
-    GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => BlocProvider(
-        create: (_) => sl<ProfileCubit>(),
-        child: const ProfileScreen(),
-      ),
-    ),
+    // Edit Profile (Adham, story #1)
     GoRoute(
       path: AppRoutes.editProfile,
       redirect: (context, state) {

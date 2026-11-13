@@ -13,6 +13,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseCityTitle => 'Choose your city';
 
   @override
+  String get chooseCitySubtitle => 'Select your city to see nearby reports.';
+
+  @override
+  String get locationRequiredTitle => 'Location Required:';
+
+  @override
+  String get locationRequiredMessage => 'Please select a city to continue.';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
   String get appName => 'FOUND IT';
 
   @override
@@ -505,6 +517,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'Resend email · $time';
   }
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navExplore => 'Explore';
+
+  @override
+  String get navReport => 'Report';
+
+  @override
+  String get navMessages => 'Messages';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String homeRecentActivity(String city) {
+    return 'Recent Activity in $city';
+  }
+
+  @override
+  String get homeFilterAll => 'All';
+
+  @override
+  String get homeFilterLost => 'Lost';
+
+  @override
+  String get homeFilterFound => 'Found';
+
+  @override
+  String get homeHeroTag => '✨ Quick Action';
+
+  @override
+  String get homeHeroTitle => 'Lost something? Let’s bring it back.';
+
+  @override
+  String get homeHeroButton => 'Report now';
+
+  @override
+  String homeEmptyTitle(String city) {
+    return 'No reports yet in $city';
+  }
+
+  @override
+  String get homeEmptySubtitle =>
+      'The city is calm with no registered reports. If you lost or found something, help others and create the first report!';
+
+  @override
+  String get homeEmptyAction => 'Create first report';
+
+  @override
+  String get homeErrorTitle => 'Unable to load reports';
+
+  @override
+  String get homeErrorSubtitle =>
+      'Check your internet connection and pull to refresh or tap retry.';
+
+  @override
+  String get homeRetryButton => 'Try again';
+
+  @override
+  String get homeNotifications => 'Notifications';
+
+  @override
+  String get homeChangeCity => 'Change City';
+
+  @override
+  String get homeSelectCityTitle => 'Select City';
+
+  @override
+  String get homeSelectCitySubtitle => 'Browse found items in your governorate';
+
+  @override
+  String get homeSearchCityHint => 'Search city or governorate...';
+
+  @override
+  String get homeNoCitiesFound => 'No cities found matching your search';
 
   @override
   String get exploreTitle => 'Explore';

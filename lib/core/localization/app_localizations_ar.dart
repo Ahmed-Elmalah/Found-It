@@ -13,6 +13,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chooseCityTitle => 'اختر مدينتك';
 
   @override
+  String get chooseCitySubtitle => 'اختر مدينتك لعرض البلاغات القريبة منك.';
+
+  @override
+  String get locationRequiredTitle => 'الموقع مطلوب:';
+
+  @override
+  String get locationRequiredMessage => 'يرجى اختيار مدينة للمتابعة.';
+
+  @override
+  String get continueButton => 'متابعة';
+
+  @override
   String get appName => 'FOUND IT';
 
   @override
@@ -503,6 +515,84 @@ class AppLocalizationsAr extends AppLocalizations {
   String resendEmailIn(String time) {
     return 'إعادة الإرسال · $time';
   }
+
+  @override
+  String get navHome => 'الرئيسية';
+
+  @override
+  String get navExplore => 'استكشاف';
+
+  @override
+  String get navReport => 'إبلاغ';
+
+  @override
+  String get navMessages => 'الرسائل';
+
+  @override
+  String get navProfile => 'حسابي';
+
+  @override
+  String homeRecentActivity(String city) {
+    return 'النشاط الأخير في $city';
+  }
+
+  @override
+  String get homeFilterAll => 'الكل';
+
+  @override
+  String get homeFilterLost => 'مفقود';
+
+  @override
+  String get homeFilterFound => 'تم العثور عليه';
+
+  @override
+  String get homeHeroTag => '✨ إجراء سريع';
+
+  @override
+  String get homeHeroTitle => 'ضايع منك حاجة؟ يلا نرجعها.';
+
+  @override
+  String get homeHeroButton => 'أبلغ الآن';
+
+  @override
+  String homeEmptyTitle(String city) {
+    return 'مافيش بلاغات حالياً في $city';
+  }
+
+  @override
+  String get homeEmptySubtitle =>
+      'المدينة رايقة ومافيش مفقودات مسجلة.. لو لاقي حاجة أو ضايع منك حاجة، ساعد غيرك وكون أول من ينشر بلاغ!';
+
+  @override
+  String get homeEmptyAction => 'أضف أول بلاغ';
+
+  @override
+  String get homeErrorTitle => 'تعذر تحميل البلاغات';
+
+  @override
+  String get homeErrorSubtitle =>
+      'تأكد من اتصالك بالإنترنت واسحب للأسفل للتحديث أو اضغط إعادة المحاولة.';
+
+  @override
+  String get homeRetryButton => 'إعادة المحاولة';
+
+  @override
+  String get homeNotifications => 'التنبيهات';
+
+  @override
+  String get homeChangeCity => 'تغيير المدينة';
+
+  @override
+  String get homeSelectCityTitle => 'اختر محافظتك أو مدينتك';
+
+  @override
+  String get homeSelectCitySubtitle => 'تصفح المعثورات حسب نطاق محافظتك';
+
+  @override
+  String get homeSearchCityHint => 'ابحث عن محافظة أو مدينة...';
+
+  @override
+  String get homeNoCitiesFound => 'لا توجد نتائج مطابقة لبحثك';
 
   @override
   String get exploreTitle => 'استكشاف';

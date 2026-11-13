@@ -104,6 +104,30 @@ abstract class AppLocalizations {
   /// **'Choose your city'**
   String get chooseCityTitle;
 
+  /// No description provided for @chooseCitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your city to see nearby reports.'**
+  String get chooseCitySubtitle;
+
+  /// No description provided for @locationRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Location Required:'**
+  String get locationRequiredTitle;
+
+  /// No description provided for @locationRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a city to continue.'**
+  String get locationRequiredMessage;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
@@ -1051,6 +1075,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resend email · {time}'**
   String resendEmailIn(String time);
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore'**
+  String get navExplore;
+
+  /// No description provided for @navReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get navReport;
+
+  /// No description provided for @navMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get navMessages;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @homeRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity in {city}'**
+  String homeRecentActivity(String city);
+
+  /// No description provided for @homeFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get homeFilterAll;
+
+  /// No description provided for @homeFilterLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get homeFilterLost;
+
+  /// No description provided for @homeFilterFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get homeFilterFound;
+
+  /// No description provided for @homeHeroTag.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Quick Action'**
+  String get homeHeroTag;
+
+  /// No description provided for @homeHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost something? Let’s bring it back.'**
+  String get homeHeroTitle;
+
+  /// No description provided for @homeHeroButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Report now'**
+  String get homeHeroButton;
+
+  /// No description provided for @homeEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports yet in {city}'**
+  String homeEmptyTitle(String city);
+
+  /// No description provided for @homeEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The city is calm with no registered reports. If you lost or found something, help others and create the first report!'**
+  String get homeEmptySubtitle;
+
+  /// No description provided for @homeEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create first report'**
+  String get homeEmptyAction;
+
+  /// No description provided for @homeErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load reports'**
+  String get homeErrorTitle;
+
+  /// No description provided for @homeErrorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and pull to refresh or tap retry.'**
+  String get homeErrorSubtitle;
+
+  /// No description provided for @homeRetryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get homeRetryButton;
+
+  /// No description provided for @homeNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get homeNotifications;
+
+  /// No description provided for @homeChangeCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Change City'**
+  String get homeChangeCity;
+
+  /// No description provided for @homeSelectCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get homeSelectCityTitle;
+
+  /// No description provided for @homeSelectCitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse found items in your governorate'**
+  String get homeSelectCitySubtitle;
+
+  /// No description provided for @homeSearchCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search city or governorate...'**
+  String get homeSearchCityHint;
+
+  /// No description provided for @homeNoCitiesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No cities found matching your search'**
+  String get homeNoCitiesFound;
 
   /// No description provided for @exploreTitle.
   ///

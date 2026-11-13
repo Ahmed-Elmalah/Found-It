@@ -2,6 +2,10 @@
   "@@locale": "en",
 
   "chooseCityTitle": "Choose your city",
+  "chooseCitySubtitle": "Select your city to see nearby reports.",
+  "locationRequiredTitle": "Location Required:",
+  "locationRequiredMessage": "Please select a city to continue.",
+  "continueButton": "Continue",
 
   "appName": "FOUND IT",
   "appTagline": "Lost something? Let’s bring it back.",
@@ -202,6 +206,42 @@
   "resendEmail": "Resend email",
   "resendEmailIn": "Resend email · {time}",
   "@resendEmailIn": {"placeholders": {"time": {"type": "String", "example": "00:45"}}},
+
+  "navHome": "Home",
+  "navExplore": "Explore",
+  "navReport": "Report",
+  "navMessages": "Messages",
+  "navProfile": "Profile",
+
+  "homeRecentActivity": "Recent Activity in {city}",
+  "@homeRecentActivity": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
+  "homeFilterAll": "All",
+  "homeFilterLost": "Lost",
+  "homeFilterFound": "Found",
+  "homeHeroTag": "✨ Quick Action",
+  "homeHeroTitle": "Lost something? Let’s bring it back.",
+  "homeHeroButton": "Report now",
+  "homeEmptyTitle": "No reports yet in {city}",
+  "@homeEmptyTitle": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
+  "homeEmptySubtitle": "The city is calm with no registered reports. If you lost or found something, help others and create the first report!",
+  "homeEmptyAction": "Create first report",
+  "homeErrorTitle": "Unable to load reports",
+  "homeErrorSubtitle": "Check your internet connection and pull to refresh or tap retry.",
+  "homeRetryButton": "Try again",
+  "homeNotifications": "Notifications",
+  "homeChangeCity": "Change City",
+  "homeSelectCityTitle": "Select City",
+  "homeSelectCitySubtitle": "Browse found items in your governorate",
+  "homeSearchCityHint": "Search city or governorate...",
+  "homeNoCitiesFound": "No cities found matching your search",
 
   "exploreTitle": "Explore",
   "searchHint": "Search",
