@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/core/router/app_router.dart';
 import 'package:found_it/core/theme/app_theme.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
@@ -13,23 +14,31 @@ class FoundIt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AuthCubit is app-wide (login state + profile): every screen can read
-    // it with context.read<AuthCubit>() (e.g. logout, cityChanged).
-    return BlocProvider.value(
-      value: sl<AuthCubit>(),
-      child: ScreenUtilInit(
-        designSize: const Size(390, 844),
-        minTextAdapt: true,
-        builder: (context, child) => MaterialApp.router(
-          title: 'FOUND IT',
-          debugShowCheckedModeBanner: false,
-          routerConfig: appRouter,
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: ThemeMode.system,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-        ),
+    // AuthCubit is app-wide (login state + profile).
+    // AppPreferencesCubit manages dynamic theme mode and locale.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: sl<AuthCubit>()),
+        BlocProvider.value(value: sl<AppPreferencesCubit>()),
+      ],
+      child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
+        builder: (context, prefs) {
+          return ScreenUtilInit(
+            designSize: const Size(390, 844),
+            minTextAdapt: true,
+            builder: (context, child) => MaterialApp.router(
+              title: 'FOUND IT',
+              debugShowCheckedModeBanner: false,
+              routerConfig: appRouter,
+              theme: AppTheme.light,
+              darkTheme: AppTheme.dark,
+              themeMode: prefs.themeMode,
+              locale: prefs.locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+            ),
+          );
+        },
       ),
     );
   }

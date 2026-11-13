@@ -58,6 +58,132 @@
   "weakPasswordTitle": "Weak password:",
   "weakPasswordMessage": "Choose a stronger password.",
 
+  "myReportsTitle": "My Reports",
+  "tabAll": "All",
+  "tabActive": "Active",
+  "tabMatching": "Matching",
+  "tabRecovered": "Recovered",
+  "statusActive": "Active",
+  "statusMatching": "Matching",
+  "statusRecovered": "Recovered",
+  "typeLost": "Lost",
+  "typeFound": "Found",
+  "noReportsTitle": "No reports yet",
+  "noReportsSubtitle": "Reports you publish will appear here.",
+  "createReport": "Create report",
+  "edit": "Edit",
+  "delete": "Delete",
+  "reportDeletedSuccess": "Report deleted successfully",
+  "reportUpdatedSuccess": "Report updated successfully",
+
+  "deleteReportDialogTitle": "Delete report?",
+  "deleteReportDialogMessage": "Are you sure you want to delete this report? It will no longer appear in search results.",
+  "cancel": "Cancel",
+  "confirmDelete": "Delete",
+
+  "editReportTitle": "Edit Report",
+  "reportTitleLabel": "Title",
+  "reportTitleHint": "e.g. Black leather wallet",
+  "reportTypeLabel": "Report type",
+  "categoryLabel": "Category",
+  "selectCategory": "Select category",
+  "areaLabel": "Area / District",
+  "selectArea": "Select area",
+  "itemDateLabel": "Date",
+  "descriptionLabel": "Description",
+  "descriptionHint": "Add details that help identify the item...",
+  "saveChanges": "Save changes",
+  "saving": "Saving...",
+  "titleTooShort": "Title must be at least 3 characters",
+  "titleTooLong": "Title must be at most 50 characters",
+
+  "profileTitle": "Profile & Settings",
+  "editProfile": "Edit profile",
+  "saveProfile": "Save profile",
+  "accountSection": "Account",
+  "preferencesSection": "Preferences",
+  "cityLabel": "City",
+  "selectCity": "Select city",
+  "languageLabel": "Language",
+  "themeLabel": "Theme",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System default",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "languageSystem": "System default",
+  "logoutButton": "Log out",
+  "logoutConfirmTitle": "Log out?",
+  "logoutConfirmMessage": "Are you sure you want to log out?",
+  "profileUpdatedSuccess": "Profile updated successfully",
+  "cityUpdatedSuccess": "City updated successfully",
+  "appVersion": "Version 1.0.0",
+  "viewMyReports": "My Reports",
+
+  "reportType": "Report type",
+  "lost": "Lost",
+  "found": "Found",
+
+  "itemTitle": "Item title",
+  "itemTitleHint": "e.g., Black leather wallet",
+  "itemTitleCounter": "{count}/50",
+  "@itemTitleCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "category": "Category",
+
+  "locationDistrict": "Location (district)",
+  "selectDistrict": "Select district",
+
+  "date": "Date",
+
+  "photos": "Photos",
+  "photoCounter": "{count}/4",
+  "@photoCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "addPhoto": "Add",
+  "photoHint": "JPG or PNG, up to 10 MB each. Add 1 to 4 photos.",
+
+  "submitReport": "Submit report",
+
+  "categoryRequired": "Please select a category",
+  "districtRequired": "Please select a district",
+  "photosRequired": "Please add at least 1 photo",
+  "invalidFileType": "Only JPG and PNG files are allowed",
+  "invalidFileSize": "File size must be under 10 MB",
+
+  "requiredFieldsBannerTitle": "Required Fields:",
+  "requiredFieldsBannerMessage": "Title, category, and location are required.",
+  "invalidFileBannerTitle": "Invalid File:",
+  "invalidFileBannerMessage": "Please upload image files (JPG/PNG) under 10 MB.",
+
+  "photoRejected": "Rejected",
+  "takePhoto": "Take a photo",
+  "chooseFromGallery": "Choose from gallery",
+
+  "reportCreatedTitle": "Report Created Successfully!",
+  "reportCreatedId": "Your report ID is {id}",
+  "@reportCreatedId": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "reportActiveMessage": "Your report is Active and listed for matching.",
+  "viewMyReport": "View my report",
+  "backToHome": "Back to home",
+
+  "notLoggedInTitle": "Login Required:",
+  "notLoggedInMessage": "You must be logged in to create a report.",
+  "invalidDataTitle": "Invalid Data:",
+  "invalidDataMessage": "Please check the entered report details.",
+  "retry": "Retry",
+
   "forgotPasswordSubtitle": "Enter your email and we’ll send you a link to reset it.",
   "sendResetLinkButton": "Send reset link",
   "rememberedIt": "Remembered it?",
@@ -82,9 +208,7 @@
   "mostRecentFirst": "Most recent first",
 
   "filtersTitle": "Filters",
-  "categoryLabel": "Category",
   "dateRangeLabel": "Date range",
-  "cityLabel": "City",
   "startDate": "Start date",
   "endDate": "End date",
   "dateFromValue": "From {date}",
@@ -103,10 +227,5 @@
   "showResults": "Show results",
 
   "emptySearchTitle": "No matching reports found.",
-  "emptySearchMessage": "Try adjusting your search filters.",
-
-  "typeLost": "Lost",
-  "typeFound": "Found",
-  "statusMatching": "Matching",
-  "statusRecovered": "Recovered"
+  "emptySearchMessage": "Try adjusting your search filters."
 }

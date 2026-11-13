@@ -159,6 +159,301 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weakPasswordMessage => 'Choose a stronger password.';
 
   @override
+  String get myReportsTitle => 'My Reports';
+
+  @override
+  String get tabAll => 'All';
+
+  @override
+  String get tabActive => 'Active';
+
+  @override
+  String get tabMatching => 'Matching';
+
+  @override
+  String get tabRecovered => 'Recovered';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusMatching => 'Matching';
+
+  @override
+  String get statusRecovered => 'Recovered';
+
+  @override
+  String get typeLost => 'Lost';
+
+  @override
+  String get typeFound => 'Found';
+
+  @override
+  String get noReportsTitle => 'No reports yet';
+
+  @override
+  String get noReportsSubtitle => 'Reports you publish will appear here.';
+
+  @override
+  String get createReport => 'Create report';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get reportDeletedSuccess => 'Report deleted successfully';
+
+  @override
+  String get reportUpdatedSuccess => 'Report updated successfully';
+
+  @override
+  String get deleteReportDialogTitle => 'Delete report?';
+
+  @override
+  String get deleteReportDialogMessage =>
+      'Are you sure you want to delete this report? It will no longer appear in search results.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get confirmDelete => 'Delete';
+
+  @override
+  String get editReportTitle => 'Edit Report';
+
+  @override
+  String get reportTitleLabel => 'Title';
+
+  @override
+  String get reportTitleHint => 'e.g. Black leather wallet';
+
+  @override
+  String get reportTypeLabel => 'Report type';
+
+  @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get areaLabel => 'Area / District';
+
+  @override
+  String get selectArea => 'Select area';
+
+  @override
+  String get itemDateLabel => 'Date';
+
+  @override
+  String get descriptionLabel => 'Description';
+
+  @override
+  String get descriptionHint => 'Add details that help identify the item...';
+
+  @override
+  String get saveChanges => 'Save changes';
+
+  @override
+  String get saving => 'Saving...';
+
+  @override
+  String get titleTooShort => 'Title must be at least 3 characters';
+
+  @override
+  String get titleTooLong => 'Title must be at most 50 characters';
+
+  @override
+  String get profileTitle => 'Profile & Settings';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get saveProfile => 'Save profile';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get preferencesSection => 'Preferences';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get selectCity => 'Select city';
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get themeLabel => 'Theme';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String get themeSystem => 'System default';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageSystem => 'System default';
+
+  @override
+  String get logoutButton => 'Log out';
+
+  @override
+  String get logoutConfirmTitle => 'Log out?';
+
+  @override
+  String get logoutConfirmMessage => 'Are you sure you want to log out?';
+
+  @override
+  String get profileUpdatedSuccess => 'Profile updated successfully';
+
+  @override
+  String get cityUpdatedSuccess => 'City updated successfully';
+
+  @override
+  String get appVersion => 'Version 1.0.0';
+
+  @override
+  String get viewMyReports => 'My Reports';
+
+  @override
+  String get reportType => 'Report type';
+
+  @override
+  String get lost => 'Lost';
+
+  @override
+  String get found => 'Found';
+
+  @override
+  String get itemTitle => 'Item title';
+
+  @override
+  String get itemTitleHint => 'e.g., Black leather wallet';
+
+  @override
+  String itemTitleCounter(int count) {
+    return '$count/50';
+  }
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get locationDistrict => 'Location (district)';
+
+  @override
+  String get selectDistrict => 'Select district';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get photos => 'Photos';
+
+  @override
+  String photoCounter(int count) {
+    return '$count/4';
+  }
+
+  @override
+  String get addPhoto => 'Add';
+
+  @override
+  String get photoHint => 'JPG or PNG, up to 10 MB each. Add 1 to 4 photos.';
+
+  @override
+  String get submitReport => 'Submit report';
+
+  @override
+  String get categoryRequired => 'Please select a category';
+
+  @override
+  String get districtRequired => 'Please select a district';
+
+  @override
+  String get photosRequired => 'Please add at least 1 photo';
+
+  @override
+  String get invalidFileType => 'Only JPG and PNG files are allowed';
+
+  @override
+  String get invalidFileSize => 'File size must be under 10 MB';
+
+  @override
+  String get requiredFieldsBannerTitle => 'Required Fields:';
+
+  @override
+  String get requiredFieldsBannerMessage =>
+      'Title, category, and location are required.';
+
+  @override
+  String get invalidFileBannerTitle => 'Invalid File:';
+
+  @override
+  String get invalidFileBannerMessage =>
+      'Please upload image files (JPG/PNG) under 10 MB.';
+
+  @override
+  String get photoRejected => 'Rejected';
+
+  @override
+  String get takePhoto => 'Take a photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get reportCreatedTitle => 'Report Created Successfully!';
+
+  @override
+  String reportCreatedId(String id) {
+    return 'Your report ID is $id';
+  }
+
+  @override
+  String get reportActiveMessage =>
+      'Your report is Active and listed for matching.';
+
+  @override
+  String get viewMyReport => 'View my report';
+
+  @override
+  String get backToHome => 'Back to home';
+
+  @override
+  String get notLoggedInTitle => 'Login Required:';
+
+  @override
+  String get notLoggedInMessage => 'You must be logged in to create a report.';
+
+  @override
+  String get invalidDataTitle => 'Invalid Data:';
+
+  @override
+  String get invalidDataMessage => 'Please check the entered report details.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
   String get forgotPasswordSubtitle =>
       'Enter your email and we’ll send you a link to reset it.';
 
@@ -211,13 +506,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filtersTitle => 'Filters';
 
   @override
-  String get categoryLabel => 'Category';
-
-  @override
   String get dateRangeLabel => 'Date range';
-
-  @override
-  String get cityLabel => 'City';
 
   @override
   String get startDate => 'Start date';
@@ -246,16 +535,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptySearchMessage => 'Try adjusting your search filters.';
-
-  @override
-  String get typeLost => 'Lost';
-
-  @override
-  String get typeFound => 'Found';
-
-  @override
-  String get statusMatching => 'Matching';
-
-  @override
-  String get statusRecovered => 'Recovered';
 }

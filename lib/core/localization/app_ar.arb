@@ -58,6 +58,132 @@
   "weakPasswordTitle": "كلمة مرور ضعيفة:",
   "weakPasswordMessage": "اختر كلمة مرور أقوى.",
 
+  "myReportsTitle": "بلاغاتي",
+  "tabAll": "الكل",
+  "tabActive": "نشط",
+  "tabMatching": "مطابق",
+  "tabRecovered": "مسترد",
+  "statusActive": "نشط",
+  "statusMatching": "مطابق",
+  "statusRecovered": "مسترد",
+  "typeLost": "مفقود",
+  "typeFound": "معثور عليه",
+  "noReportsTitle": "لا توجد بلاغات بعد",
+  "noReportsSubtitle": "البلاغات التي تنشرها ستظهر هنا.",
+  "createReport": "إنشاء بلاغ",
+  "edit": "تعديل",
+  "delete": "حذف",
+  "reportDeletedSuccess": "تم حذف البلاغ بنجاح",
+  "reportUpdatedSuccess": "تم تحديث البلاغ بنجاح",
+
+  "deleteReportDialogTitle": "حذف البلاغ؟",
+  "deleteReportDialogMessage": "هل أنت متأكد من حذف هذا البلاغ؟ لن يظهر هذا البلاغ في البحث بعد الآن.",
+  "cancel": "إلغاء",
+  "confirmDelete": "حذف",
+
+  "editReportTitle": "تعديل البلاغ",
+  "reportTitleLabel": "عنوان البلاغ",
+  "reportTitleHint": "مثال: محفظة جلد سوداء",
+  "reportTypeLabel": "نوع البلاغ",
+  "categoryLabel": "الفئة",
+  "selectCategory": "اختر الفئة",
+  "areaLabel": "المنطقة / الحي",
+  "selectArea": "اختر المنطقة",
+  "itemDateLabel": "التاريخ",
+  "descriptionLabel": "الوصف",
+  "descriptionHint": "أضف تفاصيل تساعد في التعرف على الشيء...",
+  "saveChanges": "حفظ التعديلات",
+  "saving": "جاري الحفظ...",
+  "titleTooShort": "يجب أن يكون العنوان 3 أحرف على الأقل",
+  "titleTooLong": "يجب أن يكون العنوان 50 حرفاً كحد أقصى",
+
+  "profileTitle": "الملف الشخصي والإعدادات",
+  "editProfile": "تعديل الملف الشخصي",
+  "saveProfile": "حفظ البيانات",
+  "accountSection": "الحساب",
+  "preferencesSection": "التفضيلات",
+  "cityLabel": "المدينة",
+  "selectCity": "اختر المدينة",
+  "languageLabel": "اللغة",
+  "themeLabel": "المظهر",
+  "themeLight": "فاتح",
+  "themeDark": "داكن",
+  "themeSystem": "تلقائي (حسب النظام)",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "languageSystem": "تلقائي (حسب النظام)",
+  "logoutButton": "تسجيل الخروج",
+  "logoutConfirmTitle": "تسجيل الخروج؟",
+  "logoutConfirmMessage": "هل أنت متأكد من رغبتك في تسجيل الخروج؟",
+  "profileUpdatedSuccess": "تم تحديث الملف الشخصي بنجاح",
+  "cityUpdatedSuccess": "تم تغيير المدينة بنجاح",
+  "appVersion": "الإصدار 1.0.0",
+  "viewMyReports": "بلاغاتي",
+
+  "reportType": "نوع البلاغ",
+  "lost": "مفقود",
+  "found": "عُثر عليه",
+
+  "itemTitle": "اسم الغرض",
+  "itemTitleHint": "مثال: محفظة جلدية سوداء",
+  "itemTitleCounter": "{count}/50",
+  "@itemTitleCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "category": "الفئة",
+
+  "locationDistrict": "الموقع (المنطقة)",
+  "selectDistrict": "اختر المنطقة",
+
+  "date": "التاريخ",
+
+  "photos": "الصور",
+  "photoCounter": "{count}/4",
+  "@photoCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "addPhoto": "إضافة",
+  "photoHint": "JPG أو PNG، حجم أقل من 10 ميجا. أضف من 1 إلى 4 صور.",
+
+  "submitReport": "رفع البلاغ",
+
+  "categoryRequired": "يرجى اختيار فئة",
+  "districtRequired": "يرجى اختيار المنطقة",
+  "photosRequired": "يرجى إضافة صورة واحدة على الأقل",
+  "invalidFileType": "يُسمح فقط بملفات JPG و PNG",
+  "invalidFileSize": "يجب أن يكون حجم الملف أقل من 10 ميجا",
+
+  "requiredFieldsBannerTitle": "حقول مطلوبة:",
+  "requiredFieldsBannerMessage": "العنوان والفئة والموقع مطلوبة.",
+  "invalidFileBannerTitle": "ملف غير صالح:",
+  "invalidFileBannerMessage": "يرجى رفع صور بصيغة JPG أو PNG وحجم أقل من 10 ميجا.",
+
+  "photoRejected": "مرفوض",
+  "takePhoto": "التقاط صورة",
+  "chooseFromGallery": "اختيار من المعرض",
+
+  "reportCreatedTitle": "تم إنشاء البلاغ بنجاح!",
+  "reportCreatedId": "رقم البلاغ: {id}",
+  "@reportCreatedId": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "reportActiveMessage": "بلاغك نشط ومُدرج للمطابقة.",
+  "viewMyReport": "عرض بلاغي",
+  "backToHome": "العودة للرئيسية",
+
+  "notLoggedInTitle": "تسجيل الدخول مطلوب:",
+  "notLoggedInMessage": "يجب تسجيل الدخول لإنشاء بلاغ.",
+  "invalidDataTitle": "بيانات غير صالحة:",
+  "invalidDataMessage": "يرجى التحقق من صحة تفاصيل البلاغ المدخلة.",
+  "retry": "إعادة المحاولة",
+
   "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيينها.",
   "sendResetLinkButton": "إرسال رابط إعادة التعيين",
   "rememberedIt": "تذكرتها؟",
@@ -75,9 +201,7 @@
   "mostRecentFirst": "الأحدث أولاً",
 
   "filtersTitle": "الفلاتر",
-  "categoryLabel": "التصنيف",
   "dateRangeLabel": "نطاق التاريخ",
-  "cityLabel": "المدينة",
   "startDate": "تاريخ البدء",
   "endDate": "تاريخ الانتهاء",
   "dateFromValue": "من {date}",
@@ -86,10 +210,5 @@
   "showResults": "عرض النتائج",
 
   "emptySearchTitle": "لا توجد تقارير مطابقة.",
-  "emptySearchMessage": "جرّب تعديل فلاتر البحث.",
-
-  "typeLost": "مفقود",
-  "typeFound": "تم العثور عليه",
-  "statusMatching": "قيد المطابقة",
-  "statusRecovered": "تم استرجاعه"
+  "emptySearchMessage": "جرّب تعديل فلاتر البحث."
 }

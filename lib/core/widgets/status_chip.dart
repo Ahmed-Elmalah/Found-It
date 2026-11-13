@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:found_it/core/theme/app_colors.dart';
+
 /// Semantic tone of a [StatusChip].
 enum StatusChipTone { error, success, primary }
 
@@ -22,9 +24,11 @@ class StatusChip extends StatelessWidget {
     final color = switch (tone) {
       StatusChipTone.error => colors.error,
       StatusChipTone.primary => colors.primary,
-      // The color schemes have no dedicated success slot, so success uses
-      // the primary tone instead of a hardcoded color.
-      StatusChipTone.success => colors.primary,
+      // The color schemes have no dedicated success slot.
+      StatusChipTone.success =>
+        Theme.of(context).brightness == Brightness.dark
+            ? AppColors.successDark
+            : AppColors.successLight,
     };
 
     return Container(
