@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/models/report_status.dart';
+import 'package:found_it/core/models/report_type.dart';
+import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
-import 'package:found_it/features/reports/view/widgets/report_type_badge.dart';
-import 'package:found_it/features/reports/view/widgets/status_badge.dart';
 
 class ReportCard extends StatelessWidget {
   const ReportCard({
@@ -37,8 +38,29 @@ class ReportCard extends StatelessWidget {
         ? '$locationText · $formattedDate'
         : formattedDate;
 
+    final reportType = ReportType.fromDb(report.type);
+    final reportStatus = ReportStatus.fromDb(report.status);
+
+    final typeLabel =
+        reportType == ReportType.lost ? l10n.typeLost : l10n.typeFound;
+    final typeTone = reportType == ReportType.lost
+        ? StatusChipTone.error
+        : StatusChipTone.success;
+
+    final statusLabel = switch (reportStatus) {
+      ReportStatus.active => l10n.statusActive,
+      ReportStatus.matching => l10n.statusMatching,
+      ReportStatus.recovered => l10n.statusRecovered,
+    };
+    final statusTone = switch (reportStatus) {
+      ReportStatus.active => StatusChipTone.primary,
+      ReportStatus.matching => StatusChipTone.primary,
+      ReportStatus.recovered => StatusChipTone.success,
+    };
+
     final hasImage = report.images.isNotEmpty;
-    final isRecovered = report.isRecovered || report.status == 'recovered';
+    final isRecovered =
+        report.isRecovered || reportStatus == ReportStatus.recovered;
 
     return Container(
       decoration: BoxDecoration(
@@ -98,8 +120,8 @@ class ReportCard extends StatelessWidget {
                             runSpacing: 4.h,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              ReportTypeBadge(type: report.type),
-                              StatusBadge(status: report.status),
+                              StatusChip(label: typeLabel, tone: typeTone),
+                              StatusChip(label: statusLabel, tone: statusTone),
                             ],
                           ),
                           SizedBox(height: 6.h),

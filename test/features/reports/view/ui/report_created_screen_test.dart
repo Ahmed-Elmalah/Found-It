@@ -15,15 +15,15 @@ void main() {
         routes: [
           GoRoute(
             path: AppRoutes.reportCreated,
-            builder: (_, __) => ReportCreatedScreen(referenceId: refCode),
+            builder: (_, _) => ReportCreatedScreen(referenceId: refCode),
           ),
           GoRoute(
             path: AppRoutes.myReports,
-            builder: (_, __) => const Scaffold(body: Text('MY REPORTS SCREEN')),
+            builder: (_, _) => const Scaffold(body: Text('MY REPORTS SCREEN')),
           ),
           GoRoute(
             path: AppRoutes.home,
-            builder: (_, __) => const Scaffold(body: Text('HOME SCREEN')),
+            builder: (_, _) => const Scaffold(body: Text('HOME SCREEN')),
           ),
         ],
       );

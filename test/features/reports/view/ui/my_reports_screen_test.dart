@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
@@ -129,6 +130,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ReportCard), findsOneWidget);
+      expect(find.byType(StatusChip), findsNWidgets(2));
+      expect(find.text('Lost'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(ReportCard),
+          matching: find.text('Active'),
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Black Leather Wallet'), findsOneWidget);
       expect(find.text('Edit'), findsOneWidget);
       expect(find.text('Delete Report'), findsOneWidget);
@@ -228,6 +238,14 @@ void main() {
       );
       await tester.pumpAndSettle();
 
+      expect(find.byType(StatusChip), findsNWidgets(2));
+      expect(
+        find.descendant(
+          of: find.byType(ReportCard),
+          matching: find.text('Recovered'),
+        ),
+        findsOneWidget,
+      );
       expect(find.text('Edit'), findsOneWidget);
       expect(find.text('Delete Report'), findsNothing);
 
