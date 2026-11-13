@@ -403,4 +403,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeChangeCity => 'Change City';
+
+  @override
+  String get homeSelectCityTitle => 'Select City';
+
+  @override
+  String get homeSelectCitySubtitle => 'Browse found items in your governorate';
+
+  @override
+  String get homeSearchCityHint => 'Search city or governorate...';
+
+  @override
+  String get homeNoCitiesFound => 'No cities found matching your search';
 }

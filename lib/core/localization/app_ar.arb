@@ -161,5 +161,9 @@
   "homeErrorSubtitle": "تأكد من اتصالك بالإنترنت واسحب للأسفل للتحديث أو اضغط إعادة المحاولة.",
   "homeRetryButton": "إعادة المحاولة",
   "homeNotifications": "التنبيهات",
-  "homeChangeCity": "تغيير المدينة"
+  "homeChangeCity": "تغيير المدينة",
+  "homeSelectCityTitle": "اختر محافظتك أو مدينتك",
+  "homeSelectCitySubtitle": "تصفح المعثورات حسب نطاق محافظتك",
+  "homeSearchCityHint": "ابحث عن محافظة أو مدينة...",
+  "homeNoCitiesFound": "لا توجد نتائج مطابقة لبحثك"
 }

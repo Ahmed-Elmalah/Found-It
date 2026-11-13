@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/home_report_item.dart';
 import '../../domain/entities/sample_home_data.dart';
+import '../widgets/city_selection_bottom_sheet.dart';
 import '../widgets/home_empty_view.dart';
 import '../widgets/home_error_view.dart';
 import '../widgets/home_header.dart';
@@ -25,7 +26,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late HomeViewState _currentState;
   late String _cityName;
-  HomeFilterType _selectedFilter = HomeFilterType.all;
   late List<HomeReportItem> _reports;
 
   @override
@@ -46,6 +46,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _openCityPicker() {
+    CitySelectionBottomSheet.show(
+      context: context,
+      currentCity: _cityName,
+      onCitySelected: (newCity) {
+        setState(() {
+          _cityName = newCity;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -63,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onStateChanged: (newState) {
                 setState(() => _currentState = newState);
               },
+              onCityTap: _openCityPicker,
             ),
 
             // Animated State Container
@@ -76,10 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       key: const ValueKey('home_success'),
                       cityName: _cityName,
                       reports: _reports,
-                      selectedFilter: _selectedFilter,
-                      onFilterSelected: (filter) {
-                        setState(() => _selectedFilter = filter);
-                      },
                       onRefresh: _handleRefresh,
                     ),
                   HomeViewState.loading => const HomeShimmerView(

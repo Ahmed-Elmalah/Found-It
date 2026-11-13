@@ -44,24 +44,9 @@ class HomeShimmerView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 14.h),
+          SizedBox(height: 16.h),
 
-          // 3. Filter Chips Shimmer
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                _shimmerPill(width: 74.w, height: 34.h, color: baseColor),
-                SizedBox(width: 8.w),
-                _shimmerPill(width: 90.w, height: 34.h, color: baseColor),
-                SizedBox(width: 8.w),
-                _shimmerPill(width: 110.w, height: 34.h, color: baseColor),
-              ],
-            ),
-          ),
-          SizedBox(height: 14.h),
-
-          // 4. Feed Card Skeletons (4 cards)
+          // 3. Feed Card Skeletons (4 cards)
           for (int i = 0; i < 4; i++)
             _buildCardSkeleton(baseColor, cardBg, isDark),
 
@@ -74,21 +59,6 @@ class HomeShimmerView extends StatelessWidget {
             color: highlightColor.withValues(alpha: isDark ? 0.40 : 0.70),
             curve: Curves.easeInOutSine,
           ),
-    );
-  }
-
-  Widget _shimmerPill({
-    required double width,
-    required double height,
-    required Color color,
-  }) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        color: color,
-      ),
     );
   }
 

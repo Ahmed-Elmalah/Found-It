@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import '../../domain/entities/home_report_item.dart';
 import 'home_feed_item_card.dart';
-import 'home_filter_chips.dart';
 import 'home_hero_banner.dart';
 
 class HomeSuccessView extends StatelessWidget {
@@ -13,16 +12,12 @@ class HomeSuccessView extends StatelessWidget {
     super.key,
     required this.cityName,
     required this.reports,
-    required this.selectedFilter,
-    required this.onFilterSelected,
     required this.onRefresh,
     this.onItemTap,
   });
 
   final String cityName;
   final List<HomeReportItem> reports;
-  final HomeFilterType selectedFilter;
-  final ValueChanged<HomeFilterType> onFilterSelected;
   final Future<void> Function() onRefresh;
   final ValueChanged<HomeReportItem>? onItemTap;
 
@@ -30,18 +25,6 @@ class HomeSuccessView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-
-    // Calculate filter counts
-    final allCount = reports.length;
-    final lostCount = reports.where((r) => r.isLost).length;
-    final foundCount = reports.where((r) => r.isFound).length;
-
-    // Filter items according to active chip
-    final filteredReports = switch (selectedFilter) {
-      HomeFilterType.all => reports,
-      HomeFilterType.lost => reports.where((r) => r.isLost).toList(),
-      HomeFilterType.found => reports.where((r) => r.isFound).toList(),
-    };
 
     return RefreshIndicator(
       onRefresh: onRefresh,
@@ -79,25 +62,10 @@ class HomeSuccessView extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+          SliverToBoxAdapter(child: SizedBox(height: 14.h)),
 
-          // 3. Filter Chips (All, Lost, Found)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: HomeFilterChips(
-                selectedFilter: selectedFilter,
-                onFilterSelected: onFilterSelected,
-                allCount: allCount,
-                lostCount: lostCount,
-                foundCount: foundCount,
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-
-          // 4. Staggered Feed List with flutter_animate
-          if (filteredReports.isEmpty)
+          // 3. Staggered Feed List with flutter_animate
+          if (reports.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
@@ -115,32 +83,38 @@ class HomeSuccessView extends StatelessWidget {
             )
           else
             SliverList.builder(
-              itemCount: filteredReports.length,
+              itemCount: reports.length,
               itemBuilder: (context, index) {
-                final item = filteredReports[index];
+                final item = reports[index];
 
-                return HomeFeedItemCard(
-                  item: item,
-                  onTap: () => onItemTap?.call(item),
-                )
-                    .animate(
-                      key: ValueKey('${item.id}_${selectedFilter.name}'),
-                      delay: (index * 60).clamp(0, 420).ms,
-                    )
-                    .fadeIn(
-                      duration: 380.ms,
-                      curve: Curves.easeOutCubic,
-                    )
-                    .slideY(
-                      begin: 0.16,
-                      end: 0,
-                      duration: 380.ms,
-                      curve: Curves.easeOutCubic,
-                    );
+                return Padding(
+                  padding: EdgeInsets.only(
+                    left: 20.w,
+                    right: 20.w,
+                    bottom: 14.h,
+                  ),
+                  child: HomeFeedItemCard(
+                    item: item,
+                    onTap: () => onItemTap?.call(item),
+                  )
+                      .animate(
+                        delay: Duration(milliseconds: 50 * index),
+                      )
+                      .fadeIn(
+                        duration: const Duration(milliseconds: 320),
+                        curve: Curves.easeOutCubic,
+                      )
+                      .slideY(
+                        begin: 0.12,
+                        end: 0,
+                        duration: const Duration(milliseconds: 320),
+                        curve: Curves.easeOutCubic,
+                      ),
+                );
               },
             ),
 
-          // Bottom padding to clear the floating Liquid Glass Bottom Bar
+          // 4. Bottom clearance for floating Liquid Glass Dock
           SliverToBoxAdapter(
             child: SizedBox(height: 110.h),
           ),

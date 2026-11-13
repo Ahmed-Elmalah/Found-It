@@ -173,5 +173,9 @@
   "homeErrorSubtitle": "Check your internet connection and pull to refresh or tap retry.",
   "homeRetryButton": "Try again",
   "homeNotifications": "Notifications",
-  "homeChangeCity": "Change City"
+  "homeChangeCity": "Change City",
+  "homeSelectCityTitle": "Select City",
+  "homeSelectCitySubtitle": "Browse found items in your governorate",
+  "homeSearchCityHint": "Search city or governorate...",
+  "homeNoCitiesFound": "No cities found matching your search"
 }

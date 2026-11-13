@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:found_it/features/home/view/ui/home_screen.dart';
+import 'package:found_it/features/home/view/widgets/city_selection_bottom_sheet.dart';
 import 'package:found_it/features/home/view/widgets/home_empty_view.dart';
 import 'package:found_it/features/home/view/widgets/home_error_view.dart';
 import 'package:found_it/features/home/view/widgets/home_feed_item_card.dart';
@@ -94,9 +95,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('القاهرة'), findsOneWidget);
-    expect(find.text('الكل'), findsOneWidget);
-    expect(find.text('مفقود'), findsWidgets);
-    expect(find.text('تم العثور عليه'), findsWidgets);
+    expect(find.text('عُثر عليه'), findsWidgets);
   });
 
   testWidgets('renders in Dark theme without exceptions', (tester) async {
@@ -112,5 +111,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(HomeScreen), findsOneWidget);
+  });
+
+  testWidgets('tapping city in header opens CitySelectionBottomSheet and updates city',
+      (tester) async {
+    await pumpTestApp(
+      tester,
+      const HomeScreen(
+        initialCityName: 'Cairo',
+        initialState: HomeViewState.success,
+      ),
+      padded: false,
+    );
+    await tester.pumpAndSettle();
+
+    // Tap city selector in header
+    await tester.tap(find.text('Cairo'));
+    await tester.pumpAndSettle();
+
+    // Verify CitySelectionBottomSheet is shown
+    expect(find.byType(CitySelectionBottomSheet), findsOneWidget);
+    expect(find.text('Alexandria'), findsOneWidget);
+
+    // Tap Alexandria
+    await tester.tap(find.text('Alexandria'));
+    await tester.pumpAndSettle();
+
+    // Verify bottom sheet dismissed and new city is set in header
+    expect(find.byType(CitySelectionBottomSheet), findsNothing);
+    expect(find.text('Alexandria'), findsWidgets);
   });
 }

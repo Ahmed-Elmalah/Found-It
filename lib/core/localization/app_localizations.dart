@@ -835,6 +835,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change City'**
   String get homeChangeCity;
+
+  /// No description provided for @homeSelectCityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select City'**
+  String get homeSelectCityTitle;
+
+  /// No description provided for @homeSelectCitySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse found items in your governorate'**
+  String get homeSelectCitySubtitle;
+
+  /// No description provided for @homeSearchCityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search city or governorate...'**
+  String get homeSearchCityHint;
+
+  /// No description provided for @homeNoCitiesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No cities found matching your search'**
+  String get homeNoCitiesFound;
 }
 
 class _AppLocalizationsDelegate

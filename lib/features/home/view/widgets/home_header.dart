@@ -20,12 +20,14 @@ class HomeHeader extends StatelessWidget {
     required this.currentState,
     required this.onStateChanged,
     this.onNotificationTap,
+    this.onCityTap,
   });
 
   final String cityName;
   final HomeViewState currentState;
   final ValueChanged<HomeViewState> onStateChanged;
   final VoidCallback? onNotificationTap;
+  final VoidCallback? onCityTap;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class HomeHeader extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         HapticFeedback.lightImpact();
-                        context.push(AppRoutes.city);
+                        onCityTap?.call();
                       },
                       borderRadius: BorderRadius.circular(16.r),
                       splashColor: Colors.transparent,

@@ -400,4 +400,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeChangeCity => 'تغيير المدينة';
+
+  @override
+  String get homeSelectCityTitle => 'اختر محافظتك أو مدينتك';
+
+  @override
+  String get homeSelectCitySubtitle => 'تصفح المعثورات حسب نطاق محافظتك';
+
+  @override
+  String get homeSearchCityHint => 'ابحث عن محافظة أو مدينة...';
+
+  @override
+  String get homeNoCitiesFound => 'لا توجد نتائج مطابقة لبحثك';
 }
