@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 
 enum EditReportStatus { initial, loading, ready, submitting, success, failure }
 
@@ -16,7 +17,7 @@ class EditReportState extends Equatable {
     this.selectedCategoryId,
     this.selectedAreaId,
     this.selectedDate,
-    this.errorMessage,
+    this.failure,
   });
 
   final ReportEntity report;
@@ -27,7 +28,7 @@ class EditReportState extends Equatable {
   final String? selectedCategoryId;
   final String? selectedAreaId;
   final DateTime? selectedDate;
-  final String? errorMessage;
+  final ReportFailureType? failure;
 
   bool get isLoading => status == EditReportStatus.loading;
   bool get isSubmitting => status == EditReportStatus.submitting;
@@ -42,7 +43,7 @@ class EditReportState extends Equatable {
     String? selectedCategoryId,
     String? selectedAreaId,
     DateTime? selectedDate,
-    String? errorMessage,
+    ReportFailureType? Function()? failure,
   }) {
     return EditReportState(
       report: report ?? this.report,
@@ -53,7 +54,7 @@ class EditReportState extends Equatable {
       selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
       selectedAreaId: selectedAreaId ?? this.selectedAreaId,
       selectedDate: selectedDate ?? this.selectedDate,
-      errorMessage: errorMessage,
+      failure: failure != null ? failure() : this.failure,
     );
   }
 
@@ -67,6 +68,6 @@ class EditReportState extends Equatable {
         selectedCategoryId,
         selectedAreaId,
         selectedDate,
-        errorMessage,
+        failure,
       ];
 }

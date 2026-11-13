@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/core/widgets/error_banner.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_state.dart';
 import 'package:found_it/features/reports/view/widgets/delete_report_dialog.dart';
@@ -46,10 +48,21 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
       onConfirm: () async {
         Navigator.of(context).pop();
         final success = await cubit.deleteReport(report.id);
-        if (success && mounted) {
+        if (!mounted) return;
+
+        if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.reportDeletedSuccess),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          final failureType = cubit.state.failure ?? ReportFailureType.unknown;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(_mapFailureMessage(failureType, l10n)),
+              backgroundColor: Theme.of(context).colorScheme.error,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -58,10 +71,35 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     );
   }
 
+  static String _mapFailureTitle(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorTitle;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInTitle;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataTitle;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorTitle;
+    }
+  }
+
+  static String _mapFailureMessage(ReportFailureType type, AppLocalizations l10n) {
+    switch (type) {
+      case ReportFailureType.network:
+        return l10n.connectionErrorMessage;
+      case ReportFailureType.notLoggedIn:
+        return l10n.notLoggedInMessage;
+      case ReportFailureType.invalidData:
+        return l10n.invalidDataMessage;
+      case ReportFailureType.unknown:
+        return l10n.genericErrorMessage;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -89,7 +127,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
               ),
               SizedBox(height: 12.h),
               Expanded(
-                child: _buildBody(context, state, colors, l10n),
+                child: _buildBody(context, state, l10n),
               ),
             ],
           );
@@ -101,7 +139,6 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
   Widget _buildBody(
     BuildContext context,
     MyReportsState state,
-    ColorScheme colors,
     AppLocalizations l10n,
   ) {
     if (state.isLoading && state.reports.isEmpty) {
@@ -109,27 +146,21 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     }
 
     if (state.isFailure && state.reports.isEmpty) {
+      final failureType = state.failure ?? ReportFailureType.unknown;
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.error_outline_rounded,
-                size: 48.r,
-                color: colors.error,
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                state.errorMessage ?? l10n.genericErrorMessage,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14.sp, color: colors.onSurfaceVariant),
+              ErrorBanner(
+                title: _mapFailureTitle(failureType, l10n),
+                message: _mapFailureMessage(failureType, l10n),
               ),
               SizedBox(height: 16.h),
               FilledButton.tonal(
                 onPressed: () => context.read<MyReportsCubit>().refresh(),
-                child: Text(l10n.genericErrorTitle),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -138,6 +169,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     }
 
     if (state.reports.isEmpty) {
+      final colors = Theme.of(context).colorScheme;
       return Center(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -185,12 +217,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
     return RefreshIndicator(
       onRefresh: () => context.read<MyReportsCubit>().refresh(),
       child: ListView.separated(
-        padding: EdgeInsetsDirectional.only(
-          start: 16.w,
-          end: 16.w,
-          top: 4.h,
-          bottom: 24.h,
-        ),
+        padding: EdgeInsetsDirectional.fromSTEB(16.w, 4.h, 16.w, 24.h),
         itemCount: state.reports.length,
         separatorBuilder: (_, _) => SizedBox(height: 12.h),
         itemBuilder: (context, index) {

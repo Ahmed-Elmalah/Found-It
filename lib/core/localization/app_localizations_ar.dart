@@ -204,17 +204,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get delete => 'حذف';
 
   @override
+  String get deleteReport => 'حذف البلاغ';
+
+  @override
   String get reportDeletedSuccess => 'تم حذف البلاغ بنجاح';
 
   @override
   String get reportUpdatedSuccess => 'تم تحديث البلاغ بنجاح';
 
   @override
-  String get deleteReportDialogTitle => 'حذف البلاغ؟';
+  String get locationSeparator => '، ';
+
+  @override
+  String get deleteReportDialogTitle => 'حذف هذا البلاغ؟';
 
   @override
   String get deleteReportDialogMessage =>
-      'هل أنت متأكد من حذف هذا البلاغ؟ لن يظهر هذا البلاغ في البحث بعد الآن.';
+      'سيتم حذف بلاغك من نتائج البحث العامة.';
 
   @override
   String get cancel => 'إلغاء';
@@ -278,6 +284,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get accountSection => 'الحساب';
+
+  @override
+  String get activitySection => 'النشاط';
+
+  @override
+  String get savedReports => 'البلاغات المحفوظة';
+
+  @override
+  String get potentialMatches => 'تطابقات محتملة';
+
+  @override
+  String get comingSoon => 'قريبًا';
 
   @override
   String get preferencesSection => 'التفضيلات';

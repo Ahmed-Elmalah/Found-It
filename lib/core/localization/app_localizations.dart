@@ -476,6 +476,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @deleteReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Report'**
+  String get deleteReport;
+
   /// No description provided for @reportDeletedSuccess.
   ///
   /// In en, this message translates to:
@@ -488,16 +494,22 @@ abstract class AppLocalizations {
   /// **'Report updated successfully'**
   String get reportUpdatedSuccess;
 
+  /// No description provided for @locationSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **', '**
+  String get locationSeparator;
+
   /// No description provided for @deleteReportDialogTitle.
   ///
   /// In en, this message translates to:
-  /// **'Delete report?'**
+  /// **'Delete this report?'**
   String get deleteReportDialogTitle;
 
   /// No description provided for @deleteReportDialogMessage.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to delete this report? It will no longer appear in search results.'**
+  /// **'Your report will be removed from public search results.'**
   String get deleteReportDialogMessage;
 
   /// No description provided for @cancel.
@@ -625,6 +637,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Account'**
   String get accountSection;
+
+  /// No description provided for @activitySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activitySection;
+
+  /// No description provided for @savedReports.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Reports'**
+  String get savedReports;
+
+  /// No description provided for @potentialMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Potential Matches'**
+  String get potentialMatches;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get comingSoon;
 
   /// No description provided for @preferencesSection.
   ///

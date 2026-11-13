@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_use_case.dart';
@@ -21,7 +22,7 @@ class MyReportsCubit extends Cubit<MyReportsState> {
     emit(state.copyWith(
       status: MyReportsStatus.loading,
       selectedFilter: activeFilter,
-      errorMessage: null,
+      failure: () => null,
     ));
 
     try {
@@ -38,10 +39,15 @@ class MyReportsCubit extends Cubit<MyReportsState> {
         reports: reports,
         counts: counts,
       ));
-    } catch (e) {
+    } on ReportFailure catch (e) {
       emit(state.copyWith(
         status: MyReportsStatus.failure,
-        errorMessage: e.toString(),
+        failure: () => e.type,
+      ));
+    } catch (_) {
+      emit(state.copyWith(
+        status: MyReportsStatus.failure,
+        failure: () => ReportFailureType.unknown,
       ));
     }
   }
@@ -57,7 +63,7 @@ class MyReportsCubit extends Cubit<MyReportsState> {
     emit(state.copyWith(
       isDeleting: true,
       deletingReportId: reportId,
-      errorMessage: null,
+      failure: () => null,
     ));
 
     try {
@@ -69,11 +75,18 @@ class MyReportsCubit extends Cubit<MyReportsState> {
       // Refresh current tab and counts
       await loadReports();
       return true;
-    } catch (e) {
+    } on ReportFailure catch (e) {
       emit(state.copyWith(
         isDeleting: false,
         deletingReportId: null,
-        errorMessage: e.toString(),
+        failure: () => e.type,
+      ));
+      return false;
+    } catch (_) {
+      emit(state.copyWith(
+        isDeleting: false,
+        deletingReportId: null,
+        failure: () => ReportFailureType.unknown,
       ));
       return false;
     }

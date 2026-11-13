@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:found_it/features/profile/domain/entities/city_entity.dart';
+import 'package:found_it/features/profile/domain/entities/profile_failure.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 
 enum ProfileStatus { initial, loading, success, failure }
@@ -10,15 +11,17 @@ class ProfileState extends Equatable {
     this.status = ProfileStatus.initial,
     this.profile,
     this.activeCities = const [],
+    this.reportsCount = 0,
     this.isUpdating = false,
-    this.errorMessage,
+    this.failure,
   });
 
   final ProfileStatus status;
   final UserProfileEntity? profile;
   final List<CityEntity> activeCities;
+  final int reportsCount;
   final bool isUpdating;
-  final String? errorMessage;
+  final ProfileFailureType? failure;
 
   bool get isLoading => status == ProfileStatus.loading;
   bool get isSuccess => status == ProfileStatus.success;
@@ -27,15 +30,17 @@ class ProfileState extends Equatable {
     ProfileStatus? status,
     UserProfileEntity? profile,
     List<CityEntity>? activeCities,
+    int? reportsCount,
     bool? isUpdating,
-    String? errorMessage,
+    ProfileFailureType? Function()? failure,
   }) {
     return ProfileState(
       status: status ?? this.status,
       profile: profile ?? this.profile,
       activeCities: activeCities ?? this.activeCities,
+      reportsCount: reportsCount ?? this.reportsCount,
       isUpdating: isUpdating ?? this.isUpdating,
-      errorMessage: errorMessage,
+      failure: failure != null ? failure() : this.failure,
     );
   }
 
@@ -44,7 +49,8 @@ class ProfileState extends Equatable {
         status,
         profile,
         activeCities,
+        reportsCount,
         isUpdating,
-        errorMessage,
+        failure,
       ];
 }
