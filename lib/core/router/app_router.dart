@@ -17,6 +17,7 @@ import 'package:found_it/features/auth/view/ui/verify_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
+import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/home/view/ui/home_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
@@ -117,7 +118,10 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (context, state) => const HomeScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<HomeCubit>()..init(),
+                child: const HomeScreen(),
+              ),
             ),
           ],
         ),

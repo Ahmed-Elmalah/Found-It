@@ -23,6 +23,11 @@ import 'package:found_it/features/city/domain/city_repository.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
 import 'package:found_it/features/city/domain/select_city_use_case.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
+import 'package:found_it/features/home/data/home_remote_data_source.dart';
+import 'package:found_it/features/home/data/home_repository_impl.dart';
+import 'package:found_it/features/home/domain/repositories/home_repository.dart';
+import 'package:found_it/features/home/domain/use_cases/get_home_feed_use_case.dart';
+import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -91,11 +96,11 @@ Future<void> configureDependencies() async {
   _registerAuth();
   _registerOnboarding();
   _registerCity();
+  _registerHome();
   _registerReports();
   _registerProfile();
 }
 
-// ---------------------------------------------------------------------
 // ---------------------------------------------------------------------
 // City (Youssef) — story #4
 // ---------------------------------------------------------------------
@@ -119,6 +124,27 @@ void _registerCity() {
       () => CityCubit(
         getCitiesUseCase: sl(),
         selectCityUseCase: sl(),
+      ),
+    );
+}
+
+// ---------------------------------------------------------------------
+// Home (Youssef) — story #4
+// ---------------------------------------------------------------------
+void _registerHome() {
+  sl
+    ..registerLazySingleton<HomeRemoteDataSource>(
+      () => HomeRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<HomeRepository>(
+      () => HomeRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetHomeFeedUseCase(sl()))
+    ..registerFactory(
+      () => HomeCubit(
+        getHomeFeedUseCase: sl(),
+        cityLocalDataSource: sl(),
+        getCitiesUseCase: sl(),
       ),
     );
 }

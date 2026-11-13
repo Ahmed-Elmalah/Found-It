@@ -1,11 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-enum HomeFilterType {
-  all,
-  lost,
-  found,
-}
-
 /// A lightweight domain entity representing a report card in the Home feed.
 class HomeReportItem extends Equatable {
   const HomeReportItem({
@@ -18,6 +12,15 @@ class HomeReportItem extends Equatable {
     required this.categoryIcon,
     required this.areaName,
     required this.cityName,
+    this.categoryNameEn,
+    this.categoryNameAr,
+    this.areaNameEn,
+    this.areaNameAr,
+    this.cityNameEn,
+    this.cityNameAr,
+    this.cityId,
+    this.areaId,
+    this.categoryId,
     required this.itemDate,
     required this.images,
     required this.status,
@@ -29,11 +32,20 @@ class HomeReportItem extends Equatable {
   final String refCode;
   final String title;
   final String? description;
-  final String type; // 'lost' or 'found'
+  final String type; // 'lost' | 'found'
   final String categoryName;
   final String categoryIcon;
   final String areaName;
   final String cityName;
+  final String? categoryNameEn;
+  final String? categoryNameAr;
+  final String? areaNameEn;
+  final String? areaNameAr;
+  final String? cityNameEn;
+  final String? cityNameAr;
+  final String? cityId;
+  final String? areaId;
+  final String? categoryId;
   final DateTime itemDate;
   final List<String> images;
   final String status;
@@ -43,6 +55,15 @@ class HomeReportItem extends Equatable {
   bool get isLost => type.toLowerCase() == 'lost';
   bool get isFound => type.toLowerCase() == 'found';
   bool get hasImages => images.isNotEmpty;
+
+  String localizedCategory(String locale) =>
+      locale == 'ar' ? (categoryNameAr ?? categoryName) : (categoryNameEn ?? categoryName);
+
+  String localizedCity(String locale) =>
+      locale == 'ar' ? (cityNameAr ?? cityName) : (cityNameEn ?? cityName);
+
+  String localizedArea(String locale) =>
+      locale == 'ar' ? (areaNameAr ?? areaName) : (areaNameEn ?? areaName);
 
   @override
   List<Object?> get props => [
@@ -55,6 +76,15 @@ class HomeReportItem extends Equatable {
         categoryIcon,
         areaName,
         cityName,
+        categoryNameEn,
+        categoryNameAr,
+        areaNameEn,
+        areaNameAr,
+        cityNameEn,
+        cityNameAr,
+        cityId,
+        areaId,
+        categoryId,
         itemDate,
         images,
         status,
