@@ -101,13 +101,7 @@ class ReportCreatedScreen extends StatelessWidget {
                   // ── View my report button ─────────────────────────────────
                   AppButton(
                     label: l10n.viewMyReport,
-                    onPressed: () {
-                      if (context.canPop()) {
-                        context.pop();
-                      } else {
-                        context.go(AppRoutes.home);
-                      }
-                    },
+                    onPressed: () => context.go(AppRoutes.myReports),
                   ),
                   SizedBox(height: 12.h),
 
