@@ -8,8 +8,8 @@ import 'package:found_it/core/models/report_type.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 
-class ReportCard extends StatelessWidget {
-  const ReportCard({
+class MyReportCard extends StatelessWidget {
+  const MyReportCard({
     super.key,
     required this.report,
     this.onTap,

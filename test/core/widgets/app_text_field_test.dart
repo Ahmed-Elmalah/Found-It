@@ -271,4 +271,18 @@ void main() {
       TextDirection.rtl,
     );
   });
+
+  testWidgets('maxLines and minLines are passed to TextField', (tester) async {
+    await pumpTestApp(
+      tester,
+      const AppTextField(
+        label: 'Description',
+        maxLines: 4,
+        minLines: 2,
+      ),
+    );
+    final textField = tester.widget<TextField>(find.byType(TextField));
+    expect(textField.maxLines, 4);
+    expect(textField.minLines, 2);
+  });
 }

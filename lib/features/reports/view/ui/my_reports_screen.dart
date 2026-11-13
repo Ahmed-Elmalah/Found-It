@@ -12,7 +12,7 @@ import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_state.dart';
 import 'package:found_it/features/reports/view/widgets/delete_report_dialog.dart';
 import 'package:found_it/features/reports/view/widgets/filter_tabs.dart';
-import 'package:found_it/features/reports/view/widgets/report_card.dart';
+import 'package:found_it/features/reports/view/widgets/my_report_card.dart';
 
 /// My Reports screen (Figma P21 Light / P54 Dark).
 class MyReportsScreen extends StatefulWidget {
@@ -222,7 +222,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
         separatorBuilder: (_, _) => SizedBox(height: 12.h),
         itemBuilder: (context, index) {
           final report = state.reports[index];
-          return ReportCard(
+          return MyReportCard(
             report: report,
             onEdit: () => _onEditReport(report),
             onDelete: () => _onDeleteReport(report),

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'package:found_it/core/constants/app_limits.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
 import 'package:found_it/core/widgets/error_banner.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
@@ -300,27 +301,17 @@ class _EditReportScreenState extends State<EditReportScreen> {
                   label: l10n.descriptionLabel,
                   controller: _descriptionController,
                   hint: l10n.descriptionHint,
+                  maxLines: 4,
+                  minLines: 4,
+                  maxLength: 1000,
                 ),
                 SizedBox(height: 24.h),
 
-                // Submit button
-                FilledButton(
-                  onPressed: state.isSubmitting ? null : _submit,
-                  child: state.isSubmitting
-                      ? SizedBox.square(
-                          dimension: 20.r,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: colors.onPrimary,
-                          ),
-                        )
-                      : Text(
-                          l10n.saveChanges,
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                // Save button
+                AppButton(
+                  label: l10n.saveChanges,
+                  isLoading: state.isSubmitting,
+                  onPressed: _submit,
                 ),
               ],
             ),

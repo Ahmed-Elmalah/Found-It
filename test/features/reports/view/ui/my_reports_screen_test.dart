@@ -14,7 +14,7 @@ import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_us
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/widgets/filter_tabs.dart';
-import 'package:found_it/features/reports/view/widgets/report_card.dart';
+import 'package:found_it/features/reports/view/widgets/my_report_card.dart';
 
 import '../../../../helpers/test_app.dart';
 
@@ -129,12 +129,12 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(ReportCard), findsOneWidget);
+      expect(find.byType(MyReportCard), findsOneWidget);
       expect(find.byType(StatusChip), findsNWidgets(2));
       expect(find.text('Lost'), findsOneWidget);
       expect(
         find.descendant(
-          of: find.byType(ReportCard),
+          of: find.byType(MyReportCard),
           matching: find.text('Active'),
         ),
         findsOneWidget,
@@ -241,7 +241,7 @@ void main() {
       expect(find.byType(StatusChip), findsNWidgets(2));
       expect(
         find.descendant(
-          of: find.byType(ReportCard),
+          of: find.byType(MyReportCard),
           matching: find.text('Recovered'),
         ),
         findsOneWidget,
