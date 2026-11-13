@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
@@ -22,6 +23,14 @@ import 'package:found_it/features/onboarding/domain/is_first_launch_use_case.dar
 import 'package:found_it/features/onboarding/domain/onboarding_repository.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
+import 'package:found_it/features/profile/data/profile_data_source.dart';
+import 'package:found_it/features/profile/data/profile_repository_impl.dart';
+import 'package:found_it/features/profile/domain/repositories/profile_repository.dart';
+import 'package:found_it/features/profile/domain/use_cases/get_active_cities_use_case.dart';
+import 'package:found_it/features/profile/domain/use_cases/get_profile_use_case.dart';
+import 'package:found_it/features/profile/domain/use_cases/set_my_city_use_case.dart';
+import 'package:found_it/features/profile/domain/use_cases/update_profile_use_case.dart';
+import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/data/reports_repository_impl.dart';
 import 'package:found_it/features/reports/data/services/photo_picker_service.dart';
@@ -29,8 +38,13 @@ import 'package:found_it/features/reports/domain/repositories/reports_repository
 import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_my_reports_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
+import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -64,15 +78,17 @@ Future<void> configureDependencies() async {
 
   sl
     ..registerSingleton<SharedPreferences>(prefs)
-    ..registerSingleton<SupabaseClient>(Supabase.instance.client);
+    ..registerSingleton<SupabaseClient>(Supabase.instance.client)
+    ..registerSingleton<AppPreferencesCubit>(AppPreferencesCubit(prefs));
 
   _registerAuth();
   _registerOnboarding();
   _registerReports();
+  _registerProfile();
 }
 
 // ---------------------------------------------------------------------
-// Reports
+// Reports (Ziad: Create Report + Adham: My Reports & Edit/Delete)
 // ---------------------------------------------------------------------
 void _registerReports() {
   sl
@@ -92,6 +108,10 @@ void _registerReports() {
     ..registerLazySingleton(() => GetCityAreasUseCase(sl()))
     ..registerLazySingleton(() => GetSelectedCityIdUseCase(sl()))
     ..registerLazySingleton(() => CreateReportUseCase(sl()))
+    ..registerLazySingleton(() => GetMyReportsUseCase(sl()))
+    ..registerLazySingleton(() => GetMyReportsCountsUseCase(sl()))
+    ..registerLazySingleton(() => UpdateReportUseCase(sl()))
+    ..registerLazySingleton(() => SoftDeleteReportUseCase(sl()))
     ..registerFactory(
       () => CreateReportCubit(
         getCategories: sl(),
@@ -99,6 +119,13 @@ void _registerReports() {
         getSelectedCityId: sl(),
         createReport: sl(),
         photoPicker: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => MyReportsCubit(
+        sl(),
+        sl(),
+        sl(),
       ),
     );
 }
@@ -147,4 +174,29 @@ void _registerOnboarding() {
     ..registerLazySingleton(() => CompleteOnboardingUseCase(sl()))
     ..registerFactory(() => SplashCubit(sl(), sl()))
     ..registerFactory(() => OnboardingCubit(sl()));
+}
+
+// ---------------------------------------------------------------------
+// Profile & Settings (Adham)
+// ---------------------------------------------------------------------
+void _registerProfile() {
+  sl
+    ..registerLazySingleton<ProfileDataSource>(
+      () => ProfileDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<ProfileRepository>(
+      () => ProfileRepositoryImpl(sl()),
+    )
+    ..registerLazySingleton(() => GetProfileUseCase(sl()))
+    ..registerLazySingleton(() => UpdateProfileUseCase(sl()))
+    ..registerLazySingleton(() => SetMyCityUseCase(sl()))
+    ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
+    ..registerFactory(
+      () => ProfileCubit(
+        sl(),
+        sl(),
+        sl(),
+        sl(),
+      ),
+    );
 }

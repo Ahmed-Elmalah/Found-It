@@ -1,21 +1,25 @@
 import 'package:equatable/equatable.dart';
 
 class AreaEntity extends Equatable {
-  final String id;
-  final String cityId;
-  final String nameEn;
-  final String nameAr;
-
   const AreaEntity({
     required this.id,
     required this.cityId,
     required this.nameEn,
     required this.nameAr,
+    this.isActive = true,
+    this.sortOrder = 0,
   });
+
+  final String id;
+  final String cityId;
+  final String nameEn;
+  final String nameAr;
+  final bool isActive;
+  final int sortOrder;
 
   String localizedName(String langCode) =>
       langCode.startsWith('ar') ? nameAr : nameEn;
 
   @override
-  List<Object?> get props => [id, cityId, nameEn, nameAr];
+  List<Object?> get props => [id, cityId, nameEn, nameAr, isActive, sortOrder];
 }

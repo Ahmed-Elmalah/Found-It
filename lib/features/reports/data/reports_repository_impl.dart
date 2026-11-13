@@ -8,6 +8,8 @@ import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 
@@ -19,6 +21,58 @@ class ReportsRepositoryImpl implements ReportsRepository {
     required this.remoteDataSource,
     required this.prefs,
   });
+
+  @override
+  Future<List<ReportEntity>> getMyReports({String? status}) async {
+    try {
+      return await remoteDataSource.getMyReports(status: status);
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
+
+  @override
+  Future<ReportCountsEntity> getMyReportsCounts() async {
+    try {
+      return await remoteDataSource.getMyReportsCounts();
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
+
+  @override
+  Future<ReportEntity> updateReport({
+    required String reportId,
+    String? title,
+    String? description,
+    String? type,
+    String? categoryId,
+    String? areaId,
+    DateTime? itemDate,
+  }) async {
+    try {
+      return await remoteDataSource.updateReport(
+        reportId: reportId,
+        title: title,
+        description: description,
+        type: type,
+        categoryId: categoryId,
+        areaId: areaId,
+        itemDate: itemDate,
+      );
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
+
+  @override
+  Future<void> softDeleteReport(String reportId) async {
+    try {
+      await remoteDataSource.softDeleteReport(reportId);
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
 
   @override
   Future<List<CategoryEntity>> getCategories() async {
@@ -35,7 +89,10 @@ class ReportsRepositoryImpl implements ReportsRepository {
     required String lang,
   }) async {
     try {
-      return await remoteDataSource.getCityAreas(cityId: cityId, lang: lang);
+      return await remoteDataSource.getCityAreas(
+        cityId: cityId,
+        lang: lang,
+      );
     } catch (e) {
       throw _mapFailure(e);
     }
@@ -86,7 +143,7 @@ class ReportsRepositoryImpl implements ReportsRepository {
         try {
           await remoteDataSource.deletePhotos(uploadedPaths);
         } catch (_) {
-          // ignore cleanup errors to propagate primary failure
+          // ignore cleanup errors
         }
       }
       throw _mapFailure(e);

@@ -6,14 +6,18 @@ class AreaModel extends AreaEntity {
     required super.cityId,
     required super.nameEn,
     required super.nameAr,
+    super.isActive = true,
+    super.sortOrder = 0,
   });
 
   factory AreaModel.fromJson(Map<String, dynamic> json) {
     return AreaModel(
       id: json['id'] as String,
       cityId: (json['city_id'] as String?) ?? '',
-      nameEn: json['name_en'] as String,
-      nameAr: json['name_ar'] as String,
+      nameEn: json['name_en'] as String? ?? '',
+      nameAr: json['name_ar'] as String? ?? '',
+      isActive: json['is_active'] as bool? ?? true,
+      sortOrder: json['sort_order'] as int? ?? 0,
     );
   }
 

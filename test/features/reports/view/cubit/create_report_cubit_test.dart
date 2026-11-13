@@ -7,6 +7,8 @@ import 'package:found_it/features/reports/data/services/photo_picker_service.dar
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
 import 'package:found_it/features/reports/domain/entities/report_image.dart';
@@ -61,6 +63,28 @@ class _FakeReportsRepository implements ReportsRepository {
     lastCreatedParams = params;
     return returnedRefCode;
   }
+
+  @override
+  Future<List<ReportEntity>> getMyReports({String? status}) async => const [];
+
+  @override
+  Future<ReportCountsEntity> getMyReportsCounts() async =>
+      const ReportCountsEntity.empty();
+
+  @override
+  Future<void> softDeleteReport(String reportId) async {}
+
+  @override
+  Future<ReportEntity> updateReport({
+    required String reportId,
+    String? title,
+    String? description,
+    String? type,
+    String? categoryId,
+    String? areaId,
+    DateTime? itemDate,
+  }) async =>
+      throw UnimplementedError();
 }
 
 class _FakePhotoPickerService implements PhotoPickerService {

@@ -10,13 +10,13 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get chooseCityTitle => 'اختر مدينتك';
+
+  @override
   String get appName => 'FOUND IT';
 
   @override
   String get appTagline => 'فقدت شيئًا؟ دعنا نُعيده إليك.';
-
-  @override
-  String get chooseCityTitle => 'اختر مدينتك';
 
   @override
   String get onboardingSkip => 'تخطي';
@@ -159,7 +159,179 @@ class AppLocalizationsAr extends AppLocalizations {
   String get weakPasswordMessage => 'اختر كلمة مرور أقوى.';
 
   @override
+  String get myReportsTitle => 'بلاغاتي';
+
+  @override
+  String get tabAll => 'الكل';
+
+  @override
+  String get tabActive => 'نشط';
+
+  @override
+  String get tabMatching => 'مطابق';
+
+  @override
+  String get tabRecovered => 'مسترد';
+
+  @override
+  String get statusActive => 'نشط';
+
+  @override
+  String get statusMatching => 'مطابق';
+
+  @override
+  String get statusRecovered => 'مسترد';
+
+  @override
+  String get typeLost => 'مفقود';
+
+  @override
+  String get typeFound => 'معثور عليه';
+
+  @override
+  String get noReportsTitle => 'لا توجد بلاغات بعد';
+
+  @override
+  String get noReportsSubtitle => 'البلاغات التي تنشرها ستظهر هنا.';
+
+  @override
   String get createReport => 'إنشاء بلاغ';
+
+  @override
+  String get edit => 'تعديل';
+
+  @override
+  String get delete => 'حذف';
+
+  @override
+  String get reportDeletedSuccess => 'تم حذف البلاغ بنجاح';
+
+  @override
+  String get reportUpdatedSuccess => 'تم تحديث البلاغ بنجاح';
+
+  @override
+  String get deleteReportDialogTitle => 'حذف البلاغ؟';
+
+  @override
+  String get deleteReportDialogMessage =>
+      'هل أنت متأكد من حذف هذا البلاغ؟ لن يظهر هذا البلاغ في البحث بعد الآن.';
+
+  @override
+  String get cancel => 'إلغاء';
+
+  @override
+  String get confirmDelete => 'حذف';
+
+  @override
+  String get editReportTitle => 'تعديل البلاغ';
+
+  @override
+  String get reportTitleLabel => 'عنوان البلاغ';
+
+  @override
+  String get reportTitleHint => 'مثال: محفظة جلد سوداء';
+
+  @override
+  String get reportTypeLabel => 'نوع البلاغ';
+
+  @override
+  String get categoryLabel => 'الفئة';
+
+  @override
+  String get selectCategory => 'اختر الفئة';
+
+  @override
+  String get areaLabel => 'المنطقة / الحي';
+
+  @override
+  String get selectArea => 'اختر المنطقة';
+
+  @override
+  String get itemDateLabel => 'التاريخ';
+
+  @override
+  String get descriptionLabel => 'الوصف';
+
+  @override
+  String get descriptionHint => 'أضف تفاصيل تساعد في التعرف على الشيء...';
+
+  @override
+  String get saveChanges => 'حفظ التعديلات';
+
+  @override
+  String get saving => 'جاري الحفظ...';
+
+  @override
+  String get titleTooShort => 'يجب أن يكون العنوان 3 أحرف على الأقل';
+
+  @override
+  String get titleTooLong => 'يجب أن يكون العنوان 50 حرفاً كحد أقصى';
+
+  @override
+  String get profileTitle => 'الملف الشخصي والإعدادات';
+
+  @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get saveProfile => 'حفظ البيانات';
+
+  @override
+  String get accountSection => 'الحساب';
+
+  @override
+  String get preferencesSection => 'التفضيلات';
+
+  @override
+  String get cityLabel => 'المدينة';
+
+  @override
+  String get selectCity => 'اختر المدينة';
+
+  @override
+  String get languageLabel => 'اللغة';
+
+  @override
+  String get themeLabel => 'المظهر';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get themeSystem => 'تلقائي (حسب النظام)';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageSystem => 'تلقائي (حسب النظام)';
+
+  @override
+  String get logoutButton => 'تسجيل الخروج';
+
+  @override
+  String get logoutConfirmTitle => 'تسجيل الخروج؟';
+
+  @override
+  String get logoutConfirmMessage => 'هل أنت متأكد من رغبتك في تسجيل الخروج؟';
+
+  @override
+  String get profileUpdatedSuccess => 'تم تحديث الملف الشخصي بنجاح';
+
+  @override
+  String get cityUpdatedSuccess => 'تم تغيير المدينة بنجاح';
+
+  @override
+  String get appVersion => 'الإصدار 1.0.0';
+
+  @override
+  String get viewMyReports => 'بلاغاتي';
 
   @override
   String get reportType => 'نوع البلاغ';
@@ -183,9 +355,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get category => 'الفئة';
-
-  @override
-  String get selectCategory => 'اختر فئة';
 
   @override
   String get locationDistrict => 'الموقع (المنطقة)';
@@ -212,12 +381,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitReport => 'رفع البلاغ';
-
-  @override
-  String get titleTooShort => 'يجب أن يكون العنوان 3 أحرف على الأقل';
-
-  @override
-  String get titleTooLong => 'يجب أن يكون العنوان 50 حرفاً كحد أقصى';
 
   @override
   String get categoryRequired => 'يرجى اختيار فئة';
