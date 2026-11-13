@@ -199,5 +199,22 @@
   "verifyEmailBody": "أرسلنا رابط التحقق إلى {email}. افتحه لتفعيل حسابك.",
   "verifiedButton": "لقد فعّلت بريدي",
   "resendEmail": "إعادة الإرسال",
-  "resendEmailIn": "إعادة الإرسال · {time}"
+  "resendEmailIn": "إعادة الإرسال · {time}",
+
+  "exploreTitle": "استكشاف",
+  "searchHint": "ابحث",
+  "activeReportsCount": "{count} تقارير نشطة",
+  "mostRecentFirst": "الأحدث أولاً",
+
+  "filtersTitle": "الفلاتر",
+  "dateRangeLabel": "نطاق التاريخ",
+  "startDate": "تاريخ البدء",
+  "endDate": "تاريخ الانتهاء",
+  "dateFromValue": "من {date}",
+  "dateUntilValue": "حتى {date}",
+  "reset": "إعادة تعيين",
+  "showResults": "عرض النتائج",
+
+  "emptySearchTitle": "لا توجد تقارير مطابقة.",
+  "emptySearchMessage": "جرّب تعديل فلاتر البحث."
 }
