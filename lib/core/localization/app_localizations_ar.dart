@@ -349,4 +349,55 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get navProfile => 'حسابي';
+
+  @override
+  String homeRecentActivity(String city) {
+    return 'النشاط الأخير في $city';
+  }
+
+  @override
+  String get homeFilterAll => 'الكل';
+
+  @override
+  String get homeFilterLost => 'مفقود';
+
+  @override
+  String get homeFilterFound => 'تم العثور عليه';
+
+  @override
+  String get homeHeroTag => '✨ إجراء سريع';
+
+  @override
+  String get homeHeroTitle => 'ضايع منك حاجة؟ يلا نرجعها.';
+
+  @override
+  String get homeHeroButton => 'أبلغ الآن';
+
+  @override
+  String homeEmptyTitle(String city) {
+    return 'مافيش بلاغات حالياً في $city';
+  }
+
+  @override
+  String get homeEmptySubtitle =>
+      'المدينة رايقة ومافيش مفقودات مسجلة.. لو لاقي حاجة أو ضايع منك حاجة، ساعد غيرك وكون أول من ينشر بلاغ!';
+
+  @override
+  String get homeEmptyAction => 'أضف أول بلاغ';
+
+  @override
+  String get homeErrorTitle => 'تعذر تحميل البلاغات';
+
+  @override
+  String get homeErrorSubtitle =>
+      'تأكد من اتصالك بالإنترنت واسحب للأسفل للتحديث أو اضغط إعادة المحاولة.';
+
+  @override
+  String get homeRetryButton => 'إعادة المحاولة';
+
+  @override
+  String get homeNotifications => 'التنبيهات';
+
+  @override
+  String get homeChangeCity => 'تغيير المدينة';
 }

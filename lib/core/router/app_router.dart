@@ -25,7 +25,7 @@ import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
 
 import '../../features/root/view/ui/main_shell.dart';
-import '../../features/root/view/widgets/home_shell_preview.dart';
+import '../../features/home/view/ui/home_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
@@ -107,7 +107,7 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (context, state) => const HomeShellPreview(),
+              builder: (context, state) => const HomeScreen(),
             ),
           ],
         ),

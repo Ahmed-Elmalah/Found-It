@@ -745,6 +745,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get navProfile;
+
+  /// No description provided for @homeRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity in {city}'**
+  String homeRecentActivity(String city);
+
+  /// No description provided for @homeFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get homeFilterAll;
+
+  /// No description provided for @homeFilterLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get homeFilterLost;
+
+  /// No description provided for @homeFilterFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get homeFilterFound;
+
+  /// No description provided for @homeHeroTag.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Quick Action'**
+  String get homeHeroTag;
+
+  /// No description provided for @homeHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost something? Let’s bring it back.'**
+  String get homeHeroTitle;
+
+  /// No description provided for @homeHeroButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Report now'**
+  String get homeHeroButton;
+
+  /// No description provided for @homeEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reports yet in {city}'**
+  String homeEmptyTitle(String city);
+
+  /// No description provided for @homeEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The city is calm with no registered reports. If you lost or found something, help others and create the first report!'**
+  String get homeEmptySubtitle;
+
+  /// No description provided for @homeEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create first report'**
+  String get homeEmptyAction;
+
+  /// No description provided for @homeErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load reports'**
+  String get homeErrorTitle;
+
+  /// No description provided for @homeErrorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and pull to refresh or tap retry.'**
+  String get homeErrorSubtitle;
+
+  /// No description provided for @homeRetryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get homeRetryButton;
+
+  /// No description provided for @homeNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get homeNotifications;
+
+  /// No description provided for @homeChangeCity.
+  ///
+  /// In en, this message translates to:
+  /// **'Change City'**
+  String get homeChangeCity;
 }
 
 class _AppLocalizationsDelegate

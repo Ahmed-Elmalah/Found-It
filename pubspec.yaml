@@ -27,6 +27,7 @@ dependencies:
   flutter_dotenv: ^6.0.1
   image_picker: ^1.1.2
   liquid_glass_renderer: ^1.0.0-dev.2
+  flutter_animate: ^4.5.2
 
 dev_dependencies:
   flutter_test:

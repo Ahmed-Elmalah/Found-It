@@ -145,5 +145,21 @@
   "navExplore": "استكشاف",
   "navReport": "إبلاغ",
   "navMessages": "الرسائل",
-  "navProfile": "حسابي"
+  "navProfile": "حسابي",
+
+  "homeRecentActivity": "النشاط الأخير في {city}",
+  "homeFilterAll": "الكل",
+  "homeFilterLost": "مفقود",
+  "homeFilterFound": "تم العثور عليه",
+  "homeHeroTag": "✨ إجراء سريع",
+  "homeHeroTitle": "ضايع منك حاجة؟ يلا نرجعها.",
+  "homeHeroButton": "أبلغ الآن",
+  "homeEmptyTitle": "مافيش بلاغات حالياً في {city}",
+  "homeEmptySubtitle": "المدينة رايقة ومافيش مفقودات مسجلة.. لو لاقي حاجة أو ضايع منك حاجة، ساعد غيرك وكون أول من ينشر بلاغ!",
+  "homeEmptyAction": "أضف أول بلاغ",
+  "homeErrorTitle": "تعذر تحميل البلاغات",
+  "homeErrorSubtitle": "تأكد من اتصالك بالإنترنت واسحب للأسفل للتحديث أو اضغط إعادة المحاولة.",
+  "homeRetryButton": "إعادة المحاولة",
+  "homeNotifications": "التنبيهات",
+  "homeChangeCity": "تغيير المدينة"
 }

@@ -352,4 +352,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navProfile => 'Profile';
+
+  @override
+  String homeRecentActivity(String city) {
+    return 'Recent Activity in $city';
+  }
+
+  @override
+  String get homeFilterAll => 'All';
+
+  @override
+  String get homeFilterLost => 'Lost';
+
+  @override
+  String get homeFilterFound => 'Found';
+
+  @override
+  String get homeHeroTag => '✨ Quick Action';
+
+  @override
+  String get homeHeroTitle => 'Lost something? Let’s bring it back.';
+
+  @override
+  String get homeHeroButton => 'Report now';
+
+  @override
+  String homeEmptyTitle(String city) {
+    return 'No reports yet in $city';
+  }
+
+  @override
+  String get homeEmptySubtitle =>
+      'The city is calm with no registered reports. If you lost or found something, help others and create the first report!';
+
+  @override
+  String get homeEmptyAction => 'Create first report';
+
+  @override
+  String get homeErrorTitle => 'Unable to load reports';
+
+  @override
+  String get homeErrorSubtitle =>
+      'Check your internet connection and pull to refresh or tap retry.';
+
+  @override
+  String get homeRetryButton => 'Try again';
+
+  @override
+  String get homeNotifications => 'Notifications';
+
+  @override
+  String get homeChangeCity => 'Change City';
 }
