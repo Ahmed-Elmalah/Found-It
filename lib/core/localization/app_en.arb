@@ -4,7 +4,7 @@
   "chooseCityTitle": "Choose your city",
   "chooseCitySubtitle": "Select your city to see nearby reports.",
   "locationRequiredTitle": "Location Required:",
-  "locationRequiredMessage": "Please choose a city to continue.",
+  "locationRequiredMessage": "Please select a city to continue.",
   "continueButton": "Continue",
 
   "appName": "FOUND IT",

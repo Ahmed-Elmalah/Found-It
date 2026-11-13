@@ -19,7 +19,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationRequiredTitle => 'Location Required:';
 
   @override
-  String get locationRequiredMessage => 'Please choose a city to continue.';
+  String get locationRequiredMessage => 'Please select a city to continue.';
 
   @override
   String get continueButton => 'Continue';

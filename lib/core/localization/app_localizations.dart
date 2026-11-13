@@ -119,7 +119,7 @@ abstract class AppLocalizations {
   /// No description provided for @locationRequiredMessage.
   ///
   /// In en, this message translates to:
-  /// **'Please choose a city to continue.'**
+  /// **'Please select a city to continue.'**
   String get locationRequiredMessage;
 
   /// No description provided for @continueButton.
