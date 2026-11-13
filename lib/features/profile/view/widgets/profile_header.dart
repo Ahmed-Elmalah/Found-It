@@ -45,7 +45,7 @@ class ProfileHeader extends StatelessWidget {
                       width: 64.r,
                       height: 64.r,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _buildInitial(colors, initial),
+                      errorBuilder: (_, _, _) => _buildInitial(colors, initial),
                     ),
                   )
                 : _buildInitial(colors, initial),

@@ -6,7 +6,5 @@ class GetCategoriesUseCase {
 
   final ReportsRepository _repository;
 
-  Future<List<CategoryEntity>> call() {
-    return _repository.getCategories();
-  }
+  Future<List<CategoryEntity>> call() => _repository.getCategories();
 }

@@ -35,7 +35,7 @@ class FilterTabs extends StatelessWidget {
         padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w),
         scrollDirection: Axis.horizontal,
         itemCount: tabs.length,
-        separatorBuilder: (_, __) => SizedBox(width: 8.w),
+        separatorBuilder: (_, _) => SizedBox(width: 8.w),
         itemBuilder: (context, index) {
           final (filter, label, count) = tabs[index];
           final isSelected = filter == selectedFilter;

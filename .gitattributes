@@ -1,0 +1,24 @@
+# Line endings: LF for every text file, on every OS.
+#
+# Why: Flutter writes its generated files (linux/, macos/, windows/ plugin
+# registrants, l10n, lock files) with LF. On Windows, Git's autocrlf turns
+# files into CRLF, so after every `flutter run` / `flutter pub get` those
+# files showed up as "modified" with no real change. With this file they
+# stay LF and stop appearing in `git status`.
+* text=auto eol=lf
+
+# Windows-only scripts must keep CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files: never touch them.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.ttf binary
+*.otf binary
+*.jar binary

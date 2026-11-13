@@ -6,14 +6,11 @@ import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_us
 import 'package:found_it/features/reports/view/cubit/my_reports_state.dart';
 
 class MyReportsCubit extends Cubit<MyReportsState> {
-  MyReportsCubit({
-    required GetMyReportsUseCase getMyReportsUseCase,
-    required GetMyReportsCountsUseCase getMyReportsCountsUseCase,
-    required SoftDeleteReportUseCase softDeleteReportUseCase,
-  })  : _getMyReportsUseCase = getMyReportsUseCase,
-        _getMyReportsCountsUseCase = getMyReportsCountsUseCase,
-        _softDeleteReportUseCase = softDeleteReportUseCase,
-        super(const MyReportsState());
+  MyReportsCubit(
+    this._getMyReportsUseCase,
+    this._getMyReportsCountsUseCase,
+    this._softDeleteReportUseCase,
+  ) : super(const MyReportsState());
 
   final GetMyReportsUseCase _getMyReportsUseCase;
   final GetMyReportsCountsUseCase _getMyReportsCountsUseCase;

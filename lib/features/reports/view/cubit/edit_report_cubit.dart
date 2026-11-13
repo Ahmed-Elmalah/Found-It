@@ -7,15 +7,12 @@ import 'package:found_it/features/reports/domain/use_cases/update_report_use_cas
 import 'package:found_it/features/reports/view/cubit/edit_report_state.dart';
 
 class EditReportCubit extends Cubit<EditReportState> {
-  EditReportCubit({
-    required ReportEntity report,
-    required UpdateReportUseCase updateReportUseCase,
-    required GetCategoriesUseCase getCategoriesUseCase,
-    required GetCityAreasUseCase getCityAreasUseCase,
-  })  : _updateReportUseCase = updateReportUseCase,
-        _getCategoriesUseCase = getCategoriesUseCase,
-        _getCityAreasUseCase = getCityAreasUseCase,
-        super(EditReportState(
+  EditReportCubit(
+    ReportEntity report,
+    this._updateReportUseCase,
+    this._getCategoriesUseCase,
+    this._getCityAreasUseCase,
+  ) : super(EditReportState(
           report: report,
           selectedType: report.type,
           selectedCategoryId: report.categoryId,
@@ -27,12 +24,12 @@ class EditReportCubit extends Cubit<EditReportState> {
   final GetCategoriesUseCase _getCategoriesUseCase;
   final GetCityAreasUseCase _getCityAreasUseCase;
 
-  Future<void> init() async {
+  Future<void> init({String lang = 'en'}) async {
     emit(state.copyWith(status: EditReportStatus.loading));
     try {
       final results = await Future.wait([
         _getCategoriesUseCase(),
-        _getCityAreasUseCase(cityId: state.report.cityId),
+        _getCityAreasUseCase(cityId: state.report.cityId, lang: lang),
       ]);
 
       final categories = results[0] as dynamic;

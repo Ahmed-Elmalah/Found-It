@@ -13,11 +13,18 @@ class AreaModel extends AreaEntity {
   factory AreaModel.fromJson(Map<String, dynamic> json) {
     return AreaModel(
       id: json['id'] as String,
-      cityId: json['city_id'] as String? ?? '',
+      cityId: (json['city_id'] as String?) ?? '',
       nameEn: json['name_en'] as String? ?? '',
       nameAr: json['name_ar'] as String? ?? '',
       isActive: json['is_active'] as bool? ?? true,
       sortOrder: json['sort_order'] as int? ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'city_id': cityId,
+        'name_en': nameEn,
+        'name_ar': nameAr,
+      };
 }

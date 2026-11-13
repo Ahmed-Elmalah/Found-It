@@ -94,7 +94,8 @@
   "descriptionHint": "أضف تفاصيل تساعد في التعرف على الشيء...",
   "saveChanges": "حفظ التعديلات",
   "saving": "جاري الحفظ...",
-  "titleTooShort": "يجب أن يتراوح العنوان بين 3 و 50 حرفًا",
+  "titleTooShort": "يجب أن يكون العنوان 3 أحرف على الأقل",
+  "titleTooLong": "يجب أن يكون العنوان 50 حرفاً كحد أقصى",
 
   "profileTitle": "الملف الشخصي والإعدادات",
   "editProfile": "تعديل الملف الشخصي",
@@ -116,5 +117,85 @@
   "profileUpdatedSuccess": "تم تحديث الملف الشخصي بنجاح",
   "cityUpdatedSuccess": "تم تغيير المدينة بنجاح",
   "appVersion": "الإصدار 1.0.0",
-  "viewMyReports": "بلاغاتي"
+  "viewMyReports": "بلاغاتي",
+
+  "reportType": "نوع البلاغ",
+  "lost": "مفقود",
+  "found": "عُثر عليه",
+
+  "itemTitle": "اسم الغرض",
+  "itemTitleHint": "مثال: محفظة جلدية سوداء",
+  "itemTitleCounter": "{count}/50",
+  "@itemTitleCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "category": "الفئة",
+
+  "locationDistrict": "الموقع (المنطقة)",
+  "selectDistrict": "اختر المنطقة",
+
+  "date": "التاريخ",
+
+  "photos": "الصور",
+  "photoCounter": "{count}/4",
+  "@photoCounter": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "addPhoto": "إضافة",
+  "photoHint": "JPG أو PNG، حجم أقل من 10 ميجا. أضف من 1 إلى 4 صور.",
+
+  "submitReport": "رفع البلاغ",
+
+  "categoryRequired": "يرجى اختيار فئة",
+  "districtRequired": "يرجى اختيار المنطقة",
+  "photosRequired": "يرجى إضافة صورة واحدة على الأقل",
+  "invalidFileType": "يُسمح فقط بملفات JPG و PNG",
+  "invalidFileSize": "يجب أن يكون حجم الملف أقل من 10 ميجا",
+
+  "requiredFieldsBannerTitle": "حقول مطلوبة:",
+  "requiredFieldsBannerMessage": "العنوان والفئة والموقع مطلوبة.",
+  "invalidFileBannerTitle": "ملف غير صالح:",
+  "invalidFileBannerMessage": "يرجى رفع صور بصيغة JPG أو PNG وحجم أقل من 10 ميجا.",
+
+  "photoRejected": "مرفوض",
+  "takePhoto": "التقاط صورة",
+  "chooseFromGallery": "اختيار من المعرض",
+
+  "reportCreatedTitle": "تم إنشاء البلاغ بنجاح!",
+  "reportCreatedId": "رقم البلاغ: {id}",
+  "@reportCreatedId": {
+    "placeholders": {
+      "id": { "type": "String" }
+    }
+  },
+  "reportActiveMessage": "بلاغك نشط ومُدرج للمطابقة.",
+  "viewMyReport": "عرض بلاغي",
+  "backToHome": "العودة للرئيسية",
+
+  "notLoggedInTitle": "تسجيل الدخول مطلوب:",
+  "notLoggedInMessage": "يجب تسجيل الدخول لإنشاء بلاغ.",
+  "invalidDataTitle": "بيانات غير صالحة:",
+  "invalidDataMessage": "يرجى التحقق من صحة تفاصيل البلاغ المدخلة.",
+  "retry": "إعادة المحاولة",
+
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيينها.",
+  "sendResetLinkButton": "إرسال رابط إعادة التعيين",
+  "rememberedIt": "تذكرتها؟",
+  "backToLogin": "العودة لتسجيل الدخول",
+  "resetComingSoon": "ستتوفر إعادة تعيين كلمة المرور قريبًا.",
+  "verifyEmailTitle": "تحقق من بريدك الإلكتروني",
+  "verifyEmailBody": "أرسلنا رابط التحقق إلى {email}. افتحه لتفعيل حسابك.",
+  "verifiedButton": "لقد فعّلت بريدي",
+  "resendEmail": "إعادة الإرسال",
+  "resendEmailIn": "إعادة الإرسال · {time}",
+
+  "navHome": "الرئيسية",
+  "navMyReports": "بلاغاتي",
+  "navProfile": "الحساب",
+  "homeComingSoon": "الرئيسية — قريبًا"
 }

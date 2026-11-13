@@ -6,10 +6,15 @@ import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
+import 'package:found_it/features/auth/domain/get_current_user_use_case.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
 import 'package:found_it/features/auth/domain/login_use_case.dart';
+import 'package:found_it/features/auth/domain/logout_use_case.dart';
 import 'package:found_it/features/auth/domain/signup_use_case.dart';
+import 'package:found_it/features/auth/domain/watch_auth_state_use_case.dart';
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
@@ -23,19 +28,23 @@ import 'package:found_it/features/profile/data/profile_repository_impl.dart';
 import 'package:found_it/features/profile/domain/repositories/profile_repository.dart';
 import 'package:found_it/features/profile/domain/use_cases/get_active_cities_use_case.dart';
 import 'package:found_it/features/profile/domain/use_cases/get_profile_use_case.dart';
-import 'package:found_it/features/profile/domain/use_cases/logout_use_case.dart';
+import 'package:found_it/features/profile/domain/use_cases/logout_use_case.dart' as profile_logout;
 import 'package:found_it/features/profile/domain/use_cases/set_my_city_use_case.dart';
 import 'package:found_it/features/profile/domain/use_cases/update_profile_use_case.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
-import 'package:found_it/features/reports/data/reports_data_source.dart';
+import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/data/reports_repository_impl.dart';
+import 'package:found_it/features/reports/data/services/photo_picker_service.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
+import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
+import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
 
 final GetIt sl = GetIt.instance;
@@ -55,6 +64,49 @@ Future<void> configureDependencies() async {
 }
 
 // ---------------------------------------------------------------------
+// Reports (Ziad: Create Report + Adham: My Reports & Edit/Delete)
+// ---------------------------------------------------------------------
+void _registerReports() {
+  sl
+    ..registerLazySingleton<PhotoPickerService>(
+      () => PhotoPickerServiceImpl(),
+    )
+    ..registerLazySingleton<ReportsRemoteDataSource>(
+      () => ReportsRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<ReportsRepository>(
+      () => ReportsRepositoryImpl(
+        remoteDataSource: sl(),
+        prefs: sl(),
+      ),
+    )
+    ..registerLazySingleton(() => GetCategoriesUseCase(sl()))
+    ..registerLazySingleton(() => GetCityAreasUseCase(sl()))
+    ..registerLazySingleton(() => GetSelectedCityIdUseCase(sl()))
+    ..registerLazySingleton(() => CreateReportUseCase(sl()))
+    ..registerLazySingleton(() => GetMyReportsUseCase(sl()))
+    ..registerLazySingleton(() => GetMyReportsCountsUseCase(sl()))
+    ..registerLazySingleton(() => UpdateReportUseCase(sl()))
+    ..registerLazySingleton(() => SoftDeleteReportUseCase(sl()))
+    ..registerFactory(
+      () => CreateReportCubit(
+        getCategories: sl(),
+        getCityAreas: sl(),
+        getSelectedCityId: sl(),
+        createReport: sl(),
+        photoPicker: sl(),
+      ),
+    )
+    ..registerFactory(
+      () => MyReportsCubit(
+        sl(),
+        sl(),
+        sl(),
+      ),
+    );
+}
+
+// ---------------------------------------------------------------------
 // Auth (Ahmed) — session check + login. Sign up / logout come later.
 // ---------------------------------------------------------------------
 void _registerAuth() {
@@ -65,7 +117,22 @@ void _registerAuth() {
     ..registerLazySingleton(() => LoginUseCase(sl()))
     ..registerLazySingleton(() => SignUpUseCase(sl()))
     ..registerFactory(() => LoginCubit(sl()))
-    ..registerFactory(() => SignUpCubit(sl()));
+    ..registerFactory(() => SignUpCubit(sl()))
+    ..registerFactory(() => ResendTimerCubit())
+    // Session: login state + profile for the whole app.
+    ..registerLazySingleton(() => WatchAuthStateUseCase(sl()))
+    ..registerLazySingleton(() => GetCurrentUserUseCase(sl()))
+    ..registerLazySingleton(() => LogoutUseCase(sl()))
+    // EXCEPTION to the "cubits are factories" rule: AuthCubit is ONE
+    // app-wide instance (started in main.dart, provided in found_it.dart).
+    ..registerLazySingleton(
+      () => AuthCubit(
+        watchAuthState: sl(),
+        getCurrentUser: sl(),
+        logout: sl(),
+        hasActiveSession: sl(),
+      ),
+    );
 }
 
 // ---------------------------------------------------------------------
@@ -86,32 +153,6 @@ void _registerOnboarding() {
 }
 
 // ---------------------------------------------------------------------
-// My Reports + Edit / Delete (Adham)
-// ---------------------------------------------------------------------
-void _registerReports() {
-  sl
-    ..registerLazySingleton<ReportsDataSource>(
-      () => ReportsDataSourceImpl(sl()),
-    )
-    ..registerLazySingleton<ReportsRepository>(
-      () => ReportsRepositoryImpl(sl()),
-    )
-    ..registerLazySingleton(() => GetMyReportsUseCase(sl()))
-    ..registerLazySingleton(() => GetMyReportsCountsUseCase(sl()))
-    ..registerLazySingleton(() => UpdateReportUseCase(sl()))
-    ..registerLazySingleton(() => SoftDeleteReportUseCase(sl()))
-    ..registerLazySingleton(() => GetCategoriesUseCase(sl()))
-    ..registerLazySingleton(() => GetCityAreasUseCase(sl()))
-    ..registerFactory(
-      () => MyReportsCubit(
-        getMyReportsUseCase: sl(),
-        getMyReportsCountsUseCase: sl(),
-        softDeleteReportUseCase: sl(),
-      ),
-    );
-}
-
-// ---------------------------------------------------------------------
 // Profile & Settings (Adham)
 // ---------------------------------------------------------------------
 void _registerProfile() {
@@ -126,14 +167,14 @@ void _registerProfile() {
     ..registerLazySingleton(() => UpdateProfileUseCase(sl()))
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
-    ..registerLazySingleton(() => LogoutUseCase(sl()))
+    ..registerLazySingleton(() => profile_logout.LogoutUseCase(sl()))
     ..registerFactory(
       () => ProfileCubit(
-        getProfileUseCase: sl(),
-        updateProfileUseCase: sl(),
-        setMyCityUseCase: sl(),
-        getActiveCitiesUseCase: sl(),
-        logoutUseCase: sl(),
+        sl(),
+        sl(),
+        sl(),
+        sl(),
+        sl(),
       ),
     );
 }

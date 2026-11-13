@@ -8,8 +8,7 @@ class GetCityAreasUseCase {
 
   Future<List<AreaEntity>> call({
     required String cityId,
-    String? lang,
-  }) {
-    return _repository.getCityAreas(cityId: cityId, lang: lang);
-  }
+    required String lang,
+  }) =>
+      _repository.getCityAreas(cityId: cityId, lang: lang);
 }

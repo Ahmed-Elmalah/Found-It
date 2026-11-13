@@ -1,5 +1,6 @@
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
+import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 
@@ -31,6 +32,12 @@ abstract interface class ReportsRepository {
   /// Gets all areas belonging to a specific city.
   Future<List<AreaEntity>> getCityAreas({
     required String cityId,
-    String? lang,
+    required String lang,
   });
+
+  /// Creates a new report and returns its refCode.
+  Future<String> createReport(CreateReportParams params);
+
+  /// Gets the currently selected city id from preferences.
+  Future<String> getSelectedCityId();
 }

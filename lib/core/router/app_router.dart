@@ -4,28 +4,53 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/core/router/auth_redirect.dart';
+import 'package:found_it/core/router/stream_listenable.dart';
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
+import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
+import 'package:found_it/features/auth/view/ui/verify_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
 import 'package:found_it/features/onboarding/view/ui/splash_screen.dart';
+import 'package:found_it/core/widgets/main_shell.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
 import 'package:found_it/features/profile/view/ui/profile_screen.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
+import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
+import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
+import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash,
+  // Re-check the rules below every time the login state changes
+  // (login, sign up, logout, session expired, profile loaded).
+  refreshListenable: StreamListenable(sl<AuthCubit>().stream),
+  // Page protection — the rules live in auth_redirect.dart (with tests):
+  // not logged in -> login; logged in without a city -> city;
+  // logged in on login/sign up/forgot -> home.
+  redirect: (context, state) {
+    final auth = sl<AuthCubit>().state;
+    return authRedirect(
+      isLoggedIn: auth.isLoggedIn,
+      hasCity: auth.hasCity,
+      location: state.matchedLocation,
+    );
+  },
   routes: [
-    // Splash decides where to go: onboarding (first launch), home or login.
+    // Splash decides where to go: onboarding (first launch), home or login
+    // (home -> the redirect above sends users without a city to city).
     GoRoute(
       path: AppRoutes.splash,
       builder: (context, state) => BlocProvider(
@@ -60,49 +85,105 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.city,
       builder: (context, state) => const _ComingSoon('City'),
     ),
-    // TEMP: replaced by the real Forgot password screen (Ahmed, stage 7).
+    // UI only for now (no SMTP yet): shows a "coming soon" message.
     GoRoute(
       path: AppRoutes.forgotPassword,
-      builder: (context, state) => const _ComingSoon('Forgot password'),
+      builder: (context, state) => const ForgotPasswordScreen(),
     ),
-    // TEMP: replaced by the real Home screen (Youssef, story #4).
+    // Not in the flow yet (email confirmation is off). Pass the email:
+    //   context.go(AppRoutes.verifyEmail, extra: email)
     GoRoute(
-      path: AppRoutes.home,
-      builder: (context, state) => const _ComingSoon('Home'),
-    ),
-
-    // My Reports (Adham, story #1)
-    GoRoute(
-      path: AppRoutes.myReports,
+      path: AppRoutes.verifyEmail,
       builder: (context, state) => BlocProvider(
-        create: (_) => sl<MyReportsCubit>(),
-        child: const MyReportsScreen(),
+        create: (_) => sl<ResendTimerCubit>(),
+        child: VerifyEmailScreen(email: (state.extra as String?) ?? ''),
       ),
     ),
+    // ---------------------------------------------------------------
+    // Main shell — BottomNavigationBar with 3 tabs
+    // ---------------------------------------------------------------
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) =>
+          MainShell(navigationShell: navigationShell),
+      branches: [
+        // Tab 0 — Home (placeholder)
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.home,
+              builder: (context, state) =>
+                  const _ComingSoon('Home', withLogout: true),
+            ),
+          ],
+        ),
+        // Tab 1 — My Reports (Adham)
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.myReports,
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<MyReportsCubit>(),
+                child: const MyReportsScreen(),
+              ),
+            ),
+          ],
+        ),
+        // Tab 2 — Profile & Settings (Adham)
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: AppRoutes.profile,
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<ProfileCubit>(),
+                child: const ProfileScreen(),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+
+    // Reports routes (Ziad, story #3)
+    GoRoute(
+      path: AppRoutes.createReport,
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<CreateReportCubit>(),
+        child: const CreateReportScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutes.reportCreated,
+      redirect: (context, state) {
+        final extra = state.extra;
+        if (extra is! String || extra.isEmpty) {
+          return AppRoutes.home;
+        }
+        return null;
+      },
+      builder: (context, state) {
+        final refCode = state.extra! as String;
+        return ReportCreatedScreen(referenceId: refCode);
+      },
+    ),
+
+    // Edit Report (Adham) — pushed on top of shell
     GoRoute(
       path: AppRoutes.editReport,
       builder: (context, state) {
         final report = state.extra as ReportEntity;
         return BlocProvider(
           create: (_) => EditReportCubit(
-            report: report,
-            updateReportUseCase: sl(),
-            getCategoriesUseCase: sl(),
-            getCityAreasUseCase: sl(),
+            report,
+            sl(),
+            sl(),
+            sl(),
           ),
           child: EditReportScreen(report: report),
         );
       },
     ),
 
-    // Profile & Settings (Adham, story #1)
-    GoRoute(
-      path: AppRoutes.profile,
-      builder: (context, state) => BlocProvider(
-        create: (_) => sl<ProfileCubit>(),
-        child: const ProfileScreen(),
-      ),
-    ),
+    // Edit Profile (Adham) — pushed on top of shell
     GoRoute(
       path: AppRoutes.editProfile,
       builder: (context, state) {
@@ -118,12 +199,29 @@ final GoRouter appRouter = GoRouter(
 
 /// TEMP placeholder for screens that aren't built yet (dev only, no l10n).
 class _ComingSoon extends StatelessWidget {
-  const _ComingSoon(this.name);
+  const _ComingSoon(this.name, {this.withLogout = false});
 
   final String name;
+  final bool withLogout;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('$name — coming soon')));
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('$name — coming soon'),
+            if (withLogout) ...[
+              const SizedBox(height: 24),
+              OutlinedButton(
+                onPressed: () => context.read<AuthCubit>().logout(),
+                child: const Text('Log out'),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 }

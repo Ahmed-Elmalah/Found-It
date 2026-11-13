@@ -50,11 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final colors = Theme.of(context).colorScheme;
     final cubit = context.read<LoginCubit>();
 
-    return BlocConsumer<LoginCubit, LoginState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == LoginStatus.success,
-      listener: (context, state) => context.go(AppRoutes.home),
+    // No navigation here on success: the router's redirect sends the user
+    // to Home (or City if no city yet) as soon as AuthCubit sees the login.
+    return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
         final failed = state.status == LoginStatus.failure;
         final invalidCredentials =

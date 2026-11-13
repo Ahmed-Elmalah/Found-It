@@ -27,6 +27,7 @@ class AppTextField extends StatefulWidget {
     this.validator,
     this.isPassword = false,
     this.hasError = false,
+    this.errorText,
     this.helperText,
     this.keyboardType,
     this.textInputAction,
@@ -36,6 +37,9 @@ class AppTextField extends StatefulWidget {
     this.enabled = true,
     this.autovalidateMode,
     this.forceLtr = false,
+    this.isRequired = false,
+    this.maxLength,
+    this.showErrorIcon = false,
   });
 
   final String label;
@@ -48,6 +52,9 @@ class AppTextField extends StatefulWidget {
 
   /// Forces the red border even when there is no error message.
   final bool hasError;
+
+  /// Direct error message (e.g. from state management).
+  final String? errorText;
   final String? helperText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -63,6 +70,15 @@ class AppTextField extends StatefulWidget {
   /// Arabic — for phone numbers: "+20 10 1234 5678", never "5678 1234 10 20+".
   /// The text still sits next to the icon (right side in Arabic).
   final bool forceLtr;
+
+  /// Shows a red " *" next to the label.
+  final bool isRequired;
+
+  /// Maximum characters allowed; displays an end-aligned "current/max" counter.
+  final int? maxLength;
+
+  /// When true, renders a small error icon before the error text.
+  final bool showErrorIcon;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -100,15 +116,24 @@ class _AppTextFieldState extends State<AppTextField> {
       autovalidateMode: widget.autovalidateMode,
       enabled: widget.enabled,
       builder: (field) {
-        final showError = widget.hasError || field.hasError;
-        final errorText = field.errorText;
+        final errorText = widget.errorText ?? field.errorText;
+        final showError = widget.hasError || field.hasError || widget.errorText != null;
         final footer = errorText ?? widget.helperText;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.label,
+            Text.rich(
+              TextSpan(
+                text: widget.label,
+                children: [
+                  if (widget.isRequired)
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(color: colors.error),
+                    ),
+                ],
+              ),
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
@@ -118,6 +143,10 @@ class _AppTextFieldState extends State<AppTextField> {
             SizedBox(height: 8.h),
             TextField(
               controller: _controller,
+              maxLength: widget.maxLength,
+              buildCounter: widget.maxLength != null
+                  ? (_, {required currentLength, required isFocused, maxLength}) => null
+                  : null,
               textDirection: ltrDirection,
               textAlign: widget.forceLtr ? ltrAlign : TextAlign.start,
               keyboardType: widget.keyboardType,
@@ -194,17 +223,59 @@ class _AppTextFieldState extends State<AppTextField> {
                 focusedBorder: showError ? errorBorder : null,
               ),
             ),
-            if (footer != null)
+            if (footer != null || widget.maxLength != null)
               Padding(
                 padding: EdgeInsetsDirectional.only(top: 8.h),
-                child: Text(
-                  footer,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    color: errorText != null
-                        ? colors.error
-                        : colors.onSurfaceVariant,
-                  ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (footer != null)
+                      Expanded(
+                        child: widget.showErrorIcon && errorText != null
+                            ? Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.only(
+                                      end: 4.w,
+                                      top: 1.h,
+                                    ),
+                                    child: Icon(
+                                      Icons.error_outline,
+                                      size: 14.r,
+                                      color: colors.error,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      footer,
+                                      style: TextStyle(
+                                        fontSize: 13.sp,
+                                        color: colors.error,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                footer,
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  color: showError
+                                      ? colors.error
+                                      : colors.onSurfaceVariant,
+                                ),
+                              ),
+                      ),
+                    if (widget.maxLength != null)
+                      Text(
+                        '${_controller.text.length}/${widget.maxLength}',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
+                  ],
                 ),
               ),
           ],

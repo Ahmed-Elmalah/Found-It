@@ -262,7 +262,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saving => 'Saving...';
 
   @override
-  String get titleTooShort => 'Title must be between 3 and 50 characters';
+  String get titleTooShort => 'Title must be at least 3 characters';
+
+  @override
+  String get titleTooLong => 'Title must be at most 50 characters';
 
   @override
   String get profileTitle => 'Profile & Settings';
@@ -326,4 +329,171 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get viewMyReports => 'My Reports';
+
+  @override
+  String get reportType => 'Report type';
+
+  @override
+  String get lost => 'Lost';
+
+  @override
+  String get found => 'Found';
+
+  @override
+  String get itemTitle => 'Item title';
+
+  @override
+  String get itemTitleHint => 'e.g., Black leather wallet';
+
+  @override
+  String itemTitleCounter(int count) {
+    return '$count/50';
+  }
+
+  @override
+  String get category => 'Category';
+
+  @override
+  String get locationDistrict => 'Location (district)';
+
+  @override
+  String get selectDistrict => 'Select district';
+
+  @override
+  String get date => 'Date';
+
+  @override
+  String get photos => 'Photos';
+
+  @override
+  String photoCounter(int count) {
+    return '$count/4';
+  }
+
+  @override
+  String get addPhoto => 'Add';
+
+  @override
+  String get photoHint => 'JPG or PNG, up to 10 MB each. Add 1 to 4 photos.';
+
+  @override
+  String get submitReport => 'Submit report';
+
+  @override
+  String get categoryRequired => 'Please select a category';
+
+  @override
+  String get districtRequired => 'Please select a district';
+
+  @override
+  String get photosRequired => 'Please add at least 1 photo';
+
+  @override
+  String get invalidFileType => 'Only JPG and PNG files are allowed';
+
+  @override
+  String get invalidFileSize => 'File size must be under 10 MB';
+
+  @override
+  String get requiredFieldsBannerTitle => 'Required Fields:';
+
+  @override
+  String get requiredFieldsBannerMessage =>
+      'Title, category, and location are required.';
+
+  @override
+  String get invalidFileBannerTitle => 'Invalid File:';
+
+  @override
+  String get invalidFileBannerMessage =>
+      'Please upload image files (JPG/PNG) under 10 MB.';
+
+  @override
+  String get photoRejected => 'Rejected';
+
+  @override
+  String get takePhoto => 'Take a photo';
+
+  @override
+  String get chooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get reportCreatedTitle => 'Report Created Successfully!';
+
+  @override
+  String reportCreatedId(String id) {
+    return 'Your report ID is $id';
+  }
+
+  @override
+  String get reportActiveMessage =>
+      'Your report is Active and listed for matching.';
+
+  @override
+  String get viewMyReport => 'View my report';
+
+  @override
+  String get backToHome => 'Back to home';
+
+  @override
+  String get notLoggedInTitle => 'Login Required:';
+
+  @override
+  String get notLoggedInMessage => 'You must be logged in to create a report.';
+
+  @override
+  String get invalidDataTitle => 'Invalid Data:';
+
+  @override
+  String get invalidDataMessage => 'Please check the entered report details.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Enter your email and we’ll send you a link to reset it.';
+
+  @override
+  String get sendResetLinkButton => 'Send reset link';
+
+  @override
+  String get rememberedIt => 'Remembered it?';
+
+  @override
+  String get backToLogin => 'Back to login';
+
+  @override
+  String get resetComingSoon => 'Password reset will be available soon.';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String verifyEmailBody(String email) {
+    return 'We sent a verification link to $email. Open it to activate your account.';
+  }
+
+  @override
+  String get verifiedButton => 'I’ve verified my email';
+
+  @override
+  String get resendEmail => 'Resend email';
+
+  @override
+  String resendEmailIn(String time) {
+    return 'Resend email · $time';
+  }
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navMyReports => 'My Reports';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get homeComingSoon => 'Home — coming soon';
 }

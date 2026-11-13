@@ -8,18 +8,13 @@ import 'package:found_it/features/profile/domain/use_cases/update_profile_use_ca
 import 'package:found_it/features/profile/view/cubit/profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit({
-    required GetProfileUseCase getProfileUseCase,
-    required UpdateProfileUseCase updateProfileUseCase,
-    required SetMyCityUseCase setMyCityUseCase,
-    required GetActiveCitiesUseCase getActiveCitiesUseCase,
-    required LogoutUseCase logoutUseCase,
-  })  : _getProfileUseCase = getProfileUseCase,
-        _updateProfileUseCase = updateProfileUseCase,
-        _setMyCityUseCase = setMyCityUseCase,
-        _getActiveCitiesUseCase = getActiveCitiesUseCase,
-        _logoutUseCase = logoutUseCase,
-        super(const ProfileState());
+  ProfileCubit(
+    this._getProfileUseCase,
+    this._updateProfileUseCase,
+    this._setMyCityUseCase,
+    this._getActiveCitiesUseCase,
+    this._logoutUseCase,
+  ) : super(const ProfileState());
 
   final GetProfileUseCase _getProfileUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;

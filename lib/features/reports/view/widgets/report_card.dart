@@ -63,7 +63,7 @@ class ReportCard extends StatelessWidget {
                         ? Image.network(
                             report.images.first,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, _, _) => Icon(
                               Icons.broken_image_outlined,
                               color: colors.onSurfaceVariant,
                               size: 28.r,

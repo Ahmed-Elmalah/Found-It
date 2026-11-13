@@ -17,8 +17,8 @@ class AreaEntity extends Equatable {
   final bool isActive;
   final int sortOrder;
 
-  String localizedName(String languageCode) =>
-      languageCode == 'ar' ? nameAr : nameEn;
+  String localizedName(String langCode) =>
+      langCode.startsWith('ar') ? nameAr : nameEn;
 
   @override
   List<Object?> get props => [id, cityId, nameEn, nameAr, isActive, sortOrder];

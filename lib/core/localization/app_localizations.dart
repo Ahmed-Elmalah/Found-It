@@ -593,8 +593,14 @@ abstract class AppLocalizations {
   /// No description provided for @titleTooShort.
   ///
   /// In en, this message translates to:
-  /// **'Title must be between 3 and 50 characters'**
+  /// **'Title must be at least 3 characters'**
   String get titleTooShort;
+
+  /// No description provided for @titleTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at most 50 characters'**
+  String get titleTooLong;
 
   /// No description provided for @profileTitle.
   ///
@@ -721,6 +727,312 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My Reports'**
   String get viewMyReports;
+
+  /// No description provided for @reportType.
+  ///
+  /// In en, this message translates to:
+  /// **'Report type'**
+  String get reportType;
+
+  /// No description provided for @lost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get lost;
+
+  /// No description provided for @found.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get found;
+
+  /// No description provided for @itemTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Item title'**
+  String get itemTitle;
+
+  /// No description provided for @itemTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Black leather wallet'**
+  String get itemTitleHint;
+
+  /// No description provided for @itemTitleCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/50'**
+  String itemTitleCounter(int count);
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @locationDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'Location (district)'**
+  String get locationDistrict;
+
+  /// No description provided for @selectDistrict.
+  ///
+  /// In en, this message translates to:
+  /// **'Select district'**
+  String get selectDistrict;
+
+  /// No description provided for @date.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get date;
+
+  /// No description provided for @photos.
+  ///
+  /// In en, this message translates to:
+  /// **'Photos'**
+  String get photos;
+
+  /// No description provided for @photoCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}/4'**
+  String photoCounter(int count);
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addPhoto;
+
+  /// No description provided for @photoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'JPG or PNG, up to 10 MB each. Add 1 to 4 photos.'**
+  String get photoHint;
+
+  /// No description provided for @submitReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit report'**
+  String get submitReport;
+
+  /// No description provided for @categoryRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get categoryRequired;
+
+  /// No description provided for @districtRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a district'**
+  String get districtRequired;
+
+  /// No description provided for @photosRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least 1 photo'**
+  String get photosRequired;
+
+  /// No description provided for @invalidFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'Only JPG and PNG files are allowed'**
+  String get invalidFileType;
+
+  /// No description provided for @invalidFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'File size must be under 10 MB'**
+  String get invalidFileSize;
+
+  /// No description provided for @requiredFieldsBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Required Fields:'**
+  String get requiredFieldsBannerTitle;
+
+  /// No description provided for @requiredFieldsBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Title, category, and location are required.'**
+  String get requiredFieldsBannerMessage;
+
+  /// No description provided for @invalidFileBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid File:'**
+  String get invalidFileBannerTitle;
+
+  /// No description provided for @invalidFileBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload image files (JPG/PNG) under 10 MB.'**
+  String get invalidFileBannerMessage;
+
+  /// No description provided for @photoRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get photoRejected;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @reportCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Created Successfully!'**
+  String get reportCreatedTitle;
+
+  /// No description provided for @reportCreatedId.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report ID is {id}'**
+  String reportCreatedId(String id);
+
+  /// No description provided for @reportActiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report is Active and listed for matching.'**
+  String get reportActiveMessage;
+
+  /// No description provided for @viewMyReport.
+  ///
+  /// In en, this message translates to:
+  /// **'View my report'**
+  String get viewMyReport;
+
+  /// No description provided for @backToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to home'**
+  String get backToHome;
+
+  /// No description provided for @notLoggedInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Login Required:'**
+  String get notLoggedInTitle;
+
+  /// No description provided for @notLoggedInMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be logged in to create a report.'**
+  String get notLoggedInMessage;
+
+  /// No description provided for @invalidDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Data:'**
+  String get invalidDataTitle;
+
+  /// No description provided for @invalidDataMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check the entered report details.'**
+  String get invalidDataMessage;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @forgotPasswordSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we’ll send you a link to reset it.'**
+  String get forgotPasswordSubtitle;
+
+  /// No description provided for @sendResetLinkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset link'**
+  String get sendResetLinkButton;
+
+  /// No description provided for @rememberedIt.
+  ///
+  /// In en, this message translates to:
+  /// **'Remembered it?'**
+  String get rememberedIt;
+
+  /// No description provided for @backToLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to login'**
+  String get backToLogin;
+
+  /// No description provided for @resetComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset will be available soon.'**
+  String get resetComingSoon;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a verification link to {email}. Open it to activate your account.'**
+  String verifyEmailBody(String email);
+
+  /// No description provided for @verifiedButton.
+  ///
+  /// In en, this message translates to:
+  /// **'I’ve verified my email'**
+  String get verifiedButton;
+
+  /// No description provided for @resendEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend email'**
+  String get resendEmail;
+
+  /// No description provided for @resendEmailIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend email · {time}'**
+  String resendEmailIn(String time);
+
+  /// No description provided for @navHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get navHome;
+
+  /// No description provided for @navMyReports.
+  ///
+  /// In en, this message translates to:
+  /// **'My Reports'**
+  String get navMyReports;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @homeComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Home — coming soon'**
+  String get homeComingSoon;
 }
 
 class _AppLocalizationsDelegate

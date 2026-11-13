@@ -7,14 +7,20 @@ import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/core/router/app_router.dart';
 import 'package:found_it/core/theme/app_theme.dart';
+import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 
 class FoundIt extends StatelessWidget {
   const FoundIt({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AppPreferencesCubit>.value(
-      value: sl<AppPreferencesCubit>(),
+    // AuthCubit is app-wide (login state + profile).
+    // AppPreferencesCubit manages dynamic theme mode and locale.
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: sl<AuthCubit>()),
+        BlocProvider.value(value: sl<AppPreferencesCubit>()),
+      ],
       child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
         builder: (context, prefs) {
           return ScreenUtilInit(

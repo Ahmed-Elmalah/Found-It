@@ -192,7 +192,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
           bottom: 24.h,
         ),
         itemCount: state.reports.length,
-        separatorBuilder: (_, __) => SizedBox(height: 12.h),
+        separatorBuilder: (_, _) => SizedBox(height: 12.h),
         itemBuilder: (context, index) {
           final report = state.reports[index];
           return ReportCard(

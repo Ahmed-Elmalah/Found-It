@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
-import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/utils/validators.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/app_text_field.dart';
@@ -12,6 +10,7 @@ import 'package:found_it/core/widgets/error_banner.dart';
 import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/auth/view/widgets/auth_back_button.dart';
 import 'package:found_it/features/auth/view/widgets/auth_footer_link.dart';
 import 'package:found_it/features/auth/view/widgets/auth_header.dart';
 
@@ -42,13 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void _back() {
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.login);
-    }
-  }
+  void _back() => AuthBackButton.goBack(context);
 
   void _submit() {
     final cubit = context.read<SignUpCubit>();
@@ -70,14 +63,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final colors = Theme.of(context).colorScheme;
     final cubit = context.read<SignUpCubit>();
 
-    return BlocConsumer<SignUpCubit, SignUpState>(
-      listenWhen: (previous, current) =>
-          previous.status != current.status &&
-          current.status == SignUpStatus.success,
-      listener: (context, state) => context.go(AppRoutes.city),
+    // No navigation here on success: the router's redirect sends the new
+    // user to City selection as soon as AuthCubit sees the login.
+    return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
         final failed = state.status == SignUpStatus.failure;
         final emailInUse =
@@ -108,18 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 8.h),
-                        // The icon has matchTextDirection, so it points to
-                        // the right in Arabic.
-                        IconButton(
-                          onPressed: _back,
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                          iconSize: 20.r,
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                          color: colors.onSurface,
-                          tooltip: MaterialLocalizations.of(context)
-                              .backButtonTooltip,
-                        ),
+                        const AuthBackButton(),
                         SizedBox(height: 16.h),
                         AuthHeader(title: l10n.signUpTitle),
                         SizedBox(height: 16.h),
