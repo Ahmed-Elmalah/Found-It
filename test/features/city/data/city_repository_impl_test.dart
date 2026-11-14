@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:found_it/features/city/data/city_local_data_source.dart';
 import 'package:found_it/features/city/data/city_model.dart';
 import 'package:found_it/features/city/data/city_remote_data_source.dart';
 import 'package:found_it/features/city/data/city_repository_impl.dart';
@@ -24,37 +23,14 @@ class _FakeCityRemoteDataSource implements CityRemoteDataSource {
   }
 }
 
-class _FakeCityLocalDataSource implements CityLocalDataSource {
-  String? cachedCityId;
-  Object? error;
-
-  @override
-  Future<void> saveSelectedCityId(String cityId) async {
-    final e = error;
-    if (e != null) throw e;
-    cachedCityId = cityId;
-  }
-
-  @override
-  String? getSelectedCityId() => cachedCityId;
-
-  @override
-  Future<void> clearSelectedCityId() async {
-    cachedCityId = null;
-  }
-}
-
 void main() {
   late _FakeCityRemoteDataSource remote;
-  late _FakeCityLocalDataSource local;
   late CityRepositoryImpl repository;
 
   setUp(() {
     remote = _FakeCityRemoteDataSource();
-    local = _FakeCityLocalDataSource();
     repository = CityRepositoryImpl(
       remoteDataSource: remote,
-      localDataSource: local,
     );
   });
 
@@ -78,31 +54,19 @@ void main() {
   });
 
   group('CityRepositoryImpl.selectCity', () {
-    test('updates remote and then caches locally on success', () async {
+    test('updates remote data source with selected cityId', () async {
       await repository.selectCity('c1');
 
       expect(remote.lastSetCityId, 'c1');
-      expect(local.cachedCityId, 'c1');
     });
 
-    test('does not throw when local cache fails after remote success', () async {
-      local.error = Exception('Disk write error');
-
-      await repository.selectCity('c1');
-
-      expect(remote.lastSetCityId, 'c1');
-      expect(local.cachedCityId, isNull);
-    });
-
-    test('rethrows and does not save locally when remote fails', () async {
+    test('rethrows error when remote fails', () async {
       remote.error = Exception('Server RPC failed');
 
       await expectLater(
         () => repository.selectCity('c1'),
         throwsA(isA<Exception>()),
       );
-
-      expect(local.cachedCityId, isNull);
     });
   });
 }

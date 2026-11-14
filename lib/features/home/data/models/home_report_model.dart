@@ -1,4 +1,4 @@
-import '../../domain/entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 
 class HomeReportModel extends HomeReportItem {
   const HomeReportModel({

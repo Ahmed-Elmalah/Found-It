@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'models/home_report_model.dart';
+import 'package:found_it/features/home/data/models/home_report_model.dart';
 
 abstract interface class HomeRemoteDataSource {
   Future<List<HomeReportModel>> getHomeFeed({

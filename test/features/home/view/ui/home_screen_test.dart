@@ -13,6 +13,7 @@ import 'package:found_it/features/city/domain/city_entity.dart';
 import 'package:found_it/features/city/domain/city_repository.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
 import 'package:found_it/features/city/domain/select_city_use_case.dart';
+import 'package:found_it/features/home/domain/entities/home_failure.dart';
 import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 import 'package:found_it/features/home/domain/repositories/home_repository.dart';
 import 'package:found_it/features/home/domain/use_cases/get_home_feed_use_case.dart';
@@ -156,7 +157,7 @@ void main() {
   testWidgets('renders HomeScreen initial Success state with header, hero banner and feed cards',
       (tester) async {
     homeRepo.reports = tReports;
-    await homeCubit.init(initialCityId: 'c1', locale: 'en');
+    await homeCubit.init(initialCityId: 'c1');
 
     await pumpScreen(tester);
     await tester.pumpAndSettle();
@@ -182,7 +183,7 @@ void main() {
       (tester) async {
     homeCubit.emit(const HomeState(
       status: HomeStatus.success,
-      selectedCityName: 'Alexandria',
+      selectedCity: CityEntity(id: 'c2', nameEn: 'Alexandria', nameAr: 'الإسكندرية'),
       reports: [],
     ));
 
@@ -198,7 +199,7 @@ void main() {
       (tester) async {
     homeCubit.emit(const HomeState(
       status: HomeStatus.failure,
-      errorMessage: 'Unable to load reports',
+      failure: HomeFailure(HomeFailureType.network),
     ));
 
     await pumpScreen(tester);
@@ -212,7 +213,7 @@ void main() {
   testWidgets('renders Arabic texts and RTL layout in HomeScreen',
       (tester) async {
     homeRepo.reports = tReports;
-    await homeCubit.init(initialCityId: 'c1', locale: 'ar');
+    await homeCubit.init(initialCityId: 'c1');
 
     await pumpScreen(tester, rtl: true);
     await tester.pumpAndSettle();
@@ -223,7 +224,7 @@ void main() {
 
   testWidgets('renders in Dark theme without exceptions', (tester) async {
     homeRepo.reports = tReports;
-    await homeCubit.init(initialCityId: 'c1', locale: 'en');
+    await homeCubit.init(initialCityId: 'c1');
 
     await pumpScreen(tester, dark: true);
     await tester.pumpAndSettle();
@@ -234,7 +235,7 @@ void main() {
   testWidgets('tapping city in header opens CitySelectionBottomSheet and updates city',
       (tester) async {
     homeRepo.reports = tReports;
-    await homeCubit.init(initialCityId: 'c1', locale: 'en');
+    await homeCubit.init(initialCityId: 'c1');
 
     await pumpScreen(tester);
     await tester.pumpAndSettle();

@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-import '../../domain/entities/home_report_item.dart';
+import 'package:found_it/features/city/domain/city_entity.dart';
+import 'package:found_it/features/home/domain/entities/home_failure.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 
 enum HomeStatus {
   initial,
@@ -14,15 +16,15 @@ final class HomeState extends Equatable {
     this.status = HomeStatus.initial,
     this.reports = const [],
     this.selectedCityId = '',
-    this.selectedCityName = 'Cairo',
-    this.errorMessage,
+    this.selectedCity,
+    this.failure,
   });
 
   final HomeStatus status;
   final List<HomeReportItem> reports;
   final String selectedCityId;
-  final String selectedCityName;
-  final String? errorMessage;
+  final CityEntity? selectedCity;
+  final HomeFailure? failure;
 
   bool get isLoading => status == HomeStatus.loading;
   bool get isSuccess => status == HomeStatus.success;
@@ -33,15 +35,16 @@ final class HomeState extends Equatable {
     HomeStatus? status,
     List<HomeReportItem>? reports,
     String? selectedCityId,
-    String? selectedCityName,
-    String? errorMessage,
+    CityEntity? selectedCity,
+    HomeFailure? failure,
+    bool clearFailure = false,
   }) {
     return HomeState(
       status: status ?? this.status,
       reports: reports ?? this.reports,
       selectedCityId: selectedCityId ?? this.selectedCityId,
-      selectedCityName: selectedCityName ?? this.selectedCityName,
-      errorMessage: errorMessage ?? this.errorMessage,
+      selectedCity: selectedCity ?? this.selectedCity,
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 
@@ -50,7 +53,7 @@ final class HomeState extends Equatable {
         status,
         reports,
         selectedCityId,
-        selectedCityName,
-        errorMessage,
+        selectedCity,
+        failure,
       ];
 }

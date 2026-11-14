@@ -25,7 +25,6 @@ class HomeScreen extends StatelessWidget {
       currentCityId: currentCityId,
       cities: cubit.cachedCities,
       onCitySelected: (CityEntity selectedCity) {
-        final locale = Localizations.localeOf(context).languageCode;
         cubit.selectCity(
           selectedCity,
           onCitySyncedToAuth: (cityId) {
@@ -33,7 +32,6 @@ class HomeScreen extends StatelessWidget {
               context.read<AuthCubit>().cityChanged(cityId);
             }
           },
-          locale: locale,
         );
       },
     );
@@ -49,13 +47,18 @@ class HomeScreen extends StatelessWidget {
       listener: (context, authState) {
         final newCityId = authState.user?.cityId;
         if (newCityId != null && newCityId.isNotEmpty) {
-          context.read<HomeCubit>().onCityChangedFromAuth(newCityId, locale: locale);
+          context.read<HomeCubit>().onCityChangedFromAuth(newCityId);
         }
       },
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           final cubit = context.read<HomeCubit>();
-          final cityName = state.selectedCityName;
+          final cityName = state.selectedCity?.localizedName(locale) ??
+              cubit.cachedCities
+                  .where((c) => c.id == state.selectedCityId)
+                  .firstOrNull
+                  ?.localizedName(locale) ??
+              '';
           final cityId = state.selectedCityId;
 
           return Scaffold(

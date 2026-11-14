@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/router/app_routes.dart';
 
 
-import '../widgets/liquid_glass_bottom_nav_bar.dart';
+import 'package:found_it/features/root/view/widgets/liquid_glass_bottom_nav_bar.dart';
 
 /// The persistent application shell containing the [LiquidGlassBottomNavBar]
 /// and hosting the root branches (Home, Explore, Messages, Profile).

@@ -1,4 +1,4 @@
-import '../entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 
 abstract interface class HomeRepository {
   Future<List<HomeReportItem>> getHomeFeed({

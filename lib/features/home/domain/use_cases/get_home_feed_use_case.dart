@@ -1,5 +1,5 @@
-import '../entities/home_report_item.dart';
-import '../repositories/home_repository.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/repositories/home_repository.dart';
 
 class GetHomeFeedUseCase {
   const GetHomeFeedUseCase(this._repository);

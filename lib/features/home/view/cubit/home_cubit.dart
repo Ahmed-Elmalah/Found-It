@@ -24,13 +24,11 @@ class HomeCubit extends Cubit<HomeState> {
   /// Loads available cities and initial home feed using the authenticated user's city.
   Future<void> init({
     String? initialCityId,
-    String? initialCityName,
-    String locale = 'ar',
   }) async {
-    emit(state.copyWith(status: HomeStatus.loading));
+    emit(state.copyWith(status: HomeStatus.loading, clearFailure: true));
 
     String cityId = initialCityId ?? '';
-    String cityName = initialCityName ?? state.selectedCityName;
+    CityEntity? city;
 
     try {
       _cachedCities = await getCitiesUseCase();
@@ -39,18 +37,16 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     if (_cachedCities.isNotEmpty) {
-      CityEntity? match;
       if (cityId.isNotEmpty) {
-        match = _cachedCities.where((c) => c.id == cityId).firstOrNull;
+        city = _cachedCities.where((c) => c.id == cityId).firstOrNull;
       }
-      match ??= _cachedCities.first;
-      cityId = match.id;
-      cityName = match.localizedName(locale);
+      city ??= _cachedCities.first;
+      cityId = city.id;
     }
 
     emit(state.copyWith(
       selectedCityId: cityId,
-      selectedCityName: cityName,
+      selectedCity: city,
     ));
 
     await _fetchFeed(cityId: cityId);
@@ -60,14 +56,12 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> selectCity(
     CityEntity city, {
     void Function(String)? onCitySyncedToAuth,
-    String locale = 'ar',
   }) async {
-    final cityName = city.localizedName(locale);
-
     emit(state.copyWith(
       status: HomeStatus.loading,
       selectedCityId: city.id,
-      selectedCityName: cityName,
+      selectedCity: city,
+      clearFailure: true,
     ));
 
     try {
@@ -83,21 +77,19 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   /// Called when the user's city in AuthCubit is updated (e.g. from Profile screen).
-  Future<void> onCityChangedFromAuth(String newCityId, {String locale = 'ar'}) async {
+  Future<void> onCityChangedFromAuth(String newCityId) async {
     if (newCityId == state.selectedCityId && state.reports.isNotEmpty) return;
 
-    String cityName = state.selectedCityName;
+    CityEntity? city;
     if (_cachedCities.isNotEmpty) {
-      final match = _cachedCities.where((c) => c.id == newCityId).firstOrNull;
-      if (match != null) {
-        cityName = match.localizedName(locale);
-      }
+      city = _cachedCities.where((c) => c.id == newCityId).firstOrNull;
     }
 
     emit(state.copyWith(
       status: HomeStatus.loading,
       selectedCityId: newCityId,
-      selectedCityName: cityName,
+      selectedCity: city,
+      clearFailure: true,
     ));
 
     await _fetchFeed(cityId: newCityId);
@@ -113,6 +105,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(
         status: HomeStatus.success,
         reports: const [],
+        clearFailure: true,
       ));
       return;
     }
@@ -126,16 +119,16 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(
         status: HomeStatus.success,
         reports: reports,
-        errorMessage: null,
+        clearFailure: true,
       ));
     } catch (e) {
-      final message = e is HomeFailure && e.message != null
-          ? e.message
-          : 'Failed to load home feed';
+      final failure = e is HomeFailure
+          ? e
+          : const HomeFailure(HomeFailureType.unknown);
 
       emit(state.copyWith(
         status: HomeStatus.failure,
-        errorMessage: message,
+        failure: failure,
       ));
     }
   }

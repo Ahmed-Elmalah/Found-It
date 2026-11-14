@@ -16,6 +16,7 @@ import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
+import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/home/view/ui/home_screen.dart';
@@ -128,12 +129,16 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        // Tab 1: Explore (Phase 1, mock data)
+        // Tab 1: Explore (Mohamed)
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.explore,
-              builder: (context, state) => const ExploreScreen(),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<SearchCubit>()
+                  ..init(cityId: sl<AuthCubit>().state.user!.cityId!),
+                child: const ExploreScreen(),
+              ),
             ),
           ],
         ),
@@ -203,12 +208,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final report = state.extra! as ReportEntity;
         return BlocProvider(
-          create: (_) => EditReportCubit(
-            report,
-            sl(),
-            sl(),
-            sl(),
-          ),
+          create: (_) => EditReportCubit(report, sl(), sl(), sl()),
           child: EditReportScreen(report: report),
         );
       },

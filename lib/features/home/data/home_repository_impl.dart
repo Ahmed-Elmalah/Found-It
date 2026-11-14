@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:found_it/features/home/domain/entities/home_failure.dart';
 import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 import 'package:found_it/features/home/domain/repositories/home_repository.dart';
-import 'home_remote_data_source.dart';
+import 'package:found_it/features/home/data/home_remote_data_source.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   const HomeRepositoryImpl({

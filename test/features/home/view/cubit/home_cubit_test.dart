@@ -21,7 +21,8 @@ class _FakeHomeRepository implements HomeRepository {
     int limit = 20,
     int offset = 0,
   }) async {
-    if (errorToThrow != null) throw errorToThrow!;
+    final e = errorToThrow;
+    if (e != null) throw e;
     return reportsToReturn;
   }
 }
@@ -87,9 +88,10 @@ void main() {
       cubit.close();
     });
 
-    test('initial state has default status and Cairo city', () {
+    test('initial state has default status and empty city', () {
       expect(cubit.state.status, HomeStatus.initial);
-      expect(cubit.state.selectedCityName, 'Cairo');
+      expect(cubit.state.selectedCityId, '');
+      expect(cubit.state.selectedCity, isNull);
       expect(cubit.state.reports, isEmpty);
     });
 
@@ -100,7 +102,7 @@ void main() {
 
       expect(cubit.state.status, HomeStatus.success);
       expect(cubit.state.selectedCityId, 'cairo-uuid');
-      expect(cubit.state.selectedCityName, 'القاهرة');
+      expect(cubit.state.selectedCity?.nameEn, 'Cairo');
       expect(cubit.state.reports, tReports);
       expect(cubit.state.isEmpty, isFalse);
     });
@@ -121,7 +123,7 @@ void main() {
       await cubit.init();
 
       expect(cubit.state.status, HomeStatus.failure);
-      expect(cubit.state.errorMessage, 'No internet');
+      expect(cubit.state.failure, const HomeFailure(HomeFailureType.network, 'No internet'));
     });
 
     test('selectCity changes city and reloads feed', () async {
@@ -132,11 +134,10 @@ void main() {
       await cubit.selectCity(
         newCity,
         onCitySyncedToAuth: (id) => syncedCityId = id,
-        locale: 'ar',
       );
 
       expect(cubit.state.selectedCityId, 'alex-uuid');
-      expect(cubit.state.selectedCityName, 'الإسكندرية');
+      expect(cubit.state.selectedCity, newCity);
       expect(cityRepo.selectedCityId, 'alex-uuid');
       expect(syncedCityId, 'alex-uuid');
       expect(cubit.state.status, HomeStatus.success);
@@ -146,10 +147,10 @@ void main() {
       homeRepo.reportsToReturn = tReports;
       await cubit.init();
 
-      await cubit.onCityChangedFromAuth('alex-uuid', locale: 'ar');
+      await cubit.onCityChangedFromAuth('alex-uuid');
 
       expect(cubit.state.selectedCityId, 'alex-uuid');
-      expect(cubit.state.selectedCityName, 'الإسكندرية');
+      expect(cubit.state.selectedCity?.id, 'alex-uuid');
       expect(cubit.state.status, HomeStatus.success);
     });
 
