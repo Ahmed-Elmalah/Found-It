@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:found_it/core/constants/storage_keys.dart';
 import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
@@ -15,11 +14,11 @@ import 'package:found_it/features/reports/domain/repositories/reports_repository
 
 class ReportsRepositoryImpl implements ReportsRepository {
   final ReportsRemoteDataSource remoteDataSource;
-  final SharedPreferences prefs;
+  final SharedPreferences? prefs;
 
   const ReportsRepositoryImpl({
     required this.remoteDataSource,
-    required this.prefs,
+    this.prefs,
   });
 
   @override
@@ -101,9 +100,6 @@ class ReportsRepositoryImpl implements ReportsRepository {
   @override
   Future<String> getSelectedCityId() async {
     try {
-      final saved = prefs.getString(StorageKeys.selectedCity);
-      if (saved != null && saved.isNotEmpty) return saved;
-
       final userCity = await remoteDataSource.getUserCityId();
       if (userCity != null && userCity.isNotEmpty) return userCity;
 
