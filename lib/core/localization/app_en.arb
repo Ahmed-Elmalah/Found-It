@@ -242,6 +242,32 @@
   "homeSelectCitySubtitle": "Browse found items in your governorate",
   "homeSearchCityHint": "Search city or governorate...",
   "homeNoCitiesFound": "No cities found matching your search",
+  "homeTrustBadge": "Verified Community",
+  "homeTrustSubtitle": "All found items are securely reported by the community in {city}",
+  "@homeTrustSubtitle": {
+    "placeholders": {
+      "city": { "type": "String" }
+    }
+  },
+  "homeMinutesAgo": "{count}m ago",
+  "@homeMinutesAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "homeHoursAgo": "{count}h ago",
+  "@homeHoursAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "homeDaysAgo": "{count}d ago",
+  "@homeDaysAgo": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "homeFeedError": "Failed to load home feed",
 
   "exploreTitle": "Explore",
   "searchHint": "Search",

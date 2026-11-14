@@ -597,6 +597,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoCitiesFound => 'No cities found matching your search';
 
   @override
+  String get homeTrustBadge => 'Verified Community';
+
+  @override
+  String homeTrustSubtitle(String city) {
+    return 'All found items are securely reported by the community in $city';
+  }
+
+  @override
+  String homeMinutesAgo(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String homeHoursAgo(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String homeDaysAgo(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String get homeFeedError => 'Failed to load home feed';
+
+  @override
   String get exploreTitle => 'Explore';
 
   @override

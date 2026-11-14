@@ -143,7 +143,7 @@ void _registerHome() {
     ..registerFactory(
       () => HomeCubit(
         getHomeFeedUseCase: sl(),
-        cityLocalDataSource: sl(),
+        selectCityUseCase: sl(),
         getCitiesUseCase: sl(),
       ),
     );

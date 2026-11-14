@@ -118,10 +118,13 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (context, state) => BlocProvider(
-                create: (_) => sl<HomeCubit>()..init(),
-                child: const HomeScreen(),
-              ),
+              builder: (context, state) {
+                final userCityId = context.read<AuthCubit>().state.user?.cityId;
+                return BlocProvider(
+                  create: (_) => sl<HomeCubit>()..init(initialCityId: userCityId),
+                  child: const HomeScreen(),
+                );
+              },
             ),
           ],
         ),
@@ -233,10 +236,9 @@ final GoRouter appRouter = GoRouter(
 
 /// TEMP placeholder for screens that aren't built yet (dev only, no l10n).
 class _ComingSoon extends StatelessWidget {
-  const _ComingSoon(this.name, {this.withLogout = false});
+  const _ComingSoon(this.name);
 
   final String name;
-  final bool withLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -246,13 +248,6 @@ class _ComingSoon extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('$name — coming soon'),
-            if (withLogout) ...[
-              const SizedBox(height: 24),
-              OutlinedButton(
-                onPressed: () => context.read<AuthCubit>().logout(),
-                child: const Text('Log out'),
-              ),
-            ],
           ],
         ),
       ),

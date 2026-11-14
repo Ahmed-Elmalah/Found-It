@@ -1220,6 +1220,42 @@ abstract class AppLocalizations {
   /// **'No cities found matching your search'**
   String get homeNoCitiesFound;
 
+  /// No description provided for @homeTrustBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Community'**
+  String get homeTrustBadge;
+
+  /// No description provided for @homeTrustSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'All found items are securely reported by the community in {city}'**
+  String homeTrustSubtitle(String city);
+
+  /// No description provided for @homeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String homeMinutesAgo(int count);
+
+  /// No description provided for @homeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String homeHoursAgo(int count);
+
+  /// No description provided for @homeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String homeDaysAgo(int count);
+
+  /// No description provided for @homeFeedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load home feed'**
+  String get homeFeedError;
+
   /// No description provided for @exploreTitle.
   ///
   /// In en, this message translates to:

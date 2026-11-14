@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:found_it/features/city/data/city_local_data_source.dart';
 import 'package:found_it/features/city/domain/city_entity.dart';
 import 'package:found_it/features/city/domain/city_repository.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
+import 'package:found_it/features/city/domain/select_city_use_case.dart';
 import 'package:found_it/features/home/domain/entities/home_failure.dart';
 import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 import 'package:found_it/features/home/domain/repositories/home_repository.dart';
@@ -26,43 +26,29 @@ class _FakeHomeRepository implements HomeRepository {
   }
 }
 
-class _FakeCityLocalDataSource implements CityLocalDataSource {
-  String? savedCityId;
-
-  @override
-  String? getSelectedCityId() => savedCityId;
-
-  @override
-  Future<void> saveSelectedCityId(String cityId) async {
-    savedCityId = cityId;
-  }
-
-  @override
-  Future<void> clearSelectedCityId() async {
-    savedCityId = null;
-  }
-}
-
 class _FakeCityRepository implements CityRepository {
   List<CityEntity> cities = const [
     CityEntity(id: 'cairo-uuid', nameEn: 'Cairo', nameAr: 'القاهرة'),
     CityEntity(id: 'alex-uuid', nameEn: 'Alexandria', nameAr: 'الإسكندرية'),
   ];
+  String? selectedCityId;
 
   @override
   Future<List<CityEntity>> getCities() async => cities;
 
   @override
-  Future<void> selectCity(String cityId) async {}
+  Future<void> selectCity(String cityId) async {
+    selectedCityId = cityId;
+  }
 }
 
 void main() {
   group('HomeCubit', () {
     late _FakeHomeRepository homeRepo;
-    late _FakeCityLocalDataSource cityLocalDataSource;
     late _FakeCityRepository cityRepo;
     late GetHomeFeedUseCase getHomeFeedUseCase;
     late GetCitiesUseCase getCitiesUseCase;
+    late SelectCityUseCase selectCityUseCase;
     late HomeCubit cubit;
 
     final tReports = [
@@ -85,15 +71,15 @@ void main() {
 
     setUp(() {
       homeRepo = _FakeHomeRepository();
-      cityLocalDataSource = _FakeCityLocalDataSource();
       cityRepo = _FakeCityRepository();
       getHomeFeedUseCase = GetHomeFeedUseCase(homeRepo);
       getCitiesUseCase = GetCitiesUseCase(cityRepo);
+      selectCityUseCase = SelectCityUseCase(cityRepo);
 
       cubit = HomeCubit(
         getHomeFeedUseCase: getHomeFeedUseCase,
-        cityLocalDataSource: cityLocalDataSource,
         getCitiesUseCase: getCitiesUseCase,
+        selectCityUseCase: selectCityUseCase,
       );
     });
 
@@ -109,9 +95,8 @@ void main() {
 
     test('init loads cities, resolves selected city and fetches feed successfully', () async {
       homeRepo.reportsToReturn = tReports;
-      cityLocalDataSource.savedCityId = 'cairo-uuid';
 
-      await cubit.init();
+      await cubit.init(initialCityId: 'cairo-uuid');
 
       expect(cubit.state.status, HomeStatus.success);
       expect(cubit.state.selectedCityId, 'cairo-uuid');
@@ -142,12 +127,29 @@ void main() {
     test('selectCity changes city and reloads feed', () async {
       homeRepo.reportsToReturn = tReports;
       const newCity = CityEntity(id: 'alex-uuid', nameEn: 'Alexandria', nameAr: 'الإسكندرية');
+      String? syncedCityId;
 
-      await cubit.selectCity(newCity, locale: 'ar');
+      await cubit.selectCity(
+        newCity,
+        onCitySyncedToAuth: (id) => syncedCityId = id,
+        locale: 'ar',
+      );
 
       expect(cubit.state.selectedCityId, 'alex-uuid');
       expect(cubit.state.selectedCityName, 'الإسكندرية');
-      expect(cityLocalDataSource.savedCityId, 'alex-uuid');
+      expect(cityRepo.selectedCityId, 'alex-uuid');
+      expect(syncedCityId, 'alex-uuid');
+      expect(cubit.state.status, HomeStatus.success);
+    });
+
+    test('onCityChangedFromAuth updates city and reloads feed', () async {
+      homeRepo.reportsToReturn = tReports;
+      await cubit.init();
+
+      await cubit.onCityChangedFromAuth('alex-uuid', locale: 'ar');
+
+      expect(cubit.state.selectedCityId, 'alex-uuid');
+      expect(cubit.state.selectedCityName, 'الإسكندرية');
       expect(cubit.state.status, HomeStatus.success);
     });
 

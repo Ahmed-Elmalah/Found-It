@@ -3,7 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
-import '../../domain/entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 import 'home_feed_item_card.dart';
 import 'home_hero_banner.dart';
 
@@ -26,7 +26,6 @@ class HomeSuccessView extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
-    final locale = Localizations.localeOf(context).languageCode;
 
     return RefreshIndicator(
       onRefresh: onRefresh,
@@ -97,7 +96,7 @@ class HomeSuccessView extends StatelessWidget {
                             ),
                             SizedBox(width: 4.5.w),
                             Text(
-                              locale == 'ar' ? 'مجتمع موثوق' : 'Verified Community',
+                              l10n.homeTrustBadge,
                               style: TextStyle(
                                 fontSize: 11.sp,
                                 fontWeight: FontWeight.w700,
@@ -112,9 +111,7 @@ class HomeSuccessView extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    locale == 'ar'
-                        ? 'كل المعثورات مؤمنة ومعلنة من أفراد المجتمع في $cityName'
-                        : 'All found items are securely reported by the community in $cityName',
+                    l10n.homeTrustSubtitle(cityName),
                     style: TextStyle(
                       fontSize: 11.5.sp,
                       color: theme.colorScheme.onSurfaceVariant

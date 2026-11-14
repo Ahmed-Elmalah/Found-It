@@ -595,6 +595,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeNoCitiesFound => 'لا توجد نتائج مطابقة لبحثك';
 
   @override
+  String get homeTrustBadge => 'مجتمع موثوق';
+
+  @override
+  String homeTrustSubtitle(String city) {
+    return 'كل المعثورات مؤمنة ومعلنة من أفراد المجتمع في $city';
+  }
+
+  @override
+  String homeMinutesAgo(int count) {
+    return 'منذ $count د';
+  }
+
+  @override
+  String homeHoursAgo(int count) {
+    return 'منذ $count س';
+  }
+
+  @override
+  String homeDaysAgo(int count) {
+    return 'منذ $count ي';
+  }
+
+  @override
+  String get homeFeedError => 'فشل في تحميل معثورات المدينة';
+
+  @override
   String get exploreTitle => 'استكشاف';
 
   @override

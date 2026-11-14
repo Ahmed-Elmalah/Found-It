@@ -5,30 +5,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/features/city/domain/city_entity.dart';
 
-/// The 3 supported Egyptian cities.
-const List<CityEntity> kEgyptianCities = [
-  CityEntity(id: 'cairo', nameEn: 'Cairo', nameAr: 'القاهرة', sortOrder: 1),
-  CityEntity(id: 'giza', nameEn: 'Giza', nameAr: 'الجيزة', sortOrder: 2),
-  CityEntity(id: 'alexandria', nameEn: 'Alexandria', nameAr: 'الإسكندرية', sortOrder: 3),
-];
-
 class CitySelectionBottomSheet extends StatelessWidget {
   const CitySelectionBottomSheet({
     super.key,
-    required this.currentCity,
+    required this.currentCityId,
+    required this.cities,
     required this.onCitySelected,
-    this.availableCities = kEgyptianCities,
   });
 
-  final String currentCity;
-  final ValueChanged<String> onCitySelected;
-  final List<CityEntity> availableCities;
+  final String currentCityId;
+  final List<CityEntity> cities;
+  final ValueChanged<CityEntity> onCitySelected;
 
   static Future<void> show({
     required BuildContext context,
-    required String currentCity,
-    required ValueChanged<String> onCitySelected,
-    List<CityEntity>? availableCities,
+    required String currentCityId,
+    required List<CityEntity> cities,
+    required ValueChanged<CityEntity> onCitySelected,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -36,9 +29,9 @@ class CitySelectionBottomSheet extends StatelessWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.55),
       builder: (_) => CitySelectionBottomSheet(
-        currentCity: currentCity,
+        currentCityId: currentCityId,
+        cities: cities,
         onCitySelected: onCitySelected,
-        availableCities: availableCities ?? kEgyptianCities,
       ),
     );
   }
@@ -166,24 +159,22 @@ class CitySelectionBottomSheet extends StatelessWidget {
 
               SizedBox(height: 18.h),
 
-              // The 3 City Tiles
-              for (final city in availableCities) ...[
+              // Dynamic City Tiles from Supabase Database
+              for (final city in cities) ...[
                 Builder(
                   builder: (context) {
                     final localizedName = city.localizedName(locale);
                     final secondaryName =
                         locale == 'ar' ? city.nameEn : city.nameAr;
 
-                    final isSelected = currentCity == localizedName ||
-                        currentCity == city.nameAr ||
-                        currentCity == city.nameEn;
+                    final isSelected = city.id == currentCityId;
 
                     return Padding(
                       padding: EdgeInsets.only(bottom: 10.h),
                       child: InkWell(
                         onTap: () {
                           HapticFeedback.selectionClick();
-                          onCitySelected(localizedName);
+                          onCitySelected(city);
                           Navigator.of(context).pop();
                         },
                         borderRadius: BorderRadius.circular(16.r),
@@ -198,39 +189,39 @@ class CitySelectionBottomSheet extends StatelessWidget {
                                 ? primary.withValues(
                                     alpha: isDark ? 0.16 : 0.08)
                                 : (isDark
-                                    ? Colors.white.withValues(alpha: 0.03)
-                                    : Colors.black.withValues(alpha: 0.02)),
+                                    ? Colors.white.withValues(alpha: 0.04)
+                                    : const Color(0xFFF8FAFC)),
                             borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(
                               color: isSelected
-                                  ? primary
+                                  ? primary.withValues(
+                                      alpha: isDark ? 0.45 : 0.35)
                                   : (isDark
-                                      ? Colors.white.withValues(alpha: 0.06)
-                                      : Colors.black.withValues(alpha: 0.04)),
-                              width: isSelected ? 1.5 : 1.0,
+                                      ? Colors.white.withValues(alpha: 0.07)
+                                      : const Color(0xFFE2E8F0)),
+                              width: isSelected ? 1.4 : 1.0,
                             ),
                           ),
                           child: Row(
                             children: [
                               Container(
-                                width: 34.r,
-                                height: 34.r,
+                                width: 36.r,
+                                height: 36.r,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
                                   color: isSelected
-                                      ? primary
+                                      ? primary.withValues(
+                                          alpha: isDark ? 0.22 : 0.14)
                                       : (isDark
                                           ? Colors.white.withValues(alpha: 0.06)
                                           : Colors.black.withValues(alpha: 0.04)),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.location_city_rounded,
-                                    size: 18.r,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : theme.colorScheme.onSurfaceVariant,
-                                  ),
+                                child: Icon(
+                                  Icons.location_city_rounded,
+                                  color: isSelected
+                                      ? primary
+                                      : theme.colorScheme.onSurfaceVariant,
+                                  size: 19.r,
                                 ),
                               ),
                               SizedBox(width: 12.w),
@@ -241,7 +232,7 @@ class CitySelectionBottomSheet extends StatelessWidget {
                                     Text(
                                       localizedName,
                                       style: TextStyle(
-                                        fontSize: 15.sp,
+                                        fontSize: 14.5.sp,
                                         fontWeight: isSelected
                                             ? FontWeight.w700
                                             : FontWeight.w600,
@@ -250,14 +241,13 @@ class CitySelectionBottomSheet extends StatelessWidget {
                                             : theme.colorScheme.onSurface,
                                       ),
                                     ),
-                                    SizedBox(height: 2.h),
+                                    SizedBox(height: 1.5.h),
                                     Text(
                                       secondaryName,
                                       style: TextStyle(
                                         fontSize: 11.5.sp,
-                                        color: theme
-                                            .colorScheme.onSurfaceVariant
-                                            .withValues(alpha: 0.65),
+                                        color: theme.colorScheme.onSurfaceVariant
+                                            .withValues(alpha: 0.7),
                                       ),
                                     ),
                                   ],
@@ -265,17 +255,29 @@ class CitySelectionBottomSheet extends StatelessWidget {
                               ),
                               if (isSelected)
                                 Container(
+                                  width: 24.r,
+                                  height: 24.r,
+                                  decoration: BoxDecoration(
+                                    color: primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.check_rounded,
+                                    color: Colors.white,
+                                    size: 15.r,
+                                  ),
+                                )
+                              else
+                                Container(
                                   width: 22.r,
                                   height: 22.r,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: primary,
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.check_rounded,
-                                      color: Colors.white,
-                                      size: 15,
+                                    border: Border.all(
+                                      color: isDark
+                                          ? Colors.white.withValues(alpha: 0.25)
+                                          : Colors.black.withValues(alpha: 0.20),
+                                      width: 1.4,
                                     ),
                                   ),
                                 ),
@@ -288,7 +290,7 @@ class CitySelectionBottomSheet extends StatelessWidget {
                 ),
               ],
 
-              SizedBox(height: 16.h),
+              SizedBox(height: 14.h),
             ],
           ),
         ),

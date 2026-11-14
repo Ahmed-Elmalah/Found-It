@@ -230,6 +230,12 @@
   "homeSelectCitySubtitle": "تصفح المعثورات حسب نطاق محافظتك",
   "homeSearchCityHint": "ابحث عن محافظة أو مدينة...",
   "homeNoCitiesFound": "لا توجد نتائج مطابقة لبحثك",
+  "homeTrustBadge": "مجتمع موثوق",
+  "homeTrustSubtitle": "كل المعثورات مؤمنة ومعلنة من أفراد المجتمع في {city}",
+  "homeMinutesAgo": "منذ {count} د",
+  "homeHoursAgo": "منذ {count} س",
+  "homeDaysAgo": "منذ {count} ي",
+  "homeFeedError": "فشل في تحميل معثورات المدينة",
 
   "exploreTitle": "استكشاف",
   "searchHint": "ابحث",

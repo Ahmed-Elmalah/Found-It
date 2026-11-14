@@ -1,20 +1,20 @@
 import 'dart:math' as math;
+import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 
-/// An ultra-clear "iOS 27" Liquid Glass Navigation Bar powered by [liquid_glass_renderer].
+/// An ultra-clear Frosted Glass Navigation Bar built purely with Flutter native widgets
+/// ([BackdropFilter], [ClipRRect], and smooth spring animations).
 ///
 /// Features:
-/// - **Native iOS 27 Glass:** Uses [LiquidGlassLayer] with [LiquidGlassSettings.ios27RegularLight]
-///   and [LiquidGlassSettings.ios27RegularDark] for optical refraction and specular edge glint.
-/// - **Metaball Melting Blend Group:** [LiquidGlassBlendGroup] groups the outer capsule dock,
-///   the center Plus button, and the sliding Glass Loupe so their SDF fields organically melt together.
+/// - **Native Frosted Glass:** Uses [BackdropFilter] with [ImageFilter.blur] for silky smooth,
+///   zero-dependency glassmorphism compatible across all platforms.
+/// - **Sliding Glass Loupe:** Elastic spring physics animating the active indicator capsule.
 /// - **5 Slots:** Home, Explore, Center Report Button (with Plus `+` icon), Messages (with badge `2`), Profile.
-/// - **Spring Physics:** Elastic bounce transitions when switching tabs.
+/// - **Glowing Indicator:** Soft glowing primary dot beneath the active tab.
 class LiquidGlassBottomNavBar extends StatefulWidget {
   const LiquidGlassBottomNavBar({
     super.key,
@@ -137,44 +137,49 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
 
-    final glassSettings = isDark
-        ? LiquidGlassSettings.ios27RegularDark(frost: 1.5)
-        : LiquidGlassSettings.ios27RegularLight(frost: 1.5);
-
     return RepaintBoundary(
       child: SafeArea(
         top: false,
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 14.h),
-          child: LiquidGlassLayer(
-            settings: glassSettings,
-            child: LiquidGlassBlendGroup(
-              blend: 26.0, // Melting threshold distance
-              child: Container(
-                height: 68.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(34.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: isDark ? 0.40 : 0.06),
-                      blurRadius: 28.r,
-                      offset: Offset(0, 10.h),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: isDark ? 0.20 : 0.02),
-                      blurRadius: 8.r,
-                      offset: Offset(0, 2.h),
-                    ),
-                  ],
+          child: Container(
+            height: 68.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(34.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.38 : 0.08),
+                  blurRadius: 28.r,
+                  offset: Offset(0, 10.h),
                 ),
-                child: LiquidGlass.grouped(
-                  shape: LiquidRoundedRectangle(
-                    borderRadius: 34.r,
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.18 : 0.03),
+                  blurRadius: 8.r,
+                  offset: Offset(0, 2.h),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(34.r),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(34.r),
+                    color: isDark
+                        ? const Color(0xFF131722).withValues(alpha: 0.72)
+                        : Colors.white.withValues(alpha: 0.78),
+                    border: Border.all(
+                      color: isDark
+                          ? Colors.white.withValues(alpha: 0.14)
+                          : Colors.white.withValues(alpha: 0.85),
+                      width: 1.2,
+                    ),
                   ),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Active Glass Loupe lens that slides and melts with other shapes
+                      // Active Glass Loupe lens that slides and bounces
                       AnimatedBuilder(
                         animation: _motionController,
                         builder: (context, _) {
@@ -191,55 +196,44 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                                   horizontal: 3.w,
                                   vertical: 2.h,
                                 ),
-                                child: LiquidGlass.grouped(
-                                  shape: LiquidRoundedRectangle(
-                                    borderRadius: 22.r,
-                                  ),
-                                  appearance: LiquidGlassAppearance(
-                                    tint: isDark
-                                        ? Colors.white.withValues(alpha: 0.16)
-                                        : theme.colorScheme.primary.withValues(alpha: 0.12),
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(22.r),
-                                      // Frosted glass capsule: less transparent so selected item stands out clearly
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(22.r),
+                                    color: isDark
+                                        ? Colors.white.withValues(alpha: 0.12)
+                                        : theme.colorScheme.primary.withValues(alpha: 0.08),
+                                    border: Border.all(
                                       color: isDark
-                                          ? Colors.white.withValues(alpha: 0.12)
-                                          : theme.colorScheme.primary.withValues(alpha: 0.08),
-                                      border: Border.all(
-                                        color: isDark
-                                            ? Colors.white.withValues(alpha: 0.28)
-                                            : theme.colorScheme.primary.withValues(alpha: 0.22),
-                                        width: 1.2,
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: (isDark ? Colors.black : theme.colorScheme.primary)
-                                              .withValues(alpha: isDark ? 0.20 : 0.10),
-                                          blurRadius: 10.r,
-                                          offset: Offset(0, 2.h),
-                                        ),
-                                      ],
+                                          ? Colors.white.withValues(alpha: 0.28)
+                                          : theme.colorScheme.primary.withValues(alpha: 0.22),
+                                      width: 1.2,
                                     ),
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 3.h),
-                                        child: Container(
-                                          width: 5.r,
-                                          height: 5.r,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: theme.colorScheme.primary,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: theme.colorScheme.primary.withValues(alpha: 0.8),
-                                                blurRadius: 5.r,
-                                                spreadRadius: 1.r,
-                                              ),
-                                            ],
-                                          ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: (isDark ? Colors.black : theme.colorScheme.primary)
+                                            .withValues(alpha: isDark ? 0.20 : 0.10),
+                                        blurRadius: 10.r,
+                                        offset: Offset(0, 2.h),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 3.h),
+                                      child: Container(
+                                        width: 5.r,
+                                        height: 5.r,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: theme.colorScheme.primary,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                                              blurRadius: 5.r,
+                                              spreadRadius: 1.r,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),

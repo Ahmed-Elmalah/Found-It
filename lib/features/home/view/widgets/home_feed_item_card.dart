@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
-import '../../domain/entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 
 class HomeFeedItemCard extends StatefulWidget {
   const HomeFeedItemCard({
@@ -38,17 +38,17 @@ class _HomeFeedItemCardState extends State<HomeFeedItemCard> {
 
   String _formatTimeAgo(DateTime date, BuildContext context) {
     final diff = DateTime.now().difference(date);
-    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+    final l10n = AppLocalizations.of(context);
 
     if (diff.inMinutes < 60) {
       final mins = diff.inMinutes.clamp(1, 59);
-      return isAr ? 'منذ $mins د' : '${mins}m ago';
+      return l10n.homeMinutesAgo(mins);
     } else if (diff.inHours < 24) {
       final hours = diff.inHours;
-      return isAr ? 'منذ $hours س' : '${hours}h ago';
+      return l10n.homeHoursAgo(hours);
     } else {
       final days = diff.inDays;
-      return isAr ? 'منذ $days ي' : '${days}d ago';
+      return l10n.homeDaysAgo(days);
     }
   }
 

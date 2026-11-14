@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../domain/entities/home_failure.dart';
-import '../domain/entities/home_report_item.dart';
-import '../domain/repositories/home_repository.dart';
+import 'package:found_it/features/home/domain/entities/home_failure.dart';
+import 'package:found_it/features/home/domain/entities/home_report_item.dart';
+import 'package:found_it/features/home/domain/repositories/home_repository.dart';
 import 'home_remote_data_source.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
