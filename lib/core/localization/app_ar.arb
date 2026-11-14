@@ -216,5 +216,8 @@
   "showResults": "عرض النتائج",
 
   "emptySearchTitle": "لا توجد تقارير مطابقة.",
-  "emptySearchMessage": "جرّب تعديل فلاتر البحث."
+  "emptySearchMessage": "جرّب تعديل فلاتر البحث.",
+  "clearFilters": "مسح الفلاتر",
+  "searchFailedTitle": "تعذر تحميل التقارير",
+  "searchFailedMessage": "تحقق من اتصالك وحاول مرة أخرى."
 }

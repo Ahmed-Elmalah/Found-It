@@ -553,4 +553,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptySearchMessage => 'Try adjusting your search filters.';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
+  String get searchFailedTitle => 'Couldn\'t load reports';
+
+  @override
+  String get searchFailedMessage => 'Check your connection and try again.';
 }

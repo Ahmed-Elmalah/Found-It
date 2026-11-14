@@ -1135,6 +1135,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try adjusting your search filters.'**
   String get emptySearchMessage;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFilters;
+
+  /// No description provided for @searchFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load reports'**
+  String get searchFailedTitle;
+
+  /// No description provided for @searchFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection and try again.'**
+  String get searchFailedMessage;
 }
 
 class _AppLocalizationsDelegate
