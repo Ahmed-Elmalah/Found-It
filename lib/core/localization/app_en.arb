@@ -233,5 +233,8 @@
   "showResults": "Show results",
 
   "emptySearchTitle": "No matching reports found.",
-  "emptySearchMessage": "Try adjusting your search filters."
+  "emptySearchMessage": "Try adjusting your search filters.",
+  "clearFilters": "Clear filters",
+  "searchFailedTitle": "Couldn't load reports",
+  "searchFailedMessage": "Check your connection and try again."
 }

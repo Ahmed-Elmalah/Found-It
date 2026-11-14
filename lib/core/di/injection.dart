@@ -16,6 +16,16 @@ import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/explore/data/explore_remote_data_source.dart';
+import 'package:found_it/features/explore/data/explore_repository_impl.dart';
+import 'package:found_it/features/explore/domain/explore_repository.dart';
+import 'package:found_it/features/explore/domain/get_categories_use_case.dart'
+    as explore;
+import 'package:found_it/features/explore/domain/get_city_areas_use_case.dart'
+    as explore;
+import 'package:found_it/features/explore/domain/get_current_city_use_case.dart';
+import 'package:found_it/features/explore/domain/search_reports_use_case.dart';
+import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -85,6 +95,32 @@ Future<void> configureDependencies() async {
   _registerOnboarding();
   _registerReports();
   _registerProfile();
+  _registerExplore();
+}
+
+// ---------------------------------------------------------------------
+// Explore + smart search (Mohamed, story #2)
+// ---------------------------------------------------------------------
+void _registerExplore() {
+  sl
+    ..registerLazySingleton<ExploreRemoteDataSource>(
+      () => ExploreRemoteDataSourceImpl(sl(), sl()),
+    )
+    ..registerLazySingleton<ExploreRepository>(
+      () => ExploreRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => explore.GetCategoriesUseCase(sl()))
+    ..registerLazySingleton(() => explore.GetCityAreasUseCase(sl()))
+    ..registerLazySingleton(() => GetCurrentCityUseCase(sl()))
+    ..registerLazySingleton(() => SearchReportsUseCase(sl()))
+    ..registerFactory(
+      () => SearchCubit(
+        getCurrentCity: sl(),
+        searchReports: sl(),
+        getCategories: sl(),
+        getCityAreas: sl(),
+      ),
+    );
 }
 
 // ---------------------------------------------------------------------

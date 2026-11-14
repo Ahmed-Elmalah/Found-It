@@ -14,6 +14,7 @@ import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
+import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
@@ -106,10 +107,13 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const _ComingSoon('Home', withLogout: true),
     ),
 
-    // Explore + smart search (Figma P19 / P20) — Phase 1, mock data only.
+    // Explore + smart search (Figma P19 / P20).
     GoRoute(
       path: AppRoutes.explore,
-      builder: (context, state) => const ExploreScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (_) => sl<SearchCubit>()..init(),
+        child: const ExploreScreen(),
+      ),
     ),
 
     // Reports routes (Ziad, story #3)

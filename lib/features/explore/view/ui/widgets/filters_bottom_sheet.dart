@@ -3,37 +3,52 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/models/report_type.dart';
 import 'package:found_it/core/widgets/app_button.dart';
-import 'package:found_it/features/explore/domain/category_entity.dart';
+import 'package:found_it/features/explore/view/cubit/search_state.dart';
 
-/// Values returned by [FiltersBottomSheet]. `null` means "no filter".
+/// Values returned by [FiltersBottomSheet]. `null` / empty means "no filter".
 class ExploreFilters {
-  const ExploreFilters({this.categoryId, this.dateFrom, this.dateTo});
+  const ExploreFilters({
+    this.type,
+    this.categoryIds = const [],
+    this.areaIds = const [],
+    this.dateFrom,
+    this.dateTo,
+  });
 
-  final String? categoryId;
+  final ReportType? type;
+  final List<String> categoryIds;
+  final List<String> areaIds;
   final DateTime? dateFrom;
   final DateTime? dateTo;
 }
 
-/// Filters sheet (Figma P20 / P53): category, date range, city and the
-/// Reset / Show results actions.
+/// Filters sheet (Figma P20 / P53): type, categories, areas, date range, city
+/// and the Reset / Show results actions.
 class FiltersBottomSheet extends StatefulWidget {
   const FiltersBottomSheet({
     super.key,
     required this.categories,
+    required this.areas,
     required this.cityName,
-    this.initialCategoryId,
+    this.initialType,
+    this.initialCategoryIds = const [],
+    this.initialAreaIds = const [],
     this.initialDateFrom,
     this.initialDateTo,
   });
 
-  final List<CategoryEntity> categories;
+  final List<CategoryOption> categories;
+  final List<AreaOption> areas;
 
   /// The user's city name (already localized). The field is read only: the
   /// search always stays inside that city.
   final String cityName;
 
-  final String? initialCategoryId;
+  final ReportType? initialType;
+  final List<String> initialCategoryIds;
+  final List<String> initialAreaIds;
   final DateTime? initialDateFrom;
   final DateTime? initialDateTo;
 
@@ -42,7 +57,9 @@ class FiltersBottomSheet extends StatefulWidget {
 }
 
 class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
-  late String? _categoryId;
+  late ReportType? _type;
+  late Set<String> _categoryIds;
+  late Set<String> _areaIds;
   late DateTime? _dateFrom;
   late DateTime? _dateTo;
 
@@ -55,7 +72,9 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _categoryId = widget.initialCategoryId;
+    _type = widget.initialType;
+    _categoryIds = {...widget.initialCategoryIds};
+    _areaIds = {...widget.initialAreaIds};
     _dateFrom = widget.initialDateFrom;
     _dateTo = widget.initialDateTo;
     _cityController.text = widget.cityName;
@@ -109,7 +128,9 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
 
   void _reset() {
     setState(() {
-      _categoryId = null;
+      _type = null;
+      _categoryIds = {};
+      _areaIds = {};
       _dateFrom = null;
       _dateTo = null;
       _syncDateControllers();
@@ -119,7 +140,9 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
   void _showResults() {
     Navigator.of(context).pop(
       ExploreFilters(
-        categoryId: _categoryId,
+        type: _type,
+        categoryIds: _categoryIds.toList(),
+        areaIds: _areaIds.toList(),
         dateFrom: _dateFrom,
         dateTo: _dateTo,
       ),
@@ -148,6 +171,38 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
               ),
             ),
             SizedBox(height: 20.h),
+            _Label(l10n.reportTypeLabel),
+            SizedBox(height: 10.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                _FilterChip(
+                  label: l10n.tabAll,
+                  isSelected: _type == null,
+                  onTap: () => setState(() => _type = null),
+                ),
+                _FilterChip(
+                  label: l10n.typeLost,
+                  isSelected: _type == ReportType.lost,
+                  onTap: () => setState(
+                    () => _type = _type == ReportType.lost
+                        ? null
+                        : ReportType.lost,
+                  ),
+                ),
+                _FilterChip(
+                  label: l10n.typeFound,
+                  isSelected: _type == ReportType.found,
+                  onTap: () => setState(
+                    () => _type = _type == ReportType.found
+                        ? null
+                        : ReportType.found,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.h),
             _Label(l10n.categoryLabel),
             SizedBox(height: 10.h),
             Wrap(
@@ -155,14 +210,33 @@ class _FiltersBottomSheetState extends State<FiltersBottomSheet> {
               runSpacing: 8.h,
               children: [
                 for (final category in widget.categories)
-                  _CategoryOption(
+                  _FilterChip(
                     label: category.name(l10n.localeName),
-                    isSelected: category.id == _categoryId,
-                    onTap: () => setState(
-                      () => _categoryId = category.id == _categoryId
-                          ? null
-                          : category.id,
-                    ),
+                    isSelected: _categoryIds.contains(category.id),
+                    onTap: () => setState(() {
+                      if (!_categoryIds.remove(category.id)) {
+                        _categoryIds.add(category.id);
+                      }
+                    }),
+                  ),
+              ],
+            ),
+            SizedBox(height: 20.h),
+            _Label(l10n.areaLabel),
+            SizedBox(height: 10.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.h,
+              children: [
+                for (final area in widget.areas)
+                  _FilterChip(
+                    label: area.name(l10n.localeName),
+                    isSelected: _areaIds.contains(area.id),
+                    onTap: () => setState(() {
+                      if (!_areaIds.remove(area.id)) {
+                        _areaIds.add(area.id);
+                      }
+                    }),
                   ),
               ],
             ),
@@ -241,8 +315,8 @@ class _Label extends StatelessWidget {
   }
 }
 
-class _CategoryOption extends StatelessWidget {
-  const _CategoryOption({
+class _FilterChip extends StatelessWidget {
+  const _FilterChip({
     required this.label,
     required this.isSelected,
     required this.onTap,

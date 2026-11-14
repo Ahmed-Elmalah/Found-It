@@ -551,4 +551,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get emptySearchMessage => 'جرّب تعديل فلاتر البحث.';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get searchFailedTitle => 'تعذر تحميل التقارير';
+
+  @override
+  String get searchFailedMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
 }
