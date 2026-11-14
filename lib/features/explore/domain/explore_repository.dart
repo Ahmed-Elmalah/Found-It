@@ -25,9 +25,12 @@ abstract interface class ExploreRepository {
   /// All active categories, ordered like the database.
   Future<List<CategoryEntity>> getCategories();
 
-  /// The areas of [cityId]. [lang] only changes the sort order.
-  Future<List<AreaEntity>> getCityAreas({required String cityId, String lang});
+  /// The areas of [cityId], ordered for the active [lang] (`ar` or `en`).
+  Future<List<AreaEntity>> getCityAreas({
+    required String cityId,
+    String lang = 'en',
+  });
 
-  /// The city selected by the user, or Cairo when nothing is saved.
-  Future<CityEntity> getCurrentCity();
+  /// The city of the logged-in user.
+  Future<CityEntity> getCityById(String cityId);
 }

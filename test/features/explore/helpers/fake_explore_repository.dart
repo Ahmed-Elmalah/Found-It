@@ -123,6 +123,9 @@ class FakeExploreRepository implements ExploreRepository {
     ),
   ];
 
+  String? lastAreaLang;
+  String? lastCityId;
+
   void resetRecording() {
     searchCalls = 0;
     lastQuery = null;
@@ -131,10 +134,15 @@ class FakeExploreRepository implements ExploreRepository {
     lastAreaIds = null;
     lastDateFrom = null;
     lastDateTo = null;
+    lastAreaLang = null;
+    lastCityId = null;
   }
 
   @override
-  Future<CityEntity> getCurrentCity() async => city;
+  Future<CityEntity> getCityById(String cityId) async {
+    lastCityId = cityId;
+    return city;
+  }
 
   @override
   Future<List<CategoryEntity>> getCategories() async => categories;
@@ -143,7 +151,10 @@ class FakeExploreRepository implements ExploreRepository {
   Future<List<AreaEntity>> getCityAreas({
     required String cityId,
     String lang = 'en',
-  }) async => areas;
+  }) async {
+    lastAreaLang = lang;
+    return areas;
+  }
 
   @override
   Future<List<ReportEntity>> searchReports({

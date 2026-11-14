@@ -68,9 +68,9 @@ class ExploreRepositoryImpl implements ExploreRepository {
   }
 
   @override
-  Future<CityEntity> getCurrentCity() async {
+  Future<CityEntity> getCityById(String cityId) async {
     try {
-      return await remoteDataSource.getCurrentCity();
+      return await remoteDataSource.getCityById(cityId);
     } catch (error) {
       throw _mapFailure(error);
     }

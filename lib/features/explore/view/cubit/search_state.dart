@@ -46,6 +46,7 @@ class AreaOption extends Equatable {
 class SearchState extends Equatable {
   const SearchState({
     this.status = SearchStatus.initial,
+    this.cityId,
     this.query = '',
     this.type,
     this.categoryIds = const [],
@@ -57,10 +58,13 @@ class SearchState extends Equatable {
     this.areas = const [],
     this.cityNameEn = '',
     this.cityNameAr = '',
-    this.errorMessage,
   });
 
   final SearchStatus status;
+
+  /// The logged-in user's city, taken from `AuthCubit`.
+  final String? cityId;
+
   final String query;
   final ReportType? type;
   final List<String> categoryIds;
@@ -77,7 +81,6 @@ class SearchState extends Equatable {
   final List<AreaOption> areas;
   final String cityNameEn;
   final String cityNameAr;
-  final String? errorMessage;
 
   bool get isLoading =>
       status == SearchStatus.initial || status == SearchStatus.loading;
@@ -94,6 +97,7 @@ class SearchState extends Equatable {
 
   SearchState copyWith({
     SearchStatus? status,
+    String? cityId,
     String? query,
     ReportType? type,
     bool clearType = false,
@@ -107,11 +111,10 @@ class SearchState extends Equatable {
     List<AreaOption>? areas,
     String? cityNameEn,
     String? cityNameAr,
-    String? errorMessage,
-    bool clearError = false,
   }) {
     return SearchState(
       status: status ?? this.status,
+      cityId: cityId ?? this.cityId,
       query: query ?? this.query,
       type: clearType ? null : (type ?? this.type),
       categoryIds: categoryIds ?? this.categoryIds,
@@ -123,13 +126,13 @@ class SearchState extends Equatable {
       areas: areas ?? this.areas,
       cityNameEn: cityNameEn ?? this.cityNameEn,
       cityNameAr: cityNameAr ?? this.cityNameAr,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
 
   @override
   List<Object?> get props => [
     status,
+    cityId,
     query,
     type,
     categoryIds,
@@ -141,6 +144,5 @@ class SearchState extends Equatable {
     areas,
     cityNameEn,
     cityNameAr,
-    errorMessage,
   ];
 }

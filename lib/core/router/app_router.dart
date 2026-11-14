@@ -111,7 +111,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.explore,
       builder: (context, state) => BlocProvider(
-        create: (_) => sl<SearchCubit>()..init(),
+        create: (_) =>
+            sl<SearchCubit>()
+              ..init(cityId: sl<AuthCubit>().state.user!.cityId!),
         child: const ExploreScreen(),
       ),
     ),
@@ -158,12 +160,7 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final report = state.extra! as ReportEntity;
         return BlocProvider(
-          create: (_) => EditReportCubit(
-            report,
-            sl(),
-            sl(),
-            sl(),
-          ),
+          create: (_) => EditReportCubit(report, sl(), sl(), sl()),
           child: EditReportScreen(report: report),
         );
       },

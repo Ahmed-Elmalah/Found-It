@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,6 +30,16 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   final _searchController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Keep the areas sorted for the active locale.
+    final lang = Localizations.localeOf(context).languageCode == 'ar'
+        ? 'ar'
+        : 'en';
+    unawaited(context.read<SearchCubit>().setLocale(lang));
+  }
 
   @override
   void dispose() {

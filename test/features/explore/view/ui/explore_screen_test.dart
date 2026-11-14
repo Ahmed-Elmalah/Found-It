@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/constants/app_durations.dart';
 import 'package:found_it/features/explore/domain/get_categories_use_case.dart';
 import 'package:found_it/features/explore/domain/get_city_areas_use_case.dart';
-import 'package:found_it/features/explore/domain/get_current_city_use_case.dart';
+import 'package:found_it/features/explore/domain/get_city_by_id_use_case.dart';
 import 'package:found_it/features/explore/domain/search_reports_use_case.dart';
 import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/cubit/search_state.dart';
@@ -23,7 +23,7 @@ Future<SearchCubit> _pump(
 }) async {
   final repo = repository ?? FakeExploreRepository();
   final cubit = SearchCubit(
-    getCurrentCity: GetCurrentCityUseCase(repo),
+    getCityById: GetCityByIdUseCase(repo),
     searchReports: SearchReportsUseCase(repo),
     getCategories: GetCategoriesUseCase(repo),
     getCityAreas: GetCityAreasUseCase(repo),
@@ -35,7 +35,7 @@ Future<SearchCubit> _pump(
       GoRoute(
         path: '/explore',
         builder: (_, _) => BlocProvider(
-          create: (_) => cubit..init(),
+          create: (_) => cubit..init(cityId: 'city-cairo'),
           child: const ExploreScreen(),
         ),
       ),
@@ -137,10 +137,12 @@ void main() {
   testWidgets('renders in dark mode and RTL without overflowing', (
     tester,
   ) async {
-    await _pump(tester, dark: true, rtl: true);
+    final repository = FakeExploreRepository();
+    await _pump(tester, repository: repository, dark: true, rtl: true);
 
     expect(find.text('استكشاف'), findsOneWidget);
     expect(find.text('AirPods Pro, white case'), findsOneWidget);
+    expect(repository.lastAreaLang, 'ar');
     expect(tester.takeException(), isNull);
   });
 }

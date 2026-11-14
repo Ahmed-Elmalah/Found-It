@@ -1,7 +1,5 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'package:found_it/core/constants/storage_keys.dart';
 import 'package:found_it/core/models/report_type.dart';
 import 'package:found_it/features/explore/data/models/area_model.dart';
 import 'package:found_it/features/explore/data/models/category_model.dart';
@@ -11,7 +9,7 @@ import 'package:found_it/features/explore/data/models/report_model.dart';
 /// All Supabase access for Explore lives here. Cubits and screens never
 /// import `supabase_flutter`.
 abstract interface class ExploreRemoteDataSource {
-  Future<CityModel> getCurrentCity();
+  Future<CityModel> getCityById(String cityId);
 
   Future<List<ReportModel>> searchReports({
     required String cityId,
@@ -29,34 +27,23 @@ abstract interface class ExploreRemoteDataSource {
 
   Future<List<AreaModel>> getCityAreas({
     required String cityId,
-    required String lang,
+    String lang = 'en',
   });
 }
 
 class ExploreRemoteDataSourceImpl implements ExploreRemoteDataSource {
-  const ExploreRemoteDataSourceImpl(this._supabase, this._prefs);
+  const ExploreRemoteDataSourceImpl(this._supabase);
 
   final SupabaseClient _supabase;
-  final SharedPreferences _prefs;
 
   @override
-  Future<CityModel> getCurrentCity() async {
-    final savedCityId = _prefs.getString(StorageKeys.selectedCity);
-    if (savedCityId != null && savedCityId.isNotEmpty) {
-      final saved = await _supabase
-          .from('cities')
-          .select('id, name_en, name_ar')
-          .eq('id', savedCityId)
-          .maybeSingle();
-      if (saved != null) return CityModel.fromJson(saved);
-    }
-
-    final cairo = await _supabase
+  Future<CityModel> getCityById(String cityId) async {
+    final row = await _supabase
         .from('cities')
         .select('id, name_en, name_ar')
-        .eq('name_en', 'Cairo')
+        .eq('id', cityId)
         .single();
-    return CityModel.fromJson(cairo);
+    return CityModel.fromJson(row);
   }
 
   @override
@@ -109,14 +96,11 @@ class ExploreRemoteDataSourceImpl implements ExploreRemoteDataSource {
   @override
   Future<List<AreaModel>> getCityAreas({
     required String cityId,
-    required String lang,
+    String lang = 'en',
   }) async {
     final rows = await _supabase.rpc(
       'get_city_areas',
-      params: {
-        'p_city_id': cityId,
-        'p_lang': lang.startsWith('ar') ? 'ar' : 'en',
-      },
+      params: {'p_city_id': cityId, 'p_lang': lang},
     );
     return (rows as List<dynamic>)
         .map((row) => AreaModel.fromJson(row as Map<String, dynamic>))

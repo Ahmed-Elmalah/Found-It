@@ -23,7 +23,7 @@ import 'package:found_it/features/explore/domain/get_categories_use_case.dart'
     as explore;
 import 'package:found_it/features/explore/domain/get_city_areas_use_case.dart'
     as explore;
-import 'package:found_it/features/explore/domain/get_current_city_use_case.dart';
+import 'package:found_it/features/explore/domain/get_city_by_id_use_case.dart';
 import 'package:found_it/features/explore/domain/search_reports_use_case.dart';
 import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
@@ -104,18 +104,18 @@ Future<void> configureDependencies() async {
 void _registerExplore() {
   sl
     ..registerLazySingleton<ExploreRemoteDataSource>(
-      () => ExploreRemoteDataSourceImpl(sl(), sl()),
+      () => ExploreRemoteDataSourceImpl(sl()),
     )
     ..registerLazySingleton<ExploreRepository>(
       () => ExploreRepositoryImpl(remoteDataSource: sl()),
     )
     ..registerLazySingleton(() => explore.GetCategoriesUseCase(sl()))
     ..registerLazySingleton(() => explore.GetCityAreasUseCase(sl()))
-    ..registerLazySingleton(() => GetCurrentCityUseCase(sl()))
+    ..registerLazySingleton(() => GetCityByIdUseCase(sl()))
     ..registerLazySingleton(() => SearchReportsUseCase(sl()))
     ..registerFactory(
       () => SearchCubit(
-        getCurrentCity: sl(),
+        getCityById: sl(),
         searchReports: sl(),
         getCategories: sl(),
         getCityAreas: sl(),
@@ -128,17 +128,12 @@ void _registerExplore() {
 // ---------------------------------------------------------------------
 void _registerReports() {
   sl
-    ..registerLazySingleton<PhotoPickerService>(
-      () => PhotoPickerServiceImpl(),
-    )
+    ..registerLazySingleton<PhotoPickerService>(() => PhotoPickerServiceImpl())
     ..registerLazySingleton<ReportsRemoteDataSource>(
       () => ReportsRemoteDataSourceImpl(sl()),
     )
     ..registerLazySingleton<ReportsRepository>(
-      () => ReportsRepositoryImpl(
-        remoteDataSource: sl(),
-        prefs: sl(),
-      ),
+      () => ReportsRepositoryImpl(remoteDataSource: sl(), prefs: sl()),
     )
     ..registerLazySingleton(() => GetCategoriesUseCase(sl()))
     ..registerLazySingleton(() => GetCityAreasUseCase(sl()))
@@ -157,13 +152,7 @@ void _registerReports() {
         photoPicker: sl(),
       ),
     )
-    ..registerFactory(
-      () => MyReportsCubit(
-        sl(),
-        sl(),
-        sl(),
-      ),
-    );
+    ..registerFactory(() => MyReportsCubit(sl(), sl(), sl()));
 }
 
 // ---------------------------------------------------------------------
@@ -227,13 +216,5 @@ void _registerProfile() {
     ..registerLazySingleton(() => UpdateProfileUseCase(sl()))
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
-    ..registerFactory(
-      () => ProfileCubit(
-        sl(),
-        sl(),
-        sl(),
-        sl(),
-        sl(),
-      ),
-    );
+    ..registerFactory(() => ProfileCubit(sl(), sl(), sl(), sl(), sl()));
 }

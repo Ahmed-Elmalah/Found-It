@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:found_it/core/constants/app_durations.dart';
 import 'package:found_it/core/models/report_type.dart';
-import 'package:found_it/features/explore/domain/explore_failure.dart';
 import 'package:found_it/features/explore/domain/get_categories_use_case.dart';
 import 'package:found_it/features/explore/domain/get_city_areas_use_case.dart';
-import 'package:found_it/features/explore/domain/get_current_city_use_case.dart';
+import 'package:found_it/features/explore/domain/get_city_by_id_use_case.dart';
 import 'package:found_it/features/explore/domain/report_entity.dart';
 import 'package:found_it/features/explore/domain/search_reports_use_case.dart';
 import 'package:found_it/features/explore/view/cubit/search_state.dart';
@@ -16,13 +15,13 @@ import 'package:found_it/features/explore/view/cubit/search_state.dart';
 /// the debounced `search_reports` call.
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit({
-    required GetCurrentCityUseCase getCurrentCity,
+    required GetCityByIdUseCase getCityById,
     required SearchReportsUseCase searchReports,
     required GetCategoriesUseCase getCategories,
     required GetCityAreasUseCase getCityAreas,
   })
     // ignore: prefer_initializing_formals
-    : _getCurrentCity = getCurrentCity,
+    : _getCityById = getCityById,
        // ignore: prefer_initializing_formals
        _searchReports = searchReports,
        // ignore: prefer_initializing_formals
@@ -31,30 +30,36 @@ class SearchCubit extends Cubit<SearchState> {
        _getCityAreas = getCityAreas,
        super(const SearchState());
 
-  final GetCurrentCityUseCase _getCurrentCity;
+  final GetCityByIdUseCase _getCityById;
   final SearchReportsUseCase _searchReports;
   final GetCategoriesUseCase _getCategories;
   final GetCityAreasUseCase _getCityAreas;
 
   Timer? _debounce;
-  String? _cityId;
+
+  /// Active app language, used to sort the areas returned by the backend.
+  String _lang = 'en';
+
   int _requestToken = 0;
 
-  /// Resolves the city, loads the filters data and runs the first search.
-  Future<void> init() async {
+  /// Loads the user's city, the filter data and runs the first search.
+  ///
+  /// [cityId] comes from `AuthCubit`; [lang] is the active app language.
+  Future<void> init({required String cityId, String lang = 'en'}) async {
     _debounce?.cancel();
+    _lang = _normalizeLang(lang);
+
     final token = ++_requestToken;
-    emit(state.copyWith(status: SearchStatus.loading, clearError: true));
+    emit(state.copyWith(status: SearchStatus.loading, cityId: cityId));
 
     try {
-      final city = await _getCurrentCity();
-      _cityId = city.id;
-
+      final city = await _getCityById(cityId);
       final categories = await _getCategories();
-      final areas = await _getCityAreas(cityId: city.id);
-      final results = await _runSearch(city.id);
+      final areas = await _fetchAreas(cityId);
+      final results = await _runSearch(cityId);
 
       if (_isStale(token)) return;
+
       emit(
         state.copyWith(
           status: results.isEmpty ? SearchStatus.empty : SearchStatus.success,
@@ -67,31 +72,40 @@ class SearchCubit extends Cubit<SearchState> {
                 nameAr: category.nameAr,
               ),
           ],
-          areas: [
-            for (final area in areas)
-              AreaOption(id: area.id, nameEn: area.nameEn, nameAr: area.nameAr),
-          ],
+          areas: areas,
           cityNameEn: city.nameEn,
           cityNameAr: city.nameAr,
-          clearError: true,
         ),
       );
-    } catch (error) {
+    } catch (_) {
       if (_isStale(token)) return;
-      emit(
-        state.copyWith(
-          status: SearchStatus.failure,
-          results: const [],
-          errorMessage: _messageFor(error),
-        ),
-      );
+      emit(state.copyWith(status: SearchStatus.failure, results: const []));
+    }
+  }
+
+  /// Re-fetches the areas when the app language changes so they stay sorted
+  /// for the active locale. The search results themselves are unaffected.
+  Future<void> setLocale(String lang) async {
+    final normalized = _normalizeLang(lang);
+    if (_lang == normalized) return;
+    _lang = normalized;
+
+    final cityId = state.cityId;
+    if (cityId == null) return;
+
+    try {
+      final areas = await _fetchAreas(cityId);
+      if (isClosed || cityId != state.cityId) return;
+      emit(state.copyWith(areas: areas));
+    } catch (_) {
+      // The previous areas are still usable; sorting is a cosmetic concern.
     }
   }
 
   /// Debounces typing so one search runs after [AppDurations.searchDebounce].
   void onQueryChanged(String value) {
     if (state.query == value) return;
-    emit(state.copyWith(query: value, clearError: true));
+    emit(state.copyWith(query: value));
 
     _debounce?.cancel();
     _debounce = Timer(AppDurations.searchDebounce, search);
@@ -108,6 +122,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(
       SearchState(
         status: state.status,
+        cityId: state.cityId,
         query: state.query,
         type: type,
         categoryIds: categoryIds ?? const [],
@@ -164,6 +179,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(
       SearchState(
         status: state.status,
+        cityId: state.cityId,
         results: state.results,
         categories: state.categories,
         areas: state.areas,
@@ -177,14 +193,11 @@ class SearchCubit extends Cubit<SearchState> {
   /// Runs the current query + filters. Used by Retry and by the debounce.
   Future<void> search() async {
     _debounce?.cancel();
-    final cityId = _cityId;
-    if (cityId == null) {
-      await init();
-      return;
-    }
+    final cityId = state.cityId;
+    if (cityId == null) return;
 
     final token = ++_requestToken;
-    emit(state.copyWith(status: SearchStatus.loading, clearError: true));
+    emit(state.copyWith(status: SearchStatus.loading));
 
     try {
       final results = await _runSearch(cityId);
@@ -193,18 +206,11 @@ class SearchCubit extends Cubit<SearchState> {
         state.copyWith(
           status: results.isEmpty ? SearchStatus.empty : SearchStatus.success,
           results: results,
-          clearError: true,
         ),
       );
-    } catch (error) {
+    } catch (_) {
       if (_isStale(token)) return;
-      emit(
-        state.copyWith(
-          status: SearchStatus.failure,
-          results: const [],
-          errorMessage: _messageFor(error),
-        ),
-      );
+      emit(state.copyWith(status: SearchStatus.failure, results: const []));
     }
   }
 
@@ -220,12 +226,23 @@ class SearchCubit extends Cubit<SearchState> {
     );
   }
 
+  Future<List<AreaOption>> _fetchAreas(String cityId) async {
+    final lang = _lang;
+    final areas = await _getCityAreas(cityId: cityId, lang: lang);
+    if (!isClosed && lang != _lang) {
+      // The locale changed while the request was running: fetch again.
+      return _fetchAreas(cityId);
+    }
+    return [
+      for (final area in areas)
+        AreaOption(id: area.id, nameEn: area.nameEn, nameAr: area.nameAr),
+    ];
+  }
+
   bool _isStale(int token) => isClosed || token != _requestToken;
 
-  String _messageFor(Object error) {
-    if (error is ExploreFailure) return error.message;
-    return error.toString();
-  }
+  static String _normalizeLang(String lang) =>
+      lang.startsWith('ar') ? 'ar' : 'en';
 
   @override
   Future<void> close() {
