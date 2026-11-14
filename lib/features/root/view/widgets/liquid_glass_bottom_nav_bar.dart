@@ -162,17 +162,27 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
             child: ClipRRect(
               borderRadius: BorderRadius.circular(34.r),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+                filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(34.r),
-                    color: isDark
-                        ? const Color(0xFF131722).withValues(alpha: 0.72)
-                        : Colors.white.withValues(alpha: 0.78),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: isDark
+                          ? [
+                              const Color(0xFF1E2230).withValues(alpha: 0.45),
+                              const Color(0xFF131722).withValues(alpha: 0.28),
+                            ]
+                          : [
+                              Colors.white.withValues(alpha: 0.35),
+                              Colors.white.withValues(alpha: 0.18),
+                            ],
+                    ),
                     border: Border.all(
                       color: isDark
-                          ? Colors.white.withValues(alpha: 0.14)
-                          : Colors.white.withValues(alpha: 0.85),
+                          ? Colors.white.withValues(alpha: 0.20)
+                          : Colors.white.withValues(alpha: 0.70),
                       width: 1.2,
                     ),
                   ),
@@ -199,19 +209,29 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(22.r),
-                                    color: isDark
-                                        ? Colors.white.withValues(alpha: 0.12)
-                                        : theme.colorScheme.primary.withValues(alpha: 0.08),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: isDark
+                                          ? [
+                                              Colors.white.withValues(alpha: 0.18),
+                                              Colors.white.withValues(alpha: 0.08),
+                                            ]
+                                          : [
+                                              theme.colorScheme.primary.withValues(alpha: 0.14),
+                                              theme.colorScheme.primary.withValues(alpha: 0.06),
+                                            ],
+                                    ),
                                     border: Border.all(
                                       color: isDark
-                                          ? Colors.white.withValues(alpha: 0.28)
-                                          : theme.colorScheme.primary.withValues(alpha: 0.22),
+                                          ? Colors.white.withValues(alpha: 0.32)
+                                          : theme.colorScheme.primary.withValues(alpha: 0.28),
                                       width: 1.2,
                                     ),
                                     boxShadow: [
                                       BoxShadow(
                                         color: (isDark ? Colors.black : theme.colorScheme.primary)
-                                            .withValues(alpha: isDark ? 0.20 : 0.10),
+                                            .withValues(alpha: isDark ? 0.22 : 0.12),
                                         blurRadius: 10.r,
                                         offset: Offset(0, 2.h),
                                       ),
