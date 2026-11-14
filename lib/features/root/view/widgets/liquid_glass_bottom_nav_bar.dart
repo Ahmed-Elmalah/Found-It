@@ -162,7 +162,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
             child: ClipRRect(
               borderRadius: BorderRadius.circular(34.r),
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+                filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(34.r),
@@ -171,19 +171,19 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                       end: Alignment.bottomRight,
                       colors: isDark
                           ? [
-                              const Color(0xFF1E2230).withValues(alpha: 0.45),
-                              const Color(0xFF131722).withValues(alpha: 0.28),
+                              const Color(0xFF1E2230).withValues(alpha: 0.25),
+                              const Color(0xFF131722).withValues(alpha: 0.10),
                             ]
                           : [
-                              Colors.white.withValues(alpha: 0.35),
-                              Colors.white.withValues(alpha: 0.18),
+                              Colors.white.withValues(alpha: 0.16),
+                              Colors.white.withValues(alpha: 0.05),
                             ],
                     ),
                     border: Border.all(
                       color: isDark
-                          ? Colors.white.withValues(alpha: 0.20)
-                          : Colors.white.withValues(alpha: 0.70),
-                      width: 1.2,
+                          ? Colors.white.withValues(alpha: 0.16)
+                          : Colors.white.withValues(alpha: 0.45),
+                      width: 1.0,
                     ),
                   ),
                   child: Stack(
