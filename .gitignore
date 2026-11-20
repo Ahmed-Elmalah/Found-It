@@ -51,3 +51,6 @@ app.*.map.json
 .env
 .env.*
 !.env.example
+
+# Firebase service account keys (secret, never commit)
+*firebase-adminsdk*.json
