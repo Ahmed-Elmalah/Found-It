@@ -36,6 +36,11 @@ import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/view/ui/match_compare_screen.dart';
+import 'package:found_it/features/matches/view/ui/potential_matches_screen.dart';
+import 'package:found_it/features/recovery/domain/entities/handover_contact_entity.dart';
+import 'package:found_it/features/recovery/view/ui/handover_instructions_screen.dart';
 import 'package:found_it/features/root/view/ui/main_shell.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -229,6 +234,49 @@ final GoRouter appRouter = GoRouter(
           create: (_) => sl<ProfileCubit>(),
           child: EditProfileScreen(profile: profile),
         );
+      },
+    ),
+
+    // Matches routes (Ziad, story #2)
+    GoRoute(
+      path: AppRoutes.potentialMatches,
+      builder: (context, state) {
+        final list = state.extra as List<MatchEntity>?;
+        return PotentialMatchesScreen(initialMatches: list);
+      },
+    ),
+    GoRoute(
+      path: AppRoutes.matchCompare,
+      redirect: (context, state) {
+        if (state.extra is! MatchEntity) {
+          return AppRoutes.potentialMatches;
+        }
+        return null;
+      },
+      builder: (context, state) {
+        final match = state.extra! as MatchEntity;
+        return MatchCompareScreen(match: match);
+      },
+    ),
+
+    // Recovery routes (Ziad, story #4)
+    GoRoute(
+      path: AppRoutes.handoverInstructions,
+      builder: (context, state) {
+        final extra = state.extra;
+        if (extra is HandoverContactEntity) {
+          return HandoverInstructionsScreen(contact: extra);
+        }
+        if (extra is String) {
+          return HandoverInstructionsScreen(matchId: extra);
+        }
+        if (extra is Map<String, dynamic>) {
+          return HandoverInstructionsScreen(
+            matchId: extra['matchId'] as String?,
+            contact: extra['contact'] as HandoverContactEntity?,
+          );
+        }
+        return const HandoverInstructionsScreen();
       },
     ),
   ],

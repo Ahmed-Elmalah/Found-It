@@ -15,4 +15,7 @@ abstract final class AppRoutes {
   static const editReport = '/edit-report';
   static const profile = '/profile';
   static const editProfile = '/edit-profile';
+  static const potentialMatches = '/potential-matches';
+  static const matchCompare = '/match-compare';
+  static const handoverInstructions = '/handover-instructions';
 }

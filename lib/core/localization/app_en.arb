@@ -302,5 +302,59 @@
   "emptySearchMessage": "Try adjusting your search filters.",
   "clearFilters": "Clear filters",
   "searchFailedTitle": "Couldn't load reports",
-  "searchFailedMessage": "Check your connection and try again."
+  "searchFailedMessage": "Check your connection and try again.",
+
+  "similarityScore": "{score}% Match",
+  "@similarityScore": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+  "viewMatch": "View match",
+  "dismiss": "Dismiss",
+  "matchCompareTitle": "Match comparison",
+  "yourReport": "Your report",
+  "matchedReport": "Matched report",
+  "compareCategory": "Category",
+  "compareArea": "Area",
+  "compareDate": "Date",
+  "compareDescription": "Description",
+  "hiddenDetailsNotice": "Private details are hidden to protect owner's privacy and ensure secure verification.",
+  "startChat": "Start chat",
+  "notMyItem": "Not my item",
+  "noMatchesTitle": "No potential matches yet",
+  "noMatchesSubtitle": "We'll notify you automatically when a matching report is found.",
+  "potentialMatchesSectionTitle": "Potential matches ({count})",
+  "@potentialMatchesSectionTitle": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "viewAllMatches": "View all",
+  "matchDismissedMessage": "Match dismissed",
+
+  "markAsRecovered": "Mark as Item Recovered",
+  "confirmRecovery": "Confirm recovery",
+  "confirmRecoveryTitle": "Confirm Item Recovered",
+  "confirmRecoveryMessage": "Are you sure this item has been safely recovered? This will close the report and notify the other party.",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "handoverTitle": "Handover instructions",
+  "handoverSubtitle": "Follow these safety tips for a safe and smooth handover.",
+  "safetyTipsTitle": "Safety guidelines",
+  "safetyTipPublic": "Meet in a well-lit, busy public location.",
+  "safetyTipDaylight": "Prefer meeting during daylight hours.",
+  "safetyTipInspect": "Inspect the item carefully to verify ownership before leaving.",
+  "safetyTipCash": "Never exchange cash or transfer money.",
+  "contactInfoTitle": "Verified contact details",
+  "contactName": "Name",
+  "contactPhone": "Phone",
+  "contactEmail": "Email",
+  "itemRecoveredSuccess": "Item marked as recovered successfully!",
+  "matchesLoadError": "Failed to load matches. Please try again.",
+  "matchDismissError": "Failed to dismiss match.",
+  "recoveryErrorNotVerified": "Ownership is not verified yet.",
+  "recoveryErrorInvalidState": "This item or match is already closed.",
+  "recoveryErrorNotAllowed": "You are not authorized to perform this action.",
+  "recoveryErrorGeneric": "Failed to complete recovery. Please try again."
 }
