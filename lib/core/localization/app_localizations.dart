@@ -1459,6 +1459,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verified'**
   String get messagesFilterVerified;
+
+  /// No description provided for @messagesExploreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Reports'**
+  String get messagesExploreAction;
+
+  /// No description provided for @messagesClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get messagesClearFilters;
 }
 
 class _AppLocalizationsDelegate

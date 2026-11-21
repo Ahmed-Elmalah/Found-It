@@ -729,4 +729,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get messagesFilterVerified => 'موثق';
+
+  @override
+  String get messagesExploreAction => 'استكشاف البلاغات';
+
+  @override
+  String get messagesClearFilters => 'مسح الفلاتر';
 }

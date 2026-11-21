@@ -320,5 +320,7 @@
   "messagesFilterUnread": "Unread",
   "messagesFilterLost": "Lost",
   "messagesFilterFound": "Found",
-  "messagesFilterVerified": "Verified"
+  "messagesFilterVerified": "Verified",
+  "messagesExploreAction": "Explore Reports",
+  "messagesClearFilters": "Clear filters"
 }

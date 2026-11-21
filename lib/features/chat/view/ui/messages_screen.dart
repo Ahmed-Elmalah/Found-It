@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_state.dart';
 import 'package:found_it/features/chat/view/widgets/chat_list_card.dart';
@@ -358,17 +359,26 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
                     // Search or Filter Empty State
                     if (state.isSearchEmpty) {
-                      return const SliverFillRemaining(
+                      return SliverFillRemaining(
                         hasScrollBody: false,
-                        child: ChatListEmptyView(isSearchEmpty: true),
+                        child: ChatListEmptyView(
+                          isSearchEmpty: true,
+                          onClearFilters: () {
+                            _searchController.clear();
+                            cubit.clearSearch();
+                            cubit.setFilter(ChatFilter.all);
+                          },
+                        ),
                       );
                     }
 
                     // Zero Chats Empty State
                     if (state.isEmpty) {
-                      return const SliverFillRemaining(
+                      return SliverFillRemaining(
                         hasScrollBody: false,
-                        child: ChatListEmptyView(),
+                        child: ChatListEmptyView(
+                          onExplore: () => context.push(AppRoutes.explore),
+                        ),
                       );
                     }
 

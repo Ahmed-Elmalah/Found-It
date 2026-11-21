@@ -273,5 +273,7 @@
   "messagesFilterUnread": "غير مقروء",
   "messagesFilterLost": "مفقود",
   "messagesFilterFound": "معثور عليه",
-  "messagesFilterVerified": "موثق"
+  "messagesFilterVerified": "موثق",
+  "messagesExploreAction": "استكشاف البلاغات",
+  "messagesClearFilters": "مسح الفلاتر"
 }

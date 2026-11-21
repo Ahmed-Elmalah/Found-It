@@ -731,4 +731,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messagesFilterVerified => 'Verified';
+
+  @override
+  String get messagesExploreAction => 'Explore Reports';
+
+  @override
+  String get messagesClearFilters => 'Clear filters';
 }
