@@ -37,6 +37,14 @@ import 'package:found_it/features/home/data/home_repository_impl.dart';
 import 'package:found_it/features/home/domain/repositories/home_repository.dart';
 import 'package:found_it/features/home/domain/use_cases/get_home_feed_use_case.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
+import 'package:found_it/features/matches/data/matches_remote_data_source.dart';
+import 'package:found_it/features/matches/data/matches_repository_impl.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_match_details_use_case.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_use_case.dart';
+import 'package:found_it/features/matches/domain/use_cases/reject_match_use_case.dart';
+import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -52,6 +60,12 @@ import 'package:found_it/features/profile/domain/use_cases/get_profile_use_case.
 import 'package:found_it/features/profile/domain/use_cases/set_my_city_use_case.dart';
 import 'package:found_it/features/profile/domain/use_cases/update_profile_use_case.dart';
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
+import 'package:found_it/features/recovery/data/recovery_remote_data_source.dart';
+import 'package:found_it/features/recovery/data/recovery_repository_impl.dart';
+import 'package:found_it/features/recovery/domain/repositories/recovery_repository.dart';
+import 'package:found_it/features/recovery/domain/use_cases/get_match_contact_use_case.dart';
+import 'package:found_it/features/recovery/domain/use_cases/mark_item_recovered_use_case.dart';
+import 'package:found_it/features/recovery/view/cubit/recovery_cubit.dart';
 import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/data/reports_repository_impl.dart';
 import 'package:found_it/features/reports/data/services/photo_picker_service.dart';
@@ -109,6 +123,8 @@ Future<void> configureDependencies() async {
   _registerReports();
   _registerProfile();
   _registerExplore();
+  _registerMatches();
+  _registerRecovery();
 }
 
 // ---------------------------------------------------------------------
@@ -274,4 +290,50 @@ void _registerProfile() {
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
     ..registerFactory(() => ProfileCubit(sl(), sl(), sl(), sl(), sl()));
+}
+
+// ---------------------------------------------------------------------
+// Potential Matches (Ziad, story #2)
+// ---------------------------------------------------------------------
+void _registerMatches() {
+  sl
+    ..registerLazySingleton<MatchesRemoteDataSource>(
+      () => MatchesRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<MatchesRepository>(
+      () => MatchesRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetMyMatchesUseCase(sl()))
+    ..registerLazySingleton(() => GetMatchDetailsUseCase(sl()))
+    ..registerLazySingleton(() => RejectMatchUseCase(sl()))
+    ..registerLazySingleton(() => GetMyMatchesCountUseCase(sl()))
+    ..registerFactory(
+      () => MatchesCubit(
+        getMyMatches: sl(),
+        getMatchDetails: sl(),
+        rejectMatchUseCase: sl(),
+        getMyMatchesCount: sl(),
+      ),
+    );
+}
+
+// ---------------------------------------------------------------------
+// Recovery & Handover (Ziad, story #4)
+// ---------------------------------------------------------------------
+void _registerRecovery() {
+  sl
+    ..registerLazySingleton<RecoveryRemoteDataSource>(
+      () => RecoveryRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<RecoveryRepository>(
+      () => RecoveryRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetMatchContactUseCase(sl()))
+    ..registerLazySingleton(() => MarkItemRecoveredUseCase(sl()))
+    ..registerFactory(
+      () => RecoveryCubit(
+        getMatchContact: sl(),
+        markItemRecovered: sl(),
+      ),
+    );
 }

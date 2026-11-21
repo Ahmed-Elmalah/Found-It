@@ -678,4 +678,139 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchFailedMessage => 'Check your connection and try again.';
+
+  @override
+  String similarityScore(int score) {
+    return '$score% Match';
+  }
+
+  @override
+  String get viewMatch => 'View match';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get matchCompareTitle => 'Match comparison';
+
+  @override
+  String get yourReport => 'Your report';
+
+  @override
+  String get matchedReport => 'Matched report';
+
+  @override
+  String get compareCategory => 'Category';
+
+  @override
+  String get compareArea => 'Area';
+
+  @override
+  String get compareDate => 'Date';
+
+  @override
+  String get compareDescription => 'Description';
+
+  @override
+  String get hiddenDetailsNotice =>
+      'Private details are hidden to protect owner\'s privacy and ensure secure verification.';
+
+  @override
+  String get startChat => 'Start chat';
+
+  @override
+  String get notMyItem => 'Not my item';
+
+  @override
+  String get noMatchesTitle => 'No potential matches yet';
+
+  @override
+  String get noMatchesSubtitle =>
+      'We\'ll notify you automatically when a matching report is found.';
+
+  @override
+  String potentialMatchesSectionTitle(int count) {
+    return 'Potential matches ($count)';
+  }
+
+  @override
+  String get viewAllMatches => 'View all';
+
+  @override
+  String get matchDismissedMessage => 'Match dismissed';
+
+  @override
+  String get markAsRecovered => 'Mark as Item Recovered';
+
+  @override
+  String get confirmRecovery => 'Confirm recovery';
+
+  @override
+  String get confirmRecoveryTitle => 'Confirm Item Recovered';
+
+  @override
+  String get confirmRecoveryMessage =>
+      'Are you sure this item has been safely recovered? This will close the report and notify the other party.';
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get handoverTitle => 'Handover instructions';
+
+  @override
+  String get handoverSubtitle =>
+      'Follow these safety tips for a safe and smooth handover.';
+
+  @override
+  String get safetyTipsTitle => 'Safety guidelines';
+
+  @override
+  String get safetyTipPublic => 'Meet in a well-lit, busy public location.';
+
+  @override
+  String get safetyTipDaylight => 'Prefer meeting during daylight hours.';
+
+  @override
+  String get safetyTipInspect =>
+      'Inspect the item carefully to verify ownership before leaving.';
+
+  @override
+  String get safetyTipCash => 'Never exchange cash or transfer money.';
+
+  @override
+  String get contactInfoTitle => 'Verified contact details';
+
+  @override
+  String get contactName => 'Name';
+
+  @override
+  String get contactPhone => 'Phone';
+
+  @override
+  String get contactEmail => 'Email';
+
+  @override
+  String get itemRecoveredSuccess => 'Item marked as recovered successfully!';
+
+  @override
+  String get matchesLoadError => 'Failed to load matches. Please try again.';
+
+  @override
+  String get matchDismissError => 'Failed to dismiss match.';
+
+  @override
+  String get recoveryErrorNotVerified => 'Ownership is not verified yet.';
+
+  @override
+  String get recoveryErrorInvalidState =>
+      'This item or match is already closed.';
+
+  @override
+  String get recoveryErrorNotAllowed =>
+      'You are not authorized to perform this action.';
+
+  @override
+  String get recoveryErrorGeneric =>
+      'Failed to complete recovery. Please try again.';
 }

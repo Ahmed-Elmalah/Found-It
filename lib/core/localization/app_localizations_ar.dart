@@ -676,4 +676,139 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchFailedMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String similarityScore(int score) {
+    return '$score% تطابق';
+  }
+
+  @override
+  String get viewMatch => 'عرض التطابق';
+
+  @override
+  String get dismiss => 'تجاهل';
+
+  @override
+  String get matchCompareTitle => 'مقارنة التطابق';
+
+  @override
+  String get yourReport => 'بلاغك';
+
+  @override
+  String get matchedReport => 'البلاغ المطابق';
+
+  @override
+  String get compareCategory => 'الفئة';
+
+  @override
+  String get compareArea => 'المنطقة';
+
+  @override
+  String get compareDate => 'التاريخ';
+
+  @override
+  String get compareDescription => 'الوصف';
+
+  @override
+  String get hiddenDetailsNotice =>
+      'التفاصيل الخاصة مخفية لحماية خصوصية المالك وضمان التحقق الآمن.';
+
+  @override
+  String get startChat => 'بدء محادثة';
+
+  @override
+  String get notMyItem => 'ليس غرضي';
+
+  @override
+  String get noMatchesTitle => 'لا توجد تطابقات محتملة حتى الآن';
+
+  @override
+  String get noMatchesSubtitle =>
+      'سنرسل لك إشعاراً تلقائياً عند العثور على بلاغ مطابق.';
+
+  @override
+  String potentialMatchesSectionTitle(int count) {
+    return 'تطابقات محتملة ($count)';
+  }
+
+  @override
+  String get viewAllMatches => 'عرض الكل';
+
+  @override
+  String get matchDismissedMessage => 'تم تجاهل التطابق';
+
+  @override
+  String get markAsRecovered => 'تأكيد استلام الغرض';
+
+  @override
+  String get confirmRecovery => 'تأكيد الاستلام';
+
+  @override
+  String get confirmRecoveryTitle => 'تأكيد استلام الغرض';
+
+  @override
+  String get confirmRecoveryMessage =>
+      'هل أنت متأكد من استلام هذا الغرض بأمان؟ سيتم إغلاق البلاغ وإشعار الطرف الآخر.';
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get handoverTitle => 'تعليمات التسليم';
+
+  @override
+  String get handoverSubtitle =>
+      'اتبع إرشادات السلامة التالية لتسليم آمن وسلس.';
+
+  @override
+  String get safetyTipsTitle => 'إرشادات الأمان';
+
+  @override
+  String get safetyTipPublic => 'التقِ في مكان عام ومضاء ومزدحم.';
+
+  @override
+  String get safetyTipDaylight => 'يُفضل المقابلة في ساعات النهار.';
+
+  @override
+  String get safetyTipInspect =>
+      'عاين الغرض بدقة وتأكد من الملكية قبل المغادرة.';
+
+  @override
+  String get safetyTipCash => 'لا تقم بتحويل أو تبادل أي أموال نقدية.';
+
+  @override
+  String get contactInfoTitle => 'بيانات التواصل الموثقة';
+
+  @override
+  String get contactName => 'الاسم';
+
+  @override
+  String get contactPhone => 'الهاتف';
+
+  @override
+  String get contactEmail => 'البريد الإلكتروني';
+
+  @override
+  String get itemRecoveredSuccess => 'تم تسجيل استلام الغرض بنجاح!';
+
+  @override
+  String get matchesLoadError =>
+      'تعذر تحميل التطابقات. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get matchDismissError => 'تعذر استبعاد التطابق.';
+
+  @override
+  String get recoveryErrorNotVerified => 'لم يتم تأكيد الملكية بعد.';
+
+  @override
+  String get recoveryErrorInvalidState =>
+      'تم إغلاق هذا البلاغ أو التطابق مسبقاً.';
+
+  @override
+  String get recoveryErrorNotAllowed => 'غير مصرح لك بإجراء هذه العملية.';
+
+  @override
+  String get recoveryErrorGeneric =>
+      'فشل تأكيد الاستلام. يرجى المحاولة مرة أخرى.';
 }

@@ -137,9 +137,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           final currentCityName = profile.localizedCity(locale);
 
           return ListView(
-            padding: EdgeInsetsDirectional.symmetric(
-              horizontal: 16.w,
-              vertical: 8.h,
+            padding: EdgeInsetsDirectional.fromSTEB(
+              16.w,
+              8.h,
+              16.w,
+              100.h,
             ),
             children: [
               // Header Card
@@ -164,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.compare_arrows_rounded,
                 title: l10n.potentialMatches,
-                value: l10n.comingSoon,
+                onTap: () => context.push(AppRoutes.matches),
               ),
 
               // Account Section
