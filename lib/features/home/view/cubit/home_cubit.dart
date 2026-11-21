@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/features/city/domain/city_entity.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
 import 'package:found_it/features/city/domain/select_city_use_case.dart';
@@ -12,11 +15,16 @@ class HomeCubit extends Cubit<HomeState> {
     required this.getHomeFeedUseCase,
     required this.getCitiesUseCase,
     required this.selectCityUseCase,
-  }) : super(const HomeState());
+    ReportsChangedNotifier? reportsChangedNotifier,
+  }) : super(const HomeState()) {
+    _reportsChangedSubscription =
+        reportsChangedNotifier?.stream.listen((_) => refresh());
+  }
 
   final GetHomeFeedUseCase getHomeFeedUseCase;
   final GetCitiesUseCase getCitiesUseCase;
   final SelectCityUseCase selectCityUseCase;
+  StreamSubscription<void>? _reportsChangedSubscription;
 
   List<CityEntity> _cachedCities = const [];
   List<CityEntity> get cachedCities => _cachedCities;
@@ -131,5 +139,11 @@ class HomeCubit extends Cubit<HomeState> {
         failure: failure,
       ));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _reportsChangedSubscription?.cancel();
+    return super.close();
   }
 }

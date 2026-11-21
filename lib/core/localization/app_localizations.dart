@@ -1471,6 +1471,276 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear filters'**
   String get messagesClearFilters;
+
+  /// No description provided for @similarityScore.
+  ///
+  /// In en, this message translates to:
+  /// **'{score}% Match'**
+  String similarityScore(int score);
+
+  /// No description provided for @viewMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'View match'**
+  String get viewMatch;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @matchCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match comparison'**
+  String get matchCompareTitle;
+
+  /// No description provided for @yourReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report'**
+  String get yourReport;
+
+  /// No description provided for @matchedReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched report'**
+  String get matchedReport;
+
+  /// No description provided for @compareCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get compareCategory;
+
+  /// No description provided for @compareArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get compareArea;
+
+  /// No description provided for @compareDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get compareDate;
+
+  /// No description provided for @compareDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get compareDescription;
+
+  /// No description provided for @hiddenDetailsNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Private details are hidden to protect owner\'s privacy and ensure secure verification.'**
+  String get hiddenDetailsNotice;
+
+  /// No description provided for @startChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Start chat'**
+  String get startChat;
+
+  /// No description provided for @notMyItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Not my item'**
+  String get notMyItem;
+
+  /// No description provided for @noMatchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No potential matches yet'**
+  String get noMatchesTitle;
+
+  /// No description provided for @noMatchesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you automatically when a matching report is found.'**
+  String get noMatchesSubtitle;
+
+  /// No description provided for @potentialMatchesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Potential matches ({count})'**
+  String potentialMatchesSectionTitle(int count);
+
+  /// No description provided for @viewAllMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'View all'**
+  String get viewAllMatches;
+
+  /// No description provided for @matchDismissedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Match dismissed'**
+  String get matchDismissedMessage;
+
+  /// No description provided for @markAsRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Item Recovered'**
+  String get markAsRecovered;
+
+  /// No description provided for @confirmRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm recovery'**
+  String get confirmRecovery;
+
+  /// No description provided for @confirmRecoveryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Item Recovered'**
+  String get confirmRecoveryTitle;
+
+  /// No description provided for @confirmRecoveryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure this item has been safely recovered? This will close the report and notify the other party.'**
+  String get confirmRecoveryMessage;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @handoverTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Handover instructions'**
+  String get handoverTitle;
+
+  /// No description provided for @handoverSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow these safety tips for a safe and smooth handover.'**
+  String get handoverSubtitle;
+
+  /// No description provided for @safetyTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Safety guidelines'**
+  String get safetyTipsTitle;
+
+  /// No description provided for @safetyTipPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Meet in a well-lit, busy public location.'**
+  String get safetyTipPublic;
+
+  /// No description provided for @safetyTipDaylight.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefer meeting during daylight hours.'**
+  String get safetyTipDaylight;
+
+  /// No description provided for @safetyTipInspect.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspect the item carefully to verify ownership before leaving.'**
+  String get safetyTipInspect;
+
+  /// No description provided for @safetyTipCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Never exchange cash or transfer money.'**
+  String get safetyTipCash;
+
+  /// No description provided for @contactInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified contact details'**
+  String get contactInfoTitle;
+
+  /// No description provided for @contactName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get contactName;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get contactPhone;
+
+  /// No description provided for @contactEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get contactEmail;
+
+  /// No description provided for @itemRecoveredSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Item marked as recovered successfully!'**
+  String get itemRecoveredSuccess;
+
+  /// No description provided for @matchesLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load matches. Please try again.'**
+  String get matchesLoadError;
+
+  /// No description provided for @matchesErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This match is no longer available'**
+  String get matchesErrorNotFound;
+
+  /// No description provided for @matchesErrorNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t do this action'**
+  String get matchesErrorNotAllowed;
+
+  /// No description provided for @matchesErrorInvalidState.
+  ///
+  /// In en, this message translates to:
+  /// **'This match is already closed'**
+  String get matchesErrorInvalidState;
+
+  /// No description provided for @matchesErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection'**
+  String get matchesErrorNetwork;
+
+  /// No description provided for @matchDismissError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to dismiss match.'**
+  String get matchDismissError;
+
+  /// No description provided for @recoveryErrorNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership is not verified yet.'**
+  String get recoveryErrorNotVerified;
+
+  /// No description provided for @recoveryErrorInvalidState.
+  ///
+  /// In en, this message translates to:
+  /// **'This item or match is already closed.'**
+  String get recoveryErrorInvalidState;
+
+  /// No description provided for @recoveryErrorNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not authorized to perform this action.'**
+  String get recoveryErrorNotAllowed;
+
+  /// No description provided for @recoveryErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to complete recovery. Please try again.'**
+  String get recoveryErrorGeneric;
 }
 
 class _AppLocalizationsDelegate

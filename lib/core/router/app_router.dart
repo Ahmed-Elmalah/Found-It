@@ -22,6 +22,10 @@ import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/home/view/ui/home_screen.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
+import 'package:found_it/features/matches/view/ui/match_compare_screen.dart';
+import 'package:found_it/features/matches/view/ui/potential_matches_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -30,6 +34,8 @@ import 'package:found_it/features/profile/domain/entities/user_profile_entity.da
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
 import 'package:found_it/features/profile/view/ui/profile_screen.dart';
+import 'package:found_it/features/recovery/view/cubit/recovery_cubit.dart';
+import 'package:found_it/features/recovery/view/ui/handover_instructions_screen.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
@@ -238,7 +244,7 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // =========================================================================
-    // Sprint 2 Route Stubs (Temporary placeholders until screens are built)
+    // Sprint 2 Routes
     // =========================================================================
 
     // Report Details (Adham, story #1)
@@ -253,7 +259,13 @@ final GoRouter appRouter = GoRouter(
     // Potential Matches list (Ziad, story #2)
     GoRoute(
       path: AppRoutes.matches,
-      builder: (context, state) => const _ComingSoon('Potential Matches'),
+      builder: (context, state) {
+        final reportId = state.uri.queryParameters['reportId'];
+        return BlocProvider(
+          create: (_) => sl<MatchesCubit>()..loadMatches(reportId: reportId),
+          child: PotentialMatchesScreen(reportId: reportId),
+        );
+      },
     ),
 
     // Match Compare (Ziad, story #2)
@@ -261,7 +273,22 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.matchCompare,
       builder: (context, state) {
         final id = state.pathParameters['id'] ?? '';
-        return _ComingSoon('Match Compare ($id)');
+        final match = state.extra as MatchEntity?;
+        return BlocProvider(
+          create: (_) {
+            final cubit = sl<MatchesCubit>();
+            if (match != null) {
+              cubit.setMatchDetails(match);
+            } else if (id.isNotEmpty) {
+              cubit.loadDetails(id);
+            }
+            return cubit;
+          },
+          child: MatchCompareScreen(
+            matchId: id,
+            match: match,
+          ),
+        );
       },
     ),
 
@@ -279,7 +306,16 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.handover,
       builder: (context, state) {
         final matchId = state.pathParameters['matchId'] ?? '';
-        return _ComingSoon('Handover ($matchId)');
+        return BlocProvider(
+          create: (_) {
+            final cubit = sl<RecoveryCubit>();
+            if (matchId.isNotEmpty) {
+              cubit.loadContact(matchId);
+            }
+            return cubit;
+          },
+          child: HandoverInstructionsScreen(matchId: matchId),
+        );
       },
     ),
 
