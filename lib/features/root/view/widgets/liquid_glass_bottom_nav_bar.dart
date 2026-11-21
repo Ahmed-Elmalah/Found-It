@@ -200,7 +200,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             alignment: AlignmentDirectional(currentX, 0),
                             child: FractionallySizedBox(
                               widthFactor: 0.20 * stretch,
-                              heightFactor: 0.86 / math.sqrt(stretch),
+                              heightFactor: 0.99 / math.sqrt(stretch),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 3.w,
@@ -240,7 +240,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                                   child: Align(
                                     alignment: Alignment.bottomCenter,
                                     child: Padding(
-                                      padding: EdgeInsets.only(bottom: 3.h),
+                                      padding: EdgeInsets.only(bottom: 2.h),
                                       child: Container(
                                         width: 5.r,
                                         height: 5.r,
@@ -249,7 +249,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                                           color: theme.colorScheme.primary,
                                           boxShadow: [
                                             BoxShadow(
-                                              color: theme.colorScheme.primary.withValues(alpha: 0.8),
+                                              color: theme.colorScheme.primary.withValues(alpha: 0.9),
                                               blurRadius: 5.r,
                                               spreadRadius: 1.r,
                                             ),

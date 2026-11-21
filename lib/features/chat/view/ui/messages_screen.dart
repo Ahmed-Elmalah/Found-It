@@ -23,6 +23,26 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
+  // ---------------------------------------------------------------------------
+  // 🎛️ تحكم الشفافية والتدريج للأب بار (Visual Tuning Controls)
+  // تقدر تعدل القيم دي عشان تظبط درجة الشفافية وسرعة التدريج مع البدي:
+  // ---------------------------------------------------------------------------
+  /// المسافة بالسكرول (بالبكسل) اللي بيحصل فيها التدريج الكامل (كل ما تكبر الرقم التدريج يبقى أبطأ وأنعم)
+  static const double kScrollDistance = 90.0;
+
+  /// قوة البلور الزجاجي الأقصى (Frosted Blur Sigma)
+  static const double kMaxBlurSigma = 18.0;
+
+  /// الشفافية القصوى في الدارك مود (0.0 = شفاف تماماً، 1.0 = معتم)
+  static const double kDarkMaxOpacity = 0.80;
+
+  /// الشفافية القصوى في اللايت مود (0.0 = شفاف تماماً، 1.0 = معتم)
+  static const double kLightMaxOpacity = 0.75;
+
+  /// منطقة التلاشي المتدرجة مع البدي (Feather height) تمنع أي خط قاطع وتدمج الأب بار مع البدي
+  static const double kFeatherHeight = 30.0;
+  // ---------------------------------------------------------------------------
+
   late final TextEditingController _searchController;
   late final ScrollController _scrollController;
   double _scrollProgress = 0.0;
@@ -37,8 +57,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   void _onScroll() {
     final offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-    final progress = (offset / 48.h).clamp(0.0, 1.0);
-    if ((progress - _scrollProgress).abs() > 0.01) {
+    final rawProgress = (offset / kScrollDistance.h).clamp(0.0, 1.0);
+    // منحنى تكعيبي ناعم يخلي التدرج يبدأ بهدوء شديد ويدرج خطوة بخطوة مع البدي
+    final progress = Curves.easeOutCubic.transform(rawProgress);
+    if ((progress - _scrollProgress).abs() > 0.005) {
       setState(() => _scrollProgress = progress);
     }
   }
@@ -134,7 +156,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<ChatListCubit>();
     final topPadding = MediaQuery.of(context).padding.top;
-    final topBarHeight = topPadding + 52.h;
+    final baseBarHeight = 52.h;
+    final topBarTotalHeight = topPadding + baseBarHeight;
+    final maxOpacity = isDark ? kDarkMaxOpacity : kLightMaxOpacity;
+    final baseColor = isDark ? const Color(0xFF0F172A) : Colors.white;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -154,7 +179,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               slivers: [
                 // Top clearance for header bar
                 SliverToBoxAdapter(
-                  child: SizedBox(height: topBarHeight),
+                  child: SizedBox(height: topBarTotalHeight),
                 ),
 
                 // Large Title & Search & Filter Pills
@@ -427,45 +452,61 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ),
 
-          // 2. Gradual, Seamless Frosted Header Bar (NO hard line, NO icons)
+          // 2. Gradual, Feathered Frosted Header Bar (Smooth seamless blend with body)
           Positioned(
             top: 0,
             left: 0,
             right: 0,
-            child: ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 18 * _scrollProgress,
-                  sigmaY: 18 * _scrollProgress,
-                ),
-                child: Container(
-                  height: topBarHeight,
-                  padding: EdgeInsets.only(top: topPadding),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        (isDark ? const Color(0xFF0F172A) : Colors.white)
-                            .withValues(alpha: 0.88 * _scrollProgress),
-                        (isDark ? const Color(0xFF0F172A) : Colors.white)
-                            .withValues(alpha: 0.60 * _scrollProgress),
-                        (isDark ? const Color(0xFF0F172A) : Colors.white)
-                            .withValues(alpha: 0.0 * _scrollProgress),
-                      ],
-                      stops: const [0.0, 0.72, 1.0],
-                    ),
+            child: IgnorePointer(
+              ignoring: _scrollProgress < 0.1,
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: kMaxBlurSigma * _scrollProgress,
+                    sigmaY: kMaxBlurSigma * _scrollProgress,
                   ),
-                  child: Center(
-                    child: Opacity(
-                      opacity: _scrollProgress,
-                      child: Text(
-                        l10n.messagesTitle,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.w700,
-                          color: theme.colorScheme.onSurface,
-                          letterSpacing: -0.3,
+                  child: Container(
+                    height: topBarTotalHeight + kFeatherHeight.h,
+                    padding: EdgeInsets.only(top: topPadding),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          baseColor.withValues(
+                            alpha: maxOpacity * _scrollProgress,
+                          ),
+                          baseColor.withValues(
+                            alpha: (maxOpacity * 0.85) * _scrollProgress,
+                          ),
+                          baseColor.withValues(
+                            alpha: (maxOpacity * 0.45) * _scrollProgress,
+                          ),
+                          baseColor.withValues(
+                            alpha: (maxOpacity * 0.12) * _scrollProgress,
+                          ),
+                          baseColor.withValues(alpha: 0.0),
+                        ],
+                        stops: const [0.0, 0.45, 0.70, 0.88, 1.0],
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        height: baseBarHeight,
+                        child: Center(
+                          child: Opacity(
+                            opacity: _scrollProgress,
+                            child: Text(
+                              l10n.messagesTitle,
+                              style: TextStyle(
+                                fontSize: 17.sp,
+                                fontWeight: FontWeight.w700,
+                                color: theme.colorScheme.onSurface,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
