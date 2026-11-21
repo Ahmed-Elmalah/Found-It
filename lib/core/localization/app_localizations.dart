@@ -1429,6 +1429,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please check your internet connection and try again.'**
   String get messagesFailedSubtitle;
+
+  /// No description provided for @messagesFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get messagesFilterAll;
+
+  /// No description provided for @messagesFilterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get messagesFilterUnread;
+
+  /// No description provided for @messagesFilterLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get messagesFilterLost;
+
+  /// No description provided for @messagesFilterFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get messagesFilterFound;
+
+  /// No description provided for @messagesFilterVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get messagesFilterVerified;
 }
 
 class _AppLocalizationsDelegate

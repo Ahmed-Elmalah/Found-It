@@ -315,5 +315,10 @@
   "messagesNow": "Just now",
   "messagesRetry": "Retry",
   "messagesFailedTitle": "Couldn't load messages",
-  "messagesFailedSubtitle": "Please check your internet connection and try again."
+  "messagesFailedSubtitle": "Please check your internet connection and try again.",
+  "messagesFilterAll": "All",
+  "messagesFilterUnread": "Unread",
+  "messagesFilterLost": "Lost",
+  "messagesFilterFound": "Found",
+  "messagesFilterVerified": "Verified"
 }

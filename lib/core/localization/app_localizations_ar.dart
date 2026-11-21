@@ -714,4 +714,19 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get messagesFailedSubtitle =>
       'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
+
+  @override
+  String get messagesFilterAll => 'الكل';
+
+  @override
+  String get messagesFilterUnread => 'غير مقروء';
+
+  @override
+  String get messagesFilterLost => 'مفقود';
+
+  @override
+  String get messagesFilterFound => 'معثور عليه';
+
+  @override
+  String get messagesFilterVerified => 'موثق';
 }

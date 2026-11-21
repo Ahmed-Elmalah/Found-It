@@ -716,4 +716,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get messagesFailedSubtitle =>
       'Please check your internet connection and try again.';
+
+  @override
+  String get messagesFilterAll => 'All';
+
+  @override
+  String get messagesFilterUnread => 'Unread';
+
+  @override
+  String get messagesFilterLost => 'Lost';
+
+  @override
+  String get messagesFilterFound => 'Found';
+
+  @override
+  String get messagesFilterVerified => 'Verified';
 }

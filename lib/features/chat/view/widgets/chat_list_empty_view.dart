@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
@@ -43,7 +42,7 @@ class ChatListEmptyView extends StatelessWidget {
             : Icons.chat_bubble_outline_rounded);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 40.h),
+      padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 50.h),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -53,8 +52,8 @@ class ChatListEmptyView extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Container(
-                width: 110.r,
-                height: 110.r,
+                width: 100.r,
+                height: 100.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isError
@@ -65,8 +64,8 @@ class ChatListEmptyView extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 82.r,
-                height: 82.r,
+                width: 76.r,
+                height: 76.r,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isError
@@ -77,21 +76,13 @@ class ChatListEmptyView extends StatelessWidget {
                 ),
                 child: Icon(
                   icon,
-                  size: 38.sp,
-                  color: isError
-                      ? const Color(0xFFDC2626)
-                      : primary,
+                  size: 34.sp,
+                  color: isError ? const Color(0xFFDC2626) : primary,
                 ),
               ),
             ],
-          )
-              .animate()
-              .scale(
-                duration: 500.ms,
-                curve: Curves.easeOutBack,
-              )
-              .fadeIn(duration: 400.ms),
-          SizedBox(height: 24.h),
+          ),
+          SizedBox(height: 20.h),
 
           // Title
           Text(
@@ -102,7 +93,7 @@ class ChatListEmptyView extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: theme.colorScheme.onSurface,
             ),
-          ).animate().fadeIn(delay: 150.ms).slideY(begin: 0.1, end: 0),
+          ),
           SizedBox(height: 8.h),
 
           // Subtitle
@@ -114,7 +105,7 @@ class ChatListEmptyView extends StatelessWidget {
               height: 1.45,
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.75),
             ),
-          ).animate().fadeIn(delay: 250.ms).slideY(begin: 0.1, end: 0),
+          ),
 
           // Retry Button if error
           if (isError && onRetry != null) ...[
@@ -138,7 +129,7 @@ class ChatListEmptyView extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-            ).animate().fadeIn(delay: 350.ms).scale(),
+            ),
           ],
         ],
       ),

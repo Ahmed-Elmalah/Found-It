@@ -268,5 +268,10 @@
   "messagesNow": "الآن",
   "messagesRetry": "إعادة المحاولة",
   "messagesFailedTitle": "تعذر تحميل الرسائل",
-  "messagesFailedSubtitle": "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى."
+  "messagesFailedSubtitle": "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.",
+  "messagesFilterAll": "الكل",
+  "messagesFilterUnread": "غير مقروء",
+  "messagesFilterLost": "مفقود",
+  "messagesFilterFound": "معثور عليه",
+  "messagesFilterVerified": "موثق"
 }

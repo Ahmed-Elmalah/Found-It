@@ -54,4 +54,8 @@ class ChatListCubit extends Cubit<ChatListState> {
   void clearSearch() {
     emit(state.copyWith(searchQuery: ''));
   }
+
+  void setFilter(ChatFilter filter) {
+    emit(state.copyWith(activeFilter: filter));
+  }
 }

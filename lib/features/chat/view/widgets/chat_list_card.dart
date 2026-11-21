@@ -50,13 +50,15 @@ class _ChatListCardState extends State<ChatListCard> {
     if (iconName == null) return Icons.chat_bubble_outline_rounded;
     return switch (iconName.toLowerCase()) {
       'headphones' => Icons.headphones_rounded,
-      'smartphone' || 'phone' => Icons.smartphone_rounded,
+      'smartphone' || 'phone' || 'phones' => Icons.smartphone_rounded,
       'account_balance_wallet' || 'wallet' || 'wallets' =>
         Icons.account_balance_wallet_rounded,
       'key' || 'keys' => Icons.key_rounded,
       'badge' || 'document' || 'documents' => Icons.badge_outlined,
       'pets' || 'pet' => Icons.pets_rounded,
       'backpack' || 'bag' || 'bags' => Icons.backpack_outlined,
+      'jewelry' => Icons.diamond_outlined,
+      'accessories' => Icons.watch_outlined,
       _ => Icons.category_rounded,
     };
   }
@@ -71,7 +73,7 @@ class _ChatListCardState extends State<ChatListCard> {
       return Center(
         child: Icon(
           _resolveCategoryIcon(category),
-          size: 28.sp,
+          size: 26.sp,
           color: accentColor,
         ),
       );
@@ -86,7 +88,7 @@ class _ChatListCardState extends State<ChatListCard> {
         initials,
         style: TextStyle(
           color: accentColor,
-          fontSize: 22.sp,
+          fontSize: 20.sp,
           fontWeight: FontWeight.w800,
         ),
       ),
@@ -128,7 +130,7 @@ class _ChatListCardState extends State<ChatListCard> {
           padding: EdgeInsets.all(14.r),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.r),
-            color: isDark ? const Color(0xFF1E293B) : Colors.white,
+            color: isDark ? const Color(0xFF1E2638) : Colors.white,
             border: Border.all(
               color: isDark
                   ? Colors.white.withValues(alpha: hasUnread ? 0.16 : 0.08)
@@ -160,8 +162,8 @@ class _ChatListCardState extends State<ChatListCard> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
                     child: Container(
-                      width: 66.r,
-                      height: 66.r,
+                      width: 62.r,
+                      height: 62.r,
                       color: isDark
                           ? Colors.white.withValues(alpha: 0.06)
                           : (isLost
@@ -208,7 +210,7 @@ class _ChatListCardState extends State<ChatListCard> {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: isDark
-                                ? const Color(0xFF1E293B)
+                                ? const Color(0xFF1E2638)
                                 : Colors.white,
                             width: 2.0,
                           ),
@@ -232,52 +234,61 @@ class _ChatListCardState extends State<ChatListCard> {
                   children: [
                     // Top Row: Tag (Lost/Found) + Match % + Timestamp
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 7.w,
-                            vertical: 2.5.h,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.r),
-                            color: tagBg,
-                          ),
-                          child: Text(
-                            isLost ? l10n.lost : l10n.found,
-                            style: TextStyle(
-                              color: tagText,
-                              fontSize: 10.sp,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.2,
-                            ),
+                        Flexible(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 7.w,
+                                  vertical: 2.5.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7.r),
+                                  color: tagBg,
+                                ),
+                                child: Text(
+                                  isLost ? l10n.lost : l10n.found,
+                                  style: TextStyle(
+                                    color: tagText,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 0.2,
+                                  ),
+                                ),
+                              ),
+                              if (chat.similarity > 0 &&
+                                  chat.source == 'auto') ...[
+                                SizedBox(width: 6.w),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 6.w,
+                                    vertical: 2.h,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isDark
+                                        ? const Color(0xFF1E3A5F)
+                                        : const Color(0xFFE0F2FE),
+                                    borderRadius: BorderRadius.circular(6.r),
+                                  ),
+                                  child: Text(
+                                    '${chat.similarity}%',
+                                    style: TextStyle(
+                                      fontSize: 9.5.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: isDark
+                                          ? const Color(0xFF60A5FA)
+                                          : const Color(0xFF0284C7),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
-                        if (chat.similarity > 0 && chat.source == 'auto') ...[
-                          SizedBox(width: 6.w),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 6.w,
-                              vertical: 2.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF1E3A5F)
-                                  : const Color(0xFFE0F2FE),
-                              borderRadius: BorderRadius.circular(6.r),
-                            ),
-                            child: Text(
-                              '${chat.similarity}%',
-                              style: TextStyle(
-                                fontSize: 9.5.sp,
-                                fontWeight: FontWeight.w700,
-                                color: isDark
-                                    ? const Color(0xFF60A5FA)
-                                    : const Color(0xFF0284C7),
-                              ),
-                            ),
-                          ),
-                        ],
-                        const Spacer(),
+                        SizedBox(width: 6.w),
                         Text(
                           _formatTimestamp(
                             chat.lastMessageAt ?? chat.createdAt,
@@ -314,9 +325,9 @@ class _ChatListCardState extends State<ChatListCard> {
                           ),
                         ),
                         if (report != null && report.title.isNotEmpty) ...[
-                          SizedBox(width: 6.w),
+                          SizedBox(width: 8.w),
                           ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 120.w),
+                            constraints: BoxConstraints(maxWidth: 110.w),
                             child: Text(
                               report.title,
                               maxLines: 1,

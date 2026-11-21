@@ -44,6 +44,7 @@ void main() {
       expect(cubit.state.status, ChatListStatus.initial);
       expect(cubit.state.chats, isEmpty);
       expect(cubit.state.searchQuery, isEmpty);
+      expect(cubit.state.activeFilter, ChatFilter.all);
       expect(cubit.state.failure, isNull);
     });
 
@@ -98,7 +99,7 @@ void main() {
       repository.chatsToReturn = sample;
       await cubit.loadChats();
 
-      expect(cubit.state.filteredChats.length, 3);
+      expect(cubit.state.filteredChats.length, sample.length);
 
       cubit.onSearchChanged('mona');
       expect(cubit.state.searchQuery, 'mona');
@@ -111,14 +112,38 @@ void main() {
       expect(cubit.state.filteredChats.first.otherUserName, 'Omar S.');
 
       // Search with non-matching query
-      cubit.onSearchChanged('nonexistent');
+      cubit.onSearchChanged('nonexistent_123');
       expect(cubit.state.filteredChats, isEmpty);
       expect(cubit.state.isSearchEmpty, isTrue);
 
       // Clear search
       cubit.clearSearch();
       expect(cubit.state.searchQuery, isEmpty);
-      expect(cubit.state.filteredChats.length, 3);
+      expect(cubit.state.filteredChats.length, sample.length);
+    });
+
+    test('setFilter filters chats by category pills', () async {
+      final sample = FakeChatData.sampleChats;
+      repository.chatsToReturn = sample;
+      await cubit.loadChats();
+
+      // Filter unread
+      cubit.setFilter(ChatFilter.unread);
+      expect(
+        cubit.state.filteredChats.every((c) => c.unreadCount > 0),
+        isTrue,
+      );
+
+      // Filter verified
+      cubit.setFilter(ChatFilter.verified);
+      expect(
+        cubit.state.filteredChats.every((c) => c.isVerified),
+        isTrue,
+      );
+
+      // Reset to all
+      cubit.setFilter(ChatFilter.all);
+      expect(cubit.state.filteredChats.length, sample.length);
     });
 
     test('refresh updates chats silently without loading status', () async {
@@ -132,7 +157,7 @@ void main() {
       await cubit.refresh();
 
       expect(cubit.state.status, ChatListStatus.success);
-      expect(cubit.state.chats.length, 3);
+      expect(cubit.state.chats.length, updatedChats.length);
     });
   });
 }

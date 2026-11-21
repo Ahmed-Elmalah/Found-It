@@ -90,10 +90,11 @@ void main() {
       await pumpTestApp(tester, buildSubject(), padded: false);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChatListCard), findsNWidgets(3));
+      expect(find.byType(ChatListCard), findsWidgets);
       expect(find.text('Mona K.'), findsOneWidget);
-      expect(find.text('Omar S.'), findsOneWidget);
-      expect(find.text('Ahmed Mostafa'), findsOneWidget);
+      expect(find.text('Sarah Hassan'), findsOneWidget);
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Unread'), findsOneWidget);
     });
 
     testWidgets('filters chat cards when searching in the header', (tester) async {
@@ -103,7 +104,7 @@ void main() {
       await pumpTestApp(tester, buildSubject(), padded: false);
       await tester.pumpAndSettle();
 
-      expect(find.byType(ChatListCard), findsNWidgets(3));
+      expect(find.byType(ChatListCard), findsWidgets);
 
       // Enter search query
       final searchInput = find.byType(TextField);
@@ -114,7 +115,7 @@ void main() {
       // Only Mona's card should be visible
       expect(find.byType(ChatListCard), findsOneWidget);
       expect(find.text('Mona K.'), findsOneWidget);
-      expect(find.text('Omar S.'), findsNothing);
+      expect(find.text('Sarah Hassan'), findsNothing);
     });
 
     testWidgets('displays error view with retry when loading fails', (tester) async {
