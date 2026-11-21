@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/recovery/domain/entities/handover_contact_entity.dart';
@@ -38,27 +37,10 @@ class HandoverInstructionsScreen extends StatelessWidget {
       );
     }
 
-    try {
-      context.read<RecoveryCubit>();
-      return _HandoverCubitView(
-        matchId: matchId,
-        onRecovered: onRecovered,
-      );
-    } catch (_) {
-      return BlocProvider(
-        create: (_) {
-          final cubit = sl<RecoveryCubit>();
-          if (matchId != null) {
-            cubit.loadContact(matchId!);
-          }
-          return cubit;
-        },
-        child: _HandoverCubitView(
-          matchId: matchId,
-          onRecovered: onRecovered,
-        ),
-      );
-    }
+    return _HandoverCubitView(
+      matchId: matchId,
+      onRecovered: onRecovered,
+    );
   }
 }
 

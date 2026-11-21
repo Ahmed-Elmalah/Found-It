@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
 import 'package:found_it/features/matches/domain/entities/match_report_summary.dart';
-import 'package:found_it/features/matches/domain/use_cases/reject_match_use_case.dart';
+import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
+import 'package:found_it/features/matches/view/cubit/matches_state.dart';
 import 'package:found_it/features/matches/view/widgets/comparison_field_row.dart';
 import 'package:found_it/features/matches/view/widgets/match_score_badge.dart';
 import 'package:found_it/features/matches/view/widgets/private_details_banner.dart';
@@ -18,16 +19,21 @@ import 'package:found_it/features/matches/view/widgets/private_details_banner.da
 /// Screen for detailed side-by-side comparison between your report and
 /// the matched report (Figma P29 / P63).
 class MatchCompareScreen extends StatefulWidget {
-  final MatchEntity match;
+  final String matchId;
+  final MatchEntity? match;
   final VoidCallback? onNotMyItem;
   final VoidCallback? onStartChat;
 
   const MatchCompareScreen({
     super.key,
-    required this.match,
+    this.matchId = '',
+    this.match,
     this.onNotMyItem,
     this.onStartChat,
   });
+
+  String get effectiveMatchId =>
+      matchId.isNotEmpty ? matchId : (match?.matchId ?? '');
 
   @override
   State<MatchCompareScreen> createState() => _MatchCompareScreenState();
@@ -36,7 +42,7 @@ class MatchCompareScreen extends StatefulWidget {
 class _MatchCompareScreenState extends State<MatchCompareScreen> {
   bool _isRejecting = false;
 
-  Future<void> _handleNotMyItem() async {
+  Future<void> _handleNotMyItem(String matchId) async {
     if (widget.onNotMyItem != null) {
       widget.onNotMyItem!();
       return;
@@ -44,37 +50,35 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
 
     setState(() => _isRejecting = true);
 
-    try {
-      await sl<RejectMatchUseCase>()(widget.match.matchId);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).matchDismissedMessage),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-        context.pop();
-      }
-    } catch (_) {
-      if (mounted) {
-        setState(() => _isRejecting = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).matchDismissError),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
+    final success = await context.read<MatchesCubit>().rejectMatch(matchId);
+    if (!mounted) return;
+    setState(() => _isRejecting = false);
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).matchDismissedMessage),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      context.pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).matchDismissError),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
     }
   }
 
-  void _handleStartChat() {
+  void _handleStartChat(MatchEntity match) {
     if (widget.onStartChat != null) {
       widget.onStartChat!();
       return;
     }
 
-    context.push(AppRoutes.messages);
+    context.push(AppRoutes.chatPath(match.matchId));
   }
 
   @override
@@ -83,8 +87,102 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
     final colors = Theme.of(context).colorScheme;
     final locale = Localizations.localeOf(context).languageCode;
 
-    final my = widget.match.myReport;
-    final other = widget.match.otherReport;
+    return BlocConsumer<MatchesCubit, MatchesState>(
+      listener: (context, state) {
+        if (state is MatchesError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message ?? l10n.matchesLoadError),
+              backgroundColor: colors.error,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        MatchEntity? match = widget.match;
+        if (state is MatchDetailsLoaded) {
+          match = state.match;
+        }
+
+        if (match == null) {
+          if (state is MatchesLoading || state is MatchesInitial) {
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              appBar: AppBar(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                elevation: 0,
+                title: Text(l10n.matchCompareTitle),
+              ),
+              body: const Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          if (state is MatchesError) {
+            return Scaffold(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              appBar: AppBar(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                elevation: 0,
+                title: Text(l10n.matchCompareTitle),
+              ),
+              body: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.w),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline_rounded,
+                        size: 48.r,
+                        color: colors.error,
+                      ),
+                      SizedBox(height: 14.h),
+                      Text(
+                        l10n.matchesLoadError,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      FilledButton.tonal(
+                        onPressed: () => context
+                            .read<MatchesCubit>()
+                            .loadDetails(widget.effectiveMatchId),
+                        child: Text(l10n.retry),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return const SizedBox.shrink();
+        }
+
+        return _buildScaffold(
+          context: context,
+          match: match,
+          l10n: l10n,
+          colors: colors,
+          locale: locale,
+        );
+      },
+    );
+  }
+
+  Widget _buildScaffold({
+    required BuildContext context,
+    required MatchEntity match,
+    required AppLocalizations l10n,
+    required ColorScheme colors,
+    required String locale,
+  }) {
+    final my = match.myReport;
+    final other = match.otherReport;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -102,10 +200,10 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
           ),
         ),
         actions: [
-          if (widget.match.isAuto && widget.match.similarity > 0)
+          if (match.isAuto && match.similarity > 0)
             Padding(
               padding: EdgeInsetsDirectional.only(end: 16.w),
-              child: MatchScoreBadge(similarity: widget.match.similarity),
+              child: MatchScoreBadge(similarity: match.similarity),
             ),
         ],
       ),
@@ -134,7 +232,7 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
                           child: _ReportHeaderCard(
                             headerLabel: l10n.matchedReport,
                             report: other,
-                            fallbackName: widget.match.otherUserName,
+                            fallbackName: match.otherUserName,
                           ),
                         ),
                       ],
@@ -209,14 +307,14 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
                 children: [
                   AppButton(
                     label: l10n.startChat,
-                    onPressed: _handleStartChat,
+                    onPressed: () => _handleStartChat(match),
                   ),
                   SizedBox(height: 10.h),
                   AppButton(
                     label: l10n.notMyItem,
                     variant: AppButtonVariant.outlined,
                     isLoading: _isRejecting,
-                    onPressed: _handleNotMyItem,
+                    onPressed: () => _handleNotMyItem(match.matchId),
                   ),
                 ],
               ),

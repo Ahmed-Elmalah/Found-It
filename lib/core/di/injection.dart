@@ -311,7 +311,7 @@ void _registerMatches() {
       () => MatchesCubit(
         getMyMatches: sl(),
         getMatchDetails: sl(),
-        rejectMatch: sl(),
+        rejectMatchUseCase: sl(),
         getMyMatchesCount: sl(),
       ),
     );

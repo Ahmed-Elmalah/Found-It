@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
@@ -28,15 +27,7 @@ class PotentialMatchesScreen extends StatelessWidget {
       return _PotentialMatchesStaticView(initialMatches: initialMatches!);
     }
 
-    try {
-      context.read<MatchesCubit>();
-      return _PotentialMatchesCubitView(reportId: reportId);
-    } catch (_) {
-      return BlocProvider(
-        create: (_) => sl<MatchesCubit>()..loadMatches(reportId: reportId),
-        child: _PotentialMatchesCubitView(reportId: reportId),
-      );
-    }
+    return _PotentialMatchesCubitView(reportId: reportId);
   }
 }
 
@@ -137,21 +128,37 @@ class _PotentialMatchesCubitView extends StatelessWidget {
                   return MatchCard(
                     match: match,
                     onViewMatch: () async {
-                      await context.push(AppRoutes.matchCompare, extra: match);
+                      await context.push(
+                        AppRoutes.matchComparePath(match.matchId),
+                        extra: match,
+                      );
                       if (context.mounted) {
                         context
                             .read<MatchesCubit>()
                             .loadMatches(reportId: reportId);
                       }
                     },
-                    onDismiss: () {
-                      context.read<MatchesCubit>().dismissMatch(match.matchId);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(l10n.matchDismissedMessage),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
+                    onDismiss: () async {
+                      final success = await context
+                          .read<MatchesCubit>()
+                          .dismissMatch(match.matchId);
+                      if (!context.mounted) return;
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l10n.matchDismissedMessage),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(l10n.matchDismissError),
+                            backgroundColor: colors.error,
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
+                      }
                     },
                   );
                 },
@@ -199,7 +206,7 @@ class _PotentialMatchesStaticViewState
   }
 
   void _onViewMatch(MatchEntity match) {
-    context.push(AppRoutes.matchCompare, extra: match);
+    context.push(AppRoutes.matchComparePath(match.matchId), extra: match);
   }
 
   @override

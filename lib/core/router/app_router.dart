@@ -20,6 +20,10 @@ import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/home/view/ui/home_screen.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
+import 'package:found_it/features/matches/view/ui/match_compare_screen.dart';
+import 'package:found_it/features/matches/view/ui/potential_matches_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -28,6 +32,8 @@ import 'package:found_it/features/profile/domain/entities/user_profile_entity.da
 import 'package:found_it/features/profile/view/cubit/profile_cubit.dart';
 import 'package:found_it/features/profile/view/ui/edit_profile_screen.dart';
 import 'package:found_it/features/profile/view/ui/profile_screen.dart';
+import 'package:found_it/features/recovery/view/cubit/recovery_cubit.dart';
+import 'package:found_it/features/recovery/view/ui/handover_instructions_screen.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
@@ -36,11 +42,6 @@ import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
-import 'package:found_it/features/matches/domain/entities/match_entity.dart';
-import 'package:found_it/features/matches/view/ui/match_compare_screen.dart';
-import 'package:found_it/features/matches/view/ui/potential_matches_screen.dart';
-import 'package:found_it/features/recovery/domain/entities/handover_contact_entity.dart';
-import 'package:found_it/features/recovery/view/ui/handover_instructions_screen.dart';
 import 'package:found_it/features/root/view/ui/main_shell.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -237,47 +238,86 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Matches routes (Ziad, story #2)
+    // =========================================================================
+    // Sprint 2 Routes
+    // =========================================================================
+
+    // Report Details (Adham, story #1)
     GoRoute(
-      path: AppRoutes.potentialMatches,
+      path: AppRoutes.reportDetails,
       builder: (context, state) {
-        final list = state.extra as List<MatchEntity>?;
-        return PotentialMatchesScreen(initialMatches: list);
-      },
-    ),
-    GoRoute(
-      path: AppRoutes.matchCompare,
-      redirect: (context, state) {
-        if (state.extra is! MatchEntity) {
-          return AppRoutes.potentialMatches;
-        }
-        return null;
-      },
-      builder: (context, state) {
-        final match = state.extra! as MatchEntity;
-        return MatchCompareScreen(match: match);
+        final id = state.pathParameters['id'] ?? '';
+        return _ComingSoon('Report Details ($id)');
       },
     ),
 
-    // Recovery routes (Ziad, story #4)
+    // Potential Matches list (Ziad, story #2)
     GoRoute(
-      path: AppRoutes.handoverInstructions,
+      path: AppRoutes.matches,
       builder: (context, state) {
-        final extra = state.extra;
-        if (extra is HandoverContactEntity) {
-          return HandoverInstructionsScreen(contact: extra);
-        }
-        if (extra is String) {
-          return HandoverInstructionsScreen(matchId: extra);
-        }
-        if (extra is Map<String, dynamic>) {
-          return HandoverInstructionsScreen(
-            matchId: extra['matchId'] as String?,
-            contact: extra['contact'] as HandoverContactEntity?,
-          );
-        }
-        return const HandoverInstructionsScreen();
+        final reportId = state.uri.queryParameters['reportId'];
+        return BlocProvider(
+          create: (_) => sl<MatchesCubit>()..loadMatches(reportId: reportId),
+          child: PotentialMatchesScreen(reportId: reportId),
+        );
       },
+    ),
+
+    // Match Compare (Ziad, story #2)
+    GoRoute(
+      path: AppRoutes.matchCompare,
+      builder: (context, state) {
+        final id = state.pathParameters['id'] ?? '';
+        final match = state.extra as MatchEntity?;
+        return BlocProvider(
+          create: (_) {
+            final cubit = sl<MatchesCubit>();
+            if (match != null) {
+              cubit.setMatchDetails(match);
+            } else if (id.isNotEmpty) {
+              cubit.loadDetails(id);
+            }
+            return cubit;
+          },
+          child: MatchCompareScreen(
+            matchId: id,
+            match: match,
+          ),
+        );
+      },
+    ),
+
+    // Chat (Youssef, story #3)
+    GoRoute(
+      path: AppRoutes.chat,
+      builder: (context, state) {
+        final matchId = state.pathParameters['matchId'] ?? '';
+        return _ComingSoon('Chat ($matchId)');
+      },
+    ),
+
+    // Handover Instructions (Ziad, story #4)
+    GoRoute(
+      path: AppRoutes.handover,
+      builder: (context, state) {
+        final matchId = state.pathParameters['matchId'] ?? '';
+        return BlocProvider(
+          create: (_) {
+            final cubit = sl<RecoveryCubit>();
+            if (matchId.isNotEmpty) {
+              cubit.loadContact(matchId);
+            }
+            return cubit;
+          },
+          child: HandoverInstructionsScreen(matchId: matchId),
+        );
+      },
+    ),
+
+    // Notifications (Mohamed, story #5)
+    GoRoute(
+      path: AppRoutes.notifications,
+      builder: (context, state) => const _ComingSoon('Notifications'),
     ),
   ],
 );

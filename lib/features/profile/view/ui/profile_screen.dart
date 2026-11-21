@@ -166,7 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.compare_arrows_rounded,
                 title: l10n.potentialMatches,
-                onTap: () => context.push(AppRoutes.potentialMatches),
+                onTap: () => context.push(AppRoutes.matches),
               ),
 
               // Account Section

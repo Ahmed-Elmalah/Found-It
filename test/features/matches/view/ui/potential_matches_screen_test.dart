@@ -99,10 +99,10 @@ void main() {
     testWidgets('tapping "View match" navigates to matchCompare route',
         (tester) async {
       final router = GoRouter(
-        initialLocation: AppRoutes.potentialMatches,
+        initialLocation: AppRoutes.matches,
         routes: [
           GoRoute(
-            path: AppRoutes.potentialMatches,
+            path: AppRoutes.matches,
             builder: (_, _) => PotentialMatchesScreen(
               initialMatches: [mockMatch],
             ),

@@ -103,7 +103,7 @@ void main() {
       cubit = MatchesCubit(
         getMyMatches: GetMyMatchesUseCase(repo),
         getMatchDetails: GetMatchDetailsUseCase(repo),
-        rejectMatch: RejectMatchUseCase(repo),
+        rejectMatchUseCase: RejectMatchUseCase(repo),
         getMyMatchesCount: GetMyMatchesCountUseCase(repo),
       );
     });
@@ -140,8 +140,9 @@ void main() {
       await cubit.loadMatches();
       expect((cubit.state as MatchesLoaded).matches, isNotEmpty);
 
-      await cubit.dismissMatch('match_1');
+      final success = await cubit.dismissMatch('match_1');
 
+      expect(success, isTrue);
       expect(repo.rejectedMatchId, 'match_1');
       expect(cubit.state, isA<MatchesLoaded>());
       final loaded = cubit.state as MatchesLoaded;
@@ -149,15 +150,32 @@ void main() {
       expect(loaded.dismissingMatchId, isNull);
     });
 
-    test('dismissMatch reverts list and emits error on failure', () async {
+    test('dismissMatch reverts list on failure without emitting MatchesError',
+        () async {
       await cubit.loadMatches();
       repo.shouldFailReject = true;
 
-      await cubit.dismissMatch('match_1');
+      final success = await cubit.dismissMatch('match_1');
 
-      expect(cubit.state, isA<MatchesError>());
-      final error = cubit.state as MatchesError;
-      expect(error.failureType, MatchesFailureType.invalidState);
+      expect(success, isFalse);
+      expect(cubit.state, isA<MatchesLoaded>());
+      final loaded = cubit.state as MatchesLoaded;
+      expect(loaded.matches, [repo.sampleMatch]);
+    });
+
+    test('setMatchDetails sets MatchDetailsLoaded state directly', () {
+      cubit.setMatchDetails(repo.sampleMatch);
+
+      expect(cubit.state, isA<MatchDetailsLoaded>());
+      final loaded = cubit.state as MatchDetailsLoaded;
+      expect(loaded.match, repo.sampleMatch);
+    });
+
+    test('rejectMatch delegates to dismissMatch and calls reject', () async {
+      final success = await cubit.rejectMatch('match_1');
+
+      expect(success, isTrue);
+      expect(repo.rejectedMatchId, 'match_1');
     });
 
     test('loadDetails loads match details successfully', () async {

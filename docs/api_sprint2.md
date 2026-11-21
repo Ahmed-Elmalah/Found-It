@@ -538,7 +538,12 @@ Every push is created from a `notifications` row, so it has the same `type`:
 }
 ```
 
-Title / body come in the language saved with the token. The texts come from Story #5:
+Title / body come in the language saved with the token.
+
+The Android channel id is **`found_it_default`**. Create a channel with this exact id in
+`flutter_local_notifications`, and use it for foreground notifications too.
+
+The texts come from Story #5:
 
 - **Potential match:** "Potential Match Found! We found a report matching your lost item. Tap to chat and verify ownership."
 - **New message:** "New message from {Name}: Tap to view."
@@ -553,7 +558,7 @@ Title / body come in the language saved with the token. The texts come from Stor
 
 Then call `mark_notifications_read(p_ids: [notification_id])`.
 
-> The Edge Function and the webhook are being built by Ahmed. Until they are live,
+> The Edge Function and the webhook are LIVE. Until the app saves a device token,
 > test receiving with **Firebase Console → Messaging → "Send test message"** to your
 > device token, using the `data` above.
 
