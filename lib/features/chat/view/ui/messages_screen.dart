@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,20 +22,21 @@ class MessagesScreen extends StatefulWidget {
 
 class _MessagesScreenState extends State<MessagesScreen> {
   // ---------------------------------------------------------------------------
-  // 🎛️ تحكم الشفافية والتدريج للأب بار (iOS WhatsApp Glass Controls)
-  // تقدر تعدل القيم دي عشان تظبط درجة الشفافية وسرعة التدريج:
+  // 🎛️ تحكم التدرج والشفافية للأب بار (Top Darkening Gradient Controls)
+  // مفيش بلور نهائياً، شفاف ورا الكلمة، وبيضلّم تدريجياً لفوق لحد ما يبقى أسود:
   // ---------------------------------------------------------------------------
-  /// المسافة بالسكرول (بالبكسل) اللي بيحصل فيها التدريج الكامل مع حركة صباعك
-  static const double kScrollDistance = 60.0;
+  /// المسافة بالسكرول (بالبكسل) اللي بيظهر فيها التدرج والعنوان تدريجياً
+  static const double kScrollDistance = 50.0;
 
-  /// قوة البلور الزجاجي الأقصى (Frosted Blur Sigma)
-  static const double kMaxBlurSigma = 20.0;
+  /// درجة السواد عند قمة الشاشة من فوق خالص (عند الساعة والبطارية)
+  /// 1.0 = أسود خالص معتم، 0.0 = شفاف
+  static const double kTopDarknessOpacity = 1.0;
 
-  /// نسبة عتامة الزجاج في الدارك مود (0.0 = شفاف خالص، 0.72 = زي الواتساب بالظبط، 1.0 = مصمت)
-  static const double kDarkMaxOpacity = 0.72;
+  /// درجة التعتيم في الجزء العلوي عند شريط الحالة (Status Bar)
+  static const double kStatusBarDarkness = 0.65;
 
-  /// نسبة عتامة الزجاج في اللايت مود (0.0 = شفاف خالص، 0.80 = زي الواتساب بالظبط، 1.0 = مصمت)
-  static const double kLightMaxOpacity = 0.80;
+  /// درجة الشفافية خلف كلمة Messages (0.0 = شفاف تماماً مفيش وراها أي حاجة ومنها لليست)
+  static const double kTitleAreaOpacity = 0.0;
   // ---------------------------------------------------------------------------
 
   late final TextEditingController _searchController;
@@ -154,7 +153,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final topPadding = MediaQuery.of(context).padding.top;
     final baseBarHeight = 52.h;
     final topBarTotalHeight = topPadding + baseBarHeight;
-    final maxOpacity = isDark ? kDarkMaxOpacity : kLightMaxOpacity;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -447,47 +445,47 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ),
 
-          // 2. iOS Frosted Glass Header Bar (Exact WhatsApp behavior)
+          // 2. Top Darkening Gradient Header (NO blur, floating title directly over list)
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: IgnorePointer(
               ignoring: _scrollProgress < 0.1,
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: kMaxBlurSigma * _scrollProgress,
-                    sigmaY: kMaxBlurSigma * _scrollProgress,
-                  ),
-                  child: Container(
-                    height: topBarTotalHeight,
-                    padding: EdgeInsets.only(top: topPadding),
-                    decoration: BoxDecoration(
-                      color: (isDark ? theme.scaffoldBackgroundColor : Colors.white)
-                          .withValues(alpha: maxOpacity * _scrollProgress),
-                      border: Border(
-                        bottom: BorderSide(
-                          color: (isDark ? Colors.white : Colors.black)
-                              .withValues(alpha: 0.08 * _scrollProgress),
-                          width: 0.5,
-                        ),
+              child: Container(
+                height: topBarTotalHeight,
+                padding: EdgeInsets.only(top: topPadding),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      (isDark ? Colors.black : Colors.white).withValues(
+                        alpha: kTopDarknessOpacity * _scrollProgress,
                       ),
-                    ),
-                    child: SizedBox(
-                      height: baseBarHeight,
-                      child: Center(
-                        child: Opacity(
-                          opacity: _scrollProgress,
-                          child: Text(
-                            l10n.messagesTitle,
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w700,
-                              color: theme.colorScheme.onSurface,
-                              letterSpacing: -0.3,
-                            ),
-                          ),
+                      (isDark ? Colors.black : Colors.white).withValues(
+                        alpha: kStatusBarDarkness * _scrollProgress,
+                      ),
+                      (isDark ? Colors.black : Colors.white).withValues(
+                        alpha: kTitleAreaOpacity * _scrollProgress,
+                      ),
+                      Colors.transparent,
+                    ],
+                    stops: const [0.0, 0.40, 0.75, 1.0],
+                  ),
+                ),
+                child: SizedBox(
+                  height: baseBarHeight,
+                  child: Center(
+                    child: Opacity(
+                      opacity: _scrollProgress,
+                      child: Text(
+                        l10n.messagesTitle,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                          letterSpacing: -0.3,
                         ),
                       ),
                     ),
