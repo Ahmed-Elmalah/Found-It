@@ -12,6 +12,7 @@ class ChatItemEntity extends Equatable {
     this.ownershipVerified = false,
     this.iAmFinder = false,
     required this.otherUserName,
+    this.otherUserAvatar,
     this.createdAt,
     this.lastMessageAt,
     this.myReport,
@@ -27,6 +28,7 @@ class ChatItemEntity extends Equatable {
   final bool ownershipVerified;
   final bool iAmFinder;
   final String otherUserName;
+  final String? otherUserAvatar;
   final DateTime? createdAt;
   final DateTime? lastMessageAt;
   final ChatReportSummaryEntity? myReport;
@@ -57,6 +59,7 @@ class ChatItemEntity extends Equatable {
         ownershipVerified,
         iAmFinder,
         otherUserName,
+        otherUserAvatar,
         createdAt,
         lastMessageAt,
         myReport,

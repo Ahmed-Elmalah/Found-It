@@ -13,6 +13,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: false,
           otherUserName: 'Mona K.',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(hours: 2)),
           lastMessageAt: DateTime.now().subtract(const Duration(minutes: 12)),
           unreadCount: 2,
@@ -22,11 +24,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Black Leather Wallet',
             description: 'Montblanc wallet containing national ID and bank cards',
-            image:
-                'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80',
-            images: const [
-              'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80',
-            ],
             categoryNameEn: 'Wallets',
             categoryNameAr: 'محافظ',
             cityNameEn: 'Cairo',
@@ -42,11 +39,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found Men’s Wallet',
             description: 'Found near Grand Mall Maadi stairs',
-            image:
-                'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80',
-            images: const [
-              'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=400&q=80',
-            ],
             categoryNameEn: 'Wallets',
             categoryNameAr: 'محافظ',
             cityNameEn: 'Cairo',
@@ -73,6 +65,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: true,
           otherUserName: 'Sarah Hassan',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(hours: 4)),
           lastMessageAt: DateTime.now().subtract(const Duration(minutes: 25)),
           unreadCount: 1,
@@ -82,8 +76,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found Blue Titanium iPhone',
             description: 'Found on table at Costa Coffee',
-            image:
-                'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Phones',
             categoryNameAr: 'هواتف',
             cityNameEn: 'Cairo',
@@ -99,8 +91,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Lost iPhone 15 Pro Max',
             description: 'Lost at Point 90 mall cafeteria',
-            image:
-                'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Phones',
             categoryNameAr: 'هواتف',
             cityNameEn: 'Cairo',
@@ -127,6 +117,8 @@ abstract final class FakeChatData {
           ownershipVerified: true,
           iAmFinder: true,
           otherUserName: 'Omar S.',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 1)),
           lastMessageAt: DateTime.now().subtract(const Duration(hours: 1)),
           unreadCount: 0,
@@ -136,8 +128,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'AirPods Pro Case',
             description: 'White case with blue silicone cover found in cafeteria',
-            image:
-                'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Electronics',
             categoryNameAr: 'إلكترونيات',
             cityNameEn: 'Giza',
@@ -153,8 +143,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Lost AirPods Pro',
             description: 'Lost in Dokki near shooting club',
-            image:
-                'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Electronics',
             categoryNameAr: 'إلكترونيات',
             cityNameEn: 'Giza',
@@ -181,6 +169,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: false,
           otherUserName: 'Ahmed Mostafa',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 2)),
           lastMessageAt: DateTime.now().subtract(const Duration(hours: 3)),
           unreadCount: 0,
@@ -190,8 +180,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Toyota Car Key',
             description: 'Toyota key with red leather strap',
-            image:
-                'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Keys',
             categoryNameAr: 'مفاتيح',
             cityNameEn: 'Cairo',
@@ -207,8 +195,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found Car Remote',
             description: 'Found around City Stars entrance 4',
-            image:
-                'https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Keys',
             categoryNameAr: 'مفاتيح',
             cityNameEn: 'Cairo',
@@ -235,6 +221,8 @@ abstract final class FakeChatData {
           ownershipVerified: true,
           iAmFinder: true,
           otherUserName: 'Tarek Kamel',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 2)),
           lastMessageAt: DateTime.now().subtract(const Duration(hours: 6)),
           unreadCount: 0,
@@ -244,8 +232,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Egyptian Passport & Papers',
             description: 'Found in a brown envelope near Tahrir Square',
-            image:
-                'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Documents',
             categoryNameAr: 'مستندات',
             cityNameEn: 'Cairo',
@@ -261,8 +247,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Lost Passport in Envelope',
             description: 'Lost on Metro Line 1',
-            image:
-                'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Documents',
             categoryNameAr: 'مستندات',
             cityNameEn: 'Cairo',
@@ -280,7 +264,7 @@ abstract final class FakeChatData {
           ),
         ),
 
-        // 6. Mahmoud Ali - Cat
+        // 6. Mahmoud Ali - Cat (Initial avatar fallback)
         ChatItemModel(
           matchId: 'm-106-cat',
           status: 'chatting',
@@ -289,6 +273,7 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: false,
           otherUserName: 'Mahmoud Ali',
+          otherUserAvatar: null,
           createdAt: DateTime.now().subtract(const Duration(days: 3)),
           lastMessageAt: DateTime.now().subtract(const Duration(days: 1)),
           unreadCount: 0,
@@ -298,8 +283,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'White Persian Cat (Bella)',
             description: 'Wearing a pink collar with a small bell',
-            image:
-                'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Pets',
             categoryNameAr: 'حيوانات أليفة',
             cityNameEn: 'Cairo',
@@ -315,8 +298,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found White Cat',
             description: 'Found in building garden near Korba',
-            image:
-                'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Pets',
             categoryNameAr: 'حيوانات أليفة',
             cityNameEn: 'Cairo',
@@ -343,6 +324,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: false,
           otherUserName: 'Hoda Youssef',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 3)),
           lastMessageAt: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
           unreadCount: 3,
@@ -352,8 +335,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Dell XPS 15 Silver',
             description: 'In a black sleeve with stickers',
-            image:
-                'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Electronics',
             categoryNameAr: 'إلكترونيات',
             cityNameEn: 'Giza',
@@ -369,8 +350,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found Laptop in Sleeve',
             description: 'Found at Arkan Plaza seating area',
-            image:
-                'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Electronics',
             categoryNameAr: 'إلكترونيات',
             cityNameEn: 'Giza',
@@ -388,7 +367,7 @@ abstract final class FakeChatData {
           ),
         ),
 
-        // 8. Nour El-Din - Ray-Ban Sunglasses
+        // 8. Nour El-Din - Ray-Ban Sunglasses (Initial avatar fallback)
         ChatItemModel(
           matchId: 'm-108-sunglasses',
           status: 'chatting',
@@ -397,6 +376,7 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: true,
           otherUserName: 'Nour El-Din',
+          otherUserAvatar: null,
           createdAt: DateTime.now().subtract(const Duration(days: 4)),
           lastMessageAt: DateTime.now().subtract(const Duration(days: 2)),
           unreadCount: 0,
@@ -406,8 +386,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Ray-Ban Aviator Sunglasses',
             description: 'Gold frame with green lenses in black case',
-            image:
-                'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Accessories',
             categoryNameAr: 'إكسسوارات',
             cityNameEn: 'Cairo',
@@ -423,8 +401,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Lost Ray-Ban Sunglasses',
             description: 'Lost around Gezira Club',
-            image:
-                'https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Accessories',
             categoryNameAr: 'إكسسوارات',
             cityNameEn: 'Cairo',
@@ -451,6 +427,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: false,
           otherUserName: 'Dina Adel',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 5)),
           lastMessageAt: DateTime.now().subtract(const Duration(days: 3)),
           unreadCount: 1,
@@ -460,8 +438,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Gold Wedding Band',
             description: 'Engraved with date 15/09 inside',
-            image:
-                'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Jewelry',
             categoryNameAr: 'مجوهرات',
             cityNameEn: 'Cairo',
@@ -477,8 +453,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Found Gold Ring',
             description: 'Found at City Square food court',
-            image:
-                'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Jewelry',
             categoryNameAr: 'مجوهرات',
             cityNameEn: 'Cairo',
@@ -505,6 +479,8 @@ abstract final class FakeChatData {
           ownershipVerified: false,
           iAmFinder: true,
           otherUserName: 'Karim Fahmy',
+          otherUserAvatar:
+              'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=200&q=80',
           createdAt: DateTime.now().subtract(const Duration(days: 6)),
           lastMessageAt: DateTime.now().subtract(const Duration(days: 4)),
           unreadCount: 0,
@@ -514,8 +490,6 @@ abstract final class FakeChatData {
             type: 'found',
             title: 'Black Nike Gym Backpack',
             description: 'Found in locker room with water bottle',
-            image:
-                'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Bags',
             categoryNameAr: 'حقائب',
             cityNameEn: 'Giza',
@@ -531,8 +505,6 @@ abstract final class FakeChatData {
             type: 'lost',
             title: 'Lost Gym Bag',
             description: 'Contains workout gear and water bottle',
-            image:
-                'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=400&q=80',
             categoryNameEn: 'Bags',
             categoryNameAr: 'حقائب',
             cityNameEn: 'Giza',

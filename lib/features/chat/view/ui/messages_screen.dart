@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +36,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   void _onScroll() {
     final offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-    final progress = (offset / 50.h).clamp(0.0, 1.0);
+    final progress = (offset / 48.h).clamp(0.0, 1.0);
     if ((progress - _scrollProgress).abs() > 0.01) {
       setState(() => _scrollProgress = progress);
     }
@@ -106,7 +107,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? Colors.white.withValues(alpha: 0.25)
-                      : (isDark ? const Color(0xFF1B4B66) : const Color(0xFF1B4B66)),
+                      : const Color(0xFF1B4B66),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
@@ -131,6 +132,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<ChatListCubit>();
+    final topPadding = MediaQuery.of(context).padding.top;
+    final topBarHeight = topPadding + 52.h;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -148,11 +151,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 parent: AlwaysScrollableScrollPhysics(),
               ),
               slivers: [
-                // Spacer for pinned app bar
+                // Top clearance for header bar
                 SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).padding.top + 52.h,
-                  ),
+                  child: SizedBox(height: topBarHeight),
                 ),
 
                 // Large Title & Search & Filter Pills
@@ -166,21 +167,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         Text(
                           l10n.messagesTitle,
                           style: TextStyle(
-                            fontSize: 32.sp,
+                            fontSize: 34.sp,
                             fontWeight: FontWeight.w900,
                             color: theme.colorScheme.onSurface,
-                            letterSpacing: -0.7,
+                            letterSpacing: -0.8,
                           ),
                         ),
                         SizedBox(height: 12.h),
 
-                        // WhatsApp-Style Sleek Search Bar
+                        // Sleek, generous iOS/WhatsApp Search Bar
                         Container(
-                          height: 42.h,
+                          height: 44.h,
                           decoration: BoxDecoration(
                             color: isDark
                                 ? const Color(0xFF1E2638)
-                                : const Color(0xFFF1F5F9),
+                                : const Color(0xFFE2E8F0).withValues(alpha: 0.65),
                             borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(
                               color: isDark
@@ -195,9 +196,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                               SizedBox(width: 12.w),
                               Icon(
                                 Icons.search_rounded,
-                                size: 19.sp,
+                                size: 20.sp,
                                 color: theme.colorScheme.onSurfaceVariant
-                                    .withValues(alpha: 0.6),
+                                    .withValues(alpha: 0.65),
                               ),
                               SizedBox(width: 8.w),
                               Expanded(
@@ -207,7 +208,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                       cubit.onSearchChanged(query),
                                   textAlignVertical: TextAlignVertical.center,
                                   style: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 14.5.sp,
+                                    fontWeight: FontWeight.w400,
                                     color: theme.colorScheme.onSurface,
                                   ),
                                   decoration: InputDecoration(
@@ -216,11 +218,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                     focusedBorder: InputBorder.none,
                                     enabledBorder: InputBorder.none,
                                     contentPadding: EdgeInsets.symmetric(
-                                      vertical: 10.h,
+                                      vertical: 12.h,
                                     ),
                                     hintText: l10n.messagesSearchPlaceholder,
                                     hintStyle: TextStyle(
-                                      fontSize: 13.5.sp,
+                                      fontSize: 14.5.sp,
+                                      fontWeight: FontWeight.w400,
                                       color: theme.colorScheme.onSurfaceVariant
                                           .withValues(alpha: 0.55),
                                     ),
@@ -245,7 +248,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                       ),
                                       child: Icon(
                                         Icons.cancel_rounded,
-                                        size: 18.sp,
+                                        size: 19.sp,
                                         color: theme
                                             .colorScheme.onSurfaceVariant
                                             .withValues(alpha: 0.7),
@@ -259,7 +262,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         ),
                         SizedBox(height: 12.h),
 
-                        // WhatsApp Category Filter Pills (Frame 80)
+                        // Category Filter Pills
                         BlocBuilder<ChatListCubit, ChatListState>(
                           buildWhen: (prev, curr) =>
                               prev.activeFilter != curr.activeFilter ||
@@ -369,7 +372,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       );
                     }
 
-                    // Success Chat List
+                    // Success Chat List with Staggered Entrance Animation
                     final chats = state.filteredChats;
                     return SliverPadding(
                       padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 110.h),
@@ -386,7 +389,22 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                       .push('/chat/${chat.matchId}')
                                       .then((_) => cubit.refresh());
                                 },
-                              ),
+                              )
+                                  .animate(
+                                    delay: Duration(
+                                      milliseconds: (35 * index).clamp(0, 400),
+                                    ),
+                                  )
+                                  .fadeIn(
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeOutCubic,
+                                  )
+                                  .slideY(
+                                    begin: 0.08,
+                                    end: 0,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeOutCubic,
+                                  ),
                             );
                           },
                           childCount: chats.length,
@@ -399,7 +417,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ),
 
-          // 2. Pinned Top Frosted Glass Bar with Fade-in Title
+          // 2. Gradual, Seamless Frosted Header Bar (NO hard line, NO icons)
           Positioned(
             top: 0,
             left: 0,
@@ -411,77 +429,36 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   sigmaY: 18 * _scrollProgress,
                 ),
                 child: Container(
-                  padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
-                    left: 12.w,
-                    right: 12.w,
-                  ),
-                  height: MediaQuery.of(context).padding.top + 52.h,
+                  height: topBarHeight,
+                  padding: EdgeInsets.only(top: topPadding),
                   decoration: BoxDecoration(
-                    color: (isDark ? const Color(0xFF0F172A) : Colors.white)
-                        .withValues(alpha: 0.88 * _scrollProgress),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: _scrollProgress > 0.8
-                            ? (isDark
-                                ? Colors.white.withValues(alpha: 0.08)
-                                : Colors.black.withValues(alpha: 0.06))
-                            : Colors.transparent,
-                        width: 0.8,
-                      ),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        (isDark ? const Color(0xFF0F172A) : Colors.white)
+                            .withValues(alpha: 0.88 * _scrollProgress),
+                        (isDark ? const Color(0xFF0F172A) : Colors.white)
+                            .withValues(alpha: 0.60 * _scrollProgress),
+                        (isDark ? const Color(0xFF0F172A) : Colors.white)
+                            .withValues(alpha: 0.0 * _scrollProgress),
+                      ],
+                      stops: const [0.0, 0.72, 1.0],
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Left circular action button (WhatsApp '...' style)
-                      Container(
-                        width: 36.r,
-                        height: 36.r,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.06)
-                              : Colors.black.withValues(alpha: 0.04),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.more_horiz_rounded,
-                          size: 20.sp,
+                  child: Center(
+                    child: Opacity(
+                      opacity: _scrollProgress,
+                      child: Text(
+                        l10n.messagesTitle,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w700,
                           color: theme.colorScheme.onSurface,
+                          letterSpacing: -0.3,
                         ),
                       ),
-
-                      // Center Compact Title (Fades in on scroll)
-                      Opacity(
-                        opacity: _scrollProgress,
-                        child: Text(
-                          l10n.messagesTitle,
-                          style: TextStyle(
-                            fontSize: 17.sp,
-                            fontWeight: FontWeight.w700,
-                            color: theme.colorScheme.onSurface,
-                            letterSpacing: -0.3,
-                          ),
-                        ),
-                      ),
-
-                      // Right action button
-                      Container(
-                        width: 36.r,
-                        height: 36.r,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Colors.white.withValues(alpha: 0.06)
-                              : Colors.black.withValues(alpha: 0.04),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.edit_square,
-                          size: 18.sp,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

@@ -33,7 +33,8 @@ class _ChatListCardState extends State<ChatListCard> {
     } else if (diff.inHours < 1) {
       return l10n.homeMinutesAgo(diff.inMinutes);
     } else if (diff.inHours < 24 && date.day == now.day) {
-      final hour = date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
+      final hour =
+          date.hour > 12 ? date.hour - 12 : (date.hour == 0 ? 12 : date.hour);
       final period = date.hour >= 12 ? 'PM' : 'AM';
       final min = date.minute.toString().padLeft(2, '0');
       return '$hour:$min $period';
@@ -46,50 +47,100 @@ class _ChatListCardState extends State<ChatListCard> {
     }
   }
 
-  IconData _resolveCategoryIcon(String? iconName) {
-    if (iconName == null) return Icons.chat_bubble_outline_rounded;
-    return switch (iconName.toLowerCase()) {
-      'headphones' => Icons.headphones_rounded,
-      'smartphone' || 'phone' || 'phones' => Icons.smartphone_rounded,
-      'account_balance_wallet' || 'wallet' || 'wallets' =>
-        Icons.account_balance_wallet_rounded,
-      'key' || 'keys' => Icons.key_rounded,
-      'badge' || 'document' || 'documents' => Icons.badge_outlined,
-      'pets' || 'pet' => Icons.pets_rounded,
-      'backpack' || 'bag' || 'bags' => Icons.backpack_outlined,
-      'jewelry' => Icons.diamond_outlined,
-      'accessories' => Icons.watch_outlined,
-      _ => Icons.category_rounded,
-    };
-  }
-
-  Widget _buildAvatarFallback(
-    ChatItemEntity chat,
-    bool isDark,
-    Color accentColor,
-  ) {
-    final category = chat.displayReport?.categoryNameEn;
-    if (category != null && category.isNotEmpty) {
-      return Center(
-        child: Icon(
-          _resolveCategoryIcon(category),
-          size: 26.sp,
-          color: accentColor,
-        ),
-      );
-    }
-
+  Widget _buildCircularAvatar(ChatItemEntity chat, bool isDark) {
+    final avatarUrl = chat.otherUserAvatar;
     final initials = chat.otherUserName.isNotEmpty
-        ? chat.otherUserName.substring(0, 1).toUpperCase()
+        ? chat.otherUserName
+            .trim()
+            .split(' ')
+            .where((w) => w.isNotEmpty)
+            .take(2)
+            .map((w) => w[0])
+            .join()
+            .toUpperCase()
         : '?';
 
+    final hasPhoto = avatarUrl != null && avatarUrl.isNotEmpty;
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: 56.r,
+          height: 56.r,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDark ? const Color(0xFF243044) : const Color(0xFFE2E8F0),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : Colors.black.withValues(alpha: 0.05),
+              width: 1.0,
+            ),
+          ),
+          child: ClipOval(
+            child: hasPhoto
+                ? Image.network(
+                    avatarUrl,
+                    width: 56.r,
+                    height: 56.r,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) =>
+                        _buildInitialsFallback(initials, isDark),
+                    loadingBuilder: (context, child, progress) {
+                      if (progress == null) return child;
+                      return Center(
+                        child: SizedBox(
+                          width: 16.r,
+                          height: 16.r,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              const Color(0xFF2F5BEA).withValues(alpha: 0.6),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : _buildInitialsFallback(initials, isDark),
+          ),
+        ),
+
+        // Verified green check badge
+        if (chat.isVerified)
+          Positioned(
+            bottom: -1.r,
+            right: -1.r,
+            child: Container(
+              padding: EdgeInsets.all(2.5.r),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isDark ? const Color(0xFF1E2638) : Colors.white,
+                  width: 2.0,
+                ),
+              ),
+              child: Icon(
+                Icons.check_rounded,
+                color: Colors.white,
+                size: 10.r,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildInitialsFallback(String initials, bool isDark) {
     return Center(
       child: Text(
         initials,
         style: TextStyle(
-          color: accentColor,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w800,
+          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF475569),
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -112,7 +163,6 @@ class _ChatListCardState extends State<ChatListCard> {
         : (isDark ? const Color(0xFF34D399) : const Color(0xFF059669));
 
     final hasUnread = chat.unreadCount > 0;
-    final imageUrl = report?.primaryImage;
 
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
@@ -155,75 +205,8 @@ class _ChatListCardState extends State<ChatListCard> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Avatar / Thumbnail
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16.r),
-                    child: Container(
-                      width: 62.r,
-                      height: 62.r,
-                      color: isDark
-                          ? Colors.white.withValues(alpha: 0.06)
-                          : (isLost
-                              ? const Color(0xFFFFF1F2)
-                              : const Color(0xFFF0FDF4)),
-                      child: imageUrl != null && imageUrl.isNotEmpty
-                          ? Image.network(
-                              imageUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => _buildAvatarFallback(
-                                chat,
-                                isDark,
-                                tagText,
-                              ),
-                              loadingBuilder: (context, child, progress) {
-                                if (progress == null) return child;
-                                return Center(
-                                  child: SizedBox(
-                                    width: 18.r,
-                                    height: 18.r,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        tagText.withValues(alpha: 0.6),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                          : _buildAvatarFallback(chat, isDark, tagText),
-                    ),
-                  ),
-
-                  // Verified indicator badge
-                  if (chat.isVerified)
-                    Positioned(
-                      bottom: -2.r,
-                      right: -2.r,
-                      child: Container(
-                        padding: EdgeInsets.all(2.r),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF10B981),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: isDark
-                                ? const Color(0xFF1E2638)
-                                : Colors.white,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.check_rounded,
-                          color: Colors.white,
-                          size: 11.r,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+              // Circular User Avatar (with verified badge if verified)
+              _buildCircularAvatar(chat, isDark),
               SizedBox(width: 14.w),
 
               // Content Details
