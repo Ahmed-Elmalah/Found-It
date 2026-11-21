@@ -26,17 +26,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
   // مفيش بلور نهائياً، شفاف ورا الكلمة، وبيضلّم تدريجياً لفوق لحد ما يبقى أسود:
   // ---------------------------------------------------------------------------
   /// المسافة بالسكرول (بالبكسل) اللي بيظهر فيها التدرج والعنوان تدريجياً
-  static const double kScrollDistance = 50.0;
+  static const double kScrollDistance = 90.0;
 
   /// درجة السواد عند قمة الشاشة من فوق خالص (عند الساعة والبطارية)
   /// 1.0 = أسود خالص معتم، 0.0 = شفاف
   static const double kTopDarknessOpacity = 1.0;
 
   /// درجة التعتيم في الجزء العلوي عند شريط الحالة (Status Bar)
-  static const double kStatusBarDarkness = 0.65;
+  static const double kStatusBarDarkness = 0.80;
 
   /// درجة الشفافية خلف كلمة Messages (0.0 = شفاف تماماً مفيش وراها أي حاجة ومنها لليست)
-  static const double kTitleAreaOpacity = 0.0;
+  static const double kTitleAreaOpacity = 0.50;
   // ---------------------------------------------------------------------------
 
   late final TextEditingController _searchController;
