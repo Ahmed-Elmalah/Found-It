@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:found_it/features/chat/data/mock/fake_chat_data.dart';
+import '../../mock/fake_chat_data.dart';
 import 'package:found_it/features/chat/domain/entities/chat_failure.dart';
 import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
 import 'package:found_it/features/chat/domain/repositories/chat_repository.dart';

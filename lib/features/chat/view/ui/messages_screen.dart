@@ -395,7 +395,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       return SliverFillRemaining(
                         hasScrollBody: false,
                         child: ChatListEmptyView(
-                          onExplore: () => context.push(AppRoutes.explore),
+                          onExplore: () => context.go(AppRoutes.explore),
                         ),
                       );
                     }
@@ -414,7 +414,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                 chat: chat,
                                 onTap: () {
                                   context
-                                      .push('/chat/${chat.matchId}')
+                                      .push(AppRoutes.chatPath(chat.matchId))
                                       .then((_) => cubit.refresh());
                                 },
                               )
