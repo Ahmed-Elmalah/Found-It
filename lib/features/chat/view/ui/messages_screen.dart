@@ -24,23 +24,20 @@ class MessagesScreen extends StatefulWidget {
 
 class _MessagesScreenState extends State<MessagesScreen> {
   // ---------------------------------------------------------------------------
-  // 🎛️ تحكم الشفافية والتدريج للأب بار (Visual Tuning Controls)
-  // تقدر تعدل القيم دي عشان تظبط درجة الشفافية وسرعة التدريج مع البدي:
+  // 🎛️ تحكم الشفافية والتدريج للأب بار (iOS WhatsApp Glass Controls)
+  // تقدر تعدل القيم دي عشان تظبط درجة الشفافية وسرعة التدريج:
   // ---------------------------------------------------------------------------
-  /// المسافة بالسكرول (بالبكسل) اللي بيحصل فيها التدريج الكامل (كل ما تكبر الرقم التدريج يبقى أبطأ وأنعم)
-  static const double kScrollDistance = 90.0;
+  /// المسافة بالسكرول (بالبكسل) اللي بيحصل فيها التدريج الكامل مع حركة صباعك
+  static const double kScrollDistance = 60.0;
 
   /// قوة البلور الزجاجي الأقصى (Frosted Blur Sigma)
-  static const double kMaxBlurSigma = 18.0;
+  static const double kMaxBlurSigma = 20.0;
 
-  /// الشفافية القصوى في الدارك مود (0.0 = شفاف تماماً، 1.0 = معتم)
-  static const double kDarkMaxOpacity = 0.80;
+  /// نسبة عتامة الزجاج في الدارك مود (0.0 = شفاف خالص، 0.72 = زي الواتساب بالظبط، 1.0 = مصمت)
+  static const double kDarkMaxOpacity = 0.72;
 
-  /// الشفافية القصوى في اللايت مود (0.0 = شفاف تماماً، 1.0 = معتم)
-  static const double kLightMaxOpacity = 0.75;
-
-  /// منطقة التلاشي المتدرجة مع البدي (Feather height) تمنع أي خط قاطع وتدمج الأب بار مع البدي
-  static const double kFeatherHeight = 30.0;
+  /// نسبة عتامة الزجاج في اللايت مود (0.0 = شفاف خالص، 0.80 = زي الواتساب بالظبط، 1.0 = مصمت)
+  static const double kLightMaxOpacity = 0.80;
   // ---------------------------------------------------------------------------
 
   late final TextEditingController _searchController;
@@ -57,9 +54,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   void _onScroll() {
     final offset = _scrollController.hasClients ? _scrollController.offset : 0.0;
-    final rawProgress = (offset / kScrollDistance.h).clamp(0.0, 1.0);
-    // منحنى تكعيبي ناعم يخلي التدرج يبدأ بهدوء شديد ويدرج خطوة بخطوة مع البدي
-    final progress = Curves.easeOutCubic.transform(rawProgress);
+    // تدريج خطي ناعم خطوة بخطوة مع حركة السكرول بدون قفزات مفاجئة
+    final progress = (offset / kScrollDistance.h).clamp(0.0, 1.0);
     if ((progress - _scrollProgress).abs() > 0.005) {
       setState(() => _scrollProgress = progress);
     }
@@ -159,7 +155,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final baseBarHeight = 52.h;
     final topBarTotalHeight = topPadding + baseBarHeight;
     final maxOpacity = isDark ? kDarkMaxOpacity : kLightMaxOpacity;
-    final baseColor = isDark ? const Color(0xFF0F172A) : Colors.white;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -452,7 +447,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ),
 
-          // 2. Gradual, Feathered Frosted Header Bar (Smooth seamless blend with body)
+          // 2. iOS Frosted Glass Header Bar (Exact WhatsApp behavior)
           Positioned(
             top: 0,
             left: 0,
@@ -466,45 +461,31 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     sigmaY: kMaxBlurSigma * _scrollProgress,
                   ),
                   child: Container(
-                    height: topBarTotalHeight + kFeatherHeight.h,
+                    height: topBarTotalHeight,
                     padding: EdgeInsets.only(top: topPadding),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          baseColor.withValues(
-                            alpha: maxOpacity * _scrollProgress,
-                          ),
-                          baseColor.withValues(
-                            alpha: (maxOpacity * 0.85) * _scrollProgress,
-                          ),
-                          baseColor.withValues(
-                            alpha: (maxOpacity * 0.45) * _scrollProgress,
-                          ),
-                          baseColor.withValues(
-                            alpha: (maxOpacity * 0.12) * _scrollProgress,
-                          ),
-                          baseColor.withValues(alpha: 0.0),
-                        ],
-                        stops: const [0.0, 0.45, 0.70, 0.88, 1.0],
+                      color: (isDark ? theme.scaffoldBackgroundColor : Colors.white)
+                          .withValues(alpha: maxOpacity * _scrollProgress),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: (isDark ? Colors.white : Colors.black)
+                              .withValues(alpha: 0.08 * _scrollProgress),
+                          width: 0.5,
+                        ),
                       ),
                     ),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        height: baseBarHeight,
-                        child: Center(
-                          child: Opacity(
-                            opacity: _scrollProgress,
-                            child: Text(
-                              l10n.messagesTitle,
-                              style: TextStyle(
-                                fontSize: 17.sp,
-                                fontWeight: FontWeight.w700,
-                                color: theme.colorScheme.onSurface,
-                                letterSpacing: -0.3,
-                              ),
+                    child: SizedBox(
+                      height: baseBarHeight,
+                      child: Center(
+                        child: Opacity(
+                          opacity: _scrollProgress,
+                          child: Text(
+                            l10n.messagesTitle,
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w700,
+                              color: theme.colorScheme.onSurface,
+                              letterSpacing: -0.3,
                             ),
                           ),
                         ),
