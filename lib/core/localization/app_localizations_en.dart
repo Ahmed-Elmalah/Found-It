@@ -680,6 +680,65 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchFailedMessage => 'Check your connection and try again.';
 
   @override
+  String get messagesTitle => 'Messages';
+
+  @override
+  String get messagesSubtitle => 'Conversations and item matching';
+
+  @override
+  String get messagesSearchPlaceholder => 'Search conversations...';
+
+  @override
+  String get messagesEmptyTitle => 'No conversations yet';
+
+  @override
+  String get messagesEmptySubtitle =>
+      'When a match is found for your lost or found items, you can chat here to arrange recovery safely.';
+
+  @override
+  String get messagesPhotoLabel => 'Photo';
+
+  @override
+  String get messagesYouPrefix => 'You: ';
+
+  @override
+  String get messagesYesterday => 'Yesterday';
+
+  @override
+  String get messagesNow => 'Just now';
+
+  @override
+  String get messagesRetry => 'Retry';
+
+  @override
+  String get messagesFailedTitle => 'Couldn\'t load messages';
+
+  @override
+  String get messagesFailedSubtitle =>
+      'Please check your internet connection and try again.';
+
+  @override
+  String get messagesFilterAll => 'All';
+
+  @override
+  String get messagesFilterUnread => 'Unread';
+
+  @override
+  String get messagesFilterLost => 'Lost';
+
+  @override
+  String get messagesFilterFound => 'Found';
+
+  @override
+  String get messagesFilterVerified => 'Verified';
+
+  @override
+  String get messagesExploreAction => 'Explore Reports';
+
+  @override
+  String get messagesClearFilters => 'Clear filters';
+
+  @override
   String similarityScore(int score) {
     return '$score% Match';
   }

@@ -678,6 +678,65 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchFailedMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
 
   @override
+  String get messagesTitle => 'الرسائل';
+
+  @override
+  String get messagesSubtitle => 'المحادثات وتطابق الأغراض';
+
+  @override
+  String get messagesSearchPlaceholder => 'البحث في المحادثات...';
+
+  @override
+  String get messagesEmptyTitle => 'لا توجد محادثات بعد';
+
+  @override
+  String get messagesEmptySubtitle =>
+      'عندما يتم العثور على تطابق لأشيائك المفقودة أو المعثور عليها، يمكنك المحادثة هنا لترتيب الاستلام بأمان.';
+
+  @override
+  String get messagesPhotoLabel => 'صورة';
+
+  @override
+  String get messagesYouPrefix => 'أنت: ';
+
+  @override
+  String get messagesYesterday => 'أمس';
+
+  @override
+  String get messagesNow => 'الآن';
+
+  @override
+  String get messagesRetry => 'إعادة المحاولة';
+
+  @override
+  String get messagesFailedTitle => 'تعذر تحميل الرسائل';
+
+  @override
+  String get messagesFailedSubtitle =>
+      'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
+
+  @override
+  String get messagesFilterAll => 'الكل';
+
+  @override
+  String get messagesFilterUnread => 'غير مقروء';
+
+  @override
+  String get messagesFilterLost => 'مفقود';
+
+  @override
+  String get messagesFilterFound => 'معثور عليه';
+
+  @override
+  String get messagesFilterVerified => 'موثق';
+
+  @override
+  String get messagesExploreAction => 'استكشاف البلاغات';
+
+  @override
+  String get messagesClearFilters => 'مسح الفلاتر';
+
+  @override
   String similarityScore(int score) {
     return '$score% تطابق';
   }

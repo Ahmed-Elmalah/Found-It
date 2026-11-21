@@ -14,6 +14,8 @@ import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
+import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
+import 'package:found_it/features/chat/view/ui/messages_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
 import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
@@ -153,7 +155,10 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.messages,
-              builder: (context, state) => const _ComingSoon('Messages'),
+              builder: (context, state) => BlocProvider(
+                create: (_) => sl<ChatListCubit>()..loadChats(),
+                child: const MessagesScreen(),
+              ),
             ),
           ],
         ),

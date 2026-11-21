@@ -1358,6 +1358,120 @@ abstract class AppLocalizations {
   /// **'Check your connection and try again.'**
   String get searchFailedMessage;
 
+  /// No description provided for @messagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messagesTitle;
+
+  /// No description provided for @messagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversations and item matching'**
+  String get messagesSubtitle;
+
+  /// No description provided for @messagesSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conversations...'**
+  String get messagesSearchPlaceholder;
+
+  /// No description provided for @messagesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get messagesEmptyTitle;
+
+  /// No description provided for @messagesEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When a match is found for your lost or found items, you can chat here to arrange recovery safely.'**
+  String get messagesEmptySubtitle;
+
+  /// No description provided for @messagesPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get messagesPhotoLabel;
+
+  /// No description provided for @messagesYouPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'You: '**
+  String get messagesYouPrefix;
+
+  /// No description provided for @messagesYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get messagesYesterday;
+
+  /// No description provided for @messagesNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get messagesNow;
+
+  /// No description provided for @messagesRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get messagesRetry;
+
+  /// No description provided for @messagesFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load messages'**
+  String get messagesFailedTitle;
+
+  /// No description provided for @messagesFailedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection and try again.'**
+  String get messagesFailedSubtitle;
+
+  /// No description provided for @messagesFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get messagesFilterAll;
+
+  /// No description provided for @messagesFilterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get messagesFilterUnread;
+
+  /// No description provided for @messagesFilterLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get messagesFilterLost;
+
+  /// No description provided for @messagesFilterFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Found'**
+  String get messagesFilterFound;
+
+  /// No description provided for @messagesFilterVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get messagesFilterVerified;
+
+  /// No description provided for @messagesExploreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Reports'**
+  String get messagesExploreAction;
+
+  /// No description provided for @messagesClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get messagesClearFilters;
+
   /// No description provided for @similarityScore.
   ///
   /// In en, this message translates to:
