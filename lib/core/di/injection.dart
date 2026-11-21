@@ -366,4 +366,3 @@ void _registerRecovery() {
       ),
     );
 }
-}
