@@ -302,5 +302,18 @@
   "emptySearchMessage": "Try adjusting your search filters.",
   "clearFilters": "Clear filters",
   "searchFailedTitle": "Couldn't load reports",
-  "searchFailedMessage": "Check your connection and try again."
+  "searchFailedMessage": "Check your connection and try again.",
+
+  "messagesTitle": "Messages",
+  "messagesSubtitle": "Conversations and item matching",
+  "messagesSearchPlaceholder": "Search conversations...",
+  "messagesEmptyTitle": "No conversations yet",
+  "messagesEmptySubtitle": "When a match is found for your lost or found items, you can chat here to arrange recovery safely.",
+  "messagesPhotoLabel": "Photo",
+  "messagesYouPrefix": "You: ",
+  "messagesYesterday": "Yesterday",
+  "messagesNow": "Just now",
+  "messagesRetry": "Retry",
+  "messagesFailedTitle": "Couldn't load messages",
+  "messagesFailedSubtitle": "Please check your internet connection and try again."
 }

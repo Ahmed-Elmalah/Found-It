@@ -678,4 +678,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchFailedMessage => 'Check your connection and try again.';
+
+  @override
+  String get messagesTitle => 'Messages';
+
+  @override
+  String get messagesSubtitle => 'Conversations and item matching';
+
+  @override
+  String get messagesSearchPlaceholder => 'Search conversations...';
+
+  @override
+  String get messagesEmptyTitle => 'No conversations yet';
+
+  @override
+  String get messagesEmptySubtitle =>
+      'When a match is found for your lost or found items, you can chat here to arrange recovery safely.';
+
+  @override
+  String get messagesPhotoLabel => 'Photo';
+
+  @override
+  String get messagesYouPrefix => 'You: ';
+
+  @override
+  String get messagesYesterday => 'Yesterday';
+
+  @override
+  String get messagesNow => 'Just now';
+
+  @override
+  String get messagesRetry => 'Retry';
+
+  @override
+  String get messagesFailedTitle => 'Couldn\'t load messages';
+
+  @override
+  String get messagesFailedSubtitle =>
+      'Please check your internet connection and try again.';
 }

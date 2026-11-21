@@ -16,6 +16,11 @@ import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/login_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/resend_timer_cubit.dart';
 import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
+import 'package:found_it/features/chat/data/chat_remote_data_source.dart';
+import 'package:found_it/features/chat/data/chat_repository_impl.dart';
+import 'package:found_it/features/chat/domain/repositories/chat_repository.dart';
+import 'package:found_it/features/chat/domain/use_cases/get_my_chats_use_case.dart';
+import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
 import 'package:found_it/features/city/data/city_remote_data_source.dart';
 import 'package:found_it/features/city/data/city_repository_impl.dart';
 import 'package:found_it/features/city/domain/city_repository.dart';
@@ -109,6 +114,7 @@ Future<void> configureDependencies() async {
   _registerReports();
   _registerProfile();
   _registerExplore();
+  _registerChat();
 }
 
 // ---------------------------------------------------------------------
@@ -274,4 +280,19 @@ void _registerProfile() {
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
     ..registerFactory(() => ProfileCubit(sl(), sl(), sl(), sl(), sl()));
+}
+
+// ---------------------------------------------------------------------
+// Chat & Messages (Youssef, story #3)
+// ---------------------------------------------------------------------
+void _registerChat() {
+  sl
+    ..registerLazySingleton<ChatRemoteDataSource>(
+      () => ChatRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<ChatRepository>(
+      () => ChatRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetMyChatsUseCase(sl()))
+    ..registerFactory(() => ChatListCubit(sl()));
 }

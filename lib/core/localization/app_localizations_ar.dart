@@ -676,4 +676,42 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchFailedMessage => 'تحقق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get messagesTitle => 'الرسائل';
+
+  @override
+  String get messagesSubtitle => 'المحادثات وتطابق الأغراض';
+
+  @override
+  String get messagesSearchPlaceholder => 'البحث في المحادثات...';
+
+  @override
+  String get messagesEmptyTitle => 'لا توجد محادثات بعد';
+
+  @override
+  String get messagesEmptySubtitle =>
+      'عندما يتم العثور على تطابق لأشيائك المفقودة أو المعثور عليها، يمكنك المحادثة هنا لترتيب الاستلام بأمان.';
+
+  @override
+  String get messagesPhotoLabel => 'صورة';
+
+  @override
+  String get messagesYouPrefix => 'أنت: ';
+
+  @override
+  String get messagesYesterday => 'أمس';
+
+  @override
+  String get messagesNow => 'الآن';
+
+  @override
+  String get messagesRetry => 'إعادة المحاولة';
+
+  @override
+  String get messagesFailedTitle => 'تعذر تحميل الرسائل';
+
+  @override
+  String get messagesFailedSubtitle =>
+      'يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.';
 }
