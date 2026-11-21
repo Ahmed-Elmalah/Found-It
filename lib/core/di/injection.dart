@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
@@ -114,7 +115,10 @@ Future<void> configureDependencies() async {
   sl
     ..registerSingleton<SharedPreferences>(prefs)
     ..registerSingleton<SupabaseClient>(Supabase.instance.client)
-    ..registerSingleton<AppPreferencesCubit>(AppPreferencesCubit(prefs));
+    ..registerSingleton<AppPreferencesCubit>(AppPreferencesCubit(prefs))
+    ..registerLazySingleton<ReportsChangedNotifier>(
+      () => ReportsChangedNotifier(),
+    );
 
   _registerAuth();
   _registerOnboarding();
@@ -148,6 +152,7 @@ void _registerExplore() {
         searchReports: sl(),
         getCategories: sl(),
         getCityAreas: sl(),
+        reportsChangedNotifier: sl(),
       ),
     );
 }
@@ -192,6 +197,7 @@ void _registerHome() {
         getHomeFeedUseCase: sl(),
         selectCityUseCase: sl(),
         getCitiesUseCase: sl(),
+        reportsChangedNotifier: sl(),
       ),
     );
 }
@@ -334,6 +340,7 @@ void _registerRecovery() {
       () => RecoveryCubit(
         getMatchContact: sl(),
         markItemRecovered: sl(),
+        reportsChangedNotifier: sl(),
       ),
     );
 }

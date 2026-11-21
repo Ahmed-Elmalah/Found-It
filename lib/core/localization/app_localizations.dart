@@ -1574,6 +1574,30 @@ abstract class AppLocalizations {
   /// **'Failed to load matches. Please try again.'**
   String get matchesLoadError;
 
+  /// No description provided for @matchesErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'This match is no longer available'**
+  String get matchesErrorNotFound;
+
+  /// No description provided for @matchesErrorNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t do this action'**
+  String get matchesErrorNotAllowed;
+
+  /// No description provided for @matchesErrorInvalidState.
+  ///
+  /// In en, this message translates to:
+  /// **'This match is already closed'**
+  String get matchesErrorInvalidState;
+
+  /// No description provided for @matchesErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection'**
+  String get matchesErrorNetwork;
+
   /// No description provided for @matchDismissError.
   ///
   /// In en, this message translates to:

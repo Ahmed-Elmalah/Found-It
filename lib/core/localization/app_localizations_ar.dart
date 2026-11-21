@@ -796,6 +796,18 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحميل التطابقات. يرجى المحاولة مرة أخرى.';
 
   @override
+  String get matchesErrorNotFound => 'هذا التطابق لم يعد متاحاً';
+
+  @override
+  String get matchesErrorNotAllowed => 'ليس لديك صلاحية للقيام بهذا الإجراء';
+
+  @override
+  String get matchesErrorInvalidState => 'هذا التطابق تم إغلاقه بالفعل';
+
+  @override
+  String get matchesErrorNetwork => 'يرجى التحقق من اتصالك بالإنترنت';
+
+  @override
   String get matchDismissError => 'تعذر استبعاد التطابق.';
 
   @override

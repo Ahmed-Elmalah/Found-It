@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/features/city/domain/city_entity.dart';
 import 'package:found_it/features/city/domain/city_repository.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
@@ -162,6 +163,44 @@ void main() {
 
       expect(cubit.state.status, HomeStatus.success);
       expect(cubit.state.reports, tReports);
+    });
+
+    test('reportsChangedNotifier notify triggers reload', () async {
+      final notifier = ReportsChangedNotifier();
+      homeRepo.reportsToReturn = tReports;
+      final cubitWithNotifier = HomeCubit(
+        getHomeFeedUseCase: getHomeFeedUseCase,
+        getCitiesUseCase: getCitiesUseCase,
+        selectCityUseCase: selectCityUseCase,
+        reportsChangedNotifier: notifier,
+      );
+      await cubitWithNotifier.init(initialCityId: 'cairo-uuid');
+
+      final newReports = [
+        HomeReportItem(
+          id: 'rep-2',
+          refCode: 'RPT-2',
+          title: 'Second Report',
+          type: 'found',
+          categoryName: 'Wallets',
+          categoryIcon: 'wallet',
+          areaName: 'Maadi',
+          cityName: 'Cairo',
+          itemDate: DateTime.now(),
+          images: const [],
+          status: 'active',
+          isMine: false,
+          createdAt: DateTime.now(),
+        ),
+      ];
+      homeRepo.reportsToReturn = newReports;
+
+      notifier.notify();
+      await pumpEventQueue();
+
+      expect(cubitWithNotifier.state.reports, newReports);
+      await cubitWithNotifier.close();
+      notifier.dispose();
     });
   });
 }
