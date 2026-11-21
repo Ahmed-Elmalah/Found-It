@@ -27,7 +27,8 @@ type NotificationRow = {
     | "new_message"
     | "ownership_verified"
     | "match_rejected"
-    | "item_recovered";
+    | "item_recovered"
+    | "claim_passed";
   match_id: string | null;
   report_id: string | null;
   report_title: string | null;
@@ -81,6 +82,11 @@ function buildText(n: NotificationRow, lang: Lang): PushText {
           title: "تم استرداد الغرض",
           body: `تم تحديد بلاغك "${title}" كمُسترد.`,
         };
+      case "claim_passed":
+        return {
+          title: "تمت الإجابة على أسئلة التحقق",
+          body: `${name} أجاب على أسئلة "${title}" بشكل صحيح. يمكنكما المحادثة الآن.`,
+        };
     }
   }
 
@@ -108,6 +114,11 @@ function buildText(n: NotificationRow, lang: Lang): PushText {
       return {
         title: "Report recovered",
         body: `Your report "${title}" was marked Recovered.`,
+      };
+    case "claim_passed":
+      return {
+        title: "Verification questions answered",
+        body: `${name} answered the questions for "${title}" correctly. You can chat now.`,
       };
   }
 }
