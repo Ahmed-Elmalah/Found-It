@@ -110,6 +110,8 @@ void main() {
       );
 
       await cubitWithNotifier.confirmRecovery('match_123');
+      // broadcast streams deliver events asynchronously -> let it arrive
+      await Future<void>.delayed(Duration.zero);
       expect(notified, isTrue);
 
       await sub.cancel();
