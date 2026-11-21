@@ -231,6 +231,58 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
+
+    // =========================================================================
+    // Sprint 2 Route Stubs (Temporary placeholders until screens are built)
+    // =========================================================================
+
+    // Report Details (Adham, story #1)
+    GoRoute(
+      path: AppRoutes.reportDetails,
+      builder: (context, state) {
+        final id = state.pathParameters['id'] ?? '';
+        return _ComingSoon('Report Details ($id)');
+      },
+    ),
+
+    // Potential Matches list (Ziad, story #2)
+    GoRoute(
+      path: AppRoutes.matches,
+      builder: (context, state) => const _ComingSoon('Potential Matches'),
+    ),
+
+    // Match Compare (Ziad, story #2)
+    GoRoute(
+      path: AppRoutes.matchCompare,
+      builder: (context, state) {
+        final id = state.pathParameters['id'] ?? '';
+        return _ComingSoon('Match Compare ($id)');
+      },
+    ),
+
+    // Chat (Youssef, story #3)
+    GoRoute(
+      path: AppRoutes.chat,
+      builder: (context, state) {
+        final matchId = state.pathParameters['matchId'] ?? '';
+        return _ComingSoon('Chat ($matchId)');
+      },
+    ),
+
+    // Handover Instructions (Ziad, story #4)
+    GoRoute(
+      path: AppRoutes.handover,
+      builder: (context, state) {
+        final matchId = state.pathParameters['matchId'] ?? '';
+        return _ComingSoon('Handover ($matchId)');
+      },
+    ),
+
+    // Notifications (Mohamed, story #5)
+    GoRoute(
+      path: AppRoutes.notifications,
+      builder: (context, state) => const _ComingSoon('Notifications'),
+    ),
   ],
 );
 

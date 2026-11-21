@@ -15,4 +15,29 @@ abstract final class AppRoutes {
   static const editReport = '/edit-report';
   static const profile = '/profile';
   static const editProfile = '/edit-profile';
+
+  // ---------------------------------------------------------------------------
+  // Sprint 2 Routes
+  // ---------------------------------------------------------------------------
+  /// Report Details (Adham, story #1) — opens from any report card.
+  static const reportDetails = '/reports/:id';
+  static String reportDetailsPath(String id) => '/reports/$id';
+
+  /// Potential Matches list (Ziad, story #2) — P28.
+  static const matches = '/matches';
+
+  /// Match Compare screen (Ziad, story #2) — P29.
+  static const matchCompare = '/matches/:id';
+  static String matchComparePath(String id) => '/matches/$id';
+
+  /// Live Chat screen (Youssef, story #3) — P32.
+  static const chat = '/chat/:matchId';
+  static String chatPath(String matchId) => '/chat/$matchId';
+
+  /// Handover Instructions screen (Ziad, story #4) — after ownership verified.
+  static const handover = '/chat/:matchId/handover';
+  static String handoverPath(String matchId) => '/chat/$matchId/handover';
+
+  /// Notifications screen (Mohamed, story #5) — P30.
+  static const notifications = '/notifications';
 }
