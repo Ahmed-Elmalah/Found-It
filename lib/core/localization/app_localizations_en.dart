@@ -797,6 +797,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get matchesLoadError => 'Failed to load matches. Please try again.';
 
   @override
+  String get matchesErrorNotFound => 'This match is no longer available';
+
+  @override
+  String get matchesErrorNotAllowed => 'You can\'t do this action';
+
+  @override
+  String get matchesErrorInvalidState => 'This match is already closed';
+
+  @override
+  String get matchesErrorNetwork => 'Check your internet connection';
+
+  @override
   String get matchDismissError => 'Failed to dismiss match.';
 
   @override

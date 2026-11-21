@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:found_it/core/constants/app_durations.dart';
+import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/core/models/report_type.dart';
 import 'package:found_it/features/explore/domain/get_categories_use_case.dart';
 import 'package:found_it/features/explore/domain/get_city_areas_use_case.dart';
@@ -19,6 +20,7 @@ class SearchCubit extends Cubit<SearchState> {
     required SearchReportsUseCase searchReports,
     required GetCategoriesUseCase getCategories,
     required GetCityAreasUseCase getCityAreas,
+    ReportsChangedNotifier? reportsChangedNotifier,
   })
     // ignore: prefer_initializing_formals
     : _getCityById = getCityById,
@@ -28,12 +30,20 @@ class SearchCubit extends Cubit<SearchState> {
        _getCategories = getCategories,
        // ignore: prefer_initializing_formals
        _getCityAreas = getCityAreas,
-       super(const SearchState());
+       super(const SearchState()) {
+    _reportsChangedSubscription =
+        reportsChangedNotifier?.stream.listen((_) {
+      if (state.cityId != null) {
+        search();
+      }
+    });
+  }
 
   final GetCityByIdUseCase _getCityById;
   final SearchReportsUseCase _searchReports;
   final GetCategoriesUseCase _getCategories;
   final GetCityAreasUseCase _getCityAreas;
+  StreamSubscription<void>? _reportsChangedSubscription;
 
   Timer? _debounce;
 
@@ -247,6 +257,7 @@ class SearchCubit extends Cubit<SearchState> {
   @override
   Future<void> close() {
     _debounce?.cancel();
+    _reportsChangedSubscription?.cancel();
     return super.close();
   }
 }

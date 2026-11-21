@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/entities/matches_failure.dart';
 import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
 import 'package:found_it/features/matches/view/cubit/matches_state.dart';
 import 'package:found_it/features/matches/view/widgets/match_card.dart';
@@ -62,7 +63,7 @@ class _PotentialMatchesCubitView extends StatelessWidget {
           if (state is MatchesError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message ?? l10n.matchesLoadError),
+                content: Text(_mapErrorMessage(state.failureType, l10n)),
                 backgroundColor: colors.error,
               ),
             );
@@ -87,7 +88,7 @@ class _PotentialMatchesCubitView extends StatelessWidget {
                     ),
                     SizedBox(height: 14.h),
                     Text(
-                      l10n.matchesLoadError,
+                      _mapErrorMessage(state.failureType, l10n),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16.sp,
@@ -297,4 +298,14 @@ Widget _buildEmptyState(
       ),
     ),
   );
+}
+
+String _mapErrorMessage(MatchesFailureType type, AppLocalizations l10n) {
+  return switch (type) {
+    MatchesFailureType.notFound => l10n.matchesErrorNotFound,
+    MatchesFailureType.notAllowed => l10n.matchesErrorNotAllowed,
+    MatchesFailureType.invalidState => l10n.matchesErrorInvalidState,
+    MatchesFailureType.network => l10n.matchesErrorNetwork,
+    _ => l10n.matchesLoadError,
+  };
 }

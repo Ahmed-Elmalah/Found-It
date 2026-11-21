@@ -29,8 +29,8 @@ class MatchesCubit extends Cubit<MatchesState> {
       emit(MatchesLoaded(matches));
     } on MatchesFailure catch (f) {
       emit(MatchesError(f.type, f.message));
-    } catch (e) {
-      emit(MatchesError(MatchesFailureType.unknown, e.toString()));
+    } catch (_) {
+      emit(const MatchesError(MatchesFailureType.unknown));
     }
   }
 
@@ -87,8 +87,8 @@ class MatchesCubit extends Cubit<MatchesState> {
       emit(MatchDetailsLoaded(match));
     } on MatchesFailure catch (f) {
       emit(MatchesError(f.type, f.message));
-    } catch (e) {
-      emit(MatchesError(MatchesFailureType.unknown, e.toString()));
+    } catch (_) {
+      emit(const MatchesError(MatchesFailureType.unknown));
     }
   }
 

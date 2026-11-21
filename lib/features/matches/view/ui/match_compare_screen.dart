@@ -10,6 +10,7 @@ import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
 import 'package:found_it/features/matches/domain/entities/match_report_summary.dart';
+import 'package:found_it/features/matches/domain/entities/matches_failure.dart';
 import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
 import 'package:found_it/features/matches/view/cubit/matches_state.dart';
 import 'package:found_it/features/matches/view/widgets/comparison_field_row.dart';
@@ -92,7 +93,7 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
         if (state is MatchesError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message ?? l10n.matchesLoadError),
+              content: Text(_mapErrorMessage(state.failureType, l10n)),
               backgroundColor: colors.error,
             ),
           );
@@ -138,7 +139,7 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
                       ),
                       SizedBox(height: 14.h),
                       Text(
-                        l10n.matchesLoadError,
+                        _mapErrorMessage(state.failureType, l10n),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16.sp,
@@ -415,4 +416,14 @@ class _ReportHeaderCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String _mapErrorMessage(MatchesFailureType type, AppLocalizations l10n) {
+  return switch (type) {
+    MatchesFailureType.notFound => l10n.matchesErrorNotFound,
+    MatchesFailureType.notAllowed => l10n.matchesErrorNotAllowed,
+    MatchesFailureType.invalidState => l10n.matchesErrorInvalidState,
+    MatchesFailureType.network => l10n.matchesErrorNetwork,
+    _ => l10n.matchesLoadError,
+  };
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/features/recovery/domain/entities/handover_contact_entity.dart';
 import 'package:found_it/features/recovery/domain/entities/recovery_failure.dart';
 import 'package:found_it/features/recovery/domain/repositories/recovery_repository.dart';
@@ -95,6 +96,25 @@ void main() {
       expect(cubit.state, isA<RecoveryError>());
       final error = cubit.state as RecoveryError;
       expect(error.failureType, RecoveryFailureType.invalidState);
+    });
+
+    test('confirmRecovery notifies reportsChangedNotifier on success', () async {
+      final notifier = ReportsChangedNotifier();
+      var notified = false;
+      final sub = notifier.stream.listen((_) => notified = true);
+
+      final cubitWithNotifier = RecoveryCubit(
+        getMatchContact: GetMatchContactUseCase(repo),
+        markItemRecovered: MarkItemRecoveredUseCase(repo),
+        reportsChangedNotifier: notifier,
+      );
+
+      await cubitWithNotifier.confirmRecovery('match_123');
+      expect(notified, isTrue);
+
+      await sub.cancel();
+      notifier.dispose();
+      await cubitWithNotifier.close();
     });
   });
 }
