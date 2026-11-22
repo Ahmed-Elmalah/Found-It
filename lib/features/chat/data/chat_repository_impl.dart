@@ -1,5 +1,4 @@
 import 'package:found_it/features/chat/data/chat_remote_data_source.dart';
-import 'package:found_it/features/chat/data/mock/fake_chat_data.dart';
 import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
 import 'package:found_it/features/chat/domain/entities/chat_message_entity.dart';
 import 'package:found_it/features/chat/domain/repositories/chat_repository.dart';
@@ -12,33 +11,11 @@ class ChatRepositoryImpl implements ChatRepository {
   final ChatRemoteDataSource remoteDataSource;
 
   @override
-  Future<List<ChatItemEntity>> getMyChats() async {
-    try {
-      final remote = await remoteDataSource.getMyChats();
-      if (remote.isNotEmpty) return remote;
-      // Test dummy chats for preview & testing in UI
-      return FakeChatData.sampleChats;
-    } catch (_) {
-      return FakeChatData.sampleChats;
-    }
-  }
+  Future<List<ChatItemEntity>> getMyChats() => remoteDataSource.getMyChats();
 
   @override
-  Future<int> getUnreadMessagesCount() async {
-    try {
-      final count = await remoteDataSource.getUnreadMessagesCount();
-      if (count > 0) return count;
-      return FakeChatData.sampleChats.fold<int>(
-        0,
-        (acc, c) => acc + c.unreadCount,
-      );
-    } catch (_) {
-      return FakeChatData.sampleChats.fold<int>(
-        0,
-        (acc, c) => acc + c.unreadCount,
-      );
-    }
-  }
+  Future<int> getUnreadMessagesCount() =>
+      remoteDataSource.getUnreadMessagesCount();
 
   @override
   Stream<List<ChatMessageEntity>> getMessages(String matchId) =>

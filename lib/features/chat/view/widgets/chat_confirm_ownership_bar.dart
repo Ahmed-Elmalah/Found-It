@@ -42,8 +42,8 @@ class ChatConfirmOwnershipBar extends StatelessWidget {
 
         return BackdropFilter(
           filter: ImageFilter.blur(
-            sigmaX: 14 * animation.value,
-            sigmaY: 14 * animation.value,
+            sigmaX: 2 * animation.value,
+            sigmaY: 2 * animation.value,
           ),
           child: ScaleTransition(
             scale: Tween<double>(begin: 0.88, end: 1.0).animate(curved),

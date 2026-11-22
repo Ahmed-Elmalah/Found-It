@@ -45,41 +45,23 @@ class ChatCubit extends Cubit<ChatState> {
     try {
       _messagesSub = _repository.getMessages(matchId).listen(
         (remoteMessages) {
-          if (remoteMessages.isNotEmpty) {
-            emit(state.copyWith(
-              status: ChatStatus.success,
-              messages: remoteMessages,
-            ));
-          } else if (state.messages.isEmpty) {
-            // Provide realistic sample conversation so the screen is immediately testable
-            final sample = _buildSampleMessages(matchId);
-            emit(state.copyWith(
-              status: ChatStatus.success,
-              messages: sample,
-            ));
-          } else {
-            emit(state.copyWith(status: ChatStatus.success));
-          }
+          emit(state.copyWith(
+            status: ChatStatus.success,
+            messages: remoteMessages,
+          ));
         },
         onError: (err) {
-          // If offline or stream error, fall back to sample messages in prototype
-          if (state.messages.isEmpty) {
-            emit(state.copyWith(
-              status: ChatStatus.success,
-              messages: _buildSampleMessages(matchId),
-            ));
-          } else {
-            emit(state.copyWith(status: ChatStatus.success));
-          }
+          emit(state.copyWith(
+            status: ChatStatus.failure,
+            errorMessage: () => err.toString(),
+          ));
         },
       );
-    } catch (_) {
-      if (state.messages.isEmpty) {
-        emit(state.copyWith(
-          status: ChatStatus.success,
-          messages: _buildSampleMessages(matchId),
-        ));
-      }
+    } catch (err) {
+      emit(state.copyWith(
+        status: ChatStatus.failure,
+        errorMessage: () => err.toString(),
+      ));
     }
   }
 
@@ -113,15 +95,18 @@ class ChatCubit extends Cubit<ChatState> {
         return m;
       }).toList();
       emit(state.copyWith(messages: confirmed, isSending: false));
-    } catch (_) {
-      // In offline / prototype mode, keep the message as sent for UI test
-      final confirmed = state.messages.map((m) {
+    } catch (e) {
+      final failed = state.messages.map((m) {
         if (m.id == optimisticMessage.id) {
           return m.copyWith(isSending: false);
         }
         return m;
       }).toList();
-      emit(state.copyWith(messages: confirmed, isSending: false));
+      emit(state.copyWith(
+        messages: failed,
+        isSending: false,
+        errorMessage: () => e.toString(),
+      ));
     }
   }
 
@@ -168,65 +153,13 @@ class ChatCubit extends Cubit<ChatState> {
         isConfirmed: true,
       ));
       return true;
-    } catch (_) {
-      // In prototype test, allow confirmation to succeed so the user can verify UI transition
+    } catch (e) {
       emit(state.copyWith(
         isConfirming: false,
-        isConfirmed: true,
+        errorMessage: () => e.toString(),
       ));
-      return true;
+      return false;
     }
-  }
-
-  List<ChatMessageEntity> _buildSampleMessages(String matchId) {
-    final now = DateTime.now();
-    return [
-      ChatMessageEntity(
-        id: 'msg-1',
-        matchId: matchId,
-        senderId: 'other',
-        body: 'Hello! I saw your post and I think I might have found your item.',
-        createdAt: now.subtract(const Duration(hours: 3)),
-        isMine: false,
-        readAt: now.subtract(const Duration(hours: 2, minutes: 50)),
-      ),
-      ChatMessageEntity(
-        id: 'msg-2',
-        matchId: matchId,
-        senderId: 'me',
-        body: 'Hi! That is amazing news! Can you tell me what color and condition it is in?',
-        createdAt: now.subtract(const Duration(hours: 2, minutes: 45)),
-        isMine: true,
-        readAt: now.subtract(const Duration(hours: 2, minutes: 40)),
-      ),
-      ChatMessageEntity(
-        id: 'msg-3',
-        matchId: matchId,
-        senderId: 'other',
-        body: 'Yes! It is in great condition. I took a quick photo to show you.',
-        createdAt: now.subtract(const Duration(hours: 2, minutes: 30)),
-        isMine: false,
-        imageUrl: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80',
-        readAt: now.subtract(const Duration(hours: 2, minutes: 20)),
-      ),
-      ChatMessageEntity(
-        id: 'msg-4',
-        matchId: matchId,
-        senderId: 'me',
-        body: 'Yes! That is 100% mine! The small mark near the corner confirms it.',
-        createdAt: now.subtract(const Duration(hours: 1, minutes: 15)),
-        isMine: true,
-        readAt: now.subtract(const Duration(hours: 1)),
-      ),
-      ChatMessageEntity(
-        id: 'msg-5',
-        matchId: matchId,
-        senderId: 'other',
-        body: 'Great! Whenever you are ready, please confirm ownership so we can view handover instructions.',
-        createdAt: now.subtract(const Duration(minutes: 20)),
-        isMine: false,
-      ),
-    ];
   }
 
   @override

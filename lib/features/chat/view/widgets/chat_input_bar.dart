@@ -60,7 +60,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
         child: Container(
           decoration: BoxDecoration(
             color: isDark

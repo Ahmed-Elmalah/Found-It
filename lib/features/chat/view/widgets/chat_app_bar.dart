@@ -37,7 +37,7 @@ class ChatAppBar extends StatelessWidget {
 
     return ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
           height: totalHeight,
           padding: EdgeInsets.only(top: topPadding),
