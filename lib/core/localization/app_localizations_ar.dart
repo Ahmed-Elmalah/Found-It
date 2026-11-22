@@ -882,4 +882,58 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get recoveryErrorGeneric =>
       'فشل تأكيد الاستلام. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get chatSafetyBanner =>
+      'لأمانك، قابل الطرف الآخر في مكان عام ولا تقم أبداً بتحويل أموال أو مشاركة بيانات مصرفية.';
+
+  @override
+  String get chatConfirmOwnership => 'تأكيد ملكية الغرض';
+
+  @override
+  String get chatConfirmOwnershipSub =>
+      'اضغط للتحقق من أن هذا الشخص هو المالك الحقيقي';
+
+  @override
+  String get chatOwnershipVerified => 'تم التحقق من الملكية';
+
+  @override
+  String get chatHandoverInstructions => 'تعليمات الاستلام والتسليم';
+
+  @override
+  String get chatInputPlaceholder => 'اكتب رسالة...';
+
+  @override
+  String get chatClosedMessage => 'تم إغلاق هذه المحادثة';
+
+  @override
+  String get chatToday => 'اليوم';
+
+  @override
+  String get chatYesterday => 'أمس';
+
+  @override
+  String get chatFinderBadge => 'المعثور عليه';
+
+  @override
+  String get chatOwnerBadge => 'صاحب الغرض';
+
+  @override
+  String get chatOnline => 'نشط الآن';
+
+  @override
+  String get chatConfirmDialogTitle => 'تأكيد ملكية الغرض؟';
+
+  @override
+  String get chatConfirmDialogBody =>
+      'هل أنت متأكد من أن هذا الشخص أثبت ملكيته للغرض؟ سيتم توثيق التطابق بعد هذا الإجراء.';
+
+  @override
+  String get chatConfirmSuccess => 'تم تأكيد ملكية الغرض بنجاح!';
+
+  @override
+  String get chatPhotoPreview => 'صورة';
+
+  @override
+  String get chatPickImageFailed => 'تعذر اختيار الصورة';
 }

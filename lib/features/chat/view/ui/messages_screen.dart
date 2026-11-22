@@ -414,7 +414,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                 chat: chat,
                                 onTap: () {
                                   context
-                                      .push(AppRoutes.chatPath(chat.matchId))
+                                      .push(
+                                        AppRoutes.chatPath(chat.matchId),
+                                        extra: chat,
+                                      )
                                       .then((_) => cubit.refresh());
                                 },
                               )

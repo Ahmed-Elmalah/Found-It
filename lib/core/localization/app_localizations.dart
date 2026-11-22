@@ -1741,6 +1741,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to complete recovery. Please try again.'**
   String get recoveryErrorGeneric;
+
+  /// No description provided for @chatSafetyBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'For your safety, meet in a public place and never transfer money or share banking details.'**
+  String get chatSafetyBanner;
+
+  /// No description provided for @chatConfirmOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Ownership'**
+  String get chatConfirmOwnership;
+
+  /// No description provided for @chatConfirmOwnershipSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to verify this person is the rightful owner'**
+  String get chatConfirmOwnershipSub;
+
+  /// No description provided for @chatOwnershipVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership Verified'**
+  String get chatOwnershipVerified;
+
+  /// No description provided for @chatHandoverInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Handover Instructions'**
+  String get chatHandoverInstructions;
+
+  /// No description provided for @chatInputPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get chatInputPlaceholder;
+
+  /// No description provided for @chatClosedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This conversation is closed'**
+  String get chatClosedMessage;
+
+  /// No description provided for @chatToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get chatToday;
+
+  /// No description provided for @chatYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get chatYesterday;
+
+  /// No description provided for @chatFinderBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Finder'**
+  String get chatFinderBadge;
+
+  /// No description provided for @chatOwnerBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get chatOwnerBadge;
+
+  /// No description provided for @chatOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Active now'**
+  String get chatOnline;
+
+  /// No description provided for @chatConfirmDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Ownership Verification?'**
+  String get chatConfirmDialogTitle;
+
+  /// No description provided for @chatConfirmDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure this person has proven ownership of this item? This action will verify the match.'**
+  String get chatConfirmDialogBody;
+
+  /// No description provided for @chatConfirmSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership verified successfully!'**
+  String get chatConfirmSuccess;
+
+  /// No description provided for @chatPhotoPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get chatPhotoPreview;
+
+  /// No description provided for @chatPickImageFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not select image'**
+  String get chatPickImageFailed;
 }
 
 class _AppLocalizationsDelegate

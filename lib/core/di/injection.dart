@@ -21,6 +21,7 @@ import 'package:found_it/features/chat/data/chat_remote_data_source.dart';
 import 'package:found_it/features/chat/data/chat_repository_impl.dart';
 import 'package:found_it/features/chat/domain/repositories/chat_repository.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_my_chats_use_case.dart';
+import 'package:found_it/features/chat/view/cubit/chat_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
 import 'package:found_it/features/city/data/city_remote_data_source.dart';
 import 'package:found_it/features/city/data/city_repository_impl.dart';
@@ -317,7 +318,8 @@ void _registerChat() {
       () => ChatRepositoryImpl(remoteDataSource: sl()),
     )
     ..registerLazySingleton(() => GetMyChatsUseCase(sl()))
-    ..registerFactory(() => ChatListCubit(sl()));
+    ..registerFactory(() => ChatListCubit(sl()))
+    ..registerFactory(() => ChatCubit(sl()));
 }
 
 // ---------------------------------------------------------------------
@@ -366,4 +368,4 @@ void _registerRecovery() {
       ),
     );
 }
-}
+

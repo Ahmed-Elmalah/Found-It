@@ -322,5 +322,22 @@
   "recoveryErrorNotVerified": "لم يتم تأكيد الملكية بعد.",
   "recoveryErrorInvalidState": "تم إغلاق هذا البلاغ أو التطابق مسبقاً.",
   "recoveryErrorNotAllowed": "غير مصرح لك بإجراء هذه العملية.",
-  "recoveryErrorGeneric": "فشل تأكيد الاستلام. يرجى المحاولة مرة أخرى."
+  "recoveryErrorGeneric": "فشل تأكيد الاستلام. يرجى المحاولة مرة أخرى.",
+  "chatSafetyBanner": "لأمانك، قابل الطرف الآخر في مكان عام ولا تقم أبداً بتحويل أموال أو مشاركة بيانات مصرفية.",
+  "chatConfirmOwnership": "تأكيد ملكية الغرض",
+  "chatConfirmOwnershipSub": "اضغط للتحقق من أن هذا الشخص هو المالك الحقيقي",
+  "chatOwnershipVerified": "تم التحقق من الملكية",
+  "chatHandoverInstructions": "تعليمات الاستلام والتسليم",
+  "chatInputPlaceholder": "اكتب رسالة...",
+  "chatClosedMessage": "تم إغلاق هذه المحادثة",
+  "chatToday": "اليوم",
+  "chatYesterday": "أمس",
+  "chatFinderBadge": "المعثور عليه",
+  "chatOwnerBadge": "صاحب الغرض",
+  "chatOnline": "نشط الآن",
+  "chatConfirmDialogTitle": "تأكيد ملكية الغرض؟",
+  "chatConfirmDialogBody": "هل أنت متأكد من أن هذا الشخص أثبت ملكيته للغرض؟ سيتم توثيق التطابق بعد هذا الإجراء.",
+  "chatConfirmSuccess": "تم تأكيد ملكية الغرض بنجاح!",
+  "chatPhotoPreview": "صورة",
+  "chatPickImageFailed": "تعذر اختيار الصورة"
 }
