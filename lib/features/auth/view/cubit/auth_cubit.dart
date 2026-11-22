@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:found_it/features/auth/domain/auth_failure.dart';
 import 'package:found_it/features/auth/domain/get_current_user_use_case.dart';
@@ -22,19 +23,36 @@ class AuthCubit extends Cubit<AuthState> {
     required GetCurrentUserUseCase getCurrentUser,
     required LogoutUseCase logout,
     required HasActiveSessionUseCase hasActiveSession,
-  }) : this._(watchAuthState, getCurrentUser, logout, hasActiveSession);
+    Future<void> Function()? onSignedIn,
+    Future<void> Function()? beforeLogout,
+  }) : this._(
+         watchAuthState,
+         getCurrentUser,
+         logout,
+         hasActiveSession,
+         onSignedIn,
+         beforeLogout,
+       );
 
   AuthCubit._(
     this._watchAuthState,
     this._getCurrentUser,
     this._logout,
     this._hasActiveSession,
+    this._onSignedIn,
+    this._beforeLogout,
   ) : super(const AuthState());
 
   final WatchAuthStateUseCase _watchAuthState;
   final GetCurrentUserUseCase _getCurrentUser;
   final LogoutUseCase _logout;
   final HasActiveSessionUseCase _hasActiveSession;
+
+  /// Best-effort push registration (device token), wired in DI.
+  final Future<void> Function()? _onSignedIn;
+
+  /// Best-effort push cleanup, must run BEFORE `signOut()`.
+  final Future<void> Function()? _beforeLogout;
 
   StreamSubscription<bool>? _subscription;
   bool _started = false;
@@ -63,6 +81,7 @@ class AuthCubit extends Cubit<AuthState> {
       next = user == null
           ? const AuthState(status: AuthStatus.unauthenticated)
           : AuthState(status: AuthStatus.authenticated, user: user);
+      if (user != null) _notifySignedIn();
     } on AuthFailure {
       // Logged in but the profile is unknown (e.g. offline).
       next = const AuthState(status: AuthStatus.authenticated);
@@ -74,8 +93,29 @@ class AuthCubit extends Cubit<AuthState> {
     if (!isClosed) emit(const AuthState(status: AuthStatus.unauthenticated));
   }
 
+  /// Push registration / deep-link cleanup must never block the auth flow.
+  void _notifySignedIn() {
+    final onSignedIn = _onSignedIn;
+    if (onSignedIn == null) return;
+    unawaited(
+      onSignedIn().catchError((Object error) {
+        debugPrint('[AuthCubit] device token sync failed: $error');
+      }),
+    );
+  }
+
   /// Throws [AuthFailure] and keeps the current state when sign out fails.
   Future<void> logout() async {
+    // delete_device_token needs the session, so it runs before signOut().
+    // A failure here is logged and ignored: it must not block logout.
+    final beforeLogout = _beforeLogout;
+    if (beforeLogout != null) {
+      try {
+        await beforeLogout();
+      } catch (error) {
+        debugPrint('[AuthCubit] device token cleanup failed: $error');
+      }
+    }
     await _logout();
     _emitSignedOut();
   }

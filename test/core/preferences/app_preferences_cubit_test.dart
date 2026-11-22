@@ -9,21 +9,22 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('AppPreferencesCubit', () {
-    test('default state uses system theme and null locale (system default)', () {
-      SharedPreferences.setMockInitialValues({});
-      final prefs = SharedPreferences.getInstance();
+    test(
+      'default state uses system theme and null locale (system default)',
+      () {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = SharedPreferences.getInstance();
 
-      return prefs.then((p) {
-        final cubit = AppPreferencesCubit(p);
-        expect(cubit.state.themeMode, ThemeMode.system);
-        expect(cubit.state.locale, isNull);
-      });
-    });
+        return prefs.then((p) {
+          final cubit = AppPreferencesCubit(p);
+          expect(cubit.state.themeMode, ThemeMode.system);
+          expect(cubit.state.locale, isNull);
+        });
+      },
+    );
 
     test('loads saved dark theme mode from SharedPreferences', () async {
-      SharedPreferences.setMockInitialValues({
-        StorageKeys.themeMode: 'dark',
-      });
+      SharedPreferences.setMockInitialValues({StorageKeys.themeMode: 'dark'});
       final prefs = await SharedPreferences.getInstance();
       final cubit = AppPreferencesCubit(prefs);
 
@@ -31,9 +32,7 @@ void main() {
     });
 
     test('loads saved light theme mode from SharedPreferences', () async {
-      SharedPreferences.setMockInitialValues({
-        StorageKeys.themeMode: 'light',
-      });
+      SharedPreferences.setMockInitialValues({StorageKeys.themeMode: 'light'});
       final prefs = await SharedPreferences.getInstance();
       final cubit = AppPreferencesCubit(prefs);
 
@@ -41,32 +40,33 @@ void main() {
     });
 
     test('loads saved locale from SharedPreferences', () async {
-      SharedPreferences.setMockInitialValues({
-        StorageKeys.languageCode: 'en',
-      });
+      SharedPreferences.setMockInitialValues({StorageKeys.languageCode: 'en'});
       final prefs = await SharedPreferences.getInstance();
       final cubit = AppPreferencesCubit(prefs);
 
       expect(cubit.state.locale, const Locale('en'));
     });
 
-    test('setThemeMode updates state and persists in SharedPreferences', () async {
-      SharedPreferences.setMockInitialValues({});
-      final prefs = await SharedPreferences.getInstance();
-      final cubit = AppPreferencesCubit(prefs);
+    test(
+      'setThemeMode updates state and persists in SharedPreferences',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final cubit = AppPreferencesCubit(prefs);
 
-      await cubit.setThemeMode(ThemeMode.dark);
-      expect(cubit.state.themeMode, ThemeMode.dark);
-      expect(prefs.getString(StorageKeys.themeMode), 'dark');
+        await cubit.setThemeMode(ThemeMode.dark);
+        expect(cubit.state.themeMode, ThemeMode.dark);
+        expect(prefs.getString(StorageKeys.themeMode), 'dark');
 
-      await cubit.setThemeMode(ThemeMode.light);
-      expect(cubit.state.themeMode, ThemeMode.light);
-      expect(prefs.getString(StorageKeys.themeMode), 'light');
+        await cubit.setThemeMode(ThemeMode.light);
+        expect(cubit.state.themeMode, ThemeMode.light);
+        expect(prefs.getString(StorageKeys.themeMode), 'light');
 
-      await cubit.setThemeMode(ThemeMode.system);
-      expect(cubit.state.themeMode, ThemeMode.system);
-      expect(prefs.getString(StorageKeys.themeMode), 'system');
-    });
+        await cubit.setThemeMode(ThemeMode.system);
+        expect(cubit.state.themeMode, ThemeMode.system);
+        expect(prefs.getString(StorageKeys.themeMode), 'system');
+      },
+    );
 
     test('setLocale updates state and persists in SharedPreferences', () async {
       SharedPreferences.setMockInitialValues({});
@@ -85,6 +85,41 @@ void main() {
       await cubit.setLocale(null);
       expect(cubit.state.locale, isNull);
       expect(prefs.containsKey(StorageKeys.languageCode), isFalse);
+    });
+
+    test(
+      'setLocale notifies the locale listener (device token language)',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final seen = <Locale?>[];
+        final cubit = AppPreferencesCubit(
+          prefs,
+          onLocaleChanged: (locale) async => seen.add(locale),
+        );
+
+        await cubit.setLocale(const Locale('ar'));
+        await cubit.setLocale(const Locale('en'));
+        await cubit.setLocale(null);
+
+        expect(seen, [const Locale('ar'), const Locale('en'), null]);
+        // The state already carries the new locale when the listener runs.
+        expect(cubit.state.locale, isNull);
+      },
+    );
+
+    test('setLocale is not blocked when the listener throws', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final cubit = AppPreferencesCubit(
+        prefs,
+        onLocaleChanged: (_) async => throw Exception('push unavailable'),
+      );
+
+      await cubit.setLocale(const Locale('ar'));
+
+      expect(cubit.state.locale, const Locale('ar'));
+      expect(prefs.getString(StorageKeys.languageCode), 'ar');
     });
   });
 }

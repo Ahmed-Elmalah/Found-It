@@ -1,9 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:found_it/core/events/reports_changed_notifier.dart';
 import 'package:found_it/core/preferences/app_preferences_cubit.dart';
+import 'package:found_it/core/services/device_token_sync.dart';
+import 'package:found_it/core/services/notification_service.dart';
 import 'package:found_it/features/auth/data/auth_data_source.dart';
 import 'package:found_it/features/auth/data/auth_repository_impl.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
@@ -120,12 +124,24 @@ Future<void> configureDependencies() async {
   sl
     ..registerSingleton<SharedPreferences>(prefs)
     ..registerSingleton<SupabaseClient>(Supabase.instance.client)
-    ..registerSingleton<AppPreferencesCubit>(AppPreferencesCubit(prefs))
+    ..registerSingleton<AppPreferencesCubit>(
+      AppPreferencesCubit(
+        prefs,
+        onLocaleChanged: (_) async {
+          // Section 8: `p_lang` is the language saved with the device token,
+          // so a language change has to re-save it.
+          final sync = sl<DeviceTokenSync>();
+          if (!sync.isSignedIn()) return;
+          await sync.onSignedIn();
+        },
+      ),
+    )
     ..registerLazySingleton<ReportsChangedNotifier>(
       () => ReportsChangedNotifier(),
     );
 
   _registerAuth();
+  _registerNotifications();
   _registerOnboarding();
   _registerCity();
   _registerHome();
@@ -260,13 +276,84 @@ void _registerAuth() {
     // EXCEPTION to the "cubits are factories" rule: AuthCubit is ONE
     // app-wide instance (started in main.dart, provided in found_it.dart).
     ..registerLazySingleton(
-      () => AuthCubit(
-        watchAuthState: sl(),
-        getCurrentUser: sl(),
-        logout: sl(),
-        hasActiveSession: sl(),
+      () {
+        final tokenSync = sl<DeviceTokenSync>();
+        return AuthCubit(
+          watchAuthState: sl(),
+          getCurrentUser: sl(),
+          logout: sl(),
+          hasActiveSession: sl(),
+          // Story #5: register the FCM token after login / session restore,
+          // and delete it before signOut (Section 8).
+          onSignedIn: tokenSync.onSignedIn,
+          beforeLogout: tokenSync.beforeLogout,
+        );
+      },
+    );
+}
+
+// ---------------------------------------------------------------------
+// Notifications / push (Mohamed) — story #5
+// ---------------------------------------------------------------------
+void _registerNotifications() {
+  sl
+    ..registerLazySingleton<DeviceTokenSync>(
+      () => DeviceTokenSync(
+        fetchToken: () async {
+          // The backend contract is an FCM registration token. The FID APIs
+          // added in firebase_messaging 17 are not usable with
+          // `save_device_token`, so keep using the (deprecated) token API.
+          // ignore: deprecated_member_use
+          return FirebaseMessaging.instance.getToken();
+        },
+        saveDeviceToken: ({required token, required platform, required lang}) async {
+          await sl<SupabaseClient>().rpc(
+            'save_device_token',
+            params: {
+              'p_token': token,
+              'p_platform': platform,
+              'p_lang': lang,
+            },
+          );
+        },
+        deleteDeviceToken: ({required token}) async {
+          await sl<SupabaseClient>().rpc(
+            'delete_device_token',
+            params: {'p_token': token},
+          );
+        },
+        platform: _pushPlatform(),
+        languageCode: _pushLanguage,
+        // A token can only be saved while a session exists.
+        isSignedIn: () => sl<SupabaseClient>().auth.currentSession != null,
+      ),
+    )
+    ..registerLazySingleton<NotificationService>(
+      () => NotificationService(
+        tokenSync: sl(),
+        markRead: (notificationId) async {
+          await sl<SupabaseClient>().rpc(
+            'mark_notifications_read',
+            params: {
+              'p_ids': [notificationId],
+            },
+          );
+        },
       ),
     );
+}
+
+/// `p_platform` — Section 8 allows `'android' | 'ios' | 'web'`.
+String _pushPlatform() {
+  if (kIsWeb) return 'web';
+  return defaultTargetPlatform.name.toLowerCase();
+}
+
+/// `p_lang` — the app language, or the phone language when following system.
+String _pushLanguage() {
+  final selected = sl<AppPreferencesCubit>().state.locale?.languageCode;
+  final system = PlatformDispatcher.instance.locale.languageCode;
+  return (selected ?? system) == 'ar' ? 'ar' : 'en';
 }
 
 // ---------------------------------------------------------------------

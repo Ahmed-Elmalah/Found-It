@@ -26,6 +26,7 @@ class _FakeAuthRepository implements AuthRepository {
   UserEntity? user;
   Object? profileError;
   Object? logoutError;
+  void Function()? onLogout;
   int logoutCalls = 0;
   int listenCount = 0;
   late final controller = StreamController<bool>.broadcast(
@@ -48,6 +49,7 @@ class _FakeAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     logoutCalls++;
+    onLogout?.call();
     final e = logoutError;
     if (e != null) throw e;
   }
@@ -60,11 +62,17 @@ class _FakeAuthRepository implements AuthRepository {
   Future<void> signUp(SignUpParams params) => throw UnimplementedError();
 }
 
-AuthCubit _cubit(_FakeAuthRepository repo) => AuthCubit(
+AuthCubit _cubit(
+  _FakeAuthRepository repo, {
+  Future<void> Function()? onSignedIn,
+  Future<void> Function()? beforeLogout,
+}) => AuthCubit(
   watchAuthState: WatchAuthStateUseCase(repo),
   getCurrentUser: GetCurrentUserUseCase(repo),
   logout: LogoutUseCase(repo),
   hasActiveSession: HasActiveSessionUseCase(repo),
+  onSignedIn: onSignedIn,
+  beforeLogout: beforeLogout,
 );
 
 Future<void> _pump() => Future<void>.delayed(Duration.zero);
@@ -174,6 +182,68 @@ void main() {
     await expectLater(cubit.logout(), throwsA(isA<AuthFailure>()));
     expect(cubit.state.status, AuthStatus.authenticated);
     expect(cubit.state.user, _withCity);
+    await cubit.close();
+  });
+
+  test('session restore calls onSignedIn (device token)', () async {
+    var calls = 0;
+    final cubit = _cubit(
+      _FakeAuthRepository(session: true, user: _withCity),
+      onSignedIn: () async => calls++,
+    );
+    await cubit.start();
+    await _pump();
+    expect(calls, 1);
+    await cubit.close();
+  });
+
+  test('onSignedIn is not called without a user', () async {
+    var calls = 0;
+    final cubit = _cubit(
+      _FakeAuthRepository(),
+      onSignedIn: () async => calls++,
+    );
+    await cubit.start();
+    await _pump();
+    expect(calls, 0);
+    await cubit.close();
+  });
+
+  test('a failing onSignedIn does not break the session', () async {
+    final cubit = _cubit(
+      _FakeAuthRepository(session: true, user: _withCity),
+      onSignedIn: () async => throw Exception('push unavailable'),
+    );
+    await cubit.start();
+    await _pump();
+    expect(cubit.state.status, AuthStatus.authenticated);
+    await cubit.close();
+  });
+
+  test('logout deletes the device token before signOut', () async {
+    final events = <String>[];
+    final repo = _FakeAuthRepository(session: true, user: _withCity)
+      ..onLogout = () => events.add('signOut');
+    final cubit = _cubit(
+      repo,
+      beforeLogout: () async => events.add('delete_token'),
+    );
+    await cubit.start();
+    await cubit.logout();
+    expect(events, ['delete_token', 'signOut']);
+    await cubit.close();
+  });
+
+  test('a failing beforeLogout does not block logout', () async {
+    final repo = _FakeAuthRepository(session: true, user: _withCity);
+    final cubit = _cubit(
+      repo,
+      beforeLogout: () async => throw Exception('push unavailable'),
+    );
+    await cubit.start();
+    await cubit.logout();
+    expect(repo.logoutCalls, 1);
+    expect(cubit.state.status, AuthStatus.unauthenticated);
     await cubit.close();
   });
 
