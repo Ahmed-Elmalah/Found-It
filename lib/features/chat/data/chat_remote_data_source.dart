@@ -90,11 +90,10 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     String? imagePath,
   }) async {
     try {
-      await _supabase.from('messages').insert({
-        'match_id': matchId,
-        if (body != null) 'body': body,
-        if (imagePath != null) 'image_path': imagePath,
-      });
+      final payload = <String, dynamic>{'match_id': matchId};
+      if (body != null) payload['body'] = body;
+      if (imagePath != null) payload['image_path'] = imagePath;
+      await _supabase.from('messages').insert(payload);
     } on PostgrestException catch (e) {
       throw _mapPostgrestException(e);
     } on SocketException catch (e) {
