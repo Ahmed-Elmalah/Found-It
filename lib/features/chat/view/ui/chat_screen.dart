@@ -89,10 +89,12 @@ class _ChatViewState extends State<_ChatView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final topPadding = MediaQuery.of(context).padding.top;
-    final topBarHeight = topPadding + 56.h;
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+    final topBarHeight = topPadding + 58.h;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
+      resizeToAvoidBottomInset: true,
       body: BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {
           if (state.messages.isNotEmpty) {
@@ -102,71 +104,87 @@ class _ChatViewState extends State<_ChatView> {
         builder: (context, state) {
           final cubit = context.read<ChatCubit>();
           final messages = state.messages;
+          final hasSafetyBanner = !state.isVerified;
+          final totalItemCount = messages.length + (hasSafetyBanner ? 1 : 0);
+
+          // Bottom clearance so messages can scroll completely above the floating controls
+          final bottomClearance = bottomInset + (state.isVerified ? 135.h : 185.h);
 
           return Stack(
             children: [
-              // 1. Messages Stream with Safety Banner & Bottom Action Controls
+              // 1. Full-Bleed Scrollable Messages Stream (Messages scroll smoothly behind floating controls)
               Positioned.fill(
-                child: Column(
-                  children: [
-                    // Clearance for Custom App Bar
-                    SizedBox(height: topBarHeight),
-
-                    // P32 Safety Banner (pinned at the top of messages)
-                    if (!state.isVerified) const ChatSafetyBanner(),
-
-                    // Scrollable Messages List
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => FocusScope.of(context).unfocus(),
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          physics: const BouncingScrollPhysics(),
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          padding: EdgeInsets.fromLTRB(0, 8.h, 0, 12.h),
-                          itemCount: messages.length,
-                          itemBuilder: (context, index) {
-                            final msg = messages[index];
-                            final showDate = index == 0 ||
-                                !_isSameDay(
-                                  messages[index - 1].createdAt,
-                                  msg.createdAt,
-                                );
-                            final dateLabel = showDate
-                                ? _formatDateHeader(msg.createdAt, context)
-                                : null;
-
-                            return ChatMessageBubble(
-                              message: msg,
-                              showDateHeader: showDate,
-                              dateHeaderLabel: dateLabel,
-                            );
-                          },
-                        ),
-                      ),
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: EdgeInsets.fromLTRB(
+                      0,
+                      topBarHeight + 8.h,
+                      0,
+                      bottomClearance,
                     ),
+                    itemCount: totalItemCount,
+                    itemBuilder: (context, index) {
+                      if (hasSafetyBanner && index == 0) {
+                        return const ChatSafetyBanner();
+                      }
 
-                    // Confirm Ownership Button at the bottom (User requested: وضيف زرار الكونفيرم تحت)
-                    ChatConfirmOwnershipBar(
-                      matchId: widget.matchId,
-                      isVerified: state.isVerified,
-                      isConfirming: state.isConfirming,
-                      onConfirm: () => cubit.confirmOwnership(),
-                    ),
+                      final msgIndex = hasSafetyBanner ? index - 1 : index;
+                      final msg = messages[msgIndex];
+                      final showDate = msgIndex == 0 ||
+                          !_isSameDay(
+                            messages[msgIndex - 1].createdAt,
+                            msg.createdAt,
+                          );
+                      final dateLabel = showDate
+                          ? _formatDateHeader(msg.createdAt, context)
+                          : null;
 
-                    // Floating Input Bar
-                    ChatInputBar(
-                      isClosed: state.isClosed,
-                      isSending: state.isSending,
-                      onSendMessage: (text) => cubit.sendMessage(text),
-                      onSendImage: (bytes, ext) => cubit.sendImage(bytes, ext),
-                    ),
-                  ],
+                      return ChatMessageBubble(
+                        message: msg,
+                        showDateHeader: showDate,
+                        dateHeaderLabel: dateLabel,
+                      );
+                    },
+                  ),
                 ),
               ),
 
-              // 2. Custom Floating App Bar (with Top Darkening Gradient)
+              // 2. Floating Bottom Controls (Confirm Ownership Capsule + Textfield Input Capsule)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: SafeArea(
+                  top: false,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Floating Confirm Ownership Action Pill
+                      ChatConfirmOwnershipBar(
+                        matchId: widget.matchId,
+                        isVerified: state.isVerified,
+                        isConfirming: state.isConfirming,
+                        onConfirm: () => cubit.confirmOwnership(),
+                      ),
+
+                      // Floating Capsule Input Bar
+                      ChatInputBar(
+                        isClosed: state.isClosed,
+                        isSending: state.isSending,
+                        onSendMessage: (text) => cubit.sendMessage(text),
+                        onSendImage: (bytes, ext) => cubit.sendImage(bytes, ext),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // 3. Floating Frosted Glass Custom App Bar
               Positioned(
                 top: 0,
                 left: 0,
