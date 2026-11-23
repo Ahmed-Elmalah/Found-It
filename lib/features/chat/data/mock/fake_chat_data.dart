@@ -4,7 +4,46 @@ import 'package:found_it/features/chat/data/models/chat_report_summary_model.dar
 import 'package:found_it/features/chat/domain/entities/chat_message_entity.dart';
 
 abstract final class FakeChatData {
-  static List<ChatItemModel> get sampleChats => [
+  static List<ChatItemModel>? _cachedChats;
+
+  static List<ChatItemModel> get sampleChats {
+    _cachedChats ??= List<ChatItemModel>.from(_initialChats);
+    return _cachedChats!;
+  }
+
+  static void markRead(String matchId) {
+    final chats = sampleChats;
+    final index = chats.indexWhere((c) => c.matchId == matchId);
+    if (index != -1 && chats[index].unreadCount > 0) {
+      final current = chats[index];
+      chats[index] = ChatItemModel(
+        matchId: current.matchId,
+        status: current.status,
+        similarity: current.similarity,
+        source: current.source,
+        ownershipVerified: current.ownershipVerified,
+        iAmFinder: current.iAmFinder,
+        otherUserName: current.otherUserName,
+        otherUserAvatar: current.otherUserAvatar,
+        createdAt: current.createdAt,
+        lastMessageAt: current.lastMessageAt,
+        myReport: current.myReport as ChatReportSummaryModel?,
+        otherReport: current.otherReport as ChatReportSummaryModel?,
+        lastMessage: current.lastMessage as ChatLastMessageModel?,
+        unreadCount: 0,
+      );
+    }
+  }
+
+  static int get totalUnreadCount {
+    return sampleChats.fold<int>(0, (sum, chat) => sum + chat.unreadCount);
+  }
+
+  static void reset() {
+    _cachedChats = null;
+  }
+
+  static List<ChatItemModel> get _initialChats => [
         // 1. Sarah Hassan - iPhone 15 Pro (Finder: true, status: chatting) -> Tests Confirm Ownership!
         ChatItemModel(
           matchId: 'm-104-iphone',

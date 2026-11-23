@@ -53,15 +53,9 @@ class ChatRepositoryImpl implements ChatRepository {
     try {
       final count = await remoteDataSource.getUnreadMessagesCount();
       if (count > 0) return count;
-      return FakeChatData.sampleChats.fold<int>(
-        0,
-        (acc, c) => acc + c.unreadCount,
-      );
+      return FakeChatData.totalUnreadCount;
     } catch (_) {
-      return FakeChatData.sampleChats.fold<int>(
-        0,
-        (acc, c) => acc + c.unreadCount,
-      );
+      return FakeChatData.totalUnreadCount;
     }
   }
 
@@ -115,7 +109,10 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<void> markMessagesRead(String matchId) async {
-    if (matchId.startsWith('m-')) return;
+    if (matchId.startsWith('m-')) {
+      FakeChatData.markRead(matchId);
+      return;
+    }
     return remoteDataSource.markMessagesRead(matchId);
   }
 
