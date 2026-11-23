@@ -36,6 +36,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   StreamSubscription<List<ChatMessageEntity>>? _messagesSub;
   String? _currentMatchId;
+  bool _isReloadingDetails = false;
 
   /// In-memory cache for photo signed URLs (keyed by image_path).
   /// Fetches each signed URL only once and avoids refetching on stream updates.
@@ -118,9 +119,23 @@ class ChatCubit extends Cubit<ChatState> {
       messages: hydrated,
     ));
 
-    // 3. If any unread message arrived from the other user while the chat is open,
-    // mark as read immediately so unread badge count stays accurate.
     final matchId = _currentMatchId;
+
+    // 3. The first message moves the match potential -> chatting on the server.
+    // Reload the details so the finder's "Confirm Ownership" shows right away.
+    if (matchId != null &&
+        remoteMessages.isNotEmpty &&
+        state.chatInfo?.status == 'potential' &&
+        !_isReloadingDetails) {
+      _isReloadingDetails = true;
+      unawaited(
+        _loadMatchDetails(matchId)
+            .whenComplete(() => _isReloadingDetails = false),
+      );
+    }
+
+    // 4. If any unread message arrived from the other user while the chat is open,
+    // mark as read immediately so unread badge count stays accurate.
     final hasUnreadFromOther =
         remoteMessages.any((m) => !m.isMine && m.readAt == null);
     if (hasUnreadFromOther && matchId != null) {
@@ -306,6 +321,14 @@ class ChatCubit extends Cubit<ChatState> {
     if (state.failure != null) {
       emit(state.copyWith(failure: () => null));
     }
+  }
+
+  /// Async work (signed URLs, sending, match details) can finish after the
+  /// user left the chat. Emitting on a closed cubit throws, so ignore it.
+  @override
+  void emit(ChatState state) {
+    if (isClosed) return;
+    super.emit(state);
   }
 
   @override

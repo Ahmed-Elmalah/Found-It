@@ -112,6 +112,57 @@ void main() {
     expect(fakeRepo.markReadCallCount, 1);
   });
 
+  test('first message reloads match details so the finder can confirm', () async {
+    fakeRepo.matchDetailsToReturn = const ChatItemEntity(
+      matchId: 'match-123',
+      status: 'potential',
+      otherUserName: 'Sara Ahmed',
+      iAmFinder: true,
+    );
+    await cubit.init('match-123');
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    expect(cubit.state.canConfirmOwnership, false);
+
+    // the server moved the match to "chatting" when the first message arrived
+    fakeRepo.matchDetailsToReturn = const ChatItemEntity(
+      matchId: 'match-123',
+      status: 'chatting',
+      otherUserName: 'Sara Ahmed',
+      iAmFinder: true,
+    );
+    fakeRepo.messagesController.add([
+      ChatMessageEntity(
+        id: 'msg-1',
+        matchId: 'match-123',
+        senderId: 'other-user',
+        body: 'Hi, I think it is mine',
+        createdAt: DateTime.now(),
+      ),
+    ]);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(cubit.state.chatInfo?.status, 'chatting');
+    expect(cubit.state.canConfirmOwnership, true);
+  });
+
+  test('a message arriving after the chat is closed does not throw', () async {
+    await cubit.init('match-123');
+    await cubit.close();
+
+    fakeRepo.messagesController.add([
+      ChatMessageEntity(
+        id: 'msg-late',
+        matchId: 'match-123',
+        senderId: 'other-user',
+        imagePath: 'match-123/late.jpg',
+        createdAt: DateTime.now(),
+      ),
+    ]);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    expect(cubit.isClosed, true);
+  });
+
   test('incoming messages with photo fetches signed URL once and caches it', () async {
     await cubit.init('match-123');
 
