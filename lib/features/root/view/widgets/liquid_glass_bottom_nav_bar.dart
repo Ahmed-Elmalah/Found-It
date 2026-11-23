@@ -200,7 +200,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             alignment: AlignmentDirectional(currentX, 0),
                             child: FractionallySizedBox(
                               widthFactor: 0.20 * stretch,
-                              heightFactor: 0.86 / math.sqrt(stretch),
+                              heightFactor: 0.99 / math.sqrt(stretch),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 3.w,
