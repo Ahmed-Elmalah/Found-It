@@ -212,37 +212,40 @@ class ChatAppBar extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 18.h),
-                  ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r),
-                    ),
-                    tileColor: isDark
-                        ? const Color(0xFFEF4444).withValues(alpha: 0.12)
-                        : const Color(0xFFFEE2E2),
-                    leading: Container(
-                      padding: EdgeInsets.all(8.r),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444).withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
+                  Material(
+                    color: Colors.transparent,
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
-                      child: Icon(
-                        Icons.close_rounded,
-                        color: const Color(0xFFEF4444),
-                        size: 20.sp,
+                      tileColor: isDark
+                          ? const Color(0xFFEF4444).withValues(alpha: 0.12)
+                          : const Color(0xFFFEE2E2),
+                      leading: Container(
+                        padding: EdgeInsets.all(8.r),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEF4444).withValues(alpha: 0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          color: const Color(0xFFEF4444),
+                          size: 20.sp,
+                        ),
                       ),
-                    ),
-                    title: Text(
-                      l10n.chatRejectMatch,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w700,
-                        color: const Color(0xFFEF4444),
+                      title: Text(
+                        l10n.chatRejectMatch,
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFFEF4444),
+                        ),
                       ),
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        _showGlassRejectConfirmDialog(context);
+                      },
                     ),
-                    onTap: () {
-                      Navigator.of(ctx).pop();
-                      _showGlassRejectConfirmDialog(context);
-                    },
                   ),
                   SizedBox(height: 10.h),
                 ],
