@@ -14,7 +14,9 @@ import 'package:found_it/features/auth/view/ui/forgot_pass_screen.dart';
 import 'package:found_it/features/auth/view/ui/login_screen.dart';
 import 'package:found_it/features/auth/view/ui/signup_screen.dart';
 import 'package:found_it/features/auth/view/ui/verify_screen.dart';
+import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
+import 'package:found_it/features/chat/view/ui/chat_screen.dart';
 import 'package:found_it/features/chat/view/ui/messages_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
@@ -298,7 +300,10 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.chat,
       builder: (context, state) {
         final matchId = state.pathParameters['matchId'] ?? '';
-        return _ComingSoon('Chat ($matchId)');
+        final chatInfo = state.extra is ChatItemEntity
+            ? state.extra as ChatItemEntity
+            : null;
+        return ChatScreen(matchId: matchId, initialChatInfo: chatInfo);
       },
     ),
 

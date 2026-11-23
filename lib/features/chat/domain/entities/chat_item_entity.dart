@@ -50,6 +50,40 @@ class ChatItemEntity extends Equatable {
     return myReport;
   }
 
+  ChatItemEntity copyWith({
+    String? matchId,
+    String? status,
+    int? similarity,
+    String? source,
+    bool? ownershipVerified,
+    bool? iAmFinder,
+    String? otherUserName,
+    String? otherUserAvatar,
+    DateTime? createdAt,
+    DateTime? lastMessageAt,
+    ChatReportSummaryEntity? myReport,
+    ChatReportSummaryEntity? otherReport,
+    ChatLastMessageEntity? lastMessage,
+    int? unreadCount,
+  }) {
+    return ChatItemEntity(
+      matchId: matchId ?? this.matchId,
+      status: status ?? this.status,
+      similarity: similarity ?? this.similarity,
+      source: source ?? this.source,
+      ownershipVerified: ownershipVerified ?? this.ownershipVerified,
+      iAmFinder: iAmFinder ?? this.iAmFinder,
+      otherUserName: otherUserName ?? this.otherUserName,
+      otherUserAvatar: otherUserAvatar ?? this.otherUserAvatar,
+      createdAt: createdAt ?? this.createdAt,
+      lastMessageAt: lastMessageAt ?? this.lastMessageAt,
+      myReport: myReport ?? this.myReport,
+      otherReport: otherReport ?? this.otherReport,
+      lastMessage: lastMessage ?? this.lastMessage,
+      unreadCount: unreadCount ?? this.unreadCount,
+    );
+  }
+
   @override
   List<Object?> get props => [
         matchId,

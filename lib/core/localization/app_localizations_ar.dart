@@ -981,4 +981,100 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationsMarkAllReadError => 'تعذر تحديد الإشعارات كمقروءة.';
+
+  @override
+  String get chatSafetyBanner =>
+      'لأمانك، قابل الطرف الآخر في مكان عام ولا تقم أبداً بتحويل أموال أو مشاركة بيانات مصرفية.';
+
+  @override
+  String get chatConfirmOwnership => 'تأكيد ملكية الغرض';
+
+  @override
+  String get chatConfirmOwnershipSub =>
+      'اضغط للتحقق من أن هذا الشخص هو المالك الحقيقي';
+
+  @override
+  String get chatOwnershipVerified => 'تم التحقق من الملكية';
+
+  @override
+  String get chatHandoverInstructions => 'تعليمات الاستلام والتسليم';
+
+  @override
+  String get chatInputPlaceholder => 'اكتب رسالة...';
+
+  @override
+  String get chatClosedMessage => 'تم إغلاق هذه المحادثة';
+
+  @override
+  String get chatToday => 'اليوم';
+
+  @override
+  String get chatYesterday => 'أمس';
+
+  @override
+  String get chatFinderBadge => 'المعثور عليه';
+
+  @override
+  String get chatOwnerBadge => 'صاحب الغرض';
+
+  @override
+  String get chatOnline => 'نشط الآن';
+
+  @override
+  String get chatConfirmDialogTitle => 'تأكيد ملكية الغرض؟';
+
+  @override
+  String get chatConfirmDialogBody =>
+      'هل أنت متأكد من أن هذا الشخص أثبت ملكيته للغرض؟ سيتم توثيق التطابق بعد هذا الإجراء.';
+
+  @override
+  String get chatConfirmSuccess => 'تم تأكيد ملكية الغرض بنجاح!';
+
+  @override
+  String get chatPhotoPreview => 'صورة';
+
+  @override
+  String get chatPickImageFailed => 'تعذر اختيار الصورة';
+
+  @override
+  String get chatErrorNotFound => 'المحادثة أو العنصر غير موجود';
+
+  @override
+  String get chatErrorNotAllowed => 'غير مصرح لك بالقيام بهذا الإجراء';
+
+  @override
+  String get chatErrorInvalidState =>
+      'لا يمكن تنفيذ هذا الإجراء في الحالة الحالية';
+
+  @override
+  String get chatErrorNetwork =>
+      'خطأ في الاتصال بالشبكة. يرجى التأكد من اتصالك بالإنترنت';
+
+  @override
+  String get chatErrorUnknown => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get chatRetry => 'إعادة المحاولة';
+
+  @override
+  String get chatSendFailed => 'فشل إرسال الرسالة';
+
+  @override
+  String get chatUploadFailed => 'فشل رفع الصورة';
+
+  @override
+  String get chatRejectMatch => 'إنهاء التطابق';
+
+  @override
+  String get chatRejectConfirmTitle => 'إنهاء هذا التطابق؟';
+
+  @override
+  String get chatRejectConfirmBody =>
+      'هل أنت متأكد من رغبتك في إنهاء هذا التطابق؟ سيتم إغلاق المحادثة نهائياً.';
+
+  @override
+  String get chatRejectConfirmAction => 'إنهاء التطابق';
+
+  @override
+  String get chatMatchRejectedSuccess => 'تم إغلاق التطابق بنجاح';
 }

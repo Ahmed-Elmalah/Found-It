@@ -21,6 +21,7 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
     required this.currentIndex,
     required this.onTap,
     required this.onReportTap,
+    this.unreadMessagesCount = 0,
   });
 
   /// Active tab index among the 4 destinations:
@@ -32,6 +33,9 @@ class LiquidGlassBottomNavBar extends StatefulWidget {
 
   /// Callback when the center Plus button is tapped.
   final VoidCallback onReportTap;
+
+  /// Realtime unread messages count for the Messages tab badge.
+  final int unreadMessagesCount;
 
   @override
   State<LiquidGlassBottomNavBar> createState() => _LiquidGlassBottomNavBarState();
@@ -200,7 +204,7 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             alignment: AlignmentDirectional(currentX, 0),
                             child: FractionallySizedBox(
                               widthFactor: 0.20 * stretch,
-                              heightFactor: 0.86 / math.sqrt(stretch),
+                              heightFactor: 0.99 / math.sqrt(stretch),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 3.w,
@@ -303,13 +307,15 @@ class _LiquidGlassBottomNavBarState extends State<LiquidGlassBottomNavBar>
                             ),
                           ),
 
-                          // Tab 2: Messages (with badge '2')
+                          // Tab 2: Messages (dynamic unread count)
                           Expanded(
                             child: _NavBarItem(
-                              icon: Icons.chat_bubble_rounded,
+                              icon: Icons.wechat_outlined,
                               label: l10n.navMessages,
                               isSelected: widget.currentIndex == 2,
-                              badgeCount: 2,
+                              badgeCount: widget.unreadMessagesCount > 0
+                                  ? widget.unreadMessagesCount
+                                  : null,
                               onTap: () {
                                 HapticFeedback.selectionClick();
                                 widget.onTap(2);
@@ -404,12 +410,19 @@ class _NavBarItem extends StatelessWidget {
                         vertical: 1.5.h,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEF4444),
+                        color: primary,
                         borderRadius: BorderRadius.circular(10.r),
                         border: Border.all(
-                          color: Colors.white,
+                          color: theme.colorScheme.surface,
                           width: 1.2,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primary.withValues(alpha: 0.35),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1.5),
+                          ),
+                        ],
                       ),
                       constraints: BoxConstraints(
                         minWidth: 16.r,
@@ -417,9 +430,9 @@ class _NavBarItem extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '$badgeCount',
+                          badgeCount! > 99 ? '99+' : '$badgeCount',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimary,
                             fontSize: 9.sp,
                             fontWeight: FontWeight.w700,
                             height: 1.0,
