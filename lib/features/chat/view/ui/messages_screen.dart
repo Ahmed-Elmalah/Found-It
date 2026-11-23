@@ -414,23 +414,26 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                 chat: chat,
                                 onTap: () {
                                   context
-                                      .push(AppRoutes.chatPath(chat.matchId))
+                                      .push(
+                                        AppRoutes.chatPath(chat.matchId),
+                                        extra: chat,
+                                      )
                                       .then((_) => cubit.refresh());
                                 },
                               )
                                   .animate(
                                     delay: Duration(
-                                      milliseconds: (35 * index).clamp(0, 400),
+                                      milliseconds: 50 * index,
                                     ),
                                   )
                                   .fadeIn(
-                                    duration: const Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 320),
                                     curve: Curves.easeOutCubic,
                                   )
                                   .slideY(
-                                    begin: 0.08,
+                                    begin: 0.12,
                                     end: 0,
-                                    duration: const Duration(milliseconds: 300),
+                                    duration: const Duration(milliseconds: 320),
                                     curve: Curves.easeOutCubic,
                                   ),
                             );

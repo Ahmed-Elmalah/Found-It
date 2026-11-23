@@ -884,4 +884,84 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get recoveryErrorGeneric =>
       'Failed to complete recovery. Please try again.';
+
+  @override
+  String get chatSafetyBanner =>
+      'For your safety, meet in a public place and never transfer money or share banking details.';
+
+  @override
+  String get chatConfirmOwnership => 'Confirm Ownership';
+
+  @override
+  String get chatConfirmOwnershipSub =>
+      'Tap to verify this person is the rightful owner';
+
+  @override
+  String get chatOwnershipVerified => 'Ownership Verified';
+
+  @override
+  String get chatHandoverInstructions => 'Handover Instructions';
+
+  @override
+  String get chatInputPlaceholder => 'Type a message...';
+
+  @override
+  String get chatClosedMessage => 'This conversation is closed';
+
+  @override
+  String get chatToday => 'Today';
+
+  @override
+  String get chatYesterday => 'Yesterday';
+
+  @override
+  String get chatFinderBadge => 'Finder';
+
+  @override
+  String get chatOwnerBadge => 'Owner';
+
+  @override
+  String get chatOnline => 'Active now';
+
+  @override
+  String get chatConfirmDialogTitle => 'Confirm Ownership Verification?';
+
+  @override
+  String get chatConfirmDialogBody =>
+      'Are you sure this person has proven ownership of this item? This action will verify the match.';
+
+  @override
+  String get chatConfirmSuccess => 'Ownership verified successfully!';
+
+  @override
+  String get chatPhotoPreview => 'Photo';
+
+  @override
+  String get chatPickImageFailed => 'Could not select image';
+
+  @override
+  String get chatErrorNotFound => 'Conversation or item not found';
+
+  @override
+  String get chatErrorNotAllowed =>
+      'You are not authorized to perform this action';
+
+  @override
+  String get chatErrorInvalidState =>
+      'Cannot perform this action in the current status';
+
+  @override
+  String get chatErrorNetwork => 'Network error. Please check your connection';
+
+  @override
+  String get chatErrorUnknown => 'Something went wrong. Please try again';
+
+  @override
+  String get chatRetry => 'Retry';
+
+  @override
+  String get chatSendFailed => 'Failed to send message';
+
+  @override
+  String get chatUploadFailed => 'Failed to upload photo';
 }

@@ -20,7 +20,15 @@ import 'package:found_it/features/auth/view/cubit/sign_up_cubit.dart';
 import 'package:found_it/features/chat/data/chat_remote_data_source.dart';
 import 'package:found_it/features/chat/data/chat_repository_impl.dart';
 import 'package:found_it/features/chat/domain/repositories/chat_repository.dart';
+import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_my_chats_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
+import 'package:found_it/features/chat/view/cubit/chat_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
 import 'package:found_it/features/city/data/city_remote_data_source.dart';
 import 'package:found_it/features/city/data/city_repository_impl.dart';
@@ -317,7 +325,25 @@ void _registerChat() {
       () => ChatRepositoryImpl(remoteDataSource: sl()),
     )
     ..registerLazySingleton(() => GetMyChatsUseCase(sl()))
-    ..registerFactory(() => ChatListCubit(sl()));
+    ..registerLazySingleton(() => GetChatMatchDetailsUseCase(sl()))
+    ..registerLazySingleton(() => WatchMessagesUseCase(sl()))
+    ..registerLazySingleton(() => SendMessageUseCase(sl()))
+    ..registerLazySingleton(() => UploadChatImageUseCase(sl()))
+    ..registerLazySingleton(() => GetSignedImageUrlUseCase(sl()))
+    ..registerLazySingleton(() => MarkMessagesReadUseCase(sl()))
+    ..registerLazySingleton(() => ConfirmOwnershipUseCase(sl()))
+    ..registerFactory(() => ChatListCubit(sl()))
+    ..registerFactory(
+      () => ChatCubit(
+        getChatMatchDetailsUseCase: sl(),
+        watchMessagesUseCase: sl(),
+        sendMessageUseCase: sl(),
+        uploadChatImageUseCase: sl(),
+        getSignedImageUrlUseCase: sl(),
+        markMessagesReadUseCase: sl(),
+        confirmOwnershipUseCase: sl(),
+      ),
+    );
 }
 
 // ---------------------------------------------------------------------

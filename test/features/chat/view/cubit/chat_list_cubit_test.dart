@@ -21,6 +21,9 @@ class _FakeChatRepository implements ChatRepository {
 
   @override
   Future<int> getUnreadMessagesCount() async => 0;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 void main() {
