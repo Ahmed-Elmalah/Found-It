@@ -52,4 +52,8 @@ class ChatRepositoryImpl implements ChatRepository {
   @override
   Future<String> getSignedImageUrl(String path) =>
       remoteDataSource.getSignedImageUrl(path);
+
+  @override
+  Future<void> rejectMatch(String matchId) =>
+      remoteDataSource.rejectMatch(matchId);
 }

@@ -10,6 +10,7 @@ import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_ca
 import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
@@ -49,6 +50,9 @@ class _FakeChatRepository implements ChatRepository {
   Future<void> confirmOwnership(String matchId) async {}
 
   @override
+  Future<void> rejectMatch(String matchId) async {}
+
+  @override
   Future<String> uploadChatImage(
       String matchId, List<int> bytes, String extension) async =>
       'path/img.jpg';
@@ -78,6 +82,7 @@ void main() {
         getSignedImageUrlUseCase: GetSignedImageUrlUseCase(repository),
         markMessagesReadUseCase: MarkMessagesReadUseCase(repository),
         confirmOwnershipUseCase: ConfirmOwnershipUseCase(repository),
+        rejectChatMatchUseCase: RejectChatMatchUseCase(repository),
       );
 
       if (sl.isRegistered<ChatCubit>()) {
@@ -167,6 +172,25 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('Confirm'), findsNothing);
+    });
+
+    testWidgets('shows closed conversation bar when status is rejected', (tester) async {
+      repository.matchDetails = const ChatItemEntity(
+        matchId: 'match-1',
+        status: 'rejected',
+        otherUserName: 'Omar Khaled',
+        iAmFinder: true,
+      );
+
+      await pumpTestApp(
+        tester,
+        const ChatScreen(matchId: 'match-1'),
+        padded: false,
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.text('This conversation is closed'), findsOneWidget);
     });
   });
 }

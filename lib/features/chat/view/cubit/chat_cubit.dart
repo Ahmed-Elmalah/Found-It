@@ -10,6 +10,7 @@ import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_ca
 import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
@@ -24,6 +25,7 @@ class ChatCubit extends Cubit<ChatState> {
     required this.getSignedImageUrlUseCase,
     required this.markMessagesReadUseCase,
     required this.confirmOwnershipUseCase,
+    required this.rejectChatMatchUseCase,
   }) : super(const ChatState());
 
   final GetChatMatchDetailsUseCase getChatMatchDetailsUseCase;
@@ -33,6 +35,7 @@ class ChatCubit extends Cubit<ChatState> {
   final GetSignedImageUrlUseCase getSignedImageUrlUseCase;
   final MarkMessagesReadUseCase markMessagesReadUseCase;
   final ConfirmOwnershipUseCase confirmOwnershipUseCase;
+  final RejectChatMatchUseCase rejectChatMatchUseCase;
 
   StreamSubscription<List<ChatMessageEntity>>? _messagesSub;
   String? _currentMatchId;
@@ -311,6 +314,28 @@ class ChatCubit extends Cubit<ChatState> {
           : ChatFailure(ChatFailureType.unknown, e.toString());
       emit(state.copyWith(
         isConfirming: false,
+        failure: () => failure,
+      ));
+      return false;
+    }
+  }
+
+  Future<bool> rejectMatch() async {
+    final matchId = _currentMatchId;
+    if (matchId == null) return false;
+
+    try {
+      await rejectChatMatchUseCase(matchId);
+      final updatedInfo = state.chatInfo?.copyWith(status: 'rejected');
+      emit(state.copyWith(
+        chatInfo: () => updatedInfo,
+      ));
+      return true;
+    } catch (e) {
+      final failure = e is ChatFailure
+          ? e
+          : ChatFailure(ChatFailureType.unknown, e.toString());
+      emit(state.copyWith(
         failure: () => failure,
       ));
       return false;

@@ -21,6 +21,7 @@ abstract interface class ChatRemoteDataSource {
     String extension,
   );
   Future<String> getSignedImageUrl(String path);
+  Future<void> rejectMatch(String matchId);
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -187,6 +188,20 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           .createSignedUrl(path, 3600);
     } catch (_) {
       return '';
+    }
+  }
+
+  @override
+  Future<void> rejectMatch(String matchId) async {
+    try {
+      await _supabase.rpc('reject_match', params: {'p_match_id': matchId});
+    } on PostgrestException catch (e) {
+      throw _mapPostgrestException(e);
+    } on SocketException catch (e) {
+      throw ChatFailure(ChatFailureType.network, e.message);
+    } catch (e) {
+      if (e is ChatFailure) rethrow;
+      throw ChatFailure(ChatFailureType.unknown, e.toString());
     }
   }
 

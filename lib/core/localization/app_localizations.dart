@@ -1891,6 +1891,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to upload photo'**
   String get chatUploadFailed;
+
+  /// No description provided for @chatRejectMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Match'**
+  String get chatRejectMatch;
+
+  /// No description provided for @chatRejectConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Match?'**
+  String get chatRejectConfirmTitle;
+
+  /// No description provided for @chatRejectConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reject this match? This conversation will be closed permanently.'**
+  String get chatRejectConfirmBody;
+
+  /// No description provided for @chatRejectConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get chatRejectConfirmAction;
+
+  /// No description provided for @chatMatchRejectedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Match closed successfully'**
+  String get chatMatchRejectedSuccess;
 }
 
 class _AppLocalizationsDelegate

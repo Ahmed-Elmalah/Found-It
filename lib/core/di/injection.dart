@@ -25,6 +25,7 @@ import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_u
 import 'package:found_it/features/chat/domain/use_cases/get_my_chats_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
@@ -332,6 +333,7 @@ void _registerChat() {
     ..registerLazySingleton(() => GetSignedImageUrlUseCase(sl()))
     ..registerLazySingleton(() => MarkMessagesReadUseCase(sl()))
     ..registerLazySingleton(() => ConfirmOwnershipUseCase(sl()))
+    ..registerLazySingleton(() => RejectChatMatchUseCase(sl()))
     ..registerFactory(() => ChatListCubit(sl()))
     ..registerFactory(
       () => ChatCubit(
@@ -342,6 +344,7 @@ void _registerChat() {
         getSignedImageUrlUseCase: sl(),
         markMessagesReadUseCase: sl(),
         confirmOwnershipUseCase: sl(),
+        rejectChatMatchUseCase: sl(),
       ),
     );
 }
