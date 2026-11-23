@@ -24,10 +24,13 @@ import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_ca
 import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_my_chats_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/get_unread_messages_count_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
+import 'package:found_it/features/chat/view/cubit/chat_badge_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_list_cubit.dart';
 import 'package:found_it/features/city/data/city_remote_data_source.dart';
@@ -332,7 +335,10 @@ void _registerChat() {
     ..registerLazySingleton(() => GetSignedImageUrlUseCase(sl()))
     ..registerLazySingleton(() => MarkMessagesReadUseCase(sl()))
     ..registerLazySingleton(() => ConfirmOwnershipUseCase(sl()))
-    ..registerFactory(() => ChatListCubit(sl()))
+    ..registerLazySingleton(() => RejectChatMatchUseCase(sl()))
+    ..registerLazySingleton(() => GetUnreadMessagesCountUseCase(sl()))
+    ..registerLazySingleton(() => ChatBadgeCubit(sl()))
+    ..registerFactory(() => ChatListCubit(sl(), chatBadgeCubit: sl()))
     ..registerFactory(
       () => ChatCubit(
         getChatMatchDetailsUseCase: sl(),
@@ -342,6 +348,8 @@ void _registerChat() {
         getSignedImageUrlUseCase: sl(),
         markMessagesReadUseCase: sl(),
         confirmOwnershipUseCase: sl(),
+        rejectChatMatchUseCase: sl(),
+        chatBadgeCubit: sl(),
       ),
     );
 }

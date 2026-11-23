@@ -964,4 +964,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatUploadFailed => 'Failed to upload photo';
+
+  @override
+  String get chatRejectMatch => 'Reject Match';
+
+  @override
+  String get chatRejectConfirmTitle => 'Reject Match?';
+
+  @override
+  String get chatRejectConfirmBody =>
+      'Are you sure you want to reject this match? This conversation will be closed permanently.';
+
+  @override
+  String get chatRejectConfirmAction => 'Reject';
+
+  @override
+  String get chatMatchRejectedSuccess => 'Match closed successfully';
 }

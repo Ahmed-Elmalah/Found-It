@@ -404,5 +404,10 @@
   "chatErrorUnknown": "Something went wrong. Please try again",
   "chatRetry": "Retry",
   "chatSendFailed": "Failed to send message",
-  "chatUploadFailed": "Failed to upload photo"
+  "chatUploadFailed": "Failed to upload photo",
+  "chatRejectMatch": "Reject Match",
+  "chatRejectConfirmTitle": "Reject Match?",
+  "chatRejectConfirmBody": "Are you sure you want to reject this match? This conversation will be closed permanently.",
+  "chatRejectConfirmAction": "Reject",
+  "chatMatchRejectedSuccess": "Match closed successfully"
 }

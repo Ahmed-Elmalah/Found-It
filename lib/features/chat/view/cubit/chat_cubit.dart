@@ -10,9 +10,11 @@ import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_ca
 import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
+import 'package:found_it/features/chat/view/cubit/chat_badge_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
@@ -24,6 +26,8 @@ class ChatCubit extends Cubit<ChatState> {
     required this.getSignedImageUrlUseCase,
     required this.markMessagesReadUseCase,
     required this.confirmOwnershipUseCase,
+    required this.rejectChatMatchUseCase,
+    this.chatBadgeCubit,
   }) : super(const ChatState());
 
   final GetChatMatchDetailsUseCase getChatMatchDetailsUseCase;
@@ -33,6 +37,8 @@ class ChatCubit extends Cubit<ChatState> {
   final GetSignedImageUrlUseCase getSignedImageUrlUseCase;
   final MarkMessagesReadUseCase markMessagesReadUseCase;
   final ConfirmOwnershipUseCase confirmOwnershipUseCase;
+  final RejectChatMatchUseCase rejectChatMatchUseCase;
+  final ChatBadgeCubit? chatBadgeCubit;
 
   StreamSubscription<List<ChatMessageEntity>>? _messagesSub;
   String? _currentMatchId;
@@ -55,7 +61,7 @@ class ChatCubit extends Cubit<ChatState> {
     unawaited(_loadMatchDetails(matchId));
 
     // 2. Mark unread messages as read initially
-    unawaited(markMessagesReadUseCase(matchId));
+    _markMessagesRead(matchId);
 
     // 3. Listen to realtime messages stream
     await _messagesSub?.cancel();
@@ -139,8 +145,16 @@ class ChatCubit extends Cubit<ChatState> {
     final hasUnreadFromOther =
         remoteMessages.any((m) => !m.isMine && m.readAt == null);
     if (hasUnreadFromOther && matchId != null) {
-      unawaited(markMessagesReadUseCase(matchId));
+      _markMessagesRead(matchId);
     }
+  }
+
+  void _markMessagesRead(String matchId) {
+    unawaited(
+      markMessagesReadUseCase(matchId).then((_) {
+        chatBadgeCubit?.loadUnreadCount();
+      }).catchError((_) {}),
+    );
   }
 
   Future<void> sendMessage(String text) async {
@@ -311,6 +325,28 @@ class ChatCubit extends Cubit<ChatState> {
           : ChatFailure(ChatFailureType.unknown, e.toString());
       emit(state.copyWith(
         isConfirming: false,
+        failure: () => failure,
+      ));
+      return false;
+    }
+  }
+
+  Future<bool> rejectMatch() async {
+    final matchId = _currentMatchId;
+    if (matchId == null) return false;
+
+    try {
+      await rejectChatMatchUseCase(matchId);
+      final updatedInfo = state.chatInfo?.copyWith(status: 'rejected');
+      emit(state.copyWith(
+        chatInfo: () => updatedInfo,
+      ));
+      return true;
+    } catch (e) {
+      final failure = e is ChatFailure
+          ? e
+          : ChatFailure(ChatFailureType.unknown, e.toString());
+      emit(state.copyWith(
         failure: () => failure,
       ));
       return false;

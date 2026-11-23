@@ -10,6 +10,7 @@ import 'package:found_it/features/chat/domain/use_cases/confirm_ownership_use_ca
 import 'package:found_it/features/chat/domain/use_cases/get_chat_match_details_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/get_signed_image_url_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/mark_messages_read_use_case.dart';
+import 'package:found_it/features/chat/domain/use_cases/reject_chat_match_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/send_message_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/upload_chat_image_use_case.dart';
 import 'package:found_it/features/chat/domain/use_cases/watch_messages_use_case.dart';
@@ -29,6 +30,7 @@ class _FakeChatRepository implements ChatRepository {
 
   bool failNextSendMessage = false;
   bool failNextConfirm = false;
+  bool failNextReject = false;
   int markReadCallCount = 0;
   List<String> signedUrlPathsRequested = [];
 
@@ -56,6 +58,13 @@ class _FakeChatRepository implements ChatRepository {
   Future<void> confirmOwnership(String matchId) async {
     if (failNextConfirm) {
       throw const ChatFailure(ChatFailureType.invalidState, 'Invalid state');
+    }
+  }
+
+  @override
+  Future<void> rejectMatch(String matchId) async {
+    if (failNextReject) {
+      throw const ChatFailure(ChatFailureType.invalidState, 'Already closed');
     }
   }
 
@@ -92,6 +101,7 @@ void main() {
       getSignedImageUrlUseCase: GetSignedImageUrlUseCase(fakeRepo),
       markMessagesReadUseCase: MarkMessagesReadUseCase(fakeRepo),
       confirmOwnershipUseCase: ConfirmOwnershipUseCase(fakeRepo),
+      rejectChatMatchUseCase: RejectChatMatchUseCase(fakeRepo),
     );
   });
 
@@ -265,6 +275,28 @@ void main() {
 
     expect(result, false);
     expect(cubit.state.isConfirmed, false);
+    expect(cubit.state.failure?.type, ChatFailureType.invalidState);
+  });
+
+  test('rejectMatch succeeds and updates chatInfo status to rejected (isClosed true)', () async {
+    await cubit.init('match-123');
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    final result = await cubit.rejectMatch();
+
+    expect(result, true);
+    expect(cubit.state.chatInfo?.status, 'rejected');
+    expect(cubit.state.isClosed, true);
+  });
+
+  test('rejectMatch failure updates failure state', () async {
+    await cubit.init('match-123');
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    fakeRepo.failNextReject = true;
+    final result = await cubit.rejectMatch();
+
+    expect(result, false);
     expect(cubit.state.failure?.type, ChatFailureType.invalidState);
   });
 }

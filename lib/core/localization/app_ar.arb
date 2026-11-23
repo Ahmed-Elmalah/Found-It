@@ -347,5 +347,10 @@
   "chatErrorUnknown": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى",
   "chatRetry": "إعادة المحاولة",
   "chatSendFailed": "فشل إرسال الرسالة",
-  "chatUploadFailed": "فشل رفع الصورة"
+  "chatUploadFailed": "فشل رفع الصورة",
+  "chatRejectMatch": "إنهاء التطابق",
+  "chatRejectConfirmTitle": "إنهاء هذا التطابق؟",
+  "chatRejectConfirmBody": "هل أنت متأكد من رغبتك في إنهاء هذا التطابق؟ سيتم إغلاق المحادثة نهائياً.",
+  "chatRejectConfirmAction": "إنهاء التطابق",
+  "chatMatchRejectedSuccess": "تم إغلاق التطابق بنجاح"
 }

@@ -80,4 +80,49 @@ void main() {
 
     expect(find.byType(LiquidGlassBottomNavBar), findsOneWidget);
   });
+
+  testWidgets('hides unread messages badge when unreadMessagesCount is 0', (tester) async {
+    await pumpTestApp(
+      tester,
+      LiquidGlassBottomNavBar(
+        currentIndex: 0,
+        unreadMessagesCount: 0,
+        onTap: (_) {},
+        onReportTap: () {},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('0'), findsNothing);
+    expect(find.text('2'), findsNothing);
+  });
+
+  testWidgets('displays dynamic unread messages count and clamps > 99 to 99+', (tester) async {
+    await pumpTestApp(
+      tester,
+      LiquidGlassBottomNavBar(
+        currentIndex: 0,
+        unreadMessagesCount: 5,
+        onTap: (_) {},
+        onReportTap: () {},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('5'), findsOneWidget);
+
+    // Over 99
+    await pumpTestApp(
+      tester,
+      LiquidGlassBottomNavBar(
+        currentIndex: 0,
+        unreadMessagesCount: 125,
+        onTap: (_) {},
+        onReportTap: () {},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('99+'), findsOneWidget);
+  });
 }

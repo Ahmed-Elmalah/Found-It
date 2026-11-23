@@ -962,4 +962,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatUploadFailed => 'فشل رفع الصورة';
+
+  @override
+  String get chatRejectMatch => 'إنهاء التطابق';
+
+  @override
+  String get chatRejectConfirmTitle => 'إنهاء هذا التطابق؟';
+
+  @override
+  String get chatRejectConfirmBody =>
+      'هل أنت متأكد من رغبتك في إنهاء هذا التطابق؟ سيتم إغلاق المحادثة نهائياً.';
+
+  @override
+  String get chatRejectConfirmAction => 'إنهاء التطابق';
+
+  @override
+  String get chatMatchRejectedSuccess => 'تم إغلاق التطابق بنجاح';
 }

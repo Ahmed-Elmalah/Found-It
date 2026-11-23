@@ -32,4 +32,7 @@ abstract interface class ChatRepository {
 
   /// Gets a temporary signed URL to view a private chat image.
   Future<String> getSignedImageUrl(String path);
+
+  /// Rejects / closes the match (either user, open match).
+  Future<void> rejectMatch(String matchId);
 }

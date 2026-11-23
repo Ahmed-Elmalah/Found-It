@@ -217,6 +217,7 @@ class _ChatViewState extends State<_ChatView> {
                 child: ChatAppBar(
                   chatInfo: state.chatInfo,
                   isVerified: state.isVerified,
+                  onRejectMatch: () => cubit.rejectMatch(),
                 ),
               ),
             ],
