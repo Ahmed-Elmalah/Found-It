@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -28,6 +29,13 @@ import 'package:found_it/features/home/view/widgets/home_header.dart';
 import 'package:found_it/features/home/view/widgets/home_hero_banner.dart';
 import 'package:found_it/features/home/view/widgets/home_shimmer_view.dart';
 import 'package:found_it/features/home/view/widgets/home_success_view.dart';
+import 'package:found_it/features/notifications/domain/entities/notification_entity.dart';
+import 'package:found_it/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:found_it/features/notifications/domain/use_cases/get_my_notifications_use_case.dart';
+import 'package:found_it/features/notifications/domain/use_cases/mark_notifications_read_use_case.dart';
+import 'package:found_it/features/notifications/domain/use_cases/watch_notifications_use_case.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_state.dart';
 import '../../../../helpers/test_app.dart';
 
 class _FakeAuthRepository implements AuthRepository {
@@ -84,6 +92,17 @@ class _FakeCityRepository implements CityRepository {
   }
 }
 
+class _FakeNotificationsRepository implements NotificationsRepository {
+  @override
+  Future<List<NotificationEntity>> getMyNotifications() async => const [];
+
+  @override
+  Future<void> markNotificationsRead({String? id}) async {}
+
+  @override
+  Stream<List<NotificationEntity>> watchNotifications() => const Stream.empty();
+}
+
 void main() {
   late _FakeAuthRepository authRepo;
   late _FakeHomeRepository homeRepo;
@@ -138,6 +157,7 @@ void main() {
     WidgetTester tester, {
     bool rtl = false,
     bool dark = false,
+    NotificationsCubit? notificationsCubit,
   }) async {
     await pumpTestApp(
       tester,
@@ -145,6 +165,8 @@ void main() {
         providers: [
           BlocProvider<AuthCubit>.value(value: authCubit),
           BlocProvider<HomeCubit>.value(value: homeCubit),
+          if (notificationsCubit != null)
+            BlocProvider<NotificationsCubit>.value(value: notificationsCubit),
         ],
         child: const HomeScreen(),
       ),
@@ -254,5 +276,55 @@ void main() {
 
     // Verify bottom sheet dismissed
     expect(find.byType(CitySelectionBottomSheet), findsNothing);
+  });
+
+  testWidgets('shows the bell unread dot only while notifications are unread',
+      (tester) async {
+    homeRepo.reports = tReports;
+    await homeCubit.init(initialCityId: 'c1');
+
+    final repository = _FakeNotificationsRepository();
+    final notificationsCubit = NotificationsCubit(
+      getMyNotifications: GetMyNotificationsUseCase(repository),
+      markNotificationsRead: MarkNotificationsReadUseCase(repository),
+      watchNotifications: WatchNotificationsUseCase(repository),
+    );
+    addTearDown(notificationsCubit.close);
+
+    notificationsCubit.emit(
+      NotificationsState(
+        status: NotificationsStatus.success,
+        notifications: [
+          NotificationEntity(id: 'n1', createdAt: DateTime.now()),
+        ],
+      ),
+    );
+
+    await pumpScreen(tester, notificationsCubit: notificationsCubit);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('home_notification_dot')),
+      findsOneWidget,
+    );
+
+    notificationsCubit.emit(
+      NotificationsState(
+        status: NotificationsStatus.success,
+        notifications: [
+          NotificationEntity(
+            id: 'n1',
+            createdAt: DateTime.now(),
+            readAt: DateTime.now(),
+          ),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('home_notification_dot')),
+      findsNothing,
+    );
   });
 }

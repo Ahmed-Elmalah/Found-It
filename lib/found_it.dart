@@ -8,6 +8,7 @@ import 'package:found_it/core/preferences/app_preferences_cubit.dart';
 import 'package:found_it/core/router/app_router.dart';
 import 'package:found_it/core/theme/app_theme.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
 
 class FoundIt extends StatelessWidget {
   const FoundIt({super.key});
@@ -16,10 +17,13 @@ class FoundIt extends StatelessWidget {
   Widget build(BuildContext context) {
     // AuthCubit is app-wide (login state + profile).
     // AppPreferencesCubit manages dynamic theme mode and locale.
+    // NotificationsCubit is app-wide so Home's bell and the notifications
+    // screen share the same live unread count.
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: sl<AuthCubit>()),
         BlocProvider.value(value: sl<AppPreferencesCubit>()),
+        BlocProvider.value(value: sl<NotificationsCubit>()),
       ],
       child: BlocBuilder<AppPreferencesCubit, AppPreferencesState>(
         builder: (context, prefs) {

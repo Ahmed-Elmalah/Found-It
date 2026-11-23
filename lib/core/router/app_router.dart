@@ -26,6 +26,7 @@ import 'package:found_it/features/matches/domain/entities/match_entity.dart';
 import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
 import 'package:found_it/features/matches/view/ui/match_compare_screen.dart';
 import 'package:found_it/features/matches/view/ui/potential_matches_screen.dart';
+import 'package:found_it/features/notifications/view/ui/notifications_screen.dart';
 import 'package:found_it/features/onboarding/view/cubit/onboarding_cubit.dart';
 import 'package:found_it/features/onboarding/view/cubit/splash_cubit.dart';
 import 'package:found_it/features/onboarding/view/ui/onboarding_screen.dart';
@@ -319,10 +320,11 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-    // Notifications (Mohamed, story #5)
+    // Notifications (Mohamed, story #5) — NotificationsCubit is provided at
+    // the app root (found_it.dart) so the Home bell shares its state.
     GoRoute(
       path: AppRoutes.notifications,
-      builder: (context, state) => const _ComingSoon('Notifications'),
+      builder: (context, state) => const NotificationsScreen(),
     ),
   ],
 );

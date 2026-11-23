@@ -8,11 +8,15 @@ class HomeHeader extends StatelessWidget {
   const HomeHeader({
     super.key,
     required this.cityName,
+    this.showUnreadDot = false,
     this.onNotificationTap,
     this.onCityTap,
   });
 
   final String cityName;
+
+  /// True when the user has unread notifications (Home bell dot).
+  final bool showUnreadDot;
   final VoidCallback? onNotificationTap;
   final VoidCallback? onCityTap;
 
@@ -116,14 +120,17 @@ class HomeHeader extends StatelessWidget {
                   Positioned(
                     top: 11.h,
                     right: 12.w,
-                    child: Container(
-                      width: 8.r,
-                      height: 8.r,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEF4444),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
+                    child: showUnreadDot
+                        ? Container(
+                            key: const ValueKey('home_notification_dot'),
+                            width: 8.r,
+                            height: 8.r,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFEF4444),
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ],
               ),

@@ -55,6 +55,13 @@ import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_
 import 'package:found_it/features/matches/domain/use_cases/get_my_matches_use_case.dart';
 import 'package:found_it/features/matches/domain/use_cases/reject_match_use_case.dart';
 import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
+import 'package:found_it/features/notifications/data/notifications_remote_data_source.dart';
+import 'package:found_it/features/notifications/data/notifications_repository_impl.dart';
+import 'package:found_it/features/notifications/domain/repositories/notifications_repository.dart';
+import 'package:found_it/features/notifications/domain/use_cases/get_my_notifications_use_case.dart';
+import 'package:found_it/features/notifications/domain/use_cases/mark_notifications_read_use_case.dart';
+import 'package:found_it/features/notifications/domain/use_cases/watch_notifications_use_case.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
 import 'package:found_it/features/onboarding/data/onboarding_local_data_source.dart';
 import 'package:found_it/features/onboarding/data/onboarding_repository_impl.dart';
 import 'package:found_it/features/onboarding/domain/complete_onboarding_use_case.dart';
@@ -339,6 +346,23 @@ void _registerNotifications() {
             },
           );
         },
+      ),
+    )
+    ..registerLazySingleton<NotificationsRemoteDataSource>(
+      () => NotificationsRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<NotificationsRepository>(
+      () => NotificationsRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetMyNotificationsUseCase(sl()))
+    ..registerLazySingleton(() => MarkNotificationsReadUseCase(sl()))
+    ..registerLazySingleton(() => WatchNotificationsUseCase(sl()))
+    // App-wide: the screen and the Home bell share the same unread state.
+    ..registerLazySingleton<NotificationsCubit>(
+      () => NotificationsCubit(
+        getMyNotifications: sl(),
+        markNotificationsRead: sl(),
+        watchNotifications: sl(),
       ),
     );
 }

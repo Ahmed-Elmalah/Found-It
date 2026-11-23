@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
 import 'package:found_it/features/city/domain/city_entity.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
@@ -11,6 +13,8 @@ import 'package:found_it/features/home/view/widgets/home_error_view.dart';
 import 'package:found_it/features/home/view/widgets/home_header.dart';
 import 'package:found_it/features/home/view/widgets/home_shimmer_view.dart';
 import 'package:found_it/features/home/view/widgets/home_success_view.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_state.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -61,16 +65,35 @@ class HomeScreen extends StatelessWidget {
               '';
           final cityId = state.selectedCityId;
 
+          // Optional: the bell dot must not break isolated Home tests that
+          // pump HomeScreen without the app-wide NotificationsCubit.
+          final notificationsCubit = context.read<NotificationsCubit?>();
+
+          Widget buildHeader(NotificationsState? notificationsState) {
+            return HomeHeader(
+              cityName: cityName,
+              showUnreadDot: notificationsState?.hasUnread ?? false,
+              onCityTap: () => _openCityPicker(context, cubit, cityId),
+              onNotificationTap: () => context.push(AppRoutes.notifications),
+            );
+          }
+
           return Scaffold(
             backgroundColor: theme.scaffoldBackgroundColor,
             body: SafeArea(
               bottom: false,
               child: Column(
                 children: [
-                  HomeHeader(
-                    cityName: cityName,
-                    onCityTap: () => _openCityPicker(context, cubit, cityId),
-                  ),
+                  if (notificationsCubit == null)
+                    buildHeader(null)
+                  else
+                    BlocBuilder<NotificationsCubit, NotificationsState>(
+                      bloc: notificationsCubit,
+                      buildWhen: (previous, current) =>
+                          previous.unreadCount != current.unreadCount,
+                      builder: (context, notificationsState) =>
+                          buildHeader(notificationsState),
+                    ),
                   Expanded(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
