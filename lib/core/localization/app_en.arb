@@ -396,5 +396,13 @@
   "chatConfirmDialogBody": "Are you sure this person has proven ownership of this item? This action will verify the match.",
   "chatConfirmSuccess": "Ownership verified successfully!",
   "chatPhotoPreview": "Photo",
-  "chatPickImageFailed": "Could not select image"
+  "chatPickImageFailed": "Could not select image",
+  "chatErrorNotFound": "Conversation or item not found",
+  "chatErrorNotAllowed": "You are not authorized to perform this action",
+  "chatErrorInvalidState": "Cannot perform this action in the current status",
+  "chatErrorNetwork": "Network error. Please check your connection",
+  "chatErrorUnknown": "Something went wrong. Please try again",
+  "chatRetry": "Retry",
+  "chatSendFailed": "Failed to send message",
+  "chatUploadFailed": "Failed to upload photo"
 }

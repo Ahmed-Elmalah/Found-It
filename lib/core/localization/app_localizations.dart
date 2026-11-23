@@ -1843,6 +1843,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not select image'**
   String get chatPickImageFailed;
+
+  /// No description provided for @chatErrorNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation or item not found'**
+  String get chatErrorNotFound;
+
+  /// No description provided for @chatErrorNotAllowed.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not authorized to perform this action'**
+  String get chatErrorNotAllowed;
+
+  /// No description provided for @chatErrorInvalidState.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot perform this action in the current status'**
+  String get chatErrorInvalidState;
+
+  /// No description provided for @chatErrorNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network error. Please check your connection'**
+  String get chatErrorNetwork;
+
+  /// No description provided for @chatErrorUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again'**
+  String get chatErrorUnknown;
+
+  /// No description provided for @chatRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get chatRetry;
+
+  /// No description provided for @chatSendFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send message'**
+  String get chatSendFailed;
+
+  /// No description provided for @chatUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to upload photo'**
+  String get chatUploadFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/features/chat/domain/entities/chat_message_entity.dart';
@@ -10,11 +9,13 @@ class ChatMessageBubble extends StatelessWidget {
     required this.message,
     this.showDateHeader = false,
     this.dateHeaderLabel,
+    this.onRetry,
   });
 
   final ChatMessageEntity message;
   final bool showDateHeader;
   final String? dateHeaderLabel;
+  final ValueChanged<String>? onRetry;
 
   String _formatTime(DateTime date) {
     final hour =
@@ -98,36 +99,47 @@ class ChatMessageBubble extends StatelessWidget {
             alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.78,
+                maxWidth: 0.76.sw,
               ),
               child: Container(
                 decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(18.r),
+                    topRight: Radius.circular(18.r),
+                    bottomLeft: isMine ? Radius.circular(18.r) : Radius.circular(4.r),
+                    bottomRight: isMine ? Radius.circular(4.r) : Radius.circular(18.r),
+                  ),
                   gradient: isMine
-                      ? const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF2F5BEA),
-                            Color(0xFF1D4ED8),
-                          ],
-                        )
+                      ? (message.hasFailed
+                          ? const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF991B1B), Color(0xFF7F1D1D)],
+                            )
+                          : const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF2F5BEA), Color(0xFF1D4ED8)],
+                            ))
                       : null,
                   color: isMine
                       ? null
                       : (isDark
                           ? const Color(0xFF1E2638)
                           : const Color(0xFFF1F5F9)),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(18.r),
-                    topRight: Radius.circular(18.r),
-                    bottomLeft: Radius.circular(isMine ? 18.r : 4.r),
-                    bottomRight: Radius.circular(isMine ? 4.r : 18.r),
-                  ),
+                  border: isMine
+                      ? null
+                      : Border.all(
+                          color: isDark
+                              ? Colors.white.withValues(alpha: 0.06)
+                              : Colors.black.withValues(alpha: 0.06),
+                          width: 1.0,
+                        ),
                   boxShadow: [
                     BoxShadow(
-                      color: isMine
-                          ? const Color(0xFF2F5BEA).withValues(alpha: 0.25)
-                          : Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                      color: Colors.black.withValues(
+                        alpha: isDark ? 0.25 : 0.05,
+                      ),
                       blurRadius: 8.r,
                       offset: Offset(0, 2.h),
                     ),
@@ -137,45 +149,71 @@ class ChatMessageBubble extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(18.r),
                     topRight: Radius.circular(18.r),
-                    bottomLeft: Radius.circular(isMine ? 18.r : 4.r),
-                    bottomRight: Radius.circular(isMine ? 4.r : 18.r),
+                    bottomLeft: isMine ? Radius.circular(18.r) : Radius.circular(4.r),
+                    bottomRight: isMine ? Radius.circular(4.r) : Radius.circular(18.r),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Optional Image
-                      if (hasImage && imageUrl != null && imageUrl.isNotEmpty)
-                        GestureDetector(
-                          onTap: () => _showImagePreview(context, imageUrl),
-                          child: Hero(
-                            tag: 'chat_img_${message.id}',
-                            child: Image.network(
-                              imageUrl,
-                              width: double.infinity,
-                              height: 180.h,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (ctx, child, progress) {
-                                if (progress == null) return child;
-                                return SizedBox(
-                                  height: 180.h,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        isMine
-                                            ? Colors.white70
-                                            : theme.colorScheme.primary,
+                      // Photo Attachment (if present)
+                      if (hasImage) ...[
+                        if (imageUrl != null && imageUrl.isNotEmpty)
+                          GestureDetector(
+                            onTap: () => _showImagePreview(context, imageUrl),
+                            child: Hero(
+                              tag: 'chat_img_${message.id}',
+                              child: AspectRatio(
+                                aspectRatio: 16 / 10,
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder: (_, child, progress) {
+                                    if (progress == null) return child;
+                                    return Container(
+                                      color: isDark
+                                          ? const Color(0xFF161F30)
+                                          : const Color(0xFFE2E8F0),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.0,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (_, _, _) => Container(
+                                    color: isDark
+                                        ? const Color(0xFF161F30)
+                                        : const Color(0xFFE2E8F0),
+                                    child: Center(
+                                      child: Icon(
+                                        Icons.broken_image_rounded,
+                                        size: 32.sp,
+                                        color: Colors.white54,
                                       ),
                                     ),
                                   ),
-                                );
-                              },
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          // Photo is uploading or signed URL loading
+                          AspectRatio(
+                            aspectRatio: 16 / 10,
+                            child: Container(
+                              color: isDark
+                                  ? const Color(0xFF161F30)
+                                  : const Color(0xFFE2E8F0),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.0,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                      ],
 
-                      // Text and Timestamp
+                      // Message Text & Metadata
                       Padding(
                         padding: EdgeInsets.fromLTRB(
                           12.w,
@@ -219,7 +257,27 @@ class ChatMessageBubble extends StatelessWidget {
                                 ),
                                 if (isMine) ...[
                                   SizedBox(width: 4.w),
-                                  if (message.isSending)
+                                  if (message.hasFailed)
+                                    GestureDetector(
+                                      onTap: () => onRetry?.call(message.id),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.error_outline_rounded,
+                                            size: 13.sp,
+                                            color: const Color(0xFFFCA5A5),
+                                          ),
+                                          SizedBox(width: 2.w),
+                                          Icon(
+                                            Icons.refresh_rounded,
+                                            size: 13.sp,
+                                            color: const Color(0xFFFCA5A5),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  else if (message.isSending)
                                     SizedBox(
                                       width: 10.r,
                                       height: 10.r,
@@ -255,6 +313,6 @@ class ChatMessageBubble extends StatelessWidget {
           ),
         ),
       ],
-    ).animate().fadeIn(duration: 200.ms).slideY(begin: 0.05, end: 0);
+    );
   }
 }

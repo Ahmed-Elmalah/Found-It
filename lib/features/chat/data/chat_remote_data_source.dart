@@ -9,6 +9,7 @@ import 'package:found_it/features/chat/domain/entities/chat_failure.dart';
 
 abstract interface class ChatRemoteDataSource {
   Future<List<ChatItemModel>> getMyChats();
+  Future<ChatItemModel> getMatchDetails(String matchId);
   Future<int> getUnreadMessagesCount();
   Stream<List<ChatMessageModel>> getMessages(String matchId);
   Future<void> sendMessage(String matchId, {String? body, String? imagePath});
@@ -38,6 +39,27 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
             .toList();
       }
       return const [];
+    } on PostgrestException catch (e) {
+      throw _mapPostgrestException(e);
+    } on SocketException catch (e) {
+      throw ChatFailure(ChatFailureType.network, e.message);
+    } catch (e) {
+      if (e is ChatFailure) rethrow;
+      throw ChatFailure(ChatFailureType.unknown, e.toString());
+    }
+  }
+
+  @override
+  Future<ChatItemModel> getMatchDetails(String matchId) async {
+    try {
+      final response = await _supabase.rpc(
+        'get_match_details',
+        params: {'p_match_id': matchId},
+      );
+      if (response is Map<String, dynamic>) {
+        return ChatItemModel.fromJson(response);
+      }
+      throw const ChatFailure(ChatFailureType.notFound, 'Match not found');
     } on PostgrestException catch (e) {
       throw _mapPostgrestException(e);
     } on SocketException catch (e) {

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/features/chat/domain/entities/chat_failure.dart';
 import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
 import 'package:found_it/features/chat/view/cubit/chat_cubit.dart';
 import 'package:found_it/features/chat/view/cubit/chat_state.dart';
@@ -85,6 +86,16 @@ class _ChatViewState extends State<_ChatView> {
     return '${date.day}/${date.month}/${date.year}';
   }
 
+  String _mapFailureToMessage(ChatFailure failure, AppLocalizations l10n) {
+    return switch (failure.type) {
+      ChatFailureType.notFound => l10n.chatErrorNotFound,
+      ChatFailureType.notAllowed => l10n.chatErrorNotAllowed,
+      ChatFailureType.invalidState => l10n.chatErrorInvalidState,
+      ChatFailureType.network => l10n.chatErrorNetwork,
+      ChatFailureType.unknown => l10n.chatErrorUnknown,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -99,6 +110,18 @@ class _ChatViewState extends State<_ChatView> {
         listener: (context, state) {
           if (state.messages.isNotEmpty) {
             _scrollToBottom();
+          }
+          if (state.failure != null) {
+            final l10n = AppLocalizations.of(context);
+            final msg = _mapFailureToMessage(state.failure!, l10n);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(msg),
+                behavior: SnackBarBehavior.floating,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+            context.read<ChatCubit>().clearFailure();
           }
         },
         builder: (context, state) {
@@ -148,6 +171,7 @@ class _ChatViewState extends State<_ChatView> {
                         message: msg,
                         showDateHeader: showDate,
                         dateHeaderLabel: dateLabel,
+                        onRetry: (id) => cubit.retryMessage(id),
                       );
                     },
                   ),
@@ -164,11 +188,12 @@ class _ChatViewState extends State<_ChatView> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Floating Confirm Ownership Action Pill
+                      // Floating Confirm Ownership Action Pill (visible only when verified or finder with status 'chatting')
                       ChatConfirmOwnershipBar(
                         matchId: widget.matchId,
                         isVerified: state.isVerified,
                         isConfirming: state.isConfirming,
+                        canConfirm: state.canConfirmOwnership,
                         onConfirm: () => cubit.confirmOwnership(),
                       ),
 

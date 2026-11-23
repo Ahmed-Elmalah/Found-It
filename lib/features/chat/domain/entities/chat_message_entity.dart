@@ -12,6 +12,7 @@ class ChatMessageEntity extends Equatable {
     required this.createdAt,
     this.isMine = false,
     this.isSending = false,
+    this.hasFailed = false,
   });
 
   final String id;
@@ -24,6 +25,7 @@ class ChatMessageEntity extends Equatable {
   final DateTime createdAt;
   final bool isMine;
   final bool isSending;
+  final bool hasFailed;
 
   bool get isRead => readAt != null;
   bool get hasImage => (imagePath != null && imagePath!.isNotEmpty) ||
@@ -40,6 +42,7 @@ class ChatMessageEntity extends Equatable {
     DateTime? createdAt,
     bool? isMine,
     bool? isSending,
+    bool? hasFailed,
   }) {
     return ChatMessageEntity(
       id: id ?? this.id,
@@ -52,6 +55,7 @@ class ChatMessageEntity extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       isMine: isMine ?? this.isMine,
       isSending: isSending ?? this.isSending,
+      hasFailed: hasFailed ?? this.hasFailed,
     );
   }
 
@@ -67,5 +71,6 @@ class ChatMessageEntity extends Equatable {
         createdAt,
         isMine,
         isSending,
+        hasFailed,
       ];
 }

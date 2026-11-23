@@ -15,12 +15,14 @@ class ChatConfirmOwnershipBar extends StatelessWidget {
     required this.isVerified,
     required this.isConfirming,
     required this.onConfirm,
+    this.canConfirm = false,
   });
 
   final String matchId;
   final bool isVerified;
   final bool isConfirming;
   final VoidCallback onConfirm;
+  final bool canConfirm;
 
   void _showGlassDialog(BuildContext context) {
     final theme = Theme.of(context);
@@ -360,6 +362,11 @@ class ChatConfirmOwnershipBar extends StatelessWidget {
           ),
         ),
       );
+    }
+
+    // Only Finder can confirm ownership and only when status is 'chatting'
+    if (!canConfirm) {
+      return const SizedBox.shrink();
     }
 
     // Unverified: Sleek Floating Glass Action Pill

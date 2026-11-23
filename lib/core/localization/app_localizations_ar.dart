@@ -936,4 +936,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatPickImageFailed => 'تعذر اختيار الصورة';
+
+  @override
+  String get chatErrorNotFound => 'المحادثة أو العنصر غير موجود';
+
+  @override
+  String get chatErrorNotAllowed => 'غير مصرح لك بالقيام بهذا الإجراء';
+
+  @override
+  String get chatErrorInvalidState =>
+      'لا يمكن تنفيذ هذا الإجراء في الحالة الحالية';
+
+  @override
+  String get chatErrorNetwork =>
+      'خطأ في الاتصال بالشبكة. يرجى التأكد من اتصالك بالإنترنت';
+
+  @override
+  String get chatErrorUnknown => 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى';
+
+  @override
+  String get chatRetry => 'إعادة المحاولة';
+
+  @override
+  String get chatSendFailed => 'فشل إرسال الرسالة';
+
+  @override
+  String get chatUploadFailed => 'فشل رفع الصورة';
 }

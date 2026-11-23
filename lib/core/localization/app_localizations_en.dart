@@ -938,4 +938,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatPickImageFailed => 'Could not select image';
+
+  @override
+  String get chatErrorNotFound => 'Conversation or item not found';
+
+  @override
+  String get chatErrorNotAllowed =>
+      'You are not authorized to perform this action';
+
+  @override
+  String get chatErrorInvalidState =>
+      'Cannot perform this action in the current status';
+
+  @override
+  String get chatErrorNetwork => 'Network error. Please check your connection';
+
+  @override
+  String get chatErrorUnknown => 'Something went wrong. Please try again';
+
+  @override
+  String get chatRetry => 'Retry';
+
+  @override
+  String get chatSendFailed => 'Failed to send message';
+
+  @override
+  String get chatUploadFailed => 'Failed to upload photo';
 }

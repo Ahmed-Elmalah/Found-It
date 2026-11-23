@@ -5,6 +5,9 @@ abstract interface class ChatRepository {
   /// Fetches all active and closed chats for the authenticated user (P31).
   Future<List<ChatItemEntity>> getMyChats();
 
+  /// Gets match details for a specific match header (P32), even if no messages yet.
+  Future<ChatItemEntity> getMatchDetails(String matchId);
+
   /// Gets the total unread messages count across all active chats for badge display.
   Future<int> getUnreadMessagesCount();
 

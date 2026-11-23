@@ -14,6 +14,10 @@ class ChatRepositoryImpl implements ChatRepository {
   Future<List<ChatItemEntity>> getMyChats() => remoteDataSource.getMyChats();
 
   @override
+  Future<ChatItemEntity> getMatchDetails(String matchId) =>
+      remoteDataSource.getMatchDetails(matchId);
+
+  @override
   Future<int> getUnreadMessagesCount() =>
       remoteDataSource.getUnreadMessagesCount();
 
