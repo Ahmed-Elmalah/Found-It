@@ -1742,6 +1742,172 @@ abstract class AppLocalizations {
   /// **'Failed to complete recovery. Please try again.'**
   String get recoveryErrorGeneric;
 
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all read'**
+  String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get notificationsToday;
+
+  /// No description provided for @notificationsEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get notificationsEarlier;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches, messages and recovery updates will appear here.'**
+  String get notificationsEmptySubtitle;
+
+  /// No description provided for @notificationsErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load notifications'**
+  String get notificationsErrorTitle;
+
+  /// No description provided for @notificationsErrorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and try again.'**
+  String get notificationsErrorSubtitle;
+
+  /// No description provided for @notificationsUntitledReport.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled report'**
+  String get notificationsUntitledReport;
+
+  /// No description provided for @notificationsSomeone.
+  ///
+  /// In en, this message translates to:
+  /// **'Someone'**
+  String get notificationsSomeone;
+
+  /// No description provided for @notificationsItemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'item'**
+  String get notificationsItemLabel;
+
+  /// No description provided for @notificationsPotentialMatchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Potential match found'**
+  String get notificationsPotentialMatchTitle;
+
+  /// No description provided for @notificationsPotentialMatchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A {otherType} report may match your report \"{reportTitle}\" ({reportType}).'**
+  String notificationsPotentialMatchBody(
+    String otherType,
+    String reportTitle,
+    String reportType,
+  );
+
+  /// No description provided for @notificationsNewMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New message from {actorName}'**
+  String notificationsNewMessageTitle(String actorName);
+
+  /// No description provided for @notificationsOwnershipVerifiedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership verified'**
+  String get notificationsOwnershipVerifiedTitle;
+
+  /// No description provided for @notificationsOwnershipVerifiedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actorName} confirmed the item is yours. Arrange the handover.'**
+  String notificationsOwnershipVerifiedBody(String actorName);
+
+  /// No description provided for @notificationsMatchRejectedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match closed'**
+  String get notificationsMatchRejectedTitle;
+
+  /// No description provided for @notificationsMatchRejectedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actorName} closed the match for \"{reportTitle}\".'**
+  String notificationsMatchRejectedBody(String actorName, String reportTitle);
+
+  /// No description provided for @notificationsItemRecoveredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report recovered'**
+  String get notificationsItemRecoveredTitle;
+
+  /// No description provided for @notificationsItemRecoveredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your report \"{reportTitle}\" was marked Recovered.'**
+  String notificationsItemRecoveredBody(String reportTitle);
+
+  /// No description provided for @notificationsClaimPassedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification questions answered'**
+  String get notificationsClaimPassedTitle;
+
+  /// No description provided for @notificationsClaimPassedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{actorName} answered the questions for \"{reportTitle}\" correctly. You can chat now.'**
+  String notificationsClaimPassedBody(String actorName, String reportTitle);
+
+  /// No description provided for @notificationsGenericTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notificationsGenericTitle;
+
+  /// No description provided for @notificationsGenericBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the app to see the details.'**
+  String get notificationsGenericBody;
+
+  /// No description provided for @notificationsUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get notificationsUnread;
+
+  /// No description provided for @notificationsMarkReadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t mark the notification as read.'**
+  String get notificationsMarkReadError;
+
+  /// No description provided for @notificationsMarkAllReadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t mark notifications as read.'**
+  String get notificationsMarkAllReadError;
+
   /// No description provided for @chatSafetyBanner.
   ///
   /// In en, this message translates to:

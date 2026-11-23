@@ -886,6 +886,107 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to complete recovery. Please try again.';
 
   @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
+  String get notificationsToday => 'Today';
+
+  @override
+  String get notificationsEarlier => 'Earlier';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications yet';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'Matches, messages and recovery updates will appear here.';
+
+  @override
+  String get notificationsErrorTitle => 'Couldn\'t load notifications';
+
+  @override
+  String get notificationsErrorSubtitle =>
+      'Check your internet connection and try again.';
+
+  @override
+  String get notificationsUntitledReport => 'Untitled report';
+
+  @override
+  String get notificationsSomeone => 'Someone';
+
+  @override
+  String get notificationsItemLabel => 'item';
+
+  @override
+  String get notificationsPotentialMatchTitle => 'Potential match found';
+
+  @override
+  String notificationsPotentialMatchBody(
+    String otherType,
+    String reportTitle,
+    String reportType,
+  ) {
+    return 'A $otherType report may match your report \"$reportTitle\" ($reportType).';
+  }
+
+  @override
+  String notificationsNewMessageTitle(String actorName) {
+    return 'New message from $actorName';
+  }
+
+  @override
+  String get notificationsOwnershipVerifiedTitle => 'Ownership verified';
+
+  @override
+  String notificationsOwnershipVerifiedBody(String actorName) {
+    return '$actorName confirmed the item is yours. Arrange the handover.';
+  }
+
+  @override
+  String get notificationsMatchRejectedTitle => 'Match closed';
+
+  @override
+  String notificationsMatchRejectedBody(String actorName, String reportTitle) {
+    return '$actorName closed the match for \"$reportTitle\".';
+  }
+
+  @override
+  String get notificationsItemRecoveredTitle => 'Report recovered';
+
+  @override
+  String notificationsItemRecoveredBody(String reportTitle) {
+    return 'Your report \"$reportTitle\" was marked Recovered.';
+  }
+
+  @override
+  String get notificationsClaimPassedTitle => 'Verification questions answered';
+
+  @override
+  String notificationsClaimPassedBody(String actorName, String reportTitle) {
+    return '$actorName answered the questions for \"$reportTitle\" correctly. You can chat now.';
+  }
+
+  @override
+  String get notificationsGenericTitle => 'Notification';
+
+  @override
+  String get notificationsGenericBody => 'Open the app to see the details.';
+
+  @override
+  String get notificationsUnread => 'Unread';
+
+  @override
+  String get notificationsMarkReadError =>
+      'Couldn\'t mark the notification as read.';
+
+  @override
+  String get notificationsMarkAllReadError =>
+      'Couldn\'t mark notifications as read.';
+
+  @override
   String get chatSafetyBanner =>
       'For your safety, meet in a public place and never transfer money or share banking details.';
 

@@ -357,7 +357,6 @@
   "confirmRecoveryTitle": "Confirm Item Recovered",
   "confirmRecoveryMessage": "Are you sure this item has been safely recovered? This will close the report and notify the other party.",
   "confirm": "Confirm",
-  "cancel": "Cancel",
   "handoverTitle": "Handover instructions",
   "handoverSubtitle": "Follow these safety tips for a safe and smooth handover.",
   "safetyTipsTitle": "Safety guidelines",
@@ -380,6 +379,69 @@
   "recoveryErrorInvalidState": "This item or match is already closed.",
   "recoveryErrorNotAllowed": "You are not authorized to perform this action.",
   "recoveryErrorGeneric": "Failed to complete recovery. Please try again.",
+
+  "notificationsTitle": "Notifications",
+  "notificationsMarkAllRead": "Mark all read",
+  "notificationsToday": "Today",
+  "notificationsEarlier": "Earlier",
+  "notificationsEmptyTitle": "No notifications yet",
+  "notificationsEmptySubtitle": "Matches, messages and recovery updates will appear here.",
+  "notificationsErrorTitle": "Couldn't load notifications",
+  "notificationsErrorSubtitle": "Check your internet connection and try again.",
+  "notificationsUntitledReport": "Untitled report",
+  "notificationsSomeone": "Someone",
+  "notificationsItemLabel": "item",
+  "notificationsPotentialMatchTitle": "Potential match found",
+  "notificationsPotentialMatchBody": "A {otherType} report may match your report \"{reportTitle}\" ({reportType}).",
+  "@notificationsPotentialMatchBody": {
+    "placeholders": {
+      "otherType": { "type": "String" },
+      "reportTitle": { "type": "String" },
+      "reportType": { "type": "String" }
+    }
+  },
+  "notificationsNewMessageTitle": "New message from {actorName}",
+  "@notificationsNewMessageTitle": {
+    "placeholders": {
+      "actorName": { "type": "String" }
+    }
+  },
+  "notificationsOwnershipVerifiedTitle": "Ownership verified",
+  "notificationsOwnershipVerifiedBody": "{actorName} confirmed the item is yours. Arrange the handover.",
+  "@notificationsOwnershipVerifiedBody": {
+    "placeholders": {
+      "actorName": { "type": "String" }
+    }
+  },
+  "notificationsMatchRejectedTitle": "Match closed",
+  "notificationsMatchRejectedBody": "{actorName} closed the match for \"{reportTitle}\".",
+  "@notificationsMatchRejectedBody": {
+    "placeholders": {
+      "actorName": { "type": "String" },
+      "reportTitle": { "type": "String" }
+    }
+  },
+  "notificationsItemRecoveredTitle": "Report recovered",
+  "notificationsItemRecoveredBody": "Your report \"{reportTitle}\" was marked Recovered.",
+  "@notificationsItemRecoveredBody": {
+    "placeholders": {
+      "reportTitle": { "type": "String" }
+    }
+  },
+  "notificationsClaimPassedTitle": "Verification questions answered",
+  "notificationsClaimPassedBody": "{actorName} answered the questions for \"{reportTitle}\" correctly. You can chat now.",
+  "@notificationsClaimPassedBody": {
+    "placeholders": {
+      "actorName": { "type": "String" },
+      "reportTitle": { "type": "String" }
+    }
+  },
+  "notificationsGenericTitle": "Notification",
+  "notificationsGenericBody": "Open the app to see the details.",
+  "notificationsUnread": "Unread",
+  "notificationsMarkReadError": "Couldn't mark the notification as read.",
+  "notificationsMarkAllReadError": "Couldn't mark notifications as read.",
+
   "chatSafetyBanner": "For your safety, meet in a public place and never transfer money or share banking details.",
   "chatConfirmOwnership": "Confirm Ownership",
   "chatConfirmOwnershipSub": "Tap to verify this person is the rightful owner",

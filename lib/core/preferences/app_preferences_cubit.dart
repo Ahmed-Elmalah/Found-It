@@ -6,10 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:found_it/core/constants/storage_keys.dart';
 
 class AppPreferencesState extends Equatable {
-  const AppPreferencesState({
-    required this.themeMode,
-    this.locale,
-  });
+  const AppPreferencesState({required this.themeMode, this.locale});
 
   final ThemeMode themeMode;
 
@@ -31,13 +28,18 @@ class AppPreferencesState extends Equatable {
 }
 
 class AppPreferencesCubit extends Cubit<AppPreferencesState> {
-  AppPreferencesCubit(this._prefs)
-      : super(AppPreferencesState(
+  AppPreferencesCubit(this._prefs, {this.onLocaleChanged})
+    : super(
+        AppPreferencesState(
           themeMode: _loadThemeMode(_prefs),
           locale: _loadLocale(_prefs),
-        ));
+        ),
+      );
 
   final SharedPreferences _prefs;
+
+  /// Best-effort side effect after a language change (push token language).
+  final Future<void> Function(Locale? locale)? onLocaleChanged;
 
   static ThemeMode _loadThemeMode(SharedPreferences prefs) {
     final saved = prefs.getString(StorageKeys.themeMode);
@@ -75,5 +77,18 @@ class AppPreferencesCubit extends Cubit<AppPreferencesState> {
       await _prefs.setString(StorageKeys.languageCode, locale.languageCode);
     }
     emit(state.copyWith(locale: () => locale));
+    await _notifyLocaleChanged(locale);
+  }
+
+  /// Push text is rendered in the language saved with the device token
+  /// (Section 8), so a language change re-saves it — never blocking the UI.
+  Future<void> _notifyLocaleChanged(Locale? locale) async {
+    final onLocaleChanged = this.onLocaleChanged;
+    if (onLocaleChanged == null) return;
+    try {
+      await onLocaleChanged(locale);
+    } catch (error) {
+      debugPrint('[AppPreferencesCubit] locale side effect failed: $error');
+    }
   }
 }

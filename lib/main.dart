@@ -1,32 +1,113 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:found_it/core/config/env.dart';
 import 'package:found_it/core/di/injection.dart';
+import 'package:found_it/core/router/app_router.dart';
+import 'package:found_it/core/services/notification_service.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
+import 'package:found_it/features/notifications/view/cubit/notifications_state.dart';
+import 'package:found_it/firebase_options.dart';
 import 'package:found_it/found_it.dart';
 
 Future<void> main() async {
   // 1) Lets us run async code (plugins) before runApp.
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 2) Read the Supabase URL + key from .env
+  // 2) Firebase: required before any firebase_messaging call (push tokens).
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // 3) Must be registered before runApp: messages received while the app is in
+  //    the background / terminated are delivered to this top-level handler.
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  // 4) Read the Supabase URL + key from .env
   await Env.load();
 
-  // 3) Connect to Supabase (also restores the saved login session)
+  // 5) Connect to Supabase (also restores the saved login session)
   await Supabase.initialize(
     url: Env.supabaseUrl,
     publishableKey: Env.supabasePublishableKey,
   );
 
-  // 4) Register everything in get_it (needs Supabase to be ready)
+  // 6) Register everything in get_it (needs Supabase to be ready)
   await configureDependencies();
 
-  // 5) Start listening to login / logout and load the user's profile.
+  // 7) Notification taps (foreground / background) navigate through the same
+  //    deep link, built from AppRoutes inside NotificationPayload.
+  sl<NotificationService>().taps.listen((payload) {
+    final route = payload.route;
+    if (route != null) appRouter.go(route);
+  });
+
+  // 8) Start listening to login / logout and load the user's profile.
   //    Not awaited: the splash screen shows while the profile loads.
   unawaited(sl<AuthCubit>().start());
 
   runApp(const FoundIt());
+
+  // 9) Push setup + the tap that launched the app (needs the router ready).
+  unawaited(_startNotifications());
+
+  // 10) Notifications list: load once a session exists, clear on logout, so
+  //     the Home bell dot is correct without opening the screen.
+  unawaited(_syncNotificationsWithSession());
+}
+
+Future<void> _startNotifications() async {
+  try {
+    final notifications = sl<NotificationService>();
+    await notifications.initialize();
+    // A protected deep link only works once the restored session is loaded;
+    // before that the router would redirect it to the login screen.
+    await _waitForAuth();
+    await notifications.handleInitialMessage();
+  } catch (error) {
+    // Push setup must never take the app down.
+    debugPrint('[main] notifications setup failed: $error');
+  }
+}
+
+Future<void> _waitForAuth() async {
+  final auth = sl<AuthCubit>();
+  if (auth.state.status != AuthStatus.unknown) return;
+  await auth.stream
+      .firstWhere((state) => state.status != AuthStatus.unknown)
+      .timeout(const Duration(seconds: 10), onTimeout: () => auth.state);
+}
+
+/// Keeps the notifications list in sync with the session: load on login,
+/// clear on logout. The Home bell reads the same singleton cubit, so its dot
+/// is right without opening the screen.
+Future<void> _syncNotificationsWithSession() async {
+  final auth = sl<AuthCubit>();
+  final notifications = sl<NotificationsCubit>();
+
+  Future<void> sync(bool? isLoggedIn) async {
+    if (isLoggedIn == true) {
+      if (notifications.state.status == NotificationsStatus.initial) {
+        await notifications.loadNotifications();
+      }
+      return;
+    }
+    if (isLoggedIn == false) {
+      await notifications.clear();
+    }
+  }
+
+  await _waitForAuth();
+  var previous = auth.state.isLoggedIn;
+  await sync(previous);
+
+  auth.stream.listen((state) {
+    final current = state.isLoggedIn;
+    if (current == previous) return;
+    previous = current;
+    unawaited(sync(current));
+  });
 }

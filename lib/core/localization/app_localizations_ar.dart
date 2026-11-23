@@ -884,6 +884,105 @@ class AppLocalizationsAr extends AppLocalizations {
       'فشل تأكيد الاستلام. يرجى المحاولة مرة أخرى.';
 
   @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get notificationsMarkAllRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get notificationsToday => 'اليوم';
+
+  @override
+  String get notificationsEarlier => 'أقدم';
+
+  @override
+  String get notificationsEmptyTitle => 'لا توجد إشعارات بعد';
+
+  @override
+  String get notificationsEmptySubtitle =>
+      'ستظهر هنا التطابقات والرسائل وتحديثات الاستلام.';
+
+  @override
+  String get notificationsErrorTitle => 'تعذر تحميل الإشعارات';
+
+  @override
+  String get notificationsErrorSubtitle =>
+      'تحقق من اتصالك بالإنترنت وحاول مرة أخرى.';
+
+  @override
+  String get notificationsUntitledReport => 'بلاغ بدون عنوان';
+
+  @override
+  String get notificationsSomeone => 'أحد المستخدمين';
+
+  @override
+  String get notificationsItemLabel => 'غرض';
+
+  @override
+  String get notificationsPotentialMatchTitle => 'تم العثور على تطابق محتمل';
+
+  @override
+  String notificationsPotentialMatchBody(
+    String otherType,
+    String reportTitle,
+    String reportType,
+  ) {
+    return 'قد يطابق بلاغ $otherType بلاغك \"$reportTitle\" ($reportType).';
+  }
+
+  @override
+  String notificationsNewMessageTitle(String actorName) {
+    return 'رسالة جديدة من $actorName';
+  }
+
+  @override
+  String get notificationsOwnershipVerifiedTitle => 'تم تأكيد الملكية';
+
+  @override
+  String notificationsOwnershipVerifiedBody(String actorName) {
+    return '$actorName أكد أن الغرض ملكك. رتّب عملية التسليم.';
+  }
+
+  @override
+  String get notificationsMatchRejectedTitle => 'تم إغلاق التطابق';
+
+  @override
+  String notificationsMatchRejectedBody(String actorName, String reportTitle) {
+    return '$actorName أغلق التطابق الخاص بـ \"$reportTitle\".';
+  }
+
+  @override
+  String get notificationsItemRecoveredTitle => 'تم استلام البلاغ';
+
+  @override
+  String notificationsItemRecoveredBody(String reportTitle) {
+    return 'تم تعيين بلاغك \"$reportTitle\" كتم استلامه.';
+  }
+
+  @override
+  String get notificationsClaimPassedTitle => 'تمت الإجابة على أسئلة التحقق';
+
+  @override
+  String notificationsClaimPassedBody(String actorName, String reportTitle) {
+    return '$actorName أجاب على أسئلة \"$reportTitle\" بشكل صحيح. يمكنك الدردشة الآن.';
+  }
+
+  @override
+  String get notificationsGenericTitle => 'إشعار';
+
+  @override
+  String get notificationsGenericBody => 'افتح التطبيق لعرض التفاصيل.';
+
+  @override
+  String get notificationsUnread => 'غير مقروء';
+
+  @override
+  String get notificationsMarkReadError => 'تعذر تحديد الإشعار كمقروء.';
+
+  @override
+  String get notificationsMarkAllReadError => 'تعذر تحديد الإشعارات كمقروءة.';
+
+  @override
   String get chatSafetyBanner =>
       'لأمانك، قابل الطرف الآخر في مكان عام ولا تقم أبداً بتحويل أموال أو مشاركة بيانات مصرفية.';
 
