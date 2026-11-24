@@ -4,6 +4,7 @@ import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 enum EditReportStatus { initial, loading, ready, submitting, success, failure }
 
@@ -18,6 +19,8 @@ class EditReportState extends Equatable {
     this.selectedAreaId,
     this.selectedDate,
     this.failure,
+    this.questions = const [],
+    this.questionsError,
   });
 
   final ReportEntity report;
@@ -29,6 +32,8 @@ class EditReportState extends Equatable {
   final String? selectedAreaId;
   final DateTime? selectedDate;
   final ReportFailureType? failure;
+  final List<QuestionDraft> questions;
+  final String? questionsError;
 
   bool get isLoading => status == EditReportStatus.loading;
   bool get isSubmitting => status == EditReportStatus.submitting;
@@ -44,6 +49,9 @@ class EditReportState extends Equatable {
     String? selectedAreaId,
     DateTime? selectedDate,
     ReportFailureType? Function()? failure,
+    List<QuestionDraft>? questions,
+    String? questionsError,
+    bool clearQuestionsError = false,
   }) {
     return EditReportState(
       report: report ?? this.report,
@@ -55,6 +63,10 @@ class EditReportState extends Equatable {
       selectedAreaId: selectedAreaId ?? this.selectedAreaId,
       selectedDate: selectedDate ?? this.selectedDate,
       failure: failure != null ? failure() : this.failure,
+      questions: questions ?? this.questions,
+      questionsError: clearQuestionsError
+          ? null
+          : (questionsError ?? this.questionsError),
     );
   }
 
@@ -69,5 +81,7 @@ class EditReportState extends Equatable {
         selectedAreaId,
         selectedDate,
         failure,
+        questions,
+        questionsError,
       ];
 }

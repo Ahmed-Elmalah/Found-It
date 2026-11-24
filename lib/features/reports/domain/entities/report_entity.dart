@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:found_it/features/reports/domain/entities/report_question_entity.dart';
+
 class ReportEntity extends Equatable {
   const ReportEntity({
     required this.id,
@@ -26,6 +28,7 @@ class ReportEntity extends Equatable {
     required this.updatedAt,
     this.isMine = false,
     this.privateDetails,
+    this.questions,
   });
 
   final String id;
@@ -52,6 +55,7 @@ class ReportEntity extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final bool isMine;
+  final List<ReportQuestionEntity>? questions;
 
   bool get isLost => type == 'lost';
   bool get isFound => type == 'found';
@@ -94,5 +98,6 @@ class ReportEntity extends Equatable {
         updatedAt,
         isMine,
         privateDetails,
+        questions,
       ];
 }

@@ -1,3 +1,4 @@
+import 'package:found_it/features/reports/data/models/report_question_model.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 
 class ReportModel extends ReportEntity {
@@ -26,6 +27,7 @@ class ReportModel extends ReportEntity {
     required super.updatedAt,
     super.isMine = false,
     super.privateDetails,
+    super.questions,
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,9 @@ class ReportModel extends ReportEntity {
           : DateTime.now(),
       isMine: json['is_mine'] == true,
       privateDetails: json['private_details'] as String?,
+      questions: (json['questions'] as List<dynamic>?)
+          ?.map((e) => ReportQuestionModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 

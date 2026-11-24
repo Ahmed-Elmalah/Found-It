@@ -18,6 +18,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_ca
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 import '../../../../helpers/test_app.dart';
 
@@ -240,6 +241,40 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repo.updatedPrivateDetails, 'Laser engraved serial #8877');
+    });
+
+    testWidgets('changing type to found in EditReportScreen displays VerificationQuestionsForm', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: cubit,
+                  child: EditReportScreen(report: report),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(VerificationQuestionsForm), findsNothing);
+
+      await tester.tap(find.text('Found'));
+      await tester.pumpAndSettle();
+
+      expect(cubit.state.selectedType, 'found');
+      await tester.drag(find.byType(ListView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(VerificationQuestionsForm), findsOneWidget);
     });
   });
 }

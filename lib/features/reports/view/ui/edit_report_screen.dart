@@ -13,6 +13,7 @@ import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class EditReportScreen extends StatefulWidget {
   const EditReportScreen({
@@ -336,6 +337,16 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         maxLength: 500,
                       ),
                       SizedBox(height: 16.h),
+
+                      // Verification Questions (Found reports only)
+                      if (state.selectedType == 'found') ...[
+                        VerificationQuestionsForm(
+                          questions: state.questions,
+                          onChanged: context.read<EditReportCubit>().updateQuestions,
+                          errorText: state.questionsError,
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
                     ],
                   ),
                 ),

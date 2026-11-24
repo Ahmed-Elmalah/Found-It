@@ -109,6 +109,7 @@ class ReportDetailsEntity extends Equatable {
         updatedAt: updatedAt,
         isMine: isMine,
         privateDetails: privateDetails,
+        questions: questions,
       );
 
   @override

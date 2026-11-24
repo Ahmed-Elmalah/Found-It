@@ -14,6 +14,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_ca
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class _FakeEditReportsRepo implements ReportsRepository {
   bool shouldFailInit = false;
@@ -30,6 +31,7 @@ class _FakeEditReportsRepo implements ReportsRepository {
   ];
 
   String? lastUpdatedTitle;
+  List<Map<String, dynamic>>? lastUpdatedQuestions;
 
   @override
   Future<List<CategoryEntity>> getCategories() async {
@@ -57,6 +59,7 @@ class _FakeEditReportsRepo implements ReportsRepository {
   }) async {
     if (shouldFailUpdate) throw const ReportFailure(ReportFailureType.invalidData);
     lastUpdatedTitle = title;
+    lastUpdatedQuestions = questions;
     return ReportEntity(
       id: reportId,
       refCode: '#RPT-1001',
@@ -196,6 +199,36 @@ void main() {
       expect(success, isFalse);
       expect(cubit.state.status, EditReportStatus.failure);
       expect(cubit.state.failure, ReportFailureType.invalidData);
+    });
+
+    test('typeChanged to found initializes draft question if questions empty', () {
+      cubit.typeChanged('found');
+      expect(cubit.state.selectedType, 'found');
+      expect(cubit.state.questions.length, 1);
+    });
+
+    test('submit found report fails when questions invalid', () async {
+      cubit.typeChanged('found');
+      final success = await cubit.submit(title: 'Valid Title');
+      expect(success, isFalse);
+      expect(cubit.state.questionsError, isNotNull);
+    });
+
+    test('submit found report succeeds when questions valid', () async {
+      cubit.typeChanged('found');
+      cubit.updateQuestions([
+        QuestionDraft(
+          question: 'What color is the bag?',
+          correct: 'Black',
+          wrong: ['Blue', 'Grey'],
+        ),
+      ]);
+
+      final success = await cubit.submit(title: 'Valid Title');
+      expect(success, isTrue);
+      expect(repo.lastUpdatedQuestions, isNotNull);
+      expect(repo.lastUpdatedQuestions!.first['question'], 'What color is the bag?');
+      expect(repo.lastUpdatedQuestions!.first['correct'], 'Black');
     });
   });
 }
