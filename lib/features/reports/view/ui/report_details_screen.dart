@@ -19,6 +19,7 @@ import 'package:found_it/features/matches/view/widgets/potential_matches_section
 import 'package:found_it/features/recovery/view/cubit/recovery_cubit.dart';
 import 'package:found_it/features/recovery/view/widgets/mark_recovered_button.dart';
 import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_question_entity.dart';
 import 'package:found_it/features/reports/view/cubit/report_details_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/report_details_state.dart';
 import 'package:found_it/features/reports/view/widgets/report_image_gallery.dart';
@@ -381,15 +382,21 @@ class _ReportDetailsContent extends StatelessWidget {
             ),
             SizedBox(height: 16.h),
 
-            // 6. Private Details Section
+            // 6. Private Details & Verification Questions Section
             if (report.isMine) ...[
-              if (report.privateDetails != null && report.privateDetails!.isNotEmpty)
+              if (report.privateDetails != null && report.privateDetails!.isNotEmpty) ...[
                 _PrivateDetailsCard(
                   title: l10n.reportDetailsPrivateDetails,
                   content: report.privateDetails!,
                   helperText: l10n.privateDetailsOwnerNotice,
                   isOwner: true,
                 ),
+                SizedBox(height: 16.h),
+              ],
+              if (report.questions != null && report.questions!.isNotEmpty) ...[
+                _OwnerQuestionsCard(questions: report.questions!),
+                SizedBox(height: 16.h),
+              ],
             ] else ...[
               if (report.hasPrivateDetails)
                 _PrivateDetailsCard(
@@ -668,6 +675,121 @@ class _NonOwnerBottomBar extends StatelessWidget {
         ],
       ),
       child: button,
+    );
+  }
+}
+
+class _OwnerQuestionsCard extends StatelessWidget {
+  final List<ReportQuestionEntity> questions;
+
+  const _OwnerQuestionsCard({required this.questions});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+      decoration: BoxDecoration(
+        color: colors.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: colors.outlineVariant.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.quiz_outlined, size: 20.r, color: colors.primary),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(
+                  l10n.verificationQuestionsTitle,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: colors.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12.h),
+          ...questions.asMap().entries.map((entry) {
+            final idx = entry.key + 1;
+            final q = entry.value;
+            final isLast = entry.key == questions.length - 1;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '$idx. ${q.question}',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: colors.onSurface,
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                // Correct Answer
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: colors.primaryContainer.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(6.r),
+                    border: Border.all(color: colors.primary.withValues(alpha: 0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle_outline_rounded, size: 14.r, color: colors.primary),
+                      SizedBox(width: 6.w),
+                      Text(
+                        '${l10n.correctAnswerLabel}: ${q.correct}',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w500,
+                          color: colors.onPrimaryContainer,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 6.h),
+                // Wrong choices
+                Wrap(
+                  spacing: 6.w,
+                  runSpacing: 4.h,
+                  children: q.wrong.map((w) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        color: colors.surfaceContainerHighest.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Text(
+                        w,
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                if (!isLast) ...[
+                  SizedBox(height: 12.h),
+                  Divider(height: 1, thickness: 0.5, color: colors.outlineVariant.withValues(alpha: 0.3)),
+                  SizedBox(height: 12.h),
+                ],
+              ],
+            );
+          }),
+        ],
+      ),
     );
   }
 }

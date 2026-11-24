@@ -30,6 +30,7 @@ import 'package:found_it/features/reports/domain/entities/report_counts_entity.d
 import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
+import 'package:found_it/features/reports/domain/entities/report_question_entity.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/create_manual_match_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_report_details_use_case.dart';
@@ -47,6 +48,7 @@ class _FakeReportsRepo implements ReportsRepository {
   String reportStatus = 'active';
   bool isBlocked = false;
   String? activeMatchId;
+  List<ReportQuestionEntity>? customQuestions;
   bool createManualMatchCalled = false;
   ManualMatchResultEntity matchResult = const ManualMatchResultEntity(
     matchId: 'match_123',
@@ -82,6 +84,7 @@ class _FakeReportsRepo implements ReportsRepository {
         privateDetails: isOwner ? (secretDetails ?? 'Secret serial: 9988') : null,
         iAmBlocked: isBlocked,
         myMatchId: activeMatchId,
+        questions: customQuestions,
       );
 
   @override
@@ -550,6 +553,40 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('MATCHES_PAGE: rep_1'), findsOneWidget);
+    });
+
+    testWidgets('displays verification questions for report owner when questions exist', (tester) async {
+      fakeReportsRepo.isOwner = true;
+      fakeReportsRepo.reportType = 'found';
+      fakeReportsRepo.customQuestions = const [
+        ReportQuestionEntity(
+          id: 'q_1',
+          position: 1,
+          question: 'What color is the logo on the wallet?',
+          correct: 'Gold',
+          wrong: ['Silver', 'Bronze'],
+        ),
+      ];
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Ownership Verification Questions'), findsOneWidget);
+      expect(find.text('1. What color is the logo on the wallet?'), findsOneWidget);
+      expect(find.text('Correct Answer: Gold'), findsOneWidget);
+      expect(find.text('Silver'), findsOneWidget);
+      expect(find.text('Bronze'), findsOneWidget);
     });
   });
 }
