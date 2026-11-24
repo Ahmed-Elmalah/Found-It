@@ -35,6 +35,8 @@ import '../../../../helpers/test_app.dart';
 class _FakeReportsRepo implements ReportsRepository {
   bool notFound = false;
   bool isOwner = false;
+  bool hasPrivateDetails = false;
+  String? secretDetails;
 
   ReportDetailsEntity get report => ReportDetailsEntity(
         id: 'rep_1',
@@ -59,8 +61,8 @@ class _FakeReportsRepo implements ReportsRepository {
         updatedAt: DateTime(2026, 11, 15),
         images: const ['https://example.com/wallet.jpg'],
         isMine: isOwner,
-        hasPrivateDetails: false,
-        privateDetails: isOwner ? 'Secret serial: 9988' : null,
+        hasPrivateDetails: hasPrivateDetails,
+        privateDetails: isOwner ? (secretDetails ?? 'Secret serial: 9988') : null,
       );
 
   @override
@@ -212,6 +214,52 @@ void main() {
 
       expect(find.text('Report not found'), findsOneWidget);
       expect(find.byIcon(Icons.search_off_rounded), findsOneWidget);
+    });
+
+    testWidgets('masks private verification details and never displays phone or email for non-owner',
+        (tester) async {
+      fakeReportsRepo.isOwner = false;
+      fakeReportsRepo.hasPrivateDetails = true;
+      fakeReportsRepo.secretDetails = 'CONFIDENTIAL_ENGRAVING_1234';
+
+      await pumpTestApp(
+        tester,
+        const ReportDetailsScreen(reportId: 'rep_1'),
+        padded: false,
+      );
+      await tester.pumpAndSettle();
+
+      // Mask card is visible with warning
+      expect(find.text('Private verification details'), findsOneWidget);
+      expect(
+        find.text('Private verification details are hidden to protect the owner.'),
+        findsOneWidget,
+      );
+      // The secret string itself is NOT rendered
+      expect(find.text('CONFIDENTIAL_ENGRAVING_1234'), findsNothing);
+
+      // Verify no phone numbers or email patterns are displayed on screen
+      expect(find.textContaining(RegExp(r'01[0125]\d{8}')), findsNothing);
+      expect(find.textContaining(RegExp(r'@')), findsNothing);
+    });
+
+    testWidgets('shows private verification details to the report owner with owner notice',
+        (tester) async {
+      fakeReportsRepo.isOwner = true;
+      fakeReportsRepo.hasPrivateDetails = true;
+      fakeReportsRepo.secretDetails = 'CONFIDENTIAL_ENGRAVING_1234';
+
+      await pumpTestApp(
+        tester,
+        const ReportDetailsScreen(reportId: 'rep_1'),
+        padded: false,
+      );
+      await tester.pumpAndSettle();
+
+      // The secret string is rendered for the owner
+      expect(find.text('Private verification details'), findsOneWidget);
+      expect(find.text('CONFIDENTIAL_ENGRAVING_1234'), findsOneWidget);
+      expect(find.text('Only you can see these verification details.'), findsOneWidget);
     });
   });
 }
