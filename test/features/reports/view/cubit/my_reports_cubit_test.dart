@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
@@ -89,7 +91,16 @@ class _FakeReportsRepo implements ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ReportDetailsEntity> getReportDetails(String reportId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ManualMatchResultEntity> createManualMatch(String reportId) =>
       throw UnimplementedError();
 }
 

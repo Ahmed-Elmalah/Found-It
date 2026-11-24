@@ -3,7 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:found_it/features/reports/data/models/area_model.dart';
 import 'package:found_it/features/reports/data/models/category_model.dart';
+import 'package:found_it/features/reports/data/models/manual_match_result_model.dart';
 import 'package:found_it/features/reports/data/models/report_counts_model.dart';
+import 'package:found_it/features/reports/data/models/report_details_model.dart';
 import 'package:found_it/features/reports/data/models/report_model.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
 import 'package:found_it/features/reports/domain/entities/report_image.dart';
@@ -46,6 +48,10 @@ abstract class ReportsRemoteDataSource {
 
   Future<ReportCountsModel> getMyReportsCounts();
 
+  Future<ReportDetailsModel> getReportDetails(String reportId);
+
+  Future<ManualMatchResultModel> createManualMatch(String reportId);
+
   Future<ReportModel> updateReport({
     required String reportId,
     String? title,
@@ -54,6 +60,7 @@ abstract class ReportsRemoteDataSource {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   });
 
   Future<void> softDeleteReport(String reportId);
@@ -145,6 +152,8 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
       'p_images': imageUrls,
       'p_item_date': dateStr,
       if (params.description != null) 'p_description': params.description,
+      if (params.privateDetails != null && params.privateDetails!.isNotEmpty)
+        'p_private_details': params.privateDetails,
     }).single();
 
     return res['ref_code'] as String;
@@ -210,6 +219,26 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
   }
 
   @override
+  Future<ReportDetailsModel> getReportDetails(String reportId) async {
+    final response = await _supabase.rpc(
+      'get_report_details',
+      params: {'p_report_id': reportId},
+    );
+    final map = response as Map<String, dynamic>;
+    return ReportDetailsModel.fromJson(map);
+  }
+
+  @override
+  Future<ManualMatchResultModel> createManualMatch(String reportId) async {
+    final response = await _supabase.rpc(
+      'create_manual_match',
+      params: {'p_report_id': reportId},
+    );
+    final map = response as Map<String, dynamic>;
+    return ManualMatchResultModel.fromJson(map);
+  }
+
+  @override
   Future<ReportModel> updateReport({
     required String reportId,
     String? title,
@@ -218,6 +247,7 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   }) async {
     final params = <String, dynamic>{
       'p_report_id': reportId,
@@ -228,6 +258,8 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
       if (areaId != null) 'p_area_id': areaId,
       if (itemDate != null)
         'p_item_date': itemDate.toIso8601String().split('T').first,
+      if (privateDetails != null)
+        'p_private_details': privateDetails.trim(),
     };
 
     final response =

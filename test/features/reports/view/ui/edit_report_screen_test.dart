@@ -8,7 +8,9 @@ import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
@@ -46,6 +48,7 @@ class _FakeEditRepo implements ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   }) async {
     updatedTitle = title;
     return ReportEntity(
@@ -64,6 +67,14 @@ class _FakeEditRepo implements ReportsRepository {
       images: const [],
     );
   }
+
+  @override
+  Future<ReportDetailsEntity> getReportDetails(String reportId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ManualMatchResultEntity> createManualMatch(String reportId) =>
+      throw UnimplementedError();
 
   @override
   Future<String> createReport(CreateReportParams params) => throw UnimplementedError();

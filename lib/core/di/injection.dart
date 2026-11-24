@@ -98,16 +98,19 @@ import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/data/reports_repository_impl.dart';
 import 'package:found_it/features/reports/data/services/photo_picker_service.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
+import 'package:found_it/features/reports/domain/use_cases/create_manual_match_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/create_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_report_details_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
+import 'package:found_it/features/reports/view/cubit/report_details_cubit.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -262,6 +265,8 @@ void _registerReports() {
     ..registerLazySingleton(() => GetMyReportsCountsUseCase(sl()))
     ..registerLazySingleton(() => UpdateReportUseCase(sl()))
     ..registerLazySingleton(() => SoftDeleteReportUseCase(sl()))
+    ..registerLazySingleton(() => GetReportDetailsUseCase(sl()))
+    ..registerLazySingleton(() => CreateManualMatchUseCase(sl()))
     ..registerFactory(
       () => CreateReportCubit(
         getCategories: sl(),
@@ -271,7 +276,8 @@ void _registerReports() {
         photoPicker: sl(),
       ),
     )
-    ..registerFactory(() => MyReportsCubit(sl(), sl(), sl()));
+    ..registerFactory(() => MyReportsCubit(sl(), sl(), sl()))
+    ..registerFactory(() => ReportDetailsCubit(sl(), sl()));
 }
 
 // ---------------------------------------------------------------------

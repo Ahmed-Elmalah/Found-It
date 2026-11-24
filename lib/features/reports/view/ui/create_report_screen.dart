@@ -74,6 +74,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         return l10n.notLoggedInTitle;
       case ReportFailureType.invalidData:
         return l10n.invalidDataTitle;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorTitle;
     }
@@ -87,6 +91,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         return l10n.notLoggedInMessage;
       case ReportFailureType.invalidData:
         return l10n.invalidDataMessage;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorMessage;
     }

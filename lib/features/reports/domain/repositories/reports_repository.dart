@@ -1,10 +1,18 @@
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 
 abstract interface class ReportsRepository {
+  /// Fetches details for a specific report via get_report_details RPC.
+  Future<ReportDetailsEntity> getReportDetails(String reportId);
+
+  /// Creates a manual match ("This is Mine" / "I Found This") on someone else's report.
+  Future<ManualMatchResultEntity> createManualMatch(String reportId);
+
   /// Fetches reports published by the currently logged-in user.
   /// [status] can be 'active', 'matching', 'recovered', or null for all.
   Future<List<ReportEntity>> getMyReports({String? status});
@@ -21,6 +29,7 @@ abstract interface class ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   });
 
   /// Soft deletes a report by setting `deleted_at = now()`.

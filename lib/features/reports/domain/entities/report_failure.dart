@@ -2,6 +2,10 @@ enum ReportFailureType {
   network,
   notLoggedIn,
   invalidData,
+  notFound,
+  notAllowed,
+  invalidState,
+  invalidInput,
   unknown,
 }
 
