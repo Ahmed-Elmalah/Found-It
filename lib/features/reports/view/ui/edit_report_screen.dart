@@ -30,6 +30,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
+  late final TextEditingController _privateDetailsController;
 
   @override
   void initState() {
@@ -37,6 +38,8 @@ class _EditReportScreenState extends State<EditReportScreen> {
     _titleController = TextEditingController(text: widget.report.title);
     _descriptionController =
         TextEditingController(text: widget.report.description ?? '');
+    _privateDetailsController =
+        TextEditingController(text: widget.report.privateDetails ?? '');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         final lang = Localizations.localeOf(context).languageCode;
@@ -49,6 +52,7 @@ class _EditReportScreenState extends State<EditReportScreen> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _privateDetailsController.dispose();
     super.dispose();
   }
 
@@ -58,6 +62,9 @@ class _EditReportScreenState extends State<EditReportScreen> {
     final success = await cubit.submit(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
+      privateDetails: _privateDetailsController.text.trim().isNotEmpty
+          ? _privateDetailsController.text.trim()
+          : null,
     );
 
     if (success && mounted) {
@@ -157,169 +164,191 @@ class _EditReportScreenState extends State<EditReportScreen> {
 
           return Form(
             key: _formKey,
-            child: ListView(
-              padding: EdgeInsetsDirectional.all(16.r),
+            child: Column(
               children: [
-                if (state.failure != null) ...[
-                  ErrorBanner(
-                    title: _mapFailureTitle(state.failure!, l10n),
-                    message: _mapFailureMessage(state.failure!, l10n),
-                  ),
-                  SizedBox(height: 16.h),
-                ],
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsetsDirectional.all(16.r),
+                    children: [
+                      if (state.failure != null) ...[
+                        ErrorBanner(
+                          title: _mapFailureTitle(state.failure!, l10n),
+                          message: _mapFailureMessage(state.failure!, l10n),
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
 
-                // Type selector
-                Text(
-                  l10n.reportTypeLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                SegmentedButton<String>(
-                  segments: [
-                    ButtonSegment(
-                      value: 'lost',
-                      label: Text(l10n.typeLost),
-                    ),
-                    ButtonSegment(
-                      value: 'found',
-                      label: Text(l10n.typeFound),
-                    ),
-                  ],
-                  selected: {state.selectedType},
-                  onSelectionChanged: (newSelection) {
-                    context
-                        .read<EditReportCubit>()
-                        .typeChanged(newSelection.first);
-                  },
-                ),
-                SizedBox(height: 16.h),
-
-                // Title
-                AppTextField(
-                  label: l10n.reportTitleLabel,
-                  controller: _titleController,
-                  hint: l10n.reportTitleHint,
-                  validator: (value) {
-                    final text = value?.trim() ?? '';
-                    if (text.length < AppLimits.reportTitleMinLength) {
-                      return l10n.titleTooShort;
-                    }
-                    if (text.length > AppLimits.reportTitleMaxLength) {
-                      return l10n.titleTooLong;
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16.h),
-
-                // Category Dropdown
-                Text(
-                  l10n.categoryLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                DropdownButtonFormField<String>(
-                  initialValue: state.selectedCategoryId,
-                  hint: Text(l10n.selectCategory),
-                  items: state.categories.map((cat) {
-                    final name = cat.localizedName(locale);
-                    return DropdownMenuItem(
-                      value: cat.id,
-                      child: Text(name),
-                    );
-                  }).toList(),
-                  onChanged: (id) {
-                    if (id != null) {
-                      context.read<EditReportCubit>().categoryChanged(id);
-                    }
-                  },
-                  validator: (value) =>
-                      value == null ? l10n.fieldRequired : null,
-                ),
-                SizedBox(height: 16.h),
-
-                // Area Dropdown
-                Text(
-                  l10n.areaLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                DropdownButtonFormField<String>(
-                  initialValue: state.selectedAreaId,
-                  hint: Text(l10n.selectArea),
-                  items: state.areas.map((area) {
-                    final name = area.localizedName(locale);
-                    return DropdownMenuItem(
-                      value: area.id,
-                      child: Text(name),
-                    );
-                  }).toList(),
-                  onChanged: (id) {
-                    if (id != null) {
-                      context.read<EditReportCubit>().areaChanged(id);
-                    }
-                  },
-                  validator: (value) =>
-                      value == null ? l10n.fieldRequired : null,
-                ),
-                SizedBox(height: 16.h),
-
-                // Date Picker field
-                Text(
-                  l10n.itemDateLabel,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: colors.onSurface,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                InkWell(
-                  onTap: () => _pickDate(selectedDate),
-                  borderRadius: BorderRadius.circular(14.r),
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(Icons.calendar_today_rounded),
-                    ),
-                    child: Text(
-                      formattedDate,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        color: colors.onSurface,
+                      // Type selector
+                      Text(
+                        l10n.reportTypeLabel,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 8.h),
+                      SegmentedButton<String>(
+                        segments: [
+                          ButtonSegment(
+                            value: 'lost',
+                            label: Text(l10n.typeLost),
+                          ),
+                          ButtonSegment(
+                            value: 'found',
+                            label: Text(l10n.typeFound),
+                          ),
+                        ],
+                        selected: {state.selectedType},
+                        onSelectionChanged: (newSelection) {
+                          context
+                              .read<EditReportCubit>()
+                              .typeChanged(newSelection.first);
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Title
+                      AppTextField(
+                        label: l10n.reportTitleLabel,
+                        controller: _titleController,
+                        hint: l10n.reportTitleHint,
+                        validator: (value) {
+                          final text = value?.trim() ?? '';
+                          if (text.length < AppLimits.reportTitleMinLength) {
+                            return l10n.titleTooShort;
+                          }
+                          if (text.length > AppLimits.reportTitleMaxLength) {
+                            return l10n.titleTooLong;
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Category Dropdown
+                      Text(
+                        l10n.categoryLabel,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      DropdownButtonFormField<String>(
+                        initialValue: state.selectedCategoryId,
+                        hint: Text(l10n.selectCategory),
+                        items: state.categories.map((cat) {
+                          final name = cat.localizedName(locale);
+                          return DropdownMenuItem(
+                            value: cat.id,
+                            child: Text(name),
+                          );
+                        }).toList(),
+                        onChanged: (id) {
+                          if (id != null) {
+                            context.read<EditReportCubit>().categoryChanged(id);
+                          }
+                        },
+                        validator: (value) =>
+                            value == null ? l10n.fieldRequired : null,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Area Dropdown
+                      Text(
+                        l10n.areaLabel,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      DropdownButtonFormField<String>(
+                        initialValue: state.selectedAreaId,
+                        hint: Text(l10n.selectArea),
+                        items: state.areas.map((area) {
+                          final name = area.localizedName(locale);
+                          return DropdownMenuItem(
+                            value: area.id,
+                            child: Text(name),
+                          );
+                        }).toList(),
+                        onChanged: (id) {
+                          if (id != null) {
+                            context.read<EditReportCubit>().areaChanged(id);
+                          }
+                        },
+                        validator: (value) =>
+                            value == null ? l10n.fieldRequired : null,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Date Picker field
+                      Text(
+                        l10n.itemDateLabel,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      InkWell(
+                        onTap: () => _pickDate(selectedDate),
+                        borderRadius: BorderRadius.circular(14.r),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            suffixIcon: Icon(Icons.calendar_today_rounded),
+                          ),
+                          child: Text(
+                            formattedDate,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              color: colors.onSurface,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Description
+                      AppTextField(
+                        label: l10n.descriptionLabel,
+                        controller: _descriptionController,
+                        hint: l10n.descriptionHint,
+                        maxLines: 4,
+                        minLines: 4,
+                        maxLength: 1000,
+                      ),
+                      SizedBox(height: 16.h),
+
+                      // Private Details
+                      AppTextField(
+                        label: l10n.privateDetailsLabel,
+                        controller: _privateDetailsController,
+                        hint: l10n.privateDetailsHint,
+                        helperText: l10n.privateDetailsHelper,
+                        maxLines: 4,
+                        minLines: 2,
+                        maxLength: 500,
+                      ),
+                      SizedBox(height: 16.h),
+                    ],
                   ),
                 ),
-                SizedBox(height: 16.h),
-
-                // Description
-                AppTextField(
-                  label: l10n.descriptionLabel,
-                  controller: _descriptionController,
-                  hint: l10n.descriptionHint,
-                  maxLines: 4,
-                  minLines: 4,
-                  maxLength: 1000,
-                ),
-                SizedBox(height: 24.h),
-
-                // Save button
-                AppButton(
-                  label: l10n.saveChanges,
-                  isLoading: state.isSubmitting,
-                  onPressed: _submit,
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(16.w, 8.h, 16.w, 12.h),
+                    child: AppButton(
+                      label: l10n.saveChanges,
+                      isLoading: state.isSubmitting,
+                      onPressed: _submit,
+                    ),
+                  ),
                 ),
               ],
             ),

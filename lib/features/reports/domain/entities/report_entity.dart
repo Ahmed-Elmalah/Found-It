@@ -25,6 +25,7 @@ class ReportEntity extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     this.isMine = false,
+    this.privateDetails,
   });
 
   final String id;
@@ -33,6 +34,7 @@ class ReportEntity extends Equatable {
   final String type; // 'lost' | 'found'
   final String title;
   final String? description;
+  final String? privateDetails;
   final String categoryId;
   final String? categoryNameEn;
   final String? categoryNameAr;
@@ -91,5 +93,6 @@ class ReportEntity extends Equatable {
         createdAt,
         updatedAt,
         isMine,
+        privateDetails,
       ];
 }

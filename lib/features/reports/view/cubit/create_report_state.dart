@@ -34,6 +34,7 @@ class CreateReportFormState extends CreateReportState {
   final ReportFailureType? submitFailure;
   final ReportFailureType? initialDataFailure;
   final bool hasInvalidFile;
+  final String? privateDetails;
 
   const CreateReportFormState({
     required this.isLost,
@@ -52,6 +53,7 @@ class CreateReportFormState extends CreateReportState {
     this.submitFailure,
     this.initialDataFailure,
     this.hasInvalidFile = false,
+    this.privateDetails,
   });
 
   CreateReportFormState copyWith({
@@ -75,6 +77,8 @@ class CreateReportFormState extends CreateReportState {
     ReportFailureType? initialDataFailure,
     bool clearInitialDataFailure = false,
     bool? hasInvalidFile,
+    String? privateDetails,
+    bool clearPrivateDetails = false,
   }) {
     return CreateReportFormState(
       isLost: isLost ?? this.isLost,
@@ -97,6 +101,9 @@ class CreateReportFormState extends CreateReportState {
           ? null
           : (initialDataFailure ?? this.initialDataFailure),
       hasInvalidFile: hasInvalidFile ?? this.hasInvalidFile,
+      privateDetails: clearPrivateDetails
+          ? null
+          : (privateDetails ?? this.privateDetails),
     );
   }
 
@@ -118,6 +125,7 @@ class CreateReportFormState extends CreateReportState {
         submitFailure,
         initialDataFailure,
         hasInvalidFile,
+        privateDetails,
       ];
 }
 

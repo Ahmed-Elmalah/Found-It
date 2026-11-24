@@ -23,6 +23,7 @@ import '../../../../helpers/test_app.dart';
 
 class _FakeEditRepo implements ReportsRepository {
   String? updatedTitle;
+  String? updatedPrivateDetails;
 
   final categories = const [
     CategoryEntity(id: 'cat_1', nameEn: 'Wallet', nameAr: 'محفظة', icon: 'wallet'),
@@ -51,6 +52,7 @@ class _FakeEditRepo implements ReportsRepository {
     String? privateDetails,
   }) async {
     updatedTitle = title;
+    updatedPrivateDetails = privateDetails;
     return ReportEntity(
       id: reportId,
       refCode: '#RPT-1001',
@@ -65,6 +67,7 @@ class _FakeEditRepo implements ReportsRepository {
       createdAt: DateTime(2026, 11, 10),
       updatedAt: DateTime(2026, 11, 10),
       images: const [],
+      privateDetails: privateDetails,
     );
   }
 
@@ -204,6 +207,38 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repo.updatedTitle, 'Updated Brown Wallet');
+    });
+
+    testWidgets('editing private verification details updates repo with new value', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: cubit,
+                  child: EditReportScreen(report: report),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final privateDetailsFinder = find.byType(TextField).at(2);
+      await tester.enterText(privateDetailsFinder, 'Laser engraved serial #8877');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(AppButton));
+      await tester.pumpAndSettle();
+
+      expect(repo.updatedPrivateDetails, 'Laser engraved serial #8877');
     });
   });
 }

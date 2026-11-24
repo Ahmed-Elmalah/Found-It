@@ -28,6 +28,7 @@ class CreateReportScreen extends StatefulWidget {
 
 class _CreateReportScreenState extends State<CreateReportScreen> {
   final _titleController = TextEditingController();
+  final _privateDetailsController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _privateDetailsController.dispose();
     super.dispose();
   }
 
@@ -300,6 +302,19 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                           DatePickerField(
                             selectedDate: form.date,
                             onDateSelected: cubit.selectDate,
+                          ),
+                          SizedBox(height: 20.h),
+
+                          // ── Private Details ──────────────────────────────────
+                          AppTextField(
+                            controller: _privateDetailsController,
+                            label: l10n.privateDetailsLabel,
+                            hint: l10n.privateDetailsHint,
+                            helperText: l10n.privateDetailsHelper,
+                            maxLength: 500,
+                            minLines: 2,
+                            maxLines: 4,
+                            onChanged: cubit.updatePrivateDetails,
                           ),
                           SizedBox(height: 20.h),
 

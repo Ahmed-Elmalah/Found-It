@@ -25,6 +25,7 @@ class ReportModel extends ReportEntity {
     required super.createdAt,
     required super.updatedAt,
     super.isMine = false,
+    super.privateDetails,
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) {
@@ -63,6 +64,7 @@ class ReportModel extends ReportEntity {
           ? DateTime.tryParse(json['updated_at'] as String) ?? DateTime.now()
           : DateTime.now(),
       isMine: json['is_mine'] == true,
+      privateDetails: json['private_details'] as String?,
     );
   }
 

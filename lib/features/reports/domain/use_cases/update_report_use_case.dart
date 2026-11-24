@@ -14,6 +14,7 @@ class UpdateReportUseCase {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
   }) {
     return _repository.updateReport(
       reportId: reportId,
@@ -23,6 +24,7 @@ class UpdateReportUseCase {
       categoryId: categoryId,
       areaId: areaId,
       itemDate: itemDate,
+      privateDetails: privateDetails,
     );
   }
 }

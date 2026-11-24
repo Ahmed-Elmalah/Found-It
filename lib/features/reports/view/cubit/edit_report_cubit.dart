@@ -76,6 +76,7 @@ class EditReportCubit extends Cubit<EditReportState> {
   Future<bool> submit({
     required String title,
     String? description,
+    String? privateDetails,
   }) async {
     emit(state.copyWith(
       status: EditReportStatus.submitting,
@@ -91,6 +92,7 @@ class EditReportCubit extends Cubit<EditReportState> {
         categoryId: state.selectedCategoryId,
         areaId: state.selectedAreaId,
         itemDate: state.selectedDate,
+        privateDetails: privateDetails,
       );
 
       emit(state.copyWith(

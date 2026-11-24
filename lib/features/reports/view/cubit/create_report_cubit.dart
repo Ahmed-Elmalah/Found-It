@@ -88,6 +88,10 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     ));
   }
 
+  void updatePrivateDetails(String value) {
+    emit(_currentForm.copyWith(privateDetails: value));
+  }
+
   void selectCategory(String categoryId) {
     final form = _currentForm;
     final errors = Map<String, ReportFieldError>.from(form.errors)
@@ -234,6 +238,9 @@ class CreateReportCubit extends Cubit<CreateReportState> {
         areaId: form.areaId!,
         images: validPhotos,
         itemDate: form.date,
+        privateDetails: form.privateDetails?.trim().isNotEmpty == true
+            ? form.privateDetails!.trim()
+            : null,
       ));
 
       emit(CreateReportSuccess(refCode));
