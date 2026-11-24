@@ -331,6 +331,15 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.notifications,
       builder: (context, state) => const NotificationsScreen(),
     ),
+
+    // Verify Ownership Questions (Mohamed, story #6) — /matches/:id/verify
+    GoRoute(
+      path: AppRoutes.claimVerify,
+      builder: (context, state) {
+        final matchId = state.pathParameters['id'] ?? '';
+        return _ComingSoon('Verify Ownership (match: $matchId)');
+      },
+    ),
   ],
 );
 

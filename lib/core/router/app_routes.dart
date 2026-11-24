@@ -40,4 +40,8 @@ abstract final class AppRoutes {
 
   /// Notifications screen (Mohamed, story #5) — P30.
   static const notifications = '/notifications';
+
+  /// Verify Ownership Questions (Mohamed, story #6) — /matches/:id/verify
+  static const claimVerify = '/matches/:id/verify';
+  static String claimVerifyPath(String id) => '/matches/$id/verify';
 }

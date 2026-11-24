@@ -47,6 +47,13 @@ void main() {
       );
     });
 
+    test('claimVerifyPath builds correct path with id', () {
+      expect(
+        AppRoutes.claimVerifyPath('match-123'),
+        '/matches/match-123/verify',
+      );
+    });
+
     test('static constants have expected route paths', () {
       expect(AppRoutes.reportDetails, '/reports/:id');
       expect(AppRoutes.matches, '/matches');
@@ -54,11 +61,12 @@ void main() {
       expect(AppRoutes.chat, '/chat/:matchId');
       expect(AppRoutes.handover, '/chat/:matchId/handover');
       expect(AppRoutes.notifications, '/notifications');
+      expect(AppRoutes.claimVerify, '/matches/:id/verify');
     });
   });
 
   group('Sprint 2 Router configuration', () {
-    test('appRouter contains all 6 Sprint 2 routes', () {
+    test('appRouter contains all 7 Sprint 2 routes', () {
       final routes = appRouter.configuration.routes
           .whereType<GoRoute>()
           .map((r) => r.path)
@@ -70,6 +78,7 @@ void main() {
       expect(routes.contains(AppRoutes.chat), isTrue);
       expect(routes.contains(AppRoutes.handover), isTrue);
       expect(routes.contains(AppRoutes.notifications), isTrue);
+      expect(routes.contains(AppRoutes.claimVerify), isTrue);
     });
   });
 }
