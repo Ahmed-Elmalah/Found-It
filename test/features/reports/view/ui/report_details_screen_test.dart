@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/events/reports_changed_notifier.dart';
+import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
 import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
@@ -37,6 +39,16 @@ class _FakeReportsRepo implements ReportsRepository {
   bool isOwner = false;
   bool hasPrivateDetails = false;
   String? secretDetails;
+  String reportType = 'lost';
+  bool isBlocked = false;
+  String? activeMatchId;
+  bool createManualMatchCalled = false;
+  ManualMatchResultEntity matchResult = const ManualMatchResultEntity(
+    matchId: 'match_123',
+    status: 'chatting',
+    claimStatus: 'none',
+    isNew: true,
+  );
 
   ReportDetailsEntity get report => ReportDetailsEntity(
         id: 'rep_1',
@@ -54,7 +66,7 @@ class _FakeReportsRepo implements ReportsRepository {
         categoryIcon: 'wallet',
         title: 'Lost Leather Wallet',
         description: 'Black leather wallet with cards',
-        type: 'lost',
+        type: reportType,
         status: 'active',
         itemDate: DateTime(2026, 11, 15),
         createdAt: DateTime(2026, 11, 15),
@@ -63,6 +75,8 @@ class _FakeReportsRepo implements ReportsRepository {
         isMine: isOwner,
         hasPrivateDetails: hasPrivateDetails,
         privateDetails: isOwner ? (secretDetails ?? 'Secret serial: 9988') : null,
+        iAmBlocked: isBlocked,
+        myMatchId: activeMatchId,
       );
 
   @override
@@ -75,12 +89,8 @@ class _FakeReportsRepo implements ReportsRepository {
 
   @override
   Future<ManualMatchResultEntity> createManualMatch(String reportId) async {
-    return const ManualMatchResultEntity(
-      matchId: 'match_123',
-      status: 'pending',
-      claimStatus: 'pending',
-      isNew: true,
-    );
+    createManualMatchCalled = true;
+    return matchResult;
   }
 
   @override
@@ -260,6 +270,131 @@ void main() {
       expect(find.text('Private verification details'), findsOneWidget);
       expect(find.text('CONFIDENTIAL_ENGRAVING_1234'), findsOneWidget);
       expect(find.text('Only you can see these verification details.'), findsOneWidget);
+    });
+
+    testWidgets(
+        'displays "This is Mine" on found report, and tapping it calls createManualMatch and navigates to chat',
+        (tester) async {
+      fakeReportsRepo.isOwner = false;
+      fakeReportsRepo.reportType = 'found';
+      fakeReportsRepo.matchResult = const ManualMatchResultEntity(
+        matchId: 'match_chat_1',
+        status: 'chatting',
+        claimStatus: 'none',
+        isNew: true,
+      );
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: '/chat/:matchId',
+            builder: (_, state) =>
+                Scaffold(body: Text('CHAT: ${state.pathParameters['matchId']}')),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.text('This is Mine'), findsOneWidget);
+      await tester.tap(find.text('This is Mine'));
+      await tester.pumpAndSettle();
+
+      expect(fakeReportsRepo.createManualMatchCalled, isTrue);
+      expect(find.text('CHAT: match_chat_1'), findsOneWidget);
+    });
+
+    testWidgets(
+        'displays "I Found This" on lost report, and if claim is pending navigates to verify screen',
+        (tester) async {
+      fakeReportsRepo.isOwner = false;
+      fakeReportsRepo.reportType = 'lost';
+      fakeReportsRepo.matchResult = const ManualMatchResultEntity(
+        matchId: 'match_verify_1',
+        status: 'pending',
+        claimStatus: 'pending',
+        isNew: true,
+      );
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: '/matches/:id/verify',
+            builder: (_, state) =>
+                Scaffold(body: Text('VERIFY: ${state.pathParameters['id']}')),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.text('I Found This'), findsOneWidget);
+      await tester.tap(find.text('I Found This'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('VERIFY: match_verify_1'), findsOneWidget);
+    });
+
+    testWidgets('displays "Open Chat" when user already has an active match on report',
+        (tester) async {
+      fakeReportsRepo.isOwner = false;
+      fakeReportsRepo.activeMatchId = 'active_match_55';
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: '/chat/:matchId',
+            builder: (_, state) =>
+                Scaffold(body: Text('CHAT: ${state.pathParameters['matchId']}')),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Open Chat'), findsOneWidget);
+      await tester.tap(find.text('Open Chat'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('CHAT: active_match_55'), findsOneWidget);
+    });
+
+    testWidgets('displays disabled "You can\'t claim this item" when i_am_blocked is true',
+        (tester) async {
+      fakeReportsRepo.isOwner = false;
+      fakeReportsRepo.isBlocked = true;
+
+      await pumpTestApp(
+        tester,
+        const ReportDetailsScreen(reportId: 'rep_1'),
+        padded: false,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text("You can't claim this item"), findsOneWidget);
+      final button = tester.widget<AppButton>(find.byType(AppButton));
+      expect(button.onPressed, isNull);
     });
   });
 }
