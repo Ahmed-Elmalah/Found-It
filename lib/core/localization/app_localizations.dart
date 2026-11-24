@@ -2105,6 +2105,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Answer Verification Questions'**
   String get chatVerifyOwnershipAction;
+
+  /// No description provided for @reportDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report details'**
+  String get reportDetailsTitle;
+
+  /// No description provided for @reportNotFoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report not found'**
+  String get reportNotFoundTitle;
+
+  /// No description provided for @reportNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This report does not exist or has been deleted.'**
+  String get reportNotFoundMessage;
+
+  /// No description provided for @reportDetailsCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get reportDetailsCategory;
+
+  /// No description provided for @reportDetailsLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get reportDetailsLocation;
+
+  /// No description provided for @reportDetailsDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get reportDetailsDate;
+
+  /// No description provided for @reportDetailsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get reportDetailsDescription;
+
+  /// No description provided for @reportDetailsPrivateDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Private verification details'**
+  String get reportDetailsPrivateDetails;
+
+  /// No description provided for @privateDetailsHiddenNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Private verification details are hidden to protect the owner.'**
+  String get privateDetailsHiddenNotice;
+
+  /// No description provided for @privateDetailsOwnerNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see these verification details.'**
+  String get privateDetailsOwnerNotice;
+
+  /// No description provided for @questionsNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This report requires answering ownership verification questions.'**
+  String get questionsNotice;
+
+  /// No description provided for @thisIsMine.
+  ///
+  /// In en, this message translates to:
+  /// **'This is Mine'**
+  String get thisIsMine;
+
+  /// No description provided for @iFoundThis.
+  ///
+  /// In en, this message translates to:
+  /// **'I Found This'**
+  String get iFoundThis;
+
+  /// No description provided for @openChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Chat'**
+  String get openChat;
+
+  /// No description provided for @claimBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t claim this item'**
+  String get claimBlocked;
+
+  /// No description provided for @claimFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit claim'**
+  String get claimFailed;
+
+  /// No description provided for @potentialMatchesForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 potential match for you} other{{count} potential matches for you}}'**
+  String potentialMatchesForYou(num count);
+
+  /// No description provided for @privateDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Private verification details (optional)'**
+  String get privateDetailsLabel;
+
+  /// No description provided for @privateDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Details only the true owner would know (e.g. serial number, lock code, hidden marks)...'**
+  String get privateDetailsHint;
+
+  /// No description provided for @privateDetailsHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible only to you. Used by the system to verify claims.'**
+  String get privateDetailsHelper;
+
+  /// No description provided for @fullscreenImageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {current} of {total}'**
+  String fullscreenImageTitle(int current, int total);
 }
 
 class _AppLocalizationsDelegate

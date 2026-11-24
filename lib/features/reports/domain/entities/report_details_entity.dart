@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_question_entity.dart';
 
 class ReportDetailsEntity extends Equatable {
@@ -83,6 +84,31 @@ class ReportDetailsEntity extends Equatable {
 
   String localizedArea(String languageCode) =>
       (languageCode == 'ar' ? areaNameAr : areaNameEn) ?? areaNameEn ?? '';
+
+  ReportEntity toReportEntity() => ReportEntity(
+        id: id,
+        refCode: refCode,
+        userId: '',
+        type: type,
+        title: title,
+        description: description,
+        categoryId: categoryId,
+        categoryNameEn: categoryNameEn,
+        categoryNameAr: categoryNameAr,
+        categoryIcon: categoryIcon,
+        cityId: cityId,
+        cityNameEn: cityNameEn,
+        cityNameAr: cityNameAr,
+        areaId: areaId,
+        areaNameEn: areaNameEn,
+        areaNameAr: areaNameAr,
+        itemDate: itemDate,
+        images: images,
+        status: status,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        isMine: isMine,
+      );
 
   @override
   List<Object?> get props => [

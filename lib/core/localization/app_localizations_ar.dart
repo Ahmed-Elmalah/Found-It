@@ -1089,4 +1089,85 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatVerifyOwnershipAction => 'الإجابة على أسئلة التحقق';
+
+  @override
+  String get reportDetailsTitle => 'تفاصيل البلاغ';
+
+  @override
+  String get reportNotFoundTitle => 'البلاغ غير موجود';
+
+  @override
+  String get reportNotFoundMessage => 'هذا البلاغ غير موجود أو تمت إزالته.';
+
+  @override
+  String get reportDetailsCategory => 'الفئة';
+
+  @override
+  String get reportDetailsLocation => 'الموقع';
+
+  @override
+  String get reportDetailsDate => 'التاريخ';
+
+  @override
+  String get reportDetailsDescription => 'الوصف';
+
+  @override
+  String get reportDetailsPrivateDetails => 'تفاصيل التحقق الخاصة';
+
+  @override
+  String get privateDetailsHiddenNotice =>
+      'تفاصيل التحقق الخاصة مخفية لحماية صاحب البلاغ.';
+
+  @override
+  String get privateDetailsOwnerNotice =>
+      'أنت فقط من يمكنه رؤية تفاصيل التحقق هذه.';
+
+  @override
+  String get questionsNotice =>
+      'يتطلب هذا البلاغ الإجابة على أسئلة إثبات الملكية.';
+
+  @override
+  String get thisIsMine => 'هذا الشيء ملكي';
+
+  @override
+  String get iFoundThis => 'وجدت هذا الشيء';
+
+  @override
+  String get openChat => 'فتح المحادثة';
+
+  @override
+  String get claimBlocked => 'لا يمكنك المطالبة بهذا العنصر';
+
+  @override
+  String get claimFailed => 'فشل إرسال المطالبة';
+
+  @override
+  String potentialMatchesForYou(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'يوجد $count تطابق محتمل لك',
+      many: 'يوجد $count تطابقاً محتملاً لك',
+      few: 'يوجد $count تطابقات محتملة لك',
+      two: 'يوجد تطابقان محتملان لك',
+      one: 'يوجد تطابق محتمل واحد لك',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get privateDetailsLabel => 'تفاصيل تحقق سرية (اختياري)';
+
+  @override
+  String get privateDetailsHint =>
+      'تفاصيل لا يعرفها سوى المالك الحقيقي (مثل: الرقم التسلسلي، رمز القفل، علامات مخفية)...';
+
+  @override
+  String get privateDetailsHelper =>
+      'مرئية لك فقط، وتستخدم للتحقق من ملكية الشيء.';
+
+  @override
+  String fullscreenImageTitle(int current, int total) {
+    return 'صورة $current من $total';
+  }
 }

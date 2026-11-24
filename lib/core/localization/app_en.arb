@@ -479,5 +479,43 @@
     }
   },
   "chatVerificationRequiredNotice": "You must answer the verification questions before opening this chat.",
-  "chatVerifyOwnershipAction": "Answer Verification Questions"
+  "chatVerifyOwnershipAction": "Answer Verification Questions",
+  "reportDetailsTitle": "Report details",
+  "reportNotFoundTitle": "Report not found",
+  "reportNotFoundMessage": "This report does not exist or has been deleted.",
+  "reportDetailsCategory": "Category",
+  "reportDetailsLocation": "Location",
+  "reportDetailsDate": "Date",
+  "reportDetailsDescription": "Description",
+  "reportDetailsPrivateDetails": "Private verification details",
+  "privateDetailsHiddenNotice": "Private verification details are hidden to protect the owner.",
+  "privateDetailsOwnerNotice": "Only you can see these verification details.",
+  "questionsNotice": "This report requires answering ownership verification questions.",
+  "thisIsMine": "This is Mine",
+  "iFoundThis": "I Found This",
+  "openChat": "Open Chat",
+  "claimBlocked": "You can't claim this item",
+  "claimFailed": "Failed to submit claim",
+  "potentialMatchesForYou": "{count, plural, =1{1 potential match for you} other{{count} potential matches for you}}",
+  "@potentialMatchesForYou": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "privateDetailsLabel": "Private verification details (optional)",
+  "privateDetailsHint": "Details only the true owner would know (e.g. serial number, lock code, hidden marks)...",
+  "privateDetailsHelper": "Visible only to you. Used by the system to verify claims.",
+  "fullscreenImageTitle": "Photo {current} of {total}",
+  "@fullscreenImageTitle": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

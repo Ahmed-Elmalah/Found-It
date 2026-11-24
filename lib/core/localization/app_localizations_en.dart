@@ -1093,4 +1093,83 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatVerifyOwnershipAction => 'Answer Verification Questions';
+
+  @override
+  String get reportDetailsTitle => 'Report details';
+
+  @override
+  String get reportNotFoundTitle => 'Report not found';
+
+  @override
+  String get reportNotFoundMessage =>
+      'This report does not exist or has been deleted.';
+
+  @override
+  String get reportDetailsCategory => 'Category';
+
+  @override
+  String get reportDetailsLocation => 'Location';
+
+  @override
+  String get reportDetailsDate => 'Date';
+
+  @override
+  String get reportDetailsDescription => 'Description';
+
+  @override
+  String get reportDetailsPrivateDetails => 'Private verification details';
+
+  @override
+  String get privateDetailsHiddenNotice =>
+      'Private verification details are hidden to protect the owner.';
+
+  @override
+  String get privateDetailsOwnerNotice =>
+      'Only you can see these verification details.';
+
+  @override
+  String get questionsNotice =>
+      'This report requires answering ownership verification questions.';
+
+  @override
+  String get thisIsMine => 'This is Mine';
+
+  @override
+  String get iFoundThis => 'I Found This';
+
+  @override
+  String get openChat => 'Open Chat';
+
+  @override
+  String get claimBlocked => 'You can\'t claim this item';
+
+  @override
+  String get claimFailed => 'Failed to submit claim';
+
+  @override
+  String potentialMatchesForYou(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count potential matches for you',
+      one: '1 potential match for you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get privateDetailsLabel => 'Private verification details (optional)';
+
+  @override
+  String get privateDetailsHint =>
+      'Details only the true owner would know (e.g. serial number, lock code, hidden marks)...';
+
+  @override
+  String get privateDetailsHelper =>
+      'Visible only to you. Used by the system to verify claims.';
+
+  @override
+  String fullscreenImageTitle(int current, int total) {
+    return 'Photo $current of $total';
+  }
 }
