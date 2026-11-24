@@ -30,11 +30,17 @@ class ChatState extends Equatable {
   bool get isClosed =>
       chatInfo?.status == 'rejected' || chatInfo?.status == 'recovered';
 
+  /// User Story #6 (Ownership Verification Questions)
+  bool get isClaimPending => chatInfo?.isClaimPending ?? false;
+  bool get iMustAnswer => chatInfo?.iMustAnswer ?? false;
+
   /// UI rule from docs/api_sprint2.md (section 6 & 7):
   /// "Show it ONLY if i_am_finder == true and status == 'chatting'"
+  /// and claim verification is not pending (User Story #6)
   bool get canConfirmOwnership =>
       (chatInfo?.iAmFinder ?? false) &&
       (chatInfo?.status == 'chatting') &&
+      !isClaimPending &&
       !isVerified;
 
   ChatState copyWith({

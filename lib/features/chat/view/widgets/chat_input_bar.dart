@@ -13,12 +13,14 @@ class ChatInputBar extends StatefulWidget {
     required this.onSendMessage,
     required this.onSendImage,
     this.isClosed = false,
+    this.lockedMessage,
     this.isSending = false,
   });
 
   final ValueChanged<String> onSendMessage;
   final void Function(Uint8List bytes, String extension) onSendImage;
   final bool isClosed;
+  final String? lockedMessage;
   final bool isSending;
 
   @override
@@ -179,7 +181,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
 
-    if (widget.isClosed) {
+    final isLocked = widget.isClosed || widget.lockedMessage != null;
+    if (isLocked) {
       return Padding(
         padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 14.h),
         child: ClipRRect(
@@ -187,7 +190,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 12.h),
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
               decoration: BoxDecoration(
                 color: isDark
                     ? Colors.white.withValues(alpha: 0.05)
@@ -196,7 +199,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
               ),
               child: Center(
                 child: Text(
-                  l10n.chatClosedMessage,
+                  widget.lockedMessage ?? l10n.chatClosedMessage,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,

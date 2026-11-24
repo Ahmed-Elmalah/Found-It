@@ -1081,4 +1081,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatMatchRejectedSuccess => 'Match closed successfully';
+
+  @override
+  String chatWaitingForVerificationQuestions(String name) {
+    return 'Waiting for $name to answer your verification questions';
+  }
+
+  @override
+  String get chatVerificationRequiredNotice =>
+      'You must answer the verification questions before opening this chat.';
+
+  @override
+  String get chatVerifyOwnershipAction => 'Answer Verification Questions';
 }

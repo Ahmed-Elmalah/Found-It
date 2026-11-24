@@ -471,5 +471,13 @@
   "chatRejectConfirmTitle": "Reject Match?",
   "chatRejectConfirmBody": "Are you sure you want to reject this match? This conversation will be closed permanently.",
   "chatRejectConfirmAction": "Reject",
-  "chatMatchRejectedSuccess": "Match closed successfully"
+  "chatMatchRejectedSuccess": "Match closed successfully",
+  "chatWaitingForVerificationQuestions": "Waiting for {name} to answer your verification questions",
+  "@chatWaitingForVerificationQuestions": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "chatVerificationRequiredNotice": "You must answer the verification questions before opening this chat.",
+  "chatVerifyOwnershipAction": "Answer Verification Questions"
 }
