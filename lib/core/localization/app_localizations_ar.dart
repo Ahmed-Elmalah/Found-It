@@ -1170,4 +1170,59 @@ class AppLocalizationsAr extends AppLocalizations {
   String fullscreenImageTitle(int current, int total) {
     return 'صورة $current من $total';
   }
+
+  @override
+  String get verificationQuestionsTitle => 'أسئلة إثبات الملكية';
+
+  @override
+  String get verificationQuestionsSubtitle =>
+      'أضف من 1 إلى 3 أسئلة باختيارات. يجب على من يطالب بهذا العنصر الإجابة عليها بشكل صحيح قبل فتح المحادثة.';
+
+  @override
+  String get addQuestionButton => '+ إضافة سؤال';
+
+  @override
+  String get removeQuestionButton => 'حذف';
+
+  @override
+  String questionNumber(int index) {
+    return 'السؤال $index';
+  }
+
+  @override
+  String get questionTextLabel => 'نص السؤال';
+
+  @override
+  String get questionTextHint => 'مثال: ما هو لون أو ماركة هذا الشيء؟';
+
+  @override
+  String get correctAnswerLabel => 'الإجابة الصحيحة';
+
+  @override
+  String get correctAnswerHint => 'الإجابة الحقيقية (مثال: أسود)';
+
+  @override
+  String wrongChoiceLabel(int index) {
+    return 'إجابة خاطئة $index';
+  }
+
+  @override
+  String get wrongChoiceHint => 'اختيار خاطئ مقنع';
+
+  @override
+  String get addWrongChoiceButton => '+ إضافة خيار خاطئ';
+
+  @override
+  String get questionRequiredError =>
+      'يجب إضافة سؤال تحقق واحد على الأقل للبلاغات التي تم العثور عليها.';
+
+  @override
+  String get questionTooShortError => 'يجب ألا يقل نص السؤال عن 3 أحرف.';
+
+  @override
+  String get answerRequiredError => 'جميع الإجابات مطلوبة.';
+
+  @override
+  String get duplicateAnswersError =>
+      'يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة.';
 }

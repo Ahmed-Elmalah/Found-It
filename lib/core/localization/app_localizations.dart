@@ -2231,6 +2231,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photo {current} of {total}'**
   String fullscreenImageTitle(int current, int total);
+
+  /// No description provided for @verificationQuestionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership Verification Questions'**
+  String get verificationQuestionsTitle;
+
+  /// No description provided for @verificationQuestionsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add 1 to 3 multiple-choice questions. Anyone claiming this item must answer correctly before chatting.'**
+  String get verificationQuestionsSubtitle;
+
+  /// No description provided for @addQuestionButton.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add Question'**
+  String get addQuestionButton;
+
+  /// No description provided for @removeQuestionButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get removeQuestionButton;
+
+  /// No description provided for @questionNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {index}'**
+  String questionNumber(int index);
+
+  /// No description provided for @questionTextLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Question'**
+  String get questionTextLabel;
+
+  /// No description provided for @questionTextHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. What color or brand is this item?'**
+  String get questionTextHint;
+
+  /// No description provided for @correctAnswerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct Answer'**
+  String get correctAnswerLabel;
+
+  /// No description provided for @correctAnswerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The real answer (e.g. Black)'**
+  String get correctAnswerHint;
+
+  /// No description provided for @wrongChoiceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong Choice {index}'**
+  String wrongChoiceLabel(int index);
+
+  /// No description provided for @wrongChoiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A believable wrong choice'**
+  String get wrongChoiceHint;
+
+  /// No description provided for @addWrongChoiceButton.
+  ///
+  /// In en, this message translates to:
+  /// **'+ Add Wrong Choice'**
+  String get addWrongChoiceButton;
+
+  /// No description provided for @questionRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 1 verification question is required for found items.'**
+  String get questionRequiredError;
+
+  /// No description provided for @questionTooShortError.
+  ///
+  /// In en, this message translates to:
+  /// **'Question must be at least 3 characters.'**
+  String get questionTooShortError;
+
+  /// No description provided for @answerRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'All answers are required.'**
+  String get answerRequiredError;
+
+  /// No description provided for @duplicateAnswersError.
+  ///
+  /// In en, this message translates to:
+  /// **'All choices for a question must be unique.'**
+  String get duplicateAnswersError;
 }
 
 class _AppLocalizationsDelegate

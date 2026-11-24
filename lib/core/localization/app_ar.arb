@@ -404,5 +404,21 @@
   "privateDetailsLabel": "تفاصيل تحقق سرية (اختياري)",
   "privateDetailsHint": "تفاصيل لا يعرفها سوى المالك الحقيقي (مثل: الرقم التسلسلي، رمز القفل، علامات مخفية)...",
   "privateDetailsHelper": "مرئية لك فقط، وتستخدم للتحقق من ملكية الشيء.",
-  "fullscreenImageTitle": "صورة {current} من {total}"
+  "fullscreenImageTitle": "صورة {current} من {total}",
+  "verificationQuestionsTitle": "أسئلة إثبات الملكية",
+  "verificationQuestionsSubtitle": "أضف من 1 إلى 3 أسئلة باختيارات. يجب على من يطالب بهذا العنصر الإجابة عليها بشكل صحيح قبل فتح المحادثة.",
+  "addQuestionButton": "+ إضافة سؤال",
+  "removeQuestionButton": "حذف",
+  "questionNumber": "السؤال {index}",
+  "questionTextLabel": "نص السؤال",
+  "questionTextHint": "مثال: ما هو لون أو ماركة هذا الشيء؟",
+  "correctAnswerLabel": "الإجابة الصحيحة",
+  "correctAnswerHint": "الإجابة الحقيقية (مثال: أسود)",
+  "wrongChoiceLabel": "إجابة خاطئة {index}",
+  "wrongChoiceHint": "اختيار خاطئ مقنع",
+  "addWrongChoiceButton": "+ إضافة خيار خاطئ",
+  "questionRequiredError": "يجب إضافة سؤال تحقق واحد على الأقل للبلاغات التي تم العثور عليها.",
+  "questionTooShortError": "يجب ألا يقل نص السؤال عن 3 أحرف.",
+  "answerRequiredError": "جميع الإجابات مطلوبة.",
+  "duplicateAnswersError": "يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة."
 }

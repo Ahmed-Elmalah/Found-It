@@ -1172,4 +1172,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String fullscreenImageTitle(int current, int total) {
     return 'Photo $current of $total';
   }
+
+  @override
+  String get verificationQuestionsTitle => 'Ownership Verification Questions';
+
+  @override
+  String get verificationQuestionsSubtitle =>
+      'Add 1 to 3 multiple-choice questions. Anyone claiming this item must answer correctly before chatting.';
+
+  @override
+  String get addQuestionButton => '+ Add Question';
+
+  @override
+  String get removeQuestionButton => 'Remove';
+
+  @override
+  String questionNumber(int index) {
+    return 'Question $index';
+  }
+
+  @override
+  String get questionTextLabel => 'Question';
+
+  @override
+  String get questionTextHint => 'e.g. What color or brand is this item?';
+
+  @override
+  String get correctAnswerLabel => 'Correct Answer';
+
+  @override
+  String get correctAnswerHint => 'The real answer (e.g. Black)';
+
+  @override
+  String wrongChoiceLabel(int index) {
+    return 'Wrong Choice $index';
+  }
+
+  @override
+  String get wrongChoiceHint => 'A believable wrong choice';
+
+  @override
+  String get addWrongChoiceButton => '+ Add Wrong Choice';
+
+  @override
+  String get questionRequiredError =>
+      'At least 1 verification question is required for found items.';
+
+  @override
+  String get questionTooShortError => 'Question must be at least 3 characters.';
+
+  @override
+  String get answerRequiredError => 'All answers are required.';
+
+  @override
+  String get duplicateAnswersError =>
+      'All choices for a question must be unique.';
 }
