@@ -18,6 +18,7 @@ import 'package:found_it/features/reports/view/ui/widgets/date_picker_field.dart
 import 'package:found_it/features/reports/view/ui/widgets/district_selector_field.dart';
 import 'package:found_it/features/reports/view/ui/widgets/photo_uploader_widget.dart';
 import 'package:found_it/features/reports/view/ui/widgets/report_type_toggle.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class CreateReportScreen extends StatefulWidget {
   const CreateReportScreen({super.key});
@@ -139,7 +140,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
 
         final hasRejectedPhotos =
             form.hasInvalidFile || form.rejectedPhotoIndices.isNotEmpty;
-        final hasValidationErrors = errors.isNotEmpty;
+        final hasValidationErrors =
+            errors.isNotEmpty || form.questionsError != null;
 
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -317,6 +319,16 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                             onChanged: cubit.updatePrivateDetails,
                           ),
                           SizedBox(height: 20.h),
+
+                          // ── Verification Questions (Found reports only) ─────
+                          if (!form.isLost) ...[
+                            VerificationQuestionsForm(
+                              questions: form.questions,
+                              onChanged: cubit.updateQuestions,
+                              errorText: form.questionsError,
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
 
                           // ── Photos ──────────────────────────────────────────
                           PhotoUploaderWidget(

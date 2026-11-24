@@ -12,6 +12,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_categories_use_ca
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class CreateReportCubit extends Cubit<CreateReportState> {
   final GetCategoriesUseCase getCategories;
@@ -74,7 +75,21 @@ class CreateReportCubit extends Cubit<CreateReportState> {
   }
 
   void toggleReportType(bool isLost) {
-    emit(_currentForm.copyWith(isLost: isLost));
+    final questions = !isLost && _currentForm.questions.isEmpty
+        ? [QuestionDraft()]
+        : _currentForm.questions;
+    emit(_currentForm.copyWith(
+      isLost: isLost,
+      questions: questions,
+      clearQuestionsError: true,
+    ));
+  }
+
+  void updateQuestions(List<QuestionDraft> questions) {
+    emit(_currentForm.copyWith(
+      questions: questions,
+      clearQuestionsError: true,
+    ));
   }
 
   void updateTitle(String value) {
@@ -211,10 +226,37 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       errors['photos'] = ReportFieldError.required;
     }
 
-    if (errors.isNotEmpty || form.rejectedPhotoIndices.isNotEmpty) {
+    String? qError;
+    if (!form.isLost) {
+      if (form.questions.isEmpty) {
+        qError = 'At least 1 verification question is required for found items.';
+      } else {
+        for (final q in form.questions) {
+          if (q.question.trim().length < 3) {
+            qError = 'Question must be at least 3 characters.';
+            break;
+          }
+          if (q.correct.trim().isEmpty || q.wrong.any((w) => w.trim().isEmpty)) {
+            qError = 'All answers are required.';
+            break;
+          }
+          final answers = [
+            q.correct.trim().toLowerCase(),
+            ...q.wrong.map((w) => w.trim().toLowerCase()),
+          ];
+          if (answers.toSet().length != answers.length) {
+            qError = 'All choices for a question must be unique.';
+            break;
+          }
+        }
+      }
+    }
+
+    if (errors.isNotEmpty || form.rejectedPhotoIndices.isNotEmpty || qError != null) {
       emit(form.copyWith(
         title: trimmedTitle,
         errors: errors,
+        questionsError: qError,
         hasInvalidFile: form.rejectedPhotoIndices.isNotEmpty,
       ));
       return;
@@ -223,6 +265,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     emit(form.copyWith(
       title: trimmedTitle,
       errors: const {},
+      clearQuestionsError: true,
       isSubmitting: true,
       clearSubmitFailure: true,
     ));
@@ -241,6 +284,9 @@ class CreateReportCubit extends Cubit<CreateReportState> {
         privateDetails: form.privateDetails?.trim().isNotEmpty == true
             ? form.privateDetails!.trim()
             : null,
+        questions: form.isLost
+            ? null
+            : form.questions.map((q) => q.toJson()).toList(),
       ));
 
       emit(CreateReportSuccess(refCode));

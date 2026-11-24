@@ -21,6 +21,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_ca
 import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class _FakeReportsRepository implements ReportsRepository {
   final List<CategoryEntity> categories = const [
@@ -283,5 +284,65 @@ void main() {
     expect(form.isSubmitting, false);
 
     await failCubit.close();
+  });
+
+  test('toggleReportType to found initializes draft question if empty', () {
+    cubit.toggleReportType(false);
+    final form = cubit.state as CreateReportFormState;
+    expect(form.isLost, false);
+    expect(form.questions.length, 1);
+  });
+
+  test('submitting found report without questions or invalid questions sets questionsError', () async {
+    await cubit.loadInitialData();
+    cubit.toggleReportType(false);
+    cubit.updateTitle('Found Blue Keyring');
+    cubit.selectCategory('cat_1');
+    cubit.selectDistrict('area_1');
+    picker.photoToReturn = ReportImage(
+      name: 'key.png',
+      bytes: Uint8List.fromList([1, 2, 3]),
+    );
+    await cubit.pickPhoto(ImageSource.gallery);
+
+    // Initial draft has empty question and empty wrong answers
+    await cubit.submit();
+    var form = cubit.state as CreateReportFormState;
+    expect(form.questionsError, isNotNull);
+
+    // Empty questions list
+    cubit.updateQuestions([]);
+    await cubit.submit();
+    form = cubit.state as CreateReportFormState;
+    expect(form.questionsError, isNotNull);
+  });
+
+  test('submitting found report with valid questions succeeds and passes questions', () async {
+    await cubit.loadInitialData();
+    cubit.toggleReportType(false);
+    cubit.updateTitle('Found Blue Keyring');
+    cubit.selectCategory('cat_1');
+    cubit.selectDistrict('area_1');
+    picker.photoToReturn = ReportImage(
+      name: 'key.png',
+      bytes: Uint8List.fromList([1, 2, 3]),
+    );
+    await cubit.pickPhoto(ImageSource.gallery);
+
+    cubit.updateQuestions([
+      QuestionDraft(
+        question: 'What color is the keychain?',
+        correct: 'Blue',
+        wrong: ['Red', 'Green'],
+      ),
+    ]);
+
+    await cubit.submit();
+    expect(cubit.state, isA<CreateReportSuccess>());
+    expect(repo.lastCreatedParams?.questions, isNotNull);
+    expect(repo.lastCreatedParams!.questions!.length, 1);
+    expect(repo.lastCreatedParams!.questions!.first['question'], 'What color is the keychain?');
+    expect(repo.lastCreatedParams!.questions!.first['correct'], 'Blue');
+    expect(repo.lastCreatedParams!.questions!.first['wrong'], ['Red', 'Green']);
   });
 }

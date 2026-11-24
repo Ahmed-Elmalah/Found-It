@@ -26,6 +26,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_
 import 'package:found_it/features/reports/view/cubit/create_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 import '../../../../helpers/test_app.dart';
 
@@ -248,5 +249,16 @@ void main() {
     await _pump(tester, initialLocation: AppRoutes.reportCreated);
 
     expect(find.text('HOME PAGE'), findsOneWidget);
+  });
+
+  testWidgets('toggling to found displays VerificationQuestionsForm', (tester) async {
+    await _pump(tester);
+
+    expect(find.byType(VerificationQuestionsForm), findsNothing);
+
+    await tester.tap(find.text('Found'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(VerificationQuestionsForm), findsOneWidget);
   });
 }
