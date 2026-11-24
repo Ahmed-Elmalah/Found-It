@@ -47,6 +47,7 @@ import 'package:found_it/features/reports/view/ui/create_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
 import 'package:found_it/features/reports/view/ui/my_reports_screen.dart';
 import 'package:found_it/features/reports/view/ui/report_created_screen.dart';
+import 'package:found_it/features/reports/view/ui/report_details_screen.dart';
 import 'package:found_it/features/root/view/ui/main_shell.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -255,7 +256,7 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.reportDetails,
       builder: (context, state) {
         final id = state.pathParameters['id'] ?? '';
-        return _ComingSoon('Report Details ($id)');
+        return ReportDetailsScreen(reportId: id);
       },
     ),
 

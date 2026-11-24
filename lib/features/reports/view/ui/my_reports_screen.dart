@@ -232,6 +232,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
           final report = state.reports[index];
           return MyReportCard(
             report: report,
+            onTap: () => context.push(AppRoutes.reportDetailsPath(report.id)),
             onEdit: () => _onEditReport(report),
             onDelete: () => _onDeleteReport(report),
           );

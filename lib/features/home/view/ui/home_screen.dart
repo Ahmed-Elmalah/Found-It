@@ -119,6 +119,9 @@ class HomeScreen extends StatelessWidget {
                                   cityName: cityName,
                                   reports: state.reports,
                                   onRefresh: () => cubit.refresh(),
+                                  onItemTap: (item) => context.push(
+                                    AppRoutes.reportDetailsPath(item.id),
+                                  ),
                                 ),
                       },
                     ),
