@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/chat/domain/entities/chat_failure.dart';
 import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
 import 'package:found_it/features/chat/view/cubit/chat_cubit.dart';
@@ -49,6 +51,16 @@ class _ChatViewState extends State<_ChatView> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _checkClaimPendingRedirect(context.read<ChatCubit>().state);
+    });
+  }
+
+  void _checkClaimPendingRedirect(ChatState state) {
+    if (state.isClaimPending && state.iMustAnswer && mounted) {
+      context.pushReplacement(AppRoutes.claimVerifyPath(widget.matchId));
+    }
   }
 
   @override
@@ -107,7 +119,16 @@ class _ChatViewState extends State<_ChatView> {
       backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: true,
       body: BlocConsumer<ChatCubit, ChatState>(
+        listenWhen: (previous, current) =>
+            previous.isClaimPending != current.isClaimPending ||
+            previous.iMustAnswer != current.iMustAnswer ||
+            previous.messages != current.messages ||
+            previous.failure != current.failure,
         listener: (context, state) {
+          if (state.isClaimPending && state.iMustAnswer) {
+            _checkClaimPendingRedirect(state);
+            return;
+          }
           if (state.messages.isNotEmpty) {
             _scrollToBottom();
           }
@@ -127,6 +148,15 @@ class _ChatViewState extends State<_ChatView> {
         builder: (context, state) {
           final cubit = context.read<ChatCubit>();
           final messages = state.messages;
+          final l10n = AppLocalizations.of(context);
+          final isClaimLockedForFinder = state.isClaimPending && !state.iMustAnswer;
+          final lockedMessage = isClaimLockedForFinder
+              ? l10n.chatWaitingForVerificationQuestions(
+                  state.chatInfo?.otherUserName.isNotEmpty == true
+                      ? state.chatInfo!.otherUserName
+                      : '',
+                )
+              : null;
           final hasSafetyBanner = !state.isVerified;
           final totalItemCount = messages.length + (hasSafetyBanner ? 1 : 0);
 
@@ -199,7 +229,8 @@ class _ChatViewState extends State<_ChatView> {
 
                       // Floating Capsule Input Bar
                       ChatInputBar(
-                        isClosed: state.isClosed,
+                        isClosed: state.isClosed || isClaimLockedForFinder,
+                        lockedMessage: lockedMessage,
                         isSending: state.isSending,
                         onSendMessage: (text) => cubit.sendMessage(text),
                         onSendImage: (bytes, ext) => cubit.sendImage(bytes, ext),

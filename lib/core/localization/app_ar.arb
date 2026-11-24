@@ -380,5 +380,8 @@
   "chatRejectConfirmTitle": "إنهاء هذا التطابق؟",
   "chatRejectConfirmBody": "هل أنت متأكد من رغبتك في إنهاء هذا التطابق؟ سيتم إغلاق المحادثة نهائياً.",
   "chatRejectConfirmAction": "إنهاء التطابق",
-  "chatMatchRejectedSuccess": "تم إغلاق التطابق بنجاح"
+  "chatMatchRejectedSuccess": "تم إغلاق التطابق بنجاح",
+  "chatWaitingForVerificationQuestions": "في انتظار {name} للإجابة على أسئلة التحقق الخاصة بك",
+  "chatVerificationRequiredNotice": "يجب الإجابة على أسئلة التحقق أولاً قبل فتح المحادثة.",
+  "chatVerifyOwnershipAction": "الإجابة على أسئلة التحقق"
 }

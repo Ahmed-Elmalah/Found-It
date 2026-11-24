@@ -19,6 +19,8 @@ class ChatItemEntity extends Equatable {
     this.otherReport,
     this.lastMessage,
     this.unreadCount = 0,
+    this.claimStatus = 'not_required',
+    this.iMustAnswer = false,
   });
 
   final String matchId;
@@ -36,8 +38,16 @@ class ChatItemEntity extends Equatable {
   final ChatLastMessageEntity? lastMessage;
   final int unreadCount;
 
+  /// User Story #6 (Ownership Verification Questions)
+  /// Values: 'not_required' | 'pending' | 'passed' | 'failed'
+  final String claimStatus;
+
+  /// True if the current user is the claimant who must answer before chatting
+  final bool iMustAnswer;
+
   bool get isClosed => status == 'recovered' || status == 'rejected';
   bool get isVerified => status == 'verified' || ownershipVerified;
+  bool get isClaimPending => claimStatus == 'pending';
 
   /// P31 specification from docs/api_sprint2.md:
   /// Use the lost side:
@@ -65,6 +75,8 @@ class ChatItemEntity extends Equatable {
     ChatReportSummaryEntity? otherReport,
     ChatLastMessageEntity? lastMessage,
     int? unreadCount,
+    String? claimStatus,
+    bool? iMustAnswer,
   }) {
     return ChatItemEntity(
       matchId: matchId ?? this.matchId,
@@ -81,6 +93,8 @@ class ChatItemEntity extends Equatable {
       otherReport: otherReport ?? this.otherReport,
       lastMessage: lastMessage ?? this.lastMessage,
       unreadCount: unreadCount ?? this.unreadCount,
+      claimStatus: claimStatus ?? this.claimStatus,
+      iMustAnswer: iMustAnswer ?? this.iMustAnswer,
     );
   }
 
@@ -100,5 +114,7 @@ class ChatItemEntity extends Equatable {
         otherReport,
         lastMessage,
         unreadCount,
+        claimStatus,
+        iMustAnswer,
       ];
 }

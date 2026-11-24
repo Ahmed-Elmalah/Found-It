@@ -2087,6 +2087,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Match closed successfully'**
   String get chatMatchRejectedSuccess;
+
+  /// No description provided for @chatWaitingForVerificationQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for {name} to answer your verification questions'**
+  String chatWaitingForVerificationQuestions(String name);
+
+  /// No description provided for @chatVerificationRequiredNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You must answer the verification questions before opening this chat.'**
+  String get chatVerificationRequiredNotice;
+
+  /// No description provided for @chatVerifyOwnershipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer Verification Questions'**
+  String get chatVerifyOwnershipAction;
 }
 
 class _AppLocalizationsDelegate

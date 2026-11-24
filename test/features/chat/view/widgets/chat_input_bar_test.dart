@@ -76,4 +76,41 @@ void main() {
 
     expect(find.text('تم إغلاق هذه المحادثة'), findsOneWidget);
   });
+
+  testWidgets('renders custom lockedMessage when lockedMessage is provided', (tester) async {
+    await pumpTestApp(
+      tester,
+      ChatInputBar(
+        lockedMessage: 'Waiting for Mohamed to answer your verification questions',
+        onSendMessage: (_) {},
+        onSendImage: (bytes, ext) {},
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Waiting for Mohamed to answer your verification questions'),
+      findsOneWidget,
+    );
+    expect(find.byType(TextField), findsNothing);
+  });
+
+  testWidgets('renders Arabic lockedMessage when provided', (tester) async {
+    await pumpTestApp(
+      tester,
+      ChatInputBar(
+        lockedMessage: 'في انتظار محمد للإجابة على أسئلة التحقق الخاصة بك',
+        onSendMessage: (_) {},
+        onSendImage: (bytes, ext) {},
+      ),
+      rtl: true,
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('في انتظار محمد للإجابة على أسئلة التحقق الخاصة بك'),
+      findsOneWidget,
+    );
+    expect(find.byType(TextField), findsNothing);
+  });
 }

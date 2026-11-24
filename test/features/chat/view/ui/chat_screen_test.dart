@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/features/chat/domain/entities/chat_item_entity.dart';
@@ -191,6 +193,69 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('This conversation is closed'), findsOneWidget);
+    });
+
+    testWidgets('shows waiting verification questions message to finder when claim_status is pending', (tester) async {
+      repository.matchDetails = const ChatItemEntity(
+        matchId: 'match-1',
+        status: 'chatting',
+        otherUserName: 'Omar Khaled',
+        iAmFinder: true,
+        claimStatus: 'pending',
+        iMustAnswer: false,
+      );
+
+      await pumpTestApp(
+        tester,
+        const ChatScreen(matchId: 'match-1'),
+        padded: false,
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(
+        find.text('Waiting for Omar Khaled to answer your verification questions'),
+        findsOneWidget,
+      );
+      // Input bar is disabled / no TextField
+      expect(find.byType(TextField), findsNothing);
+      // Header options button with reject match remains visible
+      expect(find.byIcon(Icons.more_vert_rounded), findsOneWidget);
+    });
+
+    testWidgets('redirects claimant to verify screen when claim_status is pending and iMustAnswer is true', (tester) async {
+      repository.matchDetails = const ChatItemEntity(
+        matchId: 'match-99',
+        status: 'chatting',
+        otherUserName: 'Omar Khaled',
+        iAmFinder: false,
+        claimStatus: 'pending',
+        iMustAnswer: true,
+      );
+
+      final router = GoRouter(
+        initialLocation: '/chat/match-99',
+        routes: [
+          GoRoute(
+            path: '/chat/:matchId',
+            builder: (context, state) => ChatScreen(
+              matchId: state.pathParameters['matchId'] ?? '',
+            ),
+          ),
+          GoRoute(
+            path: '/matches/:id/verify',
+            builder: (context, state) => Scaffold(
+              body: Text('VERIFY PAGE match: ${state.pathParameters['id']}'),
+            ),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      expect(find.text('VERIFY PAGE match: match-99'), findsOneWidget);
     });
   });
 }

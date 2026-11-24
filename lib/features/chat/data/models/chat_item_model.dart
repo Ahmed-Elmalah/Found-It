@@ -18,6 +18,8 @@ class ChatItemModel extends ChatItemEntity {
     super.otherReport,
     super.lastMessage,
     super.unreadCount,
+    super.claimStatus,
+    super.iMustAnswer,
   });
 
   factory ChatItemModel.fromJson(Map<String, dynamic> json) {
@@ -72,6 +74,8 @@ class ChatItemModel extends ChatItemEntity {
       otherReport: otherReport,
       lastMessage: lastMessage,
       unreadCount: parsedUnread,
+      claimStatus: json['claim_status']?.toString() ?? 'not_required',
+      iMustAnswer: json['i_must_answer'] == true,
     );
   }
 
@@ -90,5 +94,7 @@ class ChatItemModel extends ChatItemEntity {
         'other_report': (otherReport as ChatReportSummaryModel?)?.toJson(),
         'last_message': (lastMessage as ChatLastMessageModel?)?.toJson(),
         'unread_count': unreadCount,
+        'claim_status': claimStatus,
+        'i_must_answer': iMustAnswer,
       };
 }
