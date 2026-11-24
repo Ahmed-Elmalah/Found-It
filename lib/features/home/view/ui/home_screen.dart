@@ -112,12 +112,14 @@ class HomeScreen extends StatelessWidget {
                               ? HomeEmptyView(
                                   key: const ValueKey('home_empty'),
                                   cityName: cityName,
+                                  potentialMatchesCount: state.potentialMatchesCount,
                                   onRefresh: () => cubit.refresh(),
                                 )
                               : HomeSuccessView(
                                   key: const ValueKey('home_success'),
                                   cityName: cityName,
                                   reports: state.reports,
+                                  potentialMatchesCount: state.potentialMatchesCount,
                                   onRefresh: () => cubit.refresh(),
                                   onItemTap: (item) => context.push(
                                     AppRoutes.reportDetailsPath(item.id),

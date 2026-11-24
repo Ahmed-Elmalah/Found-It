@@ -17,6 +17,7 @@ final class HomeState extends Equatable {
     this.reports = const [],
     this.selectedCityId = '',
     this.selectedCity,
+    this.potentialMatchesCount = 0,
     this.failure,
   });
 
@@ -24,6 +25,7 @@ final class HomeState extends Equatable {
   final List<HomeReportItem> reports;
   final String selectedCityId;
   final CityEntity? selectedCity;
+  final int potentialMatchesCount;
   final HomeFailure? failure;
 
   bool get isLoading => status == HomeStatus.loading;
@@ -36,6 +38,7 @@ final class HomeState extends Equatable {
     List<HomeReportItem>? reports,
     String? selectedCityId,
     CityEntity? selectedCity,
+    int? potentialMatchesCount,
     HomeFailure? failure,
     bool clearFailure = false,
   }) {
@@ -44,6 +47,7 @@ final class HomeState extends Equatable {
       reports: reports ?? this.reports,
       selectedCityId: selectedCityId ?? this.selectedCityId,
       selectedCity: selectedCity ?? this.selectedCity,
+      potentialMatchesCount: potentialMatchesCount ?? this.potentialMatchesCount,
       failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
@@ -54,6 +58,7 @@ final class HomeState extends Equatable {
         reports,
         selectedCityId,
         selectedCity,
+        potentialMatchesCount,
         failure,
       ];
 }

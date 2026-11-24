@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/auth/domain/auth_repository.dart';
 import 'package:found_it/features/auth/domain/get_current_user_use_case.dart';
 import 'package:found_it/features/auth/domain/has_active_session_use_case.dart';
@@ -27,8 +29,12 @@ import 'package:found_it/features/home/view/widgets/home_error_view.dart';
 import 'package:found_it/features/home/view/widgets/home_feed_item_card.dart';
 import 'package:found_it/features/home/view/widgets/home_header.dart';
 import 'package:found_it/features/home/view/widgets/home_hero_banner.dart';
+import 'package:found_it/features/home/view/widgets/home_potential_matches_banner.dart';
 import 'package:found_it/features/home/view/widgets/home_shimmer_view.dart';
 import 'package:found_it/features/home/view/widgets/home_success_view.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/notifications/domain/entities/notification_entity.dart';
 import 'package:found_it/features/notifications/domain/repositories/notifications_repository.dart';
 import 'package:found_it/features/notifications/domain/use_cases/get_my_notifications_use_case.dart';
@@ -37,6 +43,18 @@ import 'package:found_it/features/notifications/domain/use_cases/watch_notificat
 import 'package:found_it/features/notifications/view/cubit/notifications_cubit.dart';
 import 'package:found_it/features/notifications/view/cubit/notifications_state.dart';
 import '../../../../helpers/test_app.dart';
+
+class _FakeMatchesRepo implements MatchesRepository {
+  int count = 0;
+  @override
+  Future<int> getMyMatchesCount() async => count;
+  @override
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  @override
+  Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
+  @override
+  Future<void> rejectMatch(String matchId) => throw UnimplementedError();
+}
 
 class _FakeAuthRepository implements AuthRepository {
   @override
@@ -326,5 +344,70 @@ void main() {
       find.byKey(const ValueKey('home_notification_dot')),
       findsNothing,
     );
+  });
+
+  testWidgets(
+      'displays potential matches banner when potentialMatchesCount > 0 and navigates to matches on tap',
+      (tester) async {
+    final matchesRepo = _FakeMatchesRepo()..count = 2;
+    homeRepo.reports = tReports;
+
+    homeCubit = HomeCubit(
+      getHomeFeedUseCase: GetHomeFeedUseCase(homeRepo),
+      getCitiesUseCase: GetCitiesUseCase(cityRepo),
+      selectCityUseCase: SelectCityUseCase(cityRepo),
+      getMyMatchesCountUseCase: GetMyMatchesCountUseCase(matchesRepo),
+    );
+    await homeCubit.init(initialCityId: 'c1');
+
+    final router = GoRouter(
+      initialLocation: '/home',
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder: (_, _) => MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthCubit>.value(value: authCubit),
+              BlocProvider<HomeCubit>.value(value: homeCubit),
+            ],
+            child: const HomeScreen(),
+          ),
+        ),
+        GoRoute(
+          path: AppRoutes.matches,
+          builder: (_, _) => const Scaffold(body: Text('MATCHES_SCREEN')),
+        ),
+      ],
+    );
+
+    await pumpTestRouterApp(tester, router);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(HomePotentialMatchesBanner), findsOneWidget);
+    expect(find.text('2 potential matches for you'), findsOneWidget);
+
+    await tester.tap(find.byType(HomePotentialMatchesBanner));
+    await tester.pumpAndSettle();
+
+    expect(find.text('MATCHES_SCREEN'), findsOneWidget);
+  });
+
+  testWidgets('hides potential matches banner when potentialMatchesCount == 0',
+      (tester) async {
+    final matchesRepo = _FakeMatchesRepo()..count = 0;
+    homeRepo.reports = tReports;
+
+    homeCubit = HomeCubit(
+      getHomeFeedUseCase: GetHomeFeedUseCase(homeRepo),
+      getCitiesUseCase: GetCitiesUseCase(cityRepo),
+      selectCityUseCase: SelectCityUseCase(cityRepo),
+      getMyMatchesCountUseCase: GetMyMatchesCountUseCase(matchesRepo),
+    );
+    await homeCubit.init(initialCityId: 'c1');
+
+    await pumpScreen(tester);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(HomePotentialMatchesBanner), findsNothing);
   });
 }

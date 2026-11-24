@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/profile/domain/entities/city_entity.dart';
 import 'package:found_it/features/profile/domain/entities/profile_failure.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
@@ -75,6 +78,18 @@ class _FakeProfileRepo implements ProfileRepository {
     lastUpdatedCity = cityId;
     profile = profile.copyWith(cityId: cityId);
   }
+}
+
+class _FakeMatchesRepo implements MatchesRepository {
+  int count = 0;
+  @override
+  Future<int> getMyMatchesCount() async => count;
+  @override
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  @override
+  Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
+  @override
+  Future<void> rejectMatch(String matchId) => throw UnimplementedError();
 }
 
 class _FakeReportsRepoForProfile implements ReportsRepository {
@@ -155,6 +170,25 @@ void main() {
       expect(cubit.state.profile?.fullName, 'Adham Alrefaay');
       expect(cubit.state.activeCities.length, 2);
       expect(cubit.state.reportsCount, 5);
+      expect(cubit.state.matchesCount, 0);
+    });
+
+    test('loadProfile loads matchesCount when GetMyMatchesCountUseCase is provided', () async {
+      final matchesRepo = _FakeMatchesRepo()..count = 4;
+      final cubitWithMatches = ProfileCubit(
+        GetProfileUseCase(repo),
+        UpdateProfileUseCase(repo),
+        SetMyCityUseCase(repo),
+        GetActiveCitiesUseCase(repo),
+        GetMyReportsCountsUseCase(reportsRepo),
+        GetMyMatchesCountUseCase(matchesRepo),
+      );
+      addTearDown(cubitWithMatches.close);
+
+      await cubitWithMatches.loadProfile();
+
+      expect(cubitWithMatches.state.status, ProfileStatus.success);
+      expect(cubitWithMatches.state.matchesCount, 4);
     });
 
     test('loadProfile emits failure on error without string error', () async {

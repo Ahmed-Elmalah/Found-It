@@ -9,12 +9,14 @@ import 'package:found_it/features/city/domain/select_city_use_case.dart';
 import 'package:found_it/features/home/domain/entities/home_failure.dart';
 import 'package:found_it/features/home/domain/use_cases/get_home_feed_use_case.dart';
 import 'package:found_it/features/home/view/cubit/home_state.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
     required this.getHomeFeedUseCase,
     required this.getCitiesUseCase,
     required this.selectCityUseCase,
+    this.getMyMatchesCountUseCase,
     ReportsChangedNotifier? reportsChangedNotifier,
   }) : super(const HomeState()) {
     _reportsChangedSubscription =
@@ -24,6 +26,7 @@ class HomeCubit extends Cubit<HomeState> {
   final GetHomeFeedUseCase getHomeFeedUseCase;
   final GetCitiesUseCase getCitiesUseCase;
   final SelectCityUseCase selectCityUseCase;
+  final GetMyMatchesCountUseCase? getMyMatchesCountUseCase;
   StreamSubscription<void>? _reportsChangedSubscription;
 
   List<CityEntity> _cachedCities = const [];
@@ -119,6 +122,15 @@ class HomeCubit extends Cubit<HomeState> {
     }
 
     try {
+      int matchesCount = state.potentialMatchesCount;
+      if (getMyMatchesCountUseCase != null) {
+        try {
+          matchesCount = await getMyMatchesCountUseCase!();
+        } catch (_) {
+          // Keep existing matches count if call fails
+        }
+      }
+
       final reports = await getHomeFeedUseCase(
         cityId: cityId,
         type: 'found',
@@ -127,6 +139,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(
         status: HomeStatus.success,
         reports: reports,
+        potentialMatchesCount: matchesCount,
         clearFailure: true,
       ));
     } catch (e) {

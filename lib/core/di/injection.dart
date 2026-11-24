@@ -240,6 +240,7 @@ void _registerHome() {
         getHomeFeedUseCase: sl(),
         selectCityUseCase: sl(),
         getCitiesUseCase: sl(),
+        getMyMatchesCountUseCase: sl(),
         reportsChangedNotifier: sl(),
       ),
     );
@@ -429,7 +430,7 @@ void _registerProfile() {
     ..registerLazySingleton(() => UpdateProfileUseCase(sl()))
     ..registerLazySingleton(() => SetMyCityUseCase(sl()))
     ..registerLazySingleton(() => GetActiveCitiesUseCase(sl()))
-    ..registerFactory(() => ProfileCubit(sl(), sl(), sl(), sl(), sl()));
+    ..registerFactory(() => ProfileCubit(sl(), sl(), sl(), sl(), sl(), sl()));
 }
 
 // ---------------------------------------------------------------------

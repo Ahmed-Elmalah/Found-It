@@ -11,6 +11,9 @@ import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:found_it/features/auth/domain/watch_auth_state_use_case.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/profile/domain/entities/city_entity.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/domain/repositories/profile_repository.dart';
@@ -65,6 +68,18 @@ class _FakeProfileRepo implements ProfileRepository {
 
   @override
   Future<void> setMyCity(String cityId) async {}
+}
+
+class _FakeMatchesRepo implements MatchesRepository {
+  int count = 0;
+  @override
+  Future<int> getMyMatchesCount() async => count;
+  @override
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  @override
+  Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
+  @override
+  Future<void> rejectMatch(String matchId) => throw UnimplementedError();
 }
 
 class _FakeReportsRepoForProfileScreen implements ReportsRepository {
@@ -206,6 +221,35 @@ void main() {
 
       await tester.scrollUntilVisible(find.text('Log out'), 200);
       expect(find.text('Log out'), findsOneWidget);
+    });
+
+    testWidgets('renders real potential matches count in activity section', (tester) async {
+      final matchesRepo = _FakeMatchesRepo()..count = 7;
+      final cubitWithMatches = ProfileCubit(
+        GetProfileUseCase(profileRepo),
+        UpdateProfileUseCase(profileRepo),
+        SetMyCityUseCase(profileRepo),
+        GetActiveCitiesUseCase(profileRepo),
+        GetMyReportsCountsUseCase(reportsRepo),
+        GetMyMatchesCountUseCase(matchesRepo),
+      );
+      addTearDown(cubitWithMatches.close);
+
+      await pumpTestApp(
+        tester,
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: cubitWithMatches),
+            BlocProvider<AuthCubit>.value(value: authCubit),
+            BlocProvider<AppPreferencesCubit>.value(value: prefsCubit),
+          ],
+          child: const ProfileScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Potential Matches'), findsOneWidget);
+      expect(find.text('7'), findsOneWidget);
     });
   });
 }
