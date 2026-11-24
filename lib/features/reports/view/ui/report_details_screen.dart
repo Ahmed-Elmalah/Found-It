@@ -427,34 +427,58 @@ class _ReportDetailsContent extends StatelessWidget {
               ],
             ],
 
-            // 7. Owner Sections (Mark Recovered & Potential Matches)
+            // 7. Owner Sections (Edit Report, Mark Recovered & Potential Matches)
             if (report.isMine) ...[
               SizedBox(height: 20.h),
-              if (!report.isRecovered && report.myMatchId != null) ...[
-                MarkRecoveredButton(
-                  onConfirmed: () async {
-                    final recoveryCubit = sl<RecoveryCubit>();
-                    final ok = await recoveryCubit.confirmRecovery(report.myMatchId!);
-                    if (ok && context.mounted) {
+              if (!report.isRecovered) ...[
+                AppButton(
+                  label: l10n.editReportTitle,
+                  variant: AppButtonVariant.outlined,
+                  onPressed: () async {
+                    final edited = await context.push<bool>(
+                      AppRoutes.editReport,
+                      extra: report.toReportEntity(),
+                    );
+                    if (context.mounted && edited == true) {
                       context.read<ReportDetailsCubit>().refresh();
                     }
                   },
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 12.h),
               ],
               BlocBuilder<MatchesCubit, MatchesState>(
                 builder: (context, matchesState) {
                   final matches = matchesState is MatchesLoaded
                       ? matchesState.matches
                       : const <MatchEntity>[];
-                  return PotentialMatchesSection(
-                    matches: matches,
-                    onViewAll: () {
-                      context.push('${AppRoutes.matches}?reportId=${report.id}');
-                    },
-                    onSelectMatch: (MatchEntity match) {
-                      context.push(AppRoutes.matchComparePath(match.matchId), extra: match);
-                    },
+                  final recoveryMatchId = report.myMatchId ??
+                      (matches.isNotEmpty ? matches.first.matchId : null);
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (!report.isRecovered && recoveryMatchId != null) ...[
+                        MarkRecoveredButton(
+                          onConfirmed: () async {
+                            final recoveryCubit = sl<RecoveryCubit>();
+                            final ok = await recoveryCubit.confirmRecovery(recoveryMatchId);
+                            if (ok && context.mounted) {
+                              context.read<ReportDetailsCubit>().refresh();
+                            }
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
+                      PotentialMatchesSection(
+                        matches: matches,
+                        onViewAll: () {
+                          context.push('${AppRoutes.matches}?reportId=${report.id}');
+                        },
+                        onSelectMatch: (MatchEntity match) {
+                          context.push(AppRoutes.matchComparePath(match.matchId), extra: match);
+                        },
+                      ),
+                    ],
                   );
                 },
               ),

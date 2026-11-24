@@ -34,12 +34,14 @@ class PotentialMatchesSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              l10n.potentialMatchesSectionTitle(matches.length),
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
-                color: colors.onSurface,
+            Expanded(
+              child: Text(
+                l10n.potentialMatchesSectionTitle(matches.length),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w700,
+                  color: colors.onSurface,
+                ),
               ),
             ),
             TextButton(

@@ -4,20 +4,24 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/di/injection.dart';
 import 'package:found_it/core/events/reports_changed_notifier.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/entities/match_report_summary.dart';
 import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
 import 'package:found_it/features/matches/domain/use_cases/get_match_details_use_case.dart';
 import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/matches/domain/use_cases/get_my_matches_use_case.dart';
 import 'package:found_it/features/matches/domain/use_cases/reject_match_use_case.dart';
 import 'package:found_it/features/matches/view/cubit/matches_cubit.dart';
+import 'package:found_it/features/matches/view/widgets/potential_matches_section.dart';
 import 'package:found_it/features/recovery/domain/entities/handover_contact_entity.dart';
 import 'package:found_it/features/recovery/domain/repositories/recovery_repository.dart';
 import 'package:found_it/features/recovery/domain/use_cases/get_match_contact_use_case.dart';
 import 'package:found_it/features/recovery/domain/use_cases/mark_item_recovered_use_case.dart';
 import 'package:found_it/features/recovery/view/cubit/recovery_cubit.dart';
+import 'package:found_it/features/recovery/view/widgets/mark_recovered_button.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
@@ -40,6 +44,7 @@ class _FakeReportsRepo implements ReportsRepository {
   bool hasPrivateDetails = false;
   String? secretDetails;
   String reportType = 'lost';
+  String reportStatus = 'active';
   bool isBlocked = false;
   String? activeMatchId;
   bool createManualMatchCalled = false;
@@ -67,7 +72,7 @@ class _FakeReportsRepo implements ReportsRepository {
         title: 'Lost Leather Wallet',
         description: 'Black leather wallet with cards',
         type: reportType,
-        status: 'active',
+        status: reportStatus,
         itemDate: DateTime(2026, 11, 15),
         createdAt: DateTime(2026, 11, 15),
         updatedAt: DateTime(2026, 11, 15),
@@ -123,10 +128,12 @@ class _FakeReportsRepo implements ReportsRepository {
 }
 
 class _FakeMatchesRepo implements MatchesRepository {
+  List<MatchEntity> matches = const [];
+
   @override
-  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => matches;
   @override
-  Future<int> getMyMatchesCount() async => 0;
+  Future<int> getMyMatchesCount() async => matches.length;
   @override
   Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
   @override
@@ -134,11 +141,17 @@ class _FakeMatchesRepo implements MatchesRepository {
 }
 
 class _FakeRecoveryRepo implements RecoveryRepository {
+  bool markItemRecoveredCalled = false;
+  String? lastRecoveredMatchId;
+
   @override
   Future<HandoverContactEntity> getMatchContact(String matchId) =>
       throw UnimplementedError();
   @override
-  Future<void> markItemRecovered(String matchId) => throw UnimplementedError();
+  Future<void> markItemRecovered(String matchId) async {
+    markItemRecoveredCalled = true;
+    lastRecoveredMatchId = matchId;
+  }
 }
 
 void main() {
@@ -395,6 +408,147 @@ void main() {
       expect(find.text("You can't claim this item"), findsOneWidget);
       final button = tester.widget<AppButton>(find.byType(AppButton));
       expect(button.onPressed, isNull);
+    });
+
+    testWidgets('owner view renders Edit Report button and navigates to edit screen',
+        (tester) async {
+      fakeReportsRepo.isOwner = true;
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: AppRoutes.editReport,
+            builder: (_, _) => const Scaffold(body: Text('EDIT_SCREEN')),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final editBtnFinder = find.text('Edit Report');
+      await tester.ensureVisible(editBtnFinder);
+      await tester.pumpAndSettle();
+      expect(editBtnFinder, findsOneWidget);
+      await tester.tap(editBtnFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('EDIT_SCREEN'), findsOneWidget);
+    });
+
+    testWidgets(
+        'owner view renders MarkRecoveredButton when activeMatchId or matches exist',
+        (tester) async {
+      fakeReportsRepo.isOwner = true;
+      fakeReportsRepo.activeMatchId = 'match_rec_1';
+      fakeReportsRepo.reportStatus = 'active';
+
+      await pumpTestApp(
+        tester,
+        const ReportDetailsScreen(reportId: 'rep_1'),
+        padded: false,
+      );
+      await tester.pumpAndSettle();
+
+      final markRecFinder = find.byType(MarkRecoveredButton);
+      await tester.ensureVisible(markRecFinder);
+      await tester.pumpAndSettle();
+      expect(markRecFinder, findsOneWidget);
+    });
+
+    testWidgets(
+        'owner view hides Edit Report and MarkRecoveredButton when report is already recovered',
+        (tester) async {
+      fakeReportsRepo.isOwner = true;
+      fakeReportsRepo.activeMatchId = 'match_rec_1';
+      fakeReportsRepo.reportStatus = 'recovered';
+
+      await pumpTestApp(
+        tester,
+        const ReportDetailsScreen(reportId: 'rep_1', key: Key('rep_rec')),
+        padded: false,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Edit Report'), findsNothing);
+      expect(find.byType(MarkRecoveredButton), findsNothing);
+    });
+
+    testWidgets(
+        'owner view displays PotentialMatchesSection when matches exist, and navigates on view all and match tap',
+        (tester) async {
+      fakeReportsRepo.isOwner = true;
+      fakeMatchesRepo.matches = [
+        MatchEntity(
+          matchId: 'match_99',
+          status: 'potential',
+          similarity: 88,
+          source: 'auto',
+          ownershipVerified: false,
+          iAmFinder: false,
+          createdAt: DateTime(2026, 11, 20),
+          otherUserName: 'Omar Tarek',
+          otherReport: MatchReportSummary(
+            id: 'other_rep_2',
+            refCode: '#RPT-9002',
+            type: 'found',
+            title: 'Found Black Leather Wallet',
+            image: 'https://example.com/other.jpg',
+            cityNameEn: 'Cairo',
+            cityNameAr: 'القاهرة',
+            areaNameEn: 'Maadi',
+            areaNameAr: 'المعادي',
+            categoryNameEn: 'Wallet',
+            categoryNameAr: 'محفظة',
+            itemDate: DateTime(2026, 11, 20),
+            status: 'active',
+          ),
+        ),
+      ];
+
+      final router = GoRouter(
+        initialLocation: '/reports/rep_1',
+        routes: [
+          GoRoute(
+            path: '/reports/:id',
+            builder: (_, state) =>
+                ReportDetailsScreen(reportId: state.pathParameters['id']!),
+          ),
+          GoRoute(
+            path: '/matches',
+            builder: (_, state) =>
+                Scaffold(body: Text('MATCHES_PAGE: ${state.uri.queryParameters['reportId']}')),
+          ),
+          GoRoute(
+            path: '/matches/:id/compare',
+            builder: (_, state) =>
+                Scaffold(body: Text('COMPARE_PAGE: ${state.pathParameters['id']}')),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final sectionFinder = find.byType(PotentialMatchesSection);
+      await tester.ensureVisible(sectionFinder);
+      await tester.pumpAndSettle();
+      expect(sectionFinder, findsOneWidget);
+      expect(find.text('Found Black Leather Wallet'), findsOneWidget);
+
+      // Tap View all
+      final viewAllFinder = find.text('View all');
+      expect(viewAllFinder, findsOneWidget);
+      await tester.tap(viewAllFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.text('MATCHES_PAGE: rep_1'), findsOneWidget);
     });
   });
 }
