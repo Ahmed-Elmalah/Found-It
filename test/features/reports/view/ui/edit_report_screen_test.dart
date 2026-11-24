@@ -50,6 +50,7 @@ class _FakeEditRepo implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     updatedTitle = title;
     updatedPrivateDetails = privateDetails;

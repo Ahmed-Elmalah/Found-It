@@ -61,6 +61,7 @@ abstract class ReportsRemoteDataSource {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   });
 
   Future<void> softDeleteReport(String reportId);
@@ -154,6 +155,8 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
       if (params.description != null) 'p_description': params.description,
       if (params.privateDetails != null && params.privateDetails!.isNotEmpty)
         'p_private_details': params.privateDetails,
+      if (params.questions != null && params.questions!.isNotEmpty)
+        'p_questions': params.questions,
     }).single();
 
     return res['ref_code'] as String;
@@ -248,6 +251,7 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     final params = <String, dynamic>{
       'p_report_id': reportId,
@@ -260,6 +264,8 @@ class ReportsRemoteDataSourceImpl implements ReportsRemoteDataSource {
         'p_item_date': itemDate.toIso8601String().split('T').first,
       if (privateDetails != null)
         'p_private_details': privateDetails.trim(),
+      if (questions != null)
+        'p_questions': questions,
     };
 
     final response =

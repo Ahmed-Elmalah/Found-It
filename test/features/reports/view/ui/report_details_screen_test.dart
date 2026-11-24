@@ -123,6 +123,7 @@ class _FakeReportsRepo implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) =>
       throw UnimplementedError();
 }

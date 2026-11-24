@@ -30,6 +30,7 @@ abstract interface class ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   });
 
   /// Soft deletes a report by setting `deleted_at = now()`.

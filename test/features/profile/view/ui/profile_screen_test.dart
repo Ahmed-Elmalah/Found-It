@@ -114,6 +114,7 @@ class _FakeReportsRepoForProfileScreen implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) =>
       throw UnimplementedError();
 

@@ -15,6 +15,7 @@ class UpdateReportUseCase {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) {
     return _repository.updateReport(
       reportId: reportId,
@@ -25,6 +26,7 @@ class UpdateReportUseCase {
       areaId: areaId,
       itemDate: itemDate,
       privateDetails: privateDetails,
+      questions: questions,
     );
   }
 }

@@ -12,6 +12,7 @@ class CreateReportParams extends Equatable {
   final DateTime itemDate;
   final String? description;
   final String? privateDetails;
+  final List<Map<String, dynamic>>? questions;
 
   const CreateReportParams({
     required this.type,
@@ -23,6 +24,7 @@ class CreateReportParams extends Equatable {
     required this.itemDate,
     this.description,
     this.privateDetails,
+    this.questions,
   });
 
   @override
@@ -36,5 +38,6 @@ class CreateReportParams extends Equatable {
         itemDate,
         description,
         privateDetails,
+        questions,
       ];
 }

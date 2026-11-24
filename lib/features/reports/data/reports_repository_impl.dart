@@ -69,6 +69,7 @@ class ReportsRepositoryImpl implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     try {
       return await remoteDataSource.updateReport(
@@ -80,6 +81,7 @@ class ReportsRepositoryImpl implements ReportsRepository {
         areaId: areaId,
         itemDate: itemDate,
         privateDetails: privateDetails,
+        questions: questions,
       );
     } catch (e) {
       throw _mapFailure(e);

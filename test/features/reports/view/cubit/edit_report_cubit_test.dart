@@ -53,6 +53,7 @@ class _FakeEditReportsRepo implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     if (shouldFailUpdate) throw const ReportFailure(ReportFailureType.invalidData);
     lastUpdatedTitle = title;

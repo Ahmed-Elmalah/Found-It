@@ -86,6 +86,7 @@ class _FakeReportsRepository implements ReportsRepository {
     String? areaId,
     DateTime? itemDate,
     String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async =>
       throw UnimplementedError();
 
