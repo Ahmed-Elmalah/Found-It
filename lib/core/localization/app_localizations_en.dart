@@ -778,6 +778,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startChat => 'Start chat';
 
   @override
+  String get answerVerificationQuestions => 'Answer verification questions';
+
+  @override
   String get notMyItem => 'Not my item';
 
   @override

@@ -776,6 +776,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get startChat => 'بدء محادثة';
 
   @override
+  String get answerVerificationQuestions => 'الإجابة على أسئلة التحقق';
+
+  @override
   String get notMyItem => 'ليس غرضي';
 
   @override

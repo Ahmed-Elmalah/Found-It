@@ -24,6 +24,7 @@ class MatchCompareScreen extends StatefulWidget {
   final MatchEntity? match;
   final VoidCallback? onNotMyItem;
   final VoidCallback? onStartChat;
+  final VoidCallback? onAnswerQuestions;
 
   const MatchCompareScreen({
     super.key,
@@ -31,6 +32,7 @@ class MatchCompareScreen extends StatefulWidget {
     this.match,
     this.onNotMyItem,
     this.onStartChat,
+    this.onAnswerQuestions,
   });
 
   String get effectiveMatchId =>
@@ -82,6 +84,18 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
     context.push(AppRoutes.chatPath(match.matchId));
   }
 
+  Future<void> _handleAnswerQuestions(MatchEntity match) async {
+    if (widget.onAnswerQuestions != null) {
+      widget.onAnswerQuestions!();
+      return;
+    }
+
+    await context.push(AppRoutes.claimVerifyPath(match.matchId));
+    if (mounted) {
+      context.read<MatchesCubit>().loadDetails(match.matchId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -101,7 +115,9 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
       },
       builder: (context, state) {
         MatchEntity? match = widget.match;
-        if (state is MatchDetailsLoaded) {
+        if (state is MatchDetailsLoaded &&
+            (widget.effectiveMatchId.isEmpty ||
+                state.match.matchId == widget.effectiveMatchId)) {
           match = state.match;
         }
 
@@ -306,10 +322,16 @@ class _MatchCompareScreenState extends State<MatchCompareScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(
-                    label: l10n.startChat,
-                    onPressed: () => _handleStartChat(match),
-                  ),
+                  if (match.iMustAnswer)
+                    AppButton(
+                      label: l10n.answerVerificationQuestions,
+                      onPressed: () => _handleAnswerQuestions(match),
+                    )
+                  else
+                    AppButton(
+                      label: l10n.startChat,
+                      onPressed: () => _handleStartChat(match),
+                    ),
                   SizedBox(height: 10.h),
                   AppButton(
                     label: l10n.notMyItem,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/theme/app_theme.dart';
 import 'package:found_it/core/widgets/status_chip.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
@@ -13,12 +15,14 @@ class MatchCard extends StatelessWidget {
   final MatchEntity match;
   final VoidCallback onViewMatch;
   final VoidCallback onDismiss;
+  final VoidCallback? onAnswerQuestions;
 
   const MatchCard({
     super.key,
     required this.match,
     required this.onViewMatch,
     required this.onDismiss,
+    this.onAnswerQuestions,
   });
 
   @override
@@ -186,52 +190,122 @@ class MatchCard extends StatelessWidget {
             SizedBox(height: 14.h),
 
             // ── Action Buttons ──
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: OutlinedButton(
-                    onPressed: onDismiss,
-                    style: OutlinedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      side: BorderSide(color: colors.outline),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
+            if (match.iMustAnswer) ...[
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: onAnswerQuestions ??
+                      () => context
+                          .push(AppRoutes.claimVerifyPath(match.matchId)),
+                  icon: Icon(Icons.quiz_outlined, size: 17.r),
+                  style: FilledButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    child: Text(
-                      l10n.dismiss,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w600,
-                        color: colors.onSurfaceVariant,
-                      ),
+                  ),
+                  label: Text(
+                    l10n.answerVerificationQuestions,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                SizedBox(width: 10.w),
-                Expanded(
-                  flex: 3,
-                  child: FilledButton(
-                    onPressed: onViewMatch,
-                    style: FilledButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 10.h),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: _CardOutlinedButton(
+                      label: l10n.dismiss,
+                      textColor: colors.onSurfaceVariant,
+                      outlineColor: colors.outline,
+                      onPressed: onDismiss,
                     ),
-                    child: Text(
-                      l10n.viewMatch,
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w600,
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: _CardOutlinedButton(
+                      label: l10n.viewMatch,
+                      textColor: colors.onSurface,
+                      outlineColor: colors.outline,
+                      onPressed: onViewMatch,
+                    ),
+                  ),
+                ],
+              ),
+            ] else
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: _CardOutlinedButton(
+                      label: l10n.dismiss,
+                      textColor: colors.onSurfaceVariant,
+                      outlineColor: colors.outline,
+                      onPressed: onDismiss,
+                    ),
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    flex: 3,
+                    child: FilledButton(
+                      onPressed: onViewMatch,
+                      style: FilledButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                      ),
+                      child: Text(
+                        l10n.viewMatch,
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CardOutlinedButton extends StatelessWidget {
+  final String label;
+  final Color textColor;
+  final Color outlineColor;
+  final VoidCallback onPressed;
+
+  const _CardOutlinedButton({
+    required this.label,
+    required this.textColor,
+    required this.outlineColor,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 10.h),
+        side: BorderSide(color: outlineColor),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 13.sp,
+          fontWeight: FontWeight.w600,
+          color: textColor,
         ),
       ),
     );

@@ -139,6 +139,16 @@ class _PotentialMatchesCubitView extends StatelessWidget {
                             .loadMatches(reportId: reportId);
                       }
                     },
+                    onAnswerQuestions: () async {
+                      await context.push(
+                        AppRoutes.claimVerifyPath(match.matchId),
+                      );
+                      if (context.mounted) {
+                        context
+                            .read<MatchesCubit>()
+                            .loadMatches(reportId: reportId);
+                      }
+                    },
                     onDismiss: () async {
                       final success = await context
                           .read<MatchesCubit>()

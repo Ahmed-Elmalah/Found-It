@@ -340,6 +340,7 @@
   "compareDescription": "Description",
   "hiddenDetailsNotice": "Private details are hidden to protect owner's privacy and ensure secure verification.",
   "startChat": "Start chat",
+  "answerVerificationQuestions": "Answer verification questions",
   "notMyItem": "Not my item",
   "noMatchesTitle": "No potential matches yet",
   "noMatchesSubtitle": "We'll notify you automatically when a matching report is found.",

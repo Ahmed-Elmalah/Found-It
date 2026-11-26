@@ -15,6 +15,16 @@ class MatchEntity extends Equatable {
   final MatchReportSummary? otherReport;
   final String otherUserName;
 
+  /// Story #6 (Ownership Verification Questions):
+  /// 'not_required' | 'pending' | 'passed' | 'failed'
+  final String claimStatus;
+
+  /// True when the current user (lost side) must answer questions before chatting.
+  final bool iMustAnswer;
+
+  /// Number of verification questions on the matched found report (0..3).
+  final int questionsCount;
+
   const MatchEntity({
     required this.matchId,
     required this.status,
@@ -27,11 +37,15 @@ class MatchEntity extends Equatable {
     this.myReport,
     this.otherReport,
     required this.otherUserName,
+    this.claimStatus = 'not_required',
+    this.iMustAnswer = false,
+    this.questionsCount = 0,
   });
 
   bool get isAuto => source == 'auto';
   bool get isOpen =>
       status == 'potential' || status == 'chatting' || status == 'verified';
+  bool get isClaimPending => claimStatus == 'pending';
 
   @override
   List<Object?> get props => [
@@ -46,5 +60,8 @@ class MatchEntity extends Equatable {
         myReport,
         otherReport,
         otherUserName,
+        claimStatus,
+        iMustAnswer,
+        questionsCount,
       ];
 }

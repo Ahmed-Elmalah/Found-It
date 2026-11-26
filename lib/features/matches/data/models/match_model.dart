@@ -14,6 +14,9 @@ class MatchModel extends MatchEntity {
     super.myReport,
     super.otherReport,
     required super.otherUserName,
+    super.claimStatus,
+    super.iMustAnswer,
+    super.questionsCount,
   });
 
   factory MatchModel.fromJson(Map<String, dynamic> json) {
@@ -48,6 +51,11 @@ class MatchModel extends MatchEntity {
     final rawSim = json['similarity'];
     final int similarity = (rawSim is num) ? rawSim.toInt() : 0;
 
+    final rawQuestionsCount = json['questions_count'];
+    final int questionsCount = (rawQuestionsCount is num)
+        ? rawQuestionsCount.toInt()
+        : int.tryParse(rawQuestionsCount?.toString() ?? '0') ?? 0;
+
     return MatchModel(
       matchId: json['match_id'] as String? ?? json['id'] as String? ?? '',
       status: json['status'] as String? ?? 'potential',
@@ -60,6 +68,9 @@ class MatchModel extends MatchEntity {
       myReport: myReport,
       otherReport: otherReport,
       otherUserName: json['other_user_name'] as String? ?? '',
+      claimStatus: json['claim_status']?.toString() ?? 'not_required',
+      iMustAnswer: json['i_must_answer'] == true,
+      questionsCount: questionsCount,
     );
   }
 
@@ -78,5 +89,8 @@ class MatchModel extends MatchEntity {
         if (otherReport != null)
           'other_report': (otherReport as MatchReportSummaryModel).toJson(),
         'other_user_name': otherUserName,
+        'claim_status': claimStatus,
+        'i_must_answer': iMustAnswer,
+        'questions_count': questionsCount,
       };
 }
