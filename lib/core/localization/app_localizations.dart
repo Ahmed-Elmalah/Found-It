@@ -1544,6 +1544,12 @@ abstract class AppLocalizations {
   /// **'Start chat'**
   String get startChat;
 
+  /// No description provided for @answerVerificationQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer verification questions'**
+  String get answerVerificationQuestions;
+
   /// No description provided for @notMyItem.
   ///
   /// In en, this message translates to:

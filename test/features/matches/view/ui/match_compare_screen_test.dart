@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/matches/domain/entities/match_entity.dart';
 import 'package:found_it/features/matches/domain/entities/match_report_summary.dart';
 import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
@@ -155,6 +157,59 @@ void main() {
       expect(find.text('Match comparison'), findsOneWidget);
       expect(find.text('88% Match'), findsOneWidget);
       expect(find.text('MacBook Pro 14"'), findsOneWidget);
+    });
+
+    testWidgets(
+        'when iMustAnswer is true, shows "Answer verification questions" instead of "Start chat" and opens /matches/:id/verify',
+        (tester) async {
+      final matchRequiringAnswers = MatchEntity(
+        matchId: 'match_789',
+        status: 'potential',
+        similarity: 88,
+        source: 'auto',
+        ownershipVerified: false,
+        iAmFinder: false,
+        createdAt: DateTime(2026, 11, 20),
+        otherUserName: 'Omar S.',
+        myReport: mockMatch.myReport,
+        otherReport: mockMatch.otherReport,
+        claimStatus: 'pending',
+        iMustAnswer: true,
+        questionsCount: 2,
+      );
+      cubit.setMatchDetails(matchRequiringAnswers);
+
+      final router = GoRouter(
+        initialLocation: AppRoutes.matchComparePath('match_789'),
+        routes: [
+          GoRoute(
+            path: AppRoutes.matchCompare,
+            builder: (_, _) => wrapWithCubit(
+              MatchCompareScreen(
+                matchId: 'match_789',
+                match: matchRequiringAnswers,
+              ),
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.claimVerify,
+            builder: (_, state) => Scaffold(
+              body: Text('VERIFY:${state.pathParameters['id']}'),
+            ),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+
+      expect(find.text('Answer verification questions'), findsOneWidget);
+      expect(find.text('Start chat'), findsNothing);
+      expect(find.text('Not my item'), findsOneWidget);
+
+      await tester.tap(find.text('Answer verification questions'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('VERIFY:match_789'), findsOneWidget);
     });
   });
 }

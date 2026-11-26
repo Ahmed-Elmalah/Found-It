@@ -288,6 +288,7 @@
   "compareDescription": "الوصف",
   "hiddenDetailsNotice": "التفاصيل الخاصة مخفية لحماية خصوصية المالك وضمان التحقق الآمن.",
   "startChat": "بدء محادثة",
+  "answerVerificationQuestions": "الإجابة على أسئلة التحقق",
   "notMyItem": "ليس غرضي",
   "noMatchesTitle": "لا توجد تطابقات محتملة حتى الآن",
   "noMatchesSubtitle": "سنرسل لك إشعاراً تلقائياً عند العثور على بلاغ مطابق.",

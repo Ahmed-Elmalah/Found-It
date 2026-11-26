@@ -123,5 +123,54 @@ void main() {
 
       expect(find.text('COMPARE SCREEN'), findsOneWidget);
     });
+
+    testWidgets(
+        'when iMustAnswer is true, MatchCard shows "Answer verification questions" and navigates to /matches/:id/verify',
+        (tester) async {
+      final matchRequiringAnswers = MatchEntity(
+        matchId: 'match_456',
+        status: 'potential',
+        similarity: 90,
+        source: 'auto',
+        ownershipVerified: false,
+        iAmFinder: false,
+        createdAt: DateTime(2026, 11, 20),
+        otherUserName: 'Mona K.',
+        myReport: mockMatch.myReport,
+        otherReport: mockMatch.otherReport,
+        claimStatus: 'pending',
+        iMustAnswer: true,
+        questionsCount: 2,
+      );
+
+      final router = GoRouter(
+        initialLocation: AppRoutes.matches,
+        routes: [
+          GoRoute(
+            path: AppRoutes.matches,
+            builder: (_, _) => PotentialMatchesScreen(
+              initialMatches: [matchRequiringAnswers],
+            ),
+          ),
+          GoRoute(
+            path: AppRoutes.claimVerify,
+            builder: (_, state) => Scaffold(
+              body: Text('VERIFY:${state.pathParameters['id']}'),
+            ),
+          ),
+        ],
+      );
+
+      await pumpTestRouterApp(tester, router);
+
+      expect(find.text('Answer verification questions'), findsOneWidget);
+      expect(find.text('View match'), findsOneWidget);
+      expect(find.text('Dismiss'), findsOneWidget);
+
+      await tester.tap(find.text('Answer verification questions'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('VERIFY:match_456'), findsOneWidget);
+    });
   });
 }
