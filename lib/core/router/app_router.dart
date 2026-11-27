@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,6 +19,8 @@ import 'package:found_it/features/chat/view/ui/chat_screen.dart';
 import 'package:found_it/features/chat/view/ui/messages_screen.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
 import 'package:found_it/features/city/view/ui/choose_city_screen.dart';
+import 'package:found_it/features/claim/view/cubit/claim_cubit.dart';
+import 'package:found_it/features/claim/view/ui/verify_ownership_screen.dart';
 import 'package:found_it/features/explore/view/cubit/search_cubit.dart';
 import 'package:found_it/features/explore/view/ui/explore_screen.dart';
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
@@ -338,29 +339,11 @@ final GoRouter appRouter = GoRouter(
       path: AppRoutes.claimVerify,
       builder: (context, state) {
         final matchId = state.pathParameters['id'] ?? '';
-        return _ComingSoon('Verify Ownership (match: $matchId)');
+        return BlocProvider<ClaimCubit>(
+          create: (_) => sl<ClaimCubit>(),
+          child: VerifyOwnershipScreen(matchId: matchId),
+        );
       },
     ),
   ],
 );
-
-/// TEMP placeholder for screens that aren't built yet (dev only, no l10n).
-class _ComingSoon extends StatelessWidget {
-  const _ComingSoon(this.name);
-
-  final String name;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('$name — coming soon'),
-          ],
-        ),
-      ),
-    );
-  }
-}

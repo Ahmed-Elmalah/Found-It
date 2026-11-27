@@ -1231,4 +1231,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noPhotosAvailable => 'لا توجد صور متاحة';
+
+  @override
+  String get claimVerifyTitle => 'إثبات الملكية';
+
+  @override
+  String get claimVerifySubtitle =>
+      'أجب على أسئلة الشخص الذي وجد الغرض لتتمكن من المطالبة به.';
+
+  @override
+  String get claimVerifyNotice =>
+      'لديك محاولة واحدة فقط. الإجابة الخاطئة تغلق التطابق نهائياً.';
+
+  @override
+  String get claimAnswerAllHint => 'أجب على جميع الأسئلة للمتابعة.';
+
+  @override
+  String get claimLoadErrorTitle => 'تعذر تحميل الأسئلة';
+
+  @override
+  String get claimLoadErrorSubtitle =>
+      'تحقق من اتصالك بالإنترنت وحاول مرة أخرى.';
+
+  @override
+  String get claimSubmitError => 'تعذر إرسال إجاباتك. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get claimSubmitAnswers => 'إرسال الإجابات';
+
+  @override
+  String get claimConfirmTitle => 'لديك محاولة واحدة فقط';
+
+  @override
+  String get claimConfirmBody =>
+      'بعد الإرسال لا يمكن تغيير إجاباتك. إذا كانت أي إجابة خاطئة، سيتم إغلاق التطابق ولن تتمكن من المطالبة بهذا الغرض مرة أخرى.';
+
+  @override
+  String get claimConfirmAction => 'تأكيد';
+
+  @override
+  String get claimFailedMessage =>
+      'إجاباتك غير مطابقة. تم إغلاق التطابق ولم يعد بإمكانك المطالبة بهذا البلاغ.';
+
+  @override
+  String get claimBackToMatches => 'العودة إلى التطابقات';
 }

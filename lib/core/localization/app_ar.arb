@@ -422,5 +422,18 @@
   "questionTooShortError": "يجب ألا يقل نص السؤال عن 3 أحرف.",
   "answerRequiredError": "جميع الإجابات مطلوبة.",
   "duplicateAnswersError": "يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة.",
-  "noPhotosAvailable": "لا توجد صور متاحة"
+  "noPhotosAvailable": "لا توجد صور متاحة",
+  "claimVerifyTitle": "إثبات الملكية",
+  "claimVerifySubtitle": "أجب على أسئلة الشخص الذي وجد الغرض لتتمكن من المطالبة به.",
+  "claimVerifyNotice": "لديك محاولة واحدة فقط. الإجابة الخاطئة تغلق التطابق نهائياً.",
+  "claimAnswerAllHint": "أجب على جميع الأسئلة للمتابعة.",
+  "claimLoadErrorTitle": "تعذر تحميل الأسئلة",
+  "claimLoadErrorSubtitle": "تحقق من اتصالك بالإنترنت وحاول مرة أخرى.",
+  "claimSubmitError": "تعذر إرسال إجاباتك. يرجى المحاولة مرة أخرى.",
+  "claimSubmitAnswers": "إرسال الإجابات",
+  "claimConfirmTitle": "لديك محاولة واحدة فقط",
+  "claimConfirmBody": "بعد الإرسال لا يمكن تغيير إجاباتك. إذا كانت أي إجابة خاطئة، سيتم إغلاق التطابق ولن تتمكن من المطالبة بهذا الغرض مرة أخرى.",
+  "claimConfirmAction": "تأكيد",
+  "claimFailedMessage": "إجاباتك غير مطابقة. تم إغلاق التطابق ولم يعد بإمكانك المطالبة بهذا البلاغ.",
+  "claimBackToMatches": "العودة إلى التطابقات"
 }
