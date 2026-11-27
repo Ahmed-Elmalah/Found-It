@@ -11,6 +11,8 @@ class CreateReportParams extends Equatable {
   final List<ReportImage> images;
   final DateTime itemDate;
   final String? description;
+  final String? privateDetails;
+  final List<Map<String, dynamic>>? questions;
 
   const CreateReportParams({
     required this.type,
@@ -21,6 +23,8 @@ class CreateReportParams extends Equatable {
     required this.images,
     required this.itemDate,
     this.description,
+    this.privateDetails,
+    this.questions,
   });
 
   @override
@@ -33,5 +37,7 @@ class CreateReportParams extends Equatable {
         images,
         itemDate,
         description,
+        privateDetails,
+        questions,
       ];
 }

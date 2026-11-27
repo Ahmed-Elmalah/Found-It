@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/profile/domain/entities/city_entity.dart';
 import 'package:found_it/features/profile/domain/entities/profile_failure.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
@@ -17,14 +18,16 @@ class ProfileCubit extends Cubit<ProfileState> {
     this._updateProfileUseCase,
     this._setMyCityUseCase,
     this._getActiveCitiesUseCase,
-    this._getMyReportsCountsUseCase,
-  ) : super(const ProfileState());
+    this._getMyReportsCountsUseCase, [
+    this._getMyMatchesCountUseCase,
+  ]) : super(const ProfileState());
 
   final GetProfileUseCase _getProfileUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
   final SetMyCityUseCase _setMyCityUseCase;
   final GetActiveCitiesUseCase _getActiveCitiesUseCase;
   final GetMyReportsCountsUseCase _getMyReportsCountsUseCase;
+  final GetMyMatchesCountUseCase? _getMyMatchesCountUseCase;
 
   Future<void> loadProfile() async {
     emit(state.copyWith(
@@ -33,21 +36,28 @@ class ProfileCubit extends Cubit<ProfileState> {
     ));
 
     try {
+      final matchesCountFuture = _getMyMatchesCountUseCase != null
+          ? _getMyMatchesCountUseCase()
+          : Future.value(0);
+
       final results = await Future.wait([
         _getProfileUseCase(),
         _getActiveCitiesUseCase(),
         _getMyReportsCountsUseCase(),
+        matchesCountFuture,
       ]);
 
       final profile = results[0] as UserProfileEntity;
       final cities = results[1] as List<CityEntity>;
       final counts = results[2] as ReportCountsEntity;
+      final matchesCount = results[3] as int;
 
       emit(state.copyWith(
         status: ProfileStatus.success,
         profile: profile,
         activeCities: cities,
         reportsCount: counts.total,
+        matchesCount: matchesCount,
         isUpdating: false,
       ));
     } on ProfileFailure catch (e) {

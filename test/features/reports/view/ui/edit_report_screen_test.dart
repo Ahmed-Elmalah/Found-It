@@ -8,7 +8,9 @@ import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_categories_use_case.dart';
@@ -16,11 +18,13 @@ import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_ca
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_cubit.dart';
 import 'package:found_it/features/reports/view/ui/edit_report_screen.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 import '../../../../helpers/test_app.dart';
 
 class _FakeEditRepo implements ReportsRepository {
   String? updatedTitle;
+  String? updatedPrivateDetails;
 
   final categories = const [
     CategoryEntity(id: 'cat_1', nameEn: 'Wallet', nameAr: 'محفظة', icon: 'wallet'),
@@ -46,8 +50,11 @@ class _FakeEditRepo implements ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     updatedTitle = title;
+    updatedPrivateDetails = privateDetails;
     return ReportEntity(
       id: reportId,
       refCode: '#RPT-1001',
@@ -62,8 +69,17 @@ class _FakeEditRepo implements ReportsRepository {
       createdAt: DateTime(2026, 11, 10),
       updatedAt: DateTime(2026, 11, 10),
       images: const [],
+      privateDetails: privateDetails,
     );
   }
+
+  @override
+  Future<ReportDetailsEntity> getReportDetails(String reportId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ManualMatchResultEntity> createManualMatch(String reportId) =>
+      throw UnimplementedError();
 
   @override
   Future<String> createReport(CreateReportParams params) => throw UnimplementedError();
@@ -193,6 +209,129 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(repo.updatedTitle, 'Updated Brown Wallet');
+    });
+
+    testWidgets('editing private verification details updates repo with new value', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: cubit,
+                  child: EditReportScreen(report: report),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final privateDetailsFinder = find.byType(TextField).at(2);
+      await tester.enterText(privateDetailsFinder, 'Laser engraved serial #8877');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(AppButton));
+      await tester.pumpAndSettle();
+
+      expect(repo.updatedPrivateDetails, 'Laser engraved serial #8877');
+    });
+
+    testWidgets('clearing private verification details updates repo with empty string', (tester) async {
+      final reportWithDetails = ReportEntity(
+        id: 'rep_1',
+        refCode: '#RPT-1001',
+        userId: 'user_1',
+        cityId: 'city_cairo',
+        areaId: 'area_1',
+        categoryId: 'cat_1',
+        title: 'Black Leather Wallet',
+        description: 'Lost near subway',
+        type: 'lost',
+        status: 'active',
+        itemDate: DateTime(2026, 11, 10),
+        createdAt: DateTime(2026, 11, 10),
+        updatedAt: DateTime(2026, 11, 10),
+        images: const [],
+        privateDetails: 'Laser engraved serial #8877',
+      );
+      final detailsCubit = EditReportCubit(
+        reportWithDetails,
+        UpdateReportUseCase(repo),
+        GetCategoriesUseCase(repo),
+        GetCityAreasUseCase(repo),
+      );
+      addTearDown(detailsCubit.close);
+
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: detailsCubit,
+                  child: EditReportScreen(report: reportWithDetails),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final privateDetailsFinder = find.byType(TextField).at(2);
+      await tester.enterText(privateDetailsFinder, '');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(AppButton));
+      await tester.pumpAndSettle();
+
+      expect(repo.updatedPrivateDetails, '');
+    });
+
+    testWidgets('changing type to found in EditReportScreen displays VerificationQuestionsForm', (tester) async {
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: cubit,
+                  child: EditReportScreen(report: report),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(VerificationQuestionsForm), findsNothing);
+
+      await tester.tap(find.text('Found'));
+      await tester.pumpAndSettle();
+
+      expect(cubit.state.selectedType, 'found');
+      await tester.drag(find.byType(ListView), const Offset(0, -500));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(VerificationQuestionsForm), findsOneWidget);
     });
   });
 }

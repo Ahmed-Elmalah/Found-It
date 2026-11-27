@@ -7,7 +7,9 @@ import 'package:found_it/features/reports/data/reports_remote_data_source.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
@@ -20,6 +22,24 @@ class ReportsRepositoryImpl implements ReportsRepository {
     required this.remoteDataSource,
     this.prefs,
   });
+
+  @override
+  Future<ReportDetailsEntity> getReportDetails(String reportId) async {
+    try {
+      return await remoteDataSource.getReportDetails(reportId);
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
+
+  @override
+  Future<ManualMatchResultEntity> createManualMatch(String reportId) async {
+    try {
+      return await remoteDataSource.createManualMatch(reportId);
+    } catch (e) {
+      throw _mapFailure(e);
+    }
+  }
 
   @override
   Future<List<ReportEntity>> getMyReports({String? status}) async {
@@ -48,6 +68,8 @@ class ReportsRepositoryImpl implements ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) async {
     try {
       return await remoteDataSource.updateReport(
@@ -58,6 +80,8 @@ class ReportsRepositoryImpl implements ReportsRepository {
         categoryId: categoryId,
         areaId: areaId,
         itemDate: itemDate,
+        privateDetails: privateDetails,
+        questions: questions,
       );
     } catch (e) {
       throw _mapFailure(e);
@@ -150,11 +174,24 @@ class ReportsRepositoryImpl implements ReportsRepository {
     if (error is ReportFailure) return error;
 
     if (error is PostgrestException) {
-      if (error.code == '23514' || error.code == '23503') {
-        return const ReportFailure(ReportFailureType.invalidData);
+      switch (error.code) {
+        case 'P0002':
+          return const ReportFailure(ReportFailureType.notFound);
+        case '42501':
+          return const ReportFailure(ReportFailureType.notAllowed);
+        case '55000':
+          return const ReportFailure(ReportFailureType.invalidState);
+        case '22023':
+          return const ReportFailure(ReportFailureType.invalidInput);
+        case '23514':
+        case '23503':
+          return const ReportFailure(ReportFailureType.invalidData);
       }
       final msg = error.message.toLowerCase();
-      if (msg.contains('invalid') || msg.contains('not found')) {
+      if (msg.contains('not found')) {
+        return const ReportFailure(ReportFailureType.notFound);
+      }
+      if (msg.contains('invalid')) {
         return const ReportFailure(ReportFailureType.invalidData);
       }
     }

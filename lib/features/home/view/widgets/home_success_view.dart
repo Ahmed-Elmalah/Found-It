@@ -3,9 +3,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/features/home/domain/entities/home_report_item.dart';
 import 'package:found_it/features/home/view/widgets/home_feed_item_card.dart';
 import 'package:found_it/features/home/view/widgets/home_hero_banner.dart';
+import 'package:found_it/features/home/view/widgets/home_potential_matches_banner.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeSuccessView extends StatelessWidget {
   const HomeSuccessView({
@@ -13,11 +16,13 @@ class HomeSuccessView extends StatelessWidget {
     required this.cityName,
     required this.reports,
     required this.onRefresh,
+    this.potentialMatchesCount = 0,
     this.onItemTap,
   });
 
   final String cityName;
   final List<HomeReportItem> reports;
+  final int potentialMatchesCount;
   final Future<void> Function() onRefresh;
   final ValueChanged<HomeReportItem>? onItemTap;
 
@@ -37,6 +42,18 @@ class HomeSuccessView extends StatelessWidget {
           parent: BouncingScrollPhysics(),
         ),
         slivers: [
+          // Potential Matches Banner (P15/P48)
+          if (potentialMatchesCount > 0)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(20.w, 4.h, 20.w, 12.h),
+                child: HomePotentialMatchesBanner(
+                  count: potentialMatchesCount,
+                  onTap: () => context.push(AppRoutes.matches),
+                ),
+              ),
+            ),
+
           // 1. Hero Action Banner
           SliverToBoxAdapter(
             child: Padding(

@@ -12,6 +12,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_categories_use_ca
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_selected_city_id_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/create_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class CreateReportCubit extends Cubit<CreateReportState> {
   final GetCategoriesUseCase getCategories;
@@ -74,7 +75,21 @@ class CreateReportCubit extends Cubit<CreateReportState> {
   }
 
   void toggleReportType(bool isLost) {
-    emit(_currentForm.copyWith(isLost: isLost));
+    final questions = !isLost && _currentForm.questions.isEmpty
+        ? [QuestionDraft()]
+        : _currentForm.questions;
+    emit(_currentForm.copyWith(
+      isLost: isLost,
+      questions: questions,
+      clearQuestionsError: true,
+    ));
+  }
+
+  void updateQuestions(List<QuestionDraft> questions) {
+    emit(_currentForm.copyWith(
+      questions: questions,
+      clearQuestionsError: true,
+    ));
   }
 
   void updateTitle(String value) {
@@ -86,6 +101,10 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       errors: errors,
       clearSubmitFailure: true,
     ));
+  }
+
+  void updatePrivateDetails(String value) {
+    emit(_currentForm.copyWith(privateDetails: value));
   }
 
   void selectCategory(String categoryId) {
@@ -207,10 +226,16 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       errors['photos'] = ReportFieldError.required;
     }
 
-    if (errors.isNotEmpty || form.rejectedPhotoIndices.isNotEmpty) {
+    final qError = VerificationQuestionsForm.validateQuestions(
+      form.questions,
+      isFound: !form.isLost,
+    );
+
+    if (errors.isNotEmpty || form.rejectedPhotoIndices.isNotEmpty || qError != null) {
       emit(form.copyWith(
         title: trimmedTitle,
         errors: errors,
+        questionsError: qError,
         hasInvalidFile: form.rejectedPhotoIndices.isNotEmpty,
       ));
       return;
@@ -219,6 +244,7 @@ class CreateReportCubit extends Cubit<CreateReportState> {
     emit(form.copyWith(
       title: trimmedTitle,
       errors: const {},
+      clearQuestionsError: true,
       isSubmitting: true,
       clearSubmitFailure: true,
     ));
@@ -234,6 +260,12 @@ class CreateReportCubit extends Cubit<CreateReportState> {
         areaId: form.areaId!,
         images: validPhotos,
         itemDate: form.date,
+        privateDetails: form.privateDetails?.trim().isNotEmpty == true
+            ? form.privateDetails!.trim()
+            : null,
+        questions: form.isLost
+            ? null
+            : form.questions.map((q) => q.toJson()).toList(),
       ));
 
       emit(CreateReportSuccess(refCode));

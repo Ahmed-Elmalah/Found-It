@@ -6,16 +6,19 @@ import 'package:go_router/go_router.dart';
 
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
+import 'package:found_it/features/home/view/widgets/home_potential_matches_banner.dart';
 
 class HomeEmptyView extends StatelessWidget {
   const HomeEmptyView({
     super.key,
     required this.cityName,
     required this.onRefresh,
+    this.potentialMatchesCount = 0,
   });
 
   final String cityName;
   final Future<void> Function() onRefresh;
+  final int potentialMatchesCount;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,16 @@ class HomeEmptyView extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(horizontal: 28.w),
         children: [
-          SizedBox(height: 50.h),
+          if (potentialMatchesCount > 0) ...[
+            SizedBox(height: 12.h),
+            HomePotentialMatchesBanner(
+              count: potentialMatchesCount,
+              onTap: () => context.push(AppRoutes.matches),
+            ),
+            SizedBox(height: 24.h),
+          ] else ...[
+            SizedBox(height: 50.h),
+          ],
 
           // Floating concentric glowing illustration
           Center(

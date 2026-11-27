@@ -11,6 +11,22 @@ import 'package:found_it/features/home/domain/use_cases/get_home_feed_use_case.d
 import 'package:found_it/features/home/view/cubit/home_cubit.dart';
 import 'package:found_it/features/home/view/cubit/home_state.dart';
 
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
+
+class _FakeMatchesRepo implements MatchesRepository {
+  int count = 0;
+  @override
+  Future<int> getMyMatchesCount() async => count;
+  @override
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  @override
+  Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
+  @override
+  Future<void> rejectMatch(String matchId) => throw UnimplementedError();
+}
+
 class _FakeHomeRepository implements HomeRepository {
   List<HomeReportItem> reportsToReturn = const [];
   Object? errorToThrow;
@@ -201,6 +217,22 @@ void main() {
       expect(cubitWithNotifier.state.reports, newReports);
       await cubitWithNotifier.close();
       notifier.dispose();
+    });
+
+    test('init fetches potentialMatchesCount when getMyMatchesCountUseCase is provided', () async {
+      final matchesRepo = _FakeMatchesRepo()..count = 3;
+      final cubitWithMatches = HomeCubit(
+        getHomeFeedUseCase: GetHomeFeedUseCase(homeRepo),
+        getCitiesUseCase: GetCitiesUseCase(cityRepo),
+        selectCityUseCase: SelectCityUseCase(cityRepo),
+        getMyMatchesCountUseCase: GetMyMatchesCountUseCase(matchesRepo),
+      );
+      addTearDown(cubitWithMatches.close);
+
+      await cubitWithMatches.init(initialCityId: 'cairo-uuid');
+
+      expect(cubitWithMatches.state.status, HomeStatus.success);
+      expect(cubitWithMatches.state.potentialMatchesCount, 3);
     });
   });
 }

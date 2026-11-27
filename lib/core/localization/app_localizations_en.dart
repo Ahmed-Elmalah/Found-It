@@ -1096,4 +1096,141 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatVerifyOwnershipAction => 'Answer Verification Questions';
+
+  @override
+  String get reportDetailsTitle => 'Report details';
+
+  @override
+  String get reportNotFoundTitle => 'Report not found';
+
+  @override
+  String get reportNotFoundMessage =>
+      'This report does not exist or has been deleted.';
+
+  @override
+  String get reportDetailsCategory => 'Category';
+
+  @override
+  String get reportDetailsLocation => 'Location';
+
+  @override
+  String get reportDetailsDate => 'Date';
+
+  @override
+  String get reportDetailsDescription => 'Description';
+
+  @override
+  String get reportDetailsPrivateDetails => 'Private verification details';
+
+  @override
+  String get privateDetailsHiddenNotice =>
+      'Private verification details are hidden to protect the owner.';
+
+  @override
+  String get privateDetailsOwnerNotice =>
+      'Only you can see these verification details.';
+
+  @override
+  String get questionsNotice =>
+      'This report requires answering ownership verification questions.';
+
+  @override
+  String get thisIsMine => 'This is Mine';
+
+  @override
+  String get iFoundThis => 'I Found This';
+
+  @override
+  String get openChat => 'Open Chat';
+
+  @override
+  String get claimBlocked => 'You can\'t claim this item';
+
+  @override
+  String get claimFailed => 'Failed to submit claim';
+
+  @override
+  String potentialMatchesForYou(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count potential matches for you',
+      one: '1 potential match for you',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get privateDetailsLabel => 'Private verification details (optional)';
+
+  @override
+  String get privateDetailsHint =>
+      'Details only the true owner would know (e.g. serial number, lock code, hidden marks)...';
+
+  @override
+  String get privateDetailsHelper =>
+      'Visible only to you. Used by the system to verify claims.';
+
+  @override
+  String fullscreenImageTitle(int current, int total) {
+    return 'Photo $current of $total';
+  }
+
+  @override
+  String get verificationQuestionsTitle => 'Ownership Verification Questions';
+
+  @override
+  String get verificationQuestionsSubtitle =>
+      'Add 1 to 3 multiple-choice questions. Anyone claiming this item must answer correctly before chatting.';
+
+  @override
+  String get addQuestionButton => '+ Add Question';
+
+  @override
+  String get removeQuestionButton => 'Remove';
+
+  @override
+  String questionNumber(int index) {
+    return 'Question $index';
+  }
+
+  @override
+  String get questionTextLabel => 'Question';
+
+  @override
+  String get questionTextHint => 'e.g. What color or brand is this item?';
+
+  @override
+  String get correctAnswerLabel => 'Correct Answer';
+
+  @override
+  String get correctAnswerHint => 'The real answer (e.g. Black)';
+
+  @override
+  String wrongChoiceLabel(int index) {
+    return 'Wrong Choice $index';
+  }
+
+  @override
+  String get wrongChoiceHint => 'A believable wrong choice';
+
+  @override
+  String get addWrongChoiceButton => '+ Add Wrong Choice';
+
+  @override
+  String get questionRequiredError =>
+      'At least 1 verification question is required for found items.';
+
+  @override
+  String get questionTooShortError => 'Question must be at least 3 characters.';
+
+  @override
+  String get answerRequiredError => 'All answers are required.';
+
+  @override
+  String get duplicateAnswersError =>
+      'All choices for a question must be unique.';
+
+  @override
+  String get noPhotosAvailable => 'No photos available';
 }

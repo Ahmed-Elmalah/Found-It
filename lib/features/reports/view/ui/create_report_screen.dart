@@ -18,6 +18,7 @@ import 'package:found_it/features/reports/view/ui/widgets/date_picker_field.dart
 import 'package:found_it/features/reports/view/ui/widgets/district_selector_field.dart';
 import 'package:found_it/features/reports/view/ui/widgets/photo_uploader_widget.dart';
 import 'package:found_it/features/reports/view/ui/widgets/report_type_toggle.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class CreateReportScreen extends StatefulWidget {
   const CreateReportScreen({super.key});
@@ -28,6 +29,7 @@ class CreateReportScreen extends StatefulWidget {
 
 class _CreateReportScreenState extends State<CreateReportScreen> {
   final _titleController = TextEditingController();
+  final _privateDetailsController = TextEditingController();
 
   @override
   void initState() {
@@ -43,6 +45,7 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _privateDetailsController.dispose();
     super.dispose();
   }
 
@@ -74,6 +77,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         return l10n.notLoggedInTitle;
       case ReportFailureType.invalidData:
         return l10n.invalidDataTitle;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorTitle;
     }
@@ -87,6 +94,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
         return l10n.notLoggedInMessage;
       case ReportFailureType.invalidData:
         return l10n.invalidDataMessage;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorMessage;
     }
@@ -129,7 +140,8 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
 
         final hasRejectedPhotos =
             form.hasInvalidFile || form.rejectedPhotoIndices.isNotEmpty;
-        final hasValidationErrors = errors.isNotEmpty;
+        final hasValidationErrors =
+            errors.isNotEmpty || form.questionsError != null;
 
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -294,6 +306,32 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                             onDateSelected: cubit.selectDate,
                           ),
                           SizedBox(height: 20.h),
+
+                          // ── Private Details ──────────────────────────────────
+                          AppTextField(
+                            controller: _privateDetailsController,
+                            label: l10n.privateDetailsLabel,
+                            hint: l10n.privateDetailsHint,
+                            helperText: l10n.privateDetailsHelper,
+                            maxLength: 500,
+                            minLines: 2,
+                            maxLines: 4,
+                            onChanged: cubit.updatePrivateDetails,
+                          ),
+                          SizedBox(height: 20.h),
+
+                          // ── Verification Questions (Found reports only) ─────
+                          if (!form.isLost) ...[
+                            VerificationQuestionsForm(
+                              questions: form.questions,
+                              onChanged: cubit.updateQuestions,
+                              errorText: VerificationQuestionsForm.questionsErrorText(
+                                form.questionsError,
+                                l10n,
+                              ),
+                            ),
+                            SizedBox(height: 20.h),
+                          ],
 
                           // ── Photos ──────────────────────────────────────────
                           PhotoUploaderWidget(

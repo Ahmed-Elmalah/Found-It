@@ -11,6 +11,9 @@ import 'package:found_it/features/auth/domain/sign_up_params.dart';
 import 'package:found_it/features/auth/domain/user_entity.dart';
 import 'package:found_it/features/auth/domain/watch_auth_state_use_case.dart';
 import 'package:found_it/features/auth/view/cubit/auth_cubit.dart';
+import 'package:found_it/features/matches/domain/entities/match_entity.dart';
+import 'package:found_it/features/matches/domain/repositories/matches_repository.dart';
+import 'package:found_it/features/matches/domain/use_cases/get_my_matches_count_use_case.dart';
 import 'package:found_it/features/profile/domain/entities/city_entity.dart';
 import 'package:found_it/features/profile/domain/entities/user_profile_entity.dart';
 import 'package:found_it/features/profile/domain/repositories/profile_repository.dart';
@@ -24,7 +27,9 @@ import 'package:found_it/features/profile/view/widgets/profile_header.dart';
 import 'package:found_it/features/reports/domain/entities/area_entity.dart';
 import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/create_report_params.dart';
+import 'package:found_it/features/reports/domain/entities/manual_match_result_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_counts_entity.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/repositories/reports_repository.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
@@ -65,6 +70,18 @@ class _FakeProfileRepo implements ProfileRepository {
   Future<void> setMyCity(String cityId) async {}
 }
 
+class _FakeMatchesRepo implements MatchesRepository {
+  int count = 0;
+  @override
+  Future<int> getMyMatchesCount() async => count;
+  @override
+  Future<List<MatchEntity>> getMyMatches({String? reportId}) async => const [];
+  @override
+  Future<MatchEntity> getMatchDetails(String matchId) => throw UnimplementedError();
+  @override
+  Future<void> rejectMatch(String matchId) => throw UnimplementedError();
+}
+
 class _FakeReportsRepoForProfileScreen implements ReportsRepository {
   @override
   Future<ReportCountsEntity> getMyReportsCounts() async => const ReportCountsEntity(
@@ -96,7 +113,17 @@ class _FakeReportsRepoForProfileScreen implements ReportsRepository {
     String? categoryId,
     String? areaId,
     DateTime? itemDate,
+    String? privateDetails,
+    List<Map<String, dynamic>>? questions,
   }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ReportDetailsEntity> getReportDetails(String reportId) =>
+      throw UnimplementedError();
+
+  @override
+  Future<ManualMatchResultEntity> createManualMatch(String reportId) =>
       throw UnimplementedError();
 }
 
@@ -195,6 +222,35 @@ void main() {
 
       await tester.scrollUntilVisible(find.text('Log out'), 200);
       expect(find.text('Log out'), findsOneWidget);
+    });
+
+    testWidgets('renders real potential matches count in activity section', (tester) async {
+      final matchesRepo = _FakeMatchesRepo()..count = 7;
+      final cubitWithMatches = ProfileCubit(
+        GetProfileUseCase(profileRepo),
+        UpdateProfileUseCase(profileRepo),
+        SetMyCityUseCase(profileRepo),
+        GetActiveCitiesUseCase(profileRepo),
+        GetMyReportsCountsUseCase(reportsRepo),
+        GetMyMatchesCountUseCase(matchesRepo),
+      );
+      addTearDown(cubitWithMatches.close);
+
+      await pumpTestApp(
+        tester,
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<ProfileCubit>.value(value: cubitWithMatches),
+            BlocProvider<AuthCubit>.value(value: authCubit),
+            BlocProvider<AppPreferencesCubit>.value(value: prefsCubit),
+          ],
+          child: const ProfileScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Potential Matches'), findsOneWidget);
+      expect(find.text('7'), findsOneWidget);
     });
   });
 }

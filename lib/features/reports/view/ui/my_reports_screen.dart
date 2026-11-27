@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/widgets/error_banner.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_cubit.dart';
@@ -30,9 +31,23 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
   }
 
   void _onEditReport(ReportEntity report) async {
+    final ReportDetailsEntity details;
+    try {
+      details = await context.read<MyReportsCubit>().getReportDetails(report.id);
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context).connectionErrorMessage),
+        ),
+      );
+      return;
+    }
+
+    if (!mounted) return;
     final result = await context.push<bool>(
       AppRoutes.editReport,
-      extra: report,
+      extra: details.toReportEntity(),
     );
     if (result == true && mounted) {
       context.read<MyReportsCubit>().refresh();
@@ -79,6 +94,10 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
         return l10n.notLoggedInTitle;
       case ReportFailureType.invalidData:
         return l10n.invalidDataTitle;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorTitle;
     }
@@ -92,6 +111,10 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
         return l10n.notLoggedInMessage;
       case ReportFailureType.invalidData:
         return l10n.invalidDataMessage;
+      case ReportFailureType.notFound:
+      case ReportFailureType.notAllowed:
+      case ReportFailureType.invalidState:
+      case ReportFailureType.invalidInput:
       case ReportFailureType.unknown:
         return l10n.genericErrorMessage;
     }
@@ -224,6 +247,7 @@ class _MyReportsScreenState extends State<MyReportsScreen> {
           final report = state.reports[index];
           return MyReportCard(
             report: report,
+            onTap: () => context.push(AppRoutes.reportDetailsPath(report.id)),
             onEdit: () => _onEditReport(report),
             onDelete: () => _onDeleteReport(report),
           );

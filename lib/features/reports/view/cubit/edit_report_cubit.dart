@@ -6,6 +6,7 @@ import 'package:found_it/features/reports/domain/use_cases/get_categories_use_ca
 import 'package:found_it/features/reports/domain/use_cases/get_city_areas_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/update_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/edit_report_state.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 class EditReportCubit extends Cubit<EditReportState> {
   EditReportCubit(
@@ -19,6 +20,9 @@ class EditReportCubit extends Cubit<EditReportState> {
           selectedCategoryId: report.categoryId,
           selectedAreaId: report.areaId,
           selectedDate: report.itemDate,
+          questions: report.questions != null && report.questions!.isNotEmpty
+              ? report.questions!.map((q) => QuestionDraft.fromEntity(q)).toList()
+              : (report.type == 'found' ? [QuestionDraft()] : const []),
         ));
 
   final UpdateReportUseCase _updateReportUseCase;
@@ -58,7 +62,21 @@ class EditReportCubit extends Cubit<EditReportState> {
   }
 
   void typeChanged(String type) {
-    emit(state.copyWith(selectedType: type));
+    final questions = type == 'found' && state.questions.isEmpty
+        ? [QuestionDraft()]
+        : state.questions;
+    emit(state.copyWith(
+      selectedType: type,
+      questions: questions,
+      clearQuestionsError: true,
+    ));
+  }
+
+  void updateQuestions(List<QuestionDraft> questions) {
+    emit(state.copyWith(
+      questions: questions,
+      clearQuestionsError: true,
+    ));
   }
 
   void categoryChanged(String categoryId) {
@@ -76,10 +94,22 @@ class EditReportCubit extends Cubit<EditReportState> {
   Future<bool> submit({
     required String title,
     String? description,
+    String? privateDetails,
   }) async {
+    final qError = VerificationQuestionsForm.validateQuestions(
+      state.questions,
+      isFound: state.selectedType == 'found',
+    );
+
+    if (qError != null) {
+      emit(state.copyWith(questionsError: qError));
+      return false;
+    }
+
     emit(state.copyWith(
       status: EditReportStatus.submitting,
       failure: () => null,
+      clearQuestionsError: true,
     ));
 
     try {
@@ -91,6 +121,10 @@ class EditReportCubit extends Cubit<EditReportState> {
         categoryId: state.selectedCategoryId,
         areaId: state.selectedAreaId,
         itemDate: state.selectedDate,
+        privateDetails: privateDetails,
+        questions: state.selectedType == 'found'
+            ? state.questions.map((q) => q.toJson()).toList()
+            : null,
       );
 
       emit(state.copyWith(

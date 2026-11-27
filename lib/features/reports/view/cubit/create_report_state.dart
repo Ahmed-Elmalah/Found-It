@@ -5,6 +5,7 @@ import 'package:found_it/features/reports/domain/entities/category_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/entities/report_field_error.dart';
 import 'package:found_it/features/reports/domain/entities/report_image.dart';
+import 'package:found_it/features/reports/view/ui/widgets/verification_questions_form.dart';
 
 sealed class CreateReportState extends Equatable {
   const CreateReportState();
@@ -34,6 +35,9 @@ class CreateReportFormState extends CreateReportState {
   final ReportFailureType? submitFailure;
   final ReportFailureType? initialDataFailure;
   final bool hasInvalidFile;
+  final String? privateDetails;
+  final List<QuestionDraft> questions;
+  final QuestionsError? questionsError;
 
   const CreateReportFormState({
     required this.isLost,
@@ -52,6 +56,9 @@ class CreateReportFormState extends CreateReportState {
     this.submitFailure,
     this.initialDataFailure,
     this.hasInvalidFile = false,
+    this.privateDetails,
+    this.questions = const [],
+    this.questionsError,
   });
 
   CreateReportFormState copyWith({
@@ -75,6 +82,11 @@ class CreateReportFormState extends CreateReportState {
     ReportFailureType? initialDataFailure,
     bool clearInitialDataFailure = false,
     bool? hasInvalidFile,
+    String? privateDetails,
+    bool clearPrivateDetails = false,
+    List<QuestionDraft>? questions,
+    QuestionsError? questionsError,
+    bool clearQuestionsError = false,
   }) {
     return CreateReportFormState(
       isLost: isLost ?? this.isLost,
@@ -97,6 +109,13 @@ class CreateReportFormState extends CreateReportState {
           ? null
           : (initialDataFailure ?? this.initialDataFailure),
       hasInvalidFile: hasInvalidFile ?? this.hasInvalidFile,
+      privateDetails: clearPrivateDetails
+          ? null
+          : (privateDetails ?? this.privateDetails),
+      questions: questions ?? this.questions,
+      questionsError: clearQuestionsError
+          ? null
+          : (questionsError ?? this.questionsError),
     );
   }
 
@@ -118,6 +137,9 @@ class CreateReportFormState extends CreateReportState {
         submitFailure,
         initialDataFailure,
         hasInvalidFile,
+        privateDetails,
+        questions,
+        questionsError,
       ];
 }
 

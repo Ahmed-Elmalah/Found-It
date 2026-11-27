@@ -12,6 +12,7 @@ class ProfileState extends Equatable {
     this.profile,
     this.activeCities = const [],
     this.reportsCount = 0,
+    this.matchesCount = 0,
     this.isUpdating = false,
     this.failure,
   });
@@ -20,6 +21,7 @@ class ProfileState extends Equatable {
   final UserProfileEntity? profile;
   final List<CityEntity> activeCities;
   final int reportsCount;
+  final int matchesCount;
   final bool isUpdating;
   final ProfileFailureType? failure;
 
@@ -31,6 +33,7 @@ class ProfileState extends Equatable {
     UserProfileEntity? profile,
     List<CityEntity>? activeCities,
     int? reportsCount,
+    int? matchesCount,
     bool? isUpdating,
     ProfileFailureType? Function()? failure,
   }) {
@@ -39,6 +42,7 @@ class ProfileState extends Equatable {
       profile: profile ?? this.profile,
       activeCities: activeCities ?? this.activeCities,
       reportsCount: reportsCount ?? this.reportsCount,
+      matchesCount: matchesCount ?? this.matchesCount,
       isUpdating: isUpdating ?? this.isUpdating,
       failure: failure != null ? failure() : this.failure,
     );
@@ -50,6 +54,7 @@ class ProfileState extends Equatable {
         profile,
         activeCities,
         reportsCount,
+        matchesCount,
         isUpdating,
         failure,
       ];

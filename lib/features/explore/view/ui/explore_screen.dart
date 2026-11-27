@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'package:found_it/core/localization/app_localizations.dart';
 import 'package:found_it/core/models/report_type.dart';
+import 'package:found_it/core/router/app_routes.dart';
 import 'package:found_it/core/theme/app_theme.dart';
 import 'package:found_it/core/widgets/app_button.dart';
 import 'package:found_it/core/widgets/report_card.dart';
@@ -234,6 +235,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       cityName: report.cityName(l10n.localeName),
       date: report.itemDate,
       imageUrl: report.primaryImageUrl,
+      onTap: () => context.push(AppRoutes.reportDetailsPath(report.id)),
     );
   }
 

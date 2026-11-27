@@ -480,5 +480,74 @@
     }
   },
   "chatVerificationRequiredNotice": "You must answer the verification questions before opening this chat.",
-  "chatVerifyOwnershipAction": "Answer Verification Questions"
+  "chatVerifyOwnershipAction": "Answer Verification Questions",
+  "reportDetailsTitle": "Report details",
+  "reportNotFoundTitle": "Report not found",
+  "reportNotFoundMessage": "This report does not exist or has been deleted.",
+  "reportDetailsCategory": "Category",
+  "reportDetailsLocation": "Location",
+  "reportDetailsDate": "Date",
+  "reportDetailsDescription": "Description",
+  "reportDetailsPrivateDetails": "Private verification details",
+  "privateDetailsHiddenNotice": "Private verification details are hidden to protect the owner.",
+  "privateDetailsOwnerNotice": "Only you can see these verification details.",
+  "questionsNotice": "This report requires answering ownership verification questions.",
+  "thisIsMine": "This is Mine",
+  "iFoundThis": "I Found This",
+  "openChat": "Open Chat",
+  "claimBlocked": "You can't claim this item",
+  "claimFailed": "Failed to submit claim",
+  "potentialMatchesForYou": "{count, plural, =1{1 potential match for you} other{{count} potential matches for you}}",
+  "@potentialMatchesForYou": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "privateDetailsLabel": "Private verification details (optional)",
+  "privateDetailsHint": "Details only the true owner would know (e.g. serial number, lock code, hidden marks)...",
+  "privateDetailsHelper": "Visible only to you. Used by the system to verify claims.",
+  "fullscreenImageTitle": "Photo {current} of {total}",
+  "@fullscreenImageTitle": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "verificationQuestionsTitle": "Ownership Verification Questions",
+  "verificationQuestionsSubtitle": "Add 1 to 3 multiple-choice questions. Anyone claiming this item must answer correctly before chatting.",
+  "addQuestionButton": "+ Add Question",
+  "removeQuestionButton": "Remove",
+  "questionNumber": "Question {index}",
+  "@questionNumber": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "questionTextLabel": "Question",
+  "questionTextHint": "e.g. What color or brand is this item?",
+  "correctAnswerLabel": "Correct Answer",
+  "correctAnswerHint": "The real answer (e.g. Black)",
+  "wrongChoiceLabel": "Wrong Choice {index}",
+  "@wrongChoiceLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
+  "wrongChoiceHint": "A believable wrong choice",
+  "addWrongChoiceButton": "+ Add Wrong Choice",
+  "questionRequiredError": "At least 1 verification question is required for found items.",
+  "questionTooShortError": "Question must be at least 3 characters.",
+  "answerRequiredError": "All answers are required.",
+  "duplicateAnswersError": "All choices for a question must be unique.",
+  "noPhotosAvailable": "No photos available"
 }

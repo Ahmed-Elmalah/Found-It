@@ -166,6 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.compare_arrows_rounded,
                 title: l10n.potentialMatches,
+                value: '${state.matchesCount}',
                 onTap: () => context.push(AppRoutes.matches),
               ),
 
