@@ -2327,6 +2327,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All choices for a question must be unique.'**
   String get duplicateAnswersError;
+
+  /// No description provided for @noPhotosAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos available'**
+  String get noPhotosAvailable;
 }
 
 class _AppLocalizationsDelegate

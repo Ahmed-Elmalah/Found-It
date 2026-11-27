@@ -37,7 +37,7 @@ class CreateReportFormState extends CreateReportState {
   final bool hasInvalidFile;
   final String? privateDetails;
   final List<QuestionDraft> questions;
-  final String? questionsError;
+  final QuestionsError? questionsError;
 
   const CreateReportFormState({
     required this.isLost,
@@ -85,7 +85,7 @@ class CreateReportFormState extends CreateReportState {
     String? privateDetails,
     bool clearPrivateDetails = false,
     List<QuestionDraft>? questions,
-    String? questionsError,
+    QuestionsError? questionsError,
     bool clearQuestionsError = false,
   }) {
     return CreateReportFormState(

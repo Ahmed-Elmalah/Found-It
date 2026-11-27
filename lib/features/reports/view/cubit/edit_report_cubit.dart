@@ -96,31 +96,10 @@ class EditReportCubit extends Cubit<EditReportState> {
     String? description,
     String? privateDetails,
   }) async {
-    String? qError;
-    if (state.selectedType == 'found') {
-      if (state.questions.isEmpty) {
-        qError = 'At least 1 verification question is required for found items.';
-      } else {
-        for (final q in state.questions) {
-          if (q.question.trim().length < 3) {
-            qError = 'Question must be at least 3 characters.';
-            break;
-          }
-          if (q.correct.trim().isEmpty || q.wrong.any((w) => w.trim().isEmpty)) {
-            qError = 'All answers are required.';
-            break;
-          }
-          final answers = [
-            q.correct.trim().toLowerCase(),
-            ...q.wrong.map((w) => w.trim().toLowerCase()),
-          ];
-          if (answers.toSet().length != answers.length) {
-            qError = 'All choices for a question must be unique.';
-            break;
-          }
-        }
-      }
-    }
+    final qError = VerificationQuestionsForm.validateQuestions(
+      state.questions,
+      isFound: state.selectedType == 'found',
+    );
 
     if (qError != null) {
       emit(state.copyWith(questionsError: qError));

@@ -226,31 +226,10 @@ class CreateReportCubit extends Cubit<CreateReportState> {
       errors['photos'] = ReportFieldError.required;
     }
 
-    String? qError;
-    if (!form.isLost) {
-      if (form.questions.isEmpty) {
-        qError = 'At least 1 verification question is required for found items.';
-      } else {
-        for (final q in form.questions) {
-          if (q.question.trim().length < 3) {
-            qError = 'Question must be at least 3 characters.';
-            break;
-          }
-          if (q.correct.trim().isEmpty || q.wrong.any((w) => w.trim().isEmpty)) {
-            qError = 'All answers are required.';
-            break;
-          }
-          final answers = [
-            q.correct.trim().toLowerCase(),
-            ...q.wrong.map((w) => w.trim().toLowerCase()),
-          ];
-          if (answers.toSet().length != answers.length) {
-            qError = 'All choices for a question must be unique.';
-            break;
-          }
-        }
-      }
-    }
+    final qError = VerificationQuestionsForm.validateQuestions(
+      form.questions,
+      isFound: !form.isLost,
+    );
 
     if (errors.isNotEmpty || form.rejectedPhotoIndices.isNotEmpty || qError != null) {
       emit(form.copyWith(

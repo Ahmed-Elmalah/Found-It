@@ -325,7 +325,10 @@ class _CreateReportScreenState extends State<CreateReportScreen> {
                             VerificationQuestionsForm(
                               questions: form.questions,
                               onChanged: cubit.updateQuestions,
-                              errorText: form.questionsError,
+                              errorText: VerificationQuestionsForm.questionsErrorText(
+                                form.questionsError,
+                                l10n,
+                              ),
                             ),
                             SizedBox(height: 20.h),
                           ],

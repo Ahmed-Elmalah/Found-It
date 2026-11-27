@@ -1227,4 +1227,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get duplicateAnswersError =>
       'All choices for a question must be unique.';
+
+  @override
+  String get noPhotosAvailable => 'No photos available';
 }

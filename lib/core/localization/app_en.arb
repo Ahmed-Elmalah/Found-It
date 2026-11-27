@@ -547,5 +547,6 @@
   "questionRequiredError": "At least 1 verification question is required for found items.",
   "questionTooShortError": "Question must be at least 3 characters.",
   "answerRequiredError": "All answers are required.",
-  "duplicateAnswersError": "All choices for a question must be unique."
+  "duplicateAnswersError": "All choices for a question must be unique.",
+  "noPhotosAvailable": "No photos available"
 }

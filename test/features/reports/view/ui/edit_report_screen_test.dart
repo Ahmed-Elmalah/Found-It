@@ -243,6 +243,63 @@ void main() {
       expect(repo.updatedPrivateDetails, 'Laser engraved serial #8877');
     });
 
+    testWidgets('clearing private verification details updates repo with empty string', (tester) async {
+      final reportWithDetails = ReportEntity(
+        id: 'rep_1',
+        refCode: '#RPT-1001',
+        userId: 'user_1',
+        cityId: 'city_cairo',
+        areaId: 'area_1',
+        categoryId: 'cat_1',
+        title: 'Black Leather Wallet',
+        description: 'Lost near subway',
+        type: 'lost',
+        status: 'active',
+        itemDate: DateTime(2026, 11, 10),
+        createdAt: DateTime(2026, 11, 10),
+        updatedAt: DateTime(2026, 11, 10),
+        images: const [],
+        privateDetails: 'Laser engraved serial #8877',
+      );
+      final detailsCubit = EditReportCubit(
+        reportWithDetails,
+        UpdateReportUseCase(repo),
+        GetCategoriesUseCase(repo),
+        GetCityAreasUseCase(repo),
+      );
+      addTearDown(detailsCubit.close);
+
+      final router = GoRouter(
+        initialLocation: '/reports/edit',
+        routes: [
+          GoRoute(
+            path: '/reports',
+            builder: (_, _) => const Scaffold(body: Text('Reports Page')),
+            routes: [
+              GoRoute(
+                path: 'edit',
+                builder: (_, _) => BlocProvider<EditReportCubit>.value(
+                  value: detailsCubit,
+                  child: EditReportScreen(report: reportWithDetails),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+      await pumpTestRouterApp(tester, router);
+      await tester.pumpAndSettle();
+
+      final privateDetailsFinder = find.byType(TextField).at(2);
+      await tester.enterText(privateDetailsFinder, '');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(AppButton));
+      await tester.pumpAndSettle();
+
+      expect(repo.updatedPrivateDetails, '');
+    });
+
     testWidgets('changing type to found in EditReportScreen displays VerificationQuestionsForm', (tester) async {
       final router = GoRouter(
         initialLocation: '/reports/edit',

@@ -60,12 +60,14 @@ class _EditReportScreenState extends State<EditReportScreen> {
   void _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final cubit = context.read<EditReportCubit>();
+    final text = _privateDetailsController.text.trim();
+    final original = widget.report.privateDetails ?? '';
+    final privateDetails = text == original ? null : text;
+
     final success = await cubit.submit(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
-      privateDetails: _privateDetailsController.text.trim().isNotEmpty
-          ? _privateDetailsController.text.trim()
-          : null,
+      privateDetails: privateDetails,
     );
 
     if (success && mounted) {
@@ -343,7 +345,10 @@ class _EditReportScreenState extends State<EditReportScreen> {
                         VerificationQuestionsForm(
                           questions: state.questions,
                           onChanged: context.read<EditReportCubit>().updateQuestions,
-                          errorText: state.questionsError,
+                          errorText: VerificationQuestionsForm.questionsErrorText(
+                            state.questionsError,
+                            l10n,
+                          ),
                         ),
                         SizedBox(height: 16.h),
                       ],

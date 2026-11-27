@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:found_it/core/di/injection.dart';
+import 'package:found_it/features/reports/domain/entities/report_details_entity.dart';
 import 'package:found_it/features/reports/domain/entities/report_failure.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_counts_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/get_my_reports_use_case.dart';
+import 'package:found_it/features/reports/domain/use_cases/get_report_details_use_case.dart';
 import 'package:found_it/features/reports/domain/use_cases/soft_delete_report_use_case.dart';
 import 'package:found_it/features/reports/view/cubit/my_reports_state.dart';
 
@@ -10,12 +13,27 @@ class MyReportsCubit extends Cubit<MyReportsState> {
   MyReportsCubit(
     this._getMyReportsUseCase,
     this._getMyReportsCountsUseCase,
-    this._softDeleteReportUseCase,
-  ) : super(const MyReportsState());
+    this._softDeleteReportUseCase, [
+    this._getReportDetailsUseCase,
+  ]) : super(const MyReportsState());
 
   final GetMyReportsUseCase _getMyReportsUseCase;
   final GetMyReportsCountsUseCase _getMyReportsCountsUseCase;
   final SoftDeleteReportUseCase _softDeleteReportUseCase;
+  final GetReportDetailsUseCase? _getReportDetailsUseCase;
+
+  GetReportDetailsUseCase? get getReportDetailsUseCase => _getReportDetailsUseCase;
+
+  Future<ReportDetailsEntity> getReportDetails(String reportId) async {
+    final useCase = _getReportDetailsUseCase ??
+        (sl.isRegistered<GetReportDetailsUseCase>()
+            ? sl<GetReportDetailsUseCase>()
+            : null);
+    if (useCase == null) {
+      throw const ReportFailure(ReportFailureType.unknown);
+    }
+    return useCase(reportId);
+  }
 
   Future<void> loadReports({MyReportsFilter? filter}) async {
     final activeFilter = filter ?? state.selectedFilter;

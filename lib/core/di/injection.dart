@@ -277,7 +277,7 @@ void _registerReports() {
         photoPicker: sl(),
       ),
     )
-    ..registerFactory(() => MyReportsCubit(sl(), sl(), sl()))
+    ..registerFactory(() => MyReportsCubit(sl(), sl(), sl(), sl()))
     ..registerFactory(() => ReportDetailsCubit(sl(), sl()));
 }
 

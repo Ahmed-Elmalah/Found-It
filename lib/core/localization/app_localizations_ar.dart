@@ -1225,4 +1225,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get duplicateAnswersError =>
       'يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة.';
+
+  @override
+  String get noPhotosAvailable => 'لا توجد صور متاحة';
 }

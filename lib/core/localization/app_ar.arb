@@ -420,5 +420,6 @@
   "questionRequiredError": "يجب إضافة سؤال تحقق واحد على الأقل للبلاغات التي تم العثور عليها.",
   "questionTooShortError": "يجب ألا يقل نص السؤال عن 3 أحرف.",
   "answerRequiredError": "جميع الإجابات مطلوبة.",
-  "duplicateAnswersError": "يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة."
+  "duplicateAnswersError": "يجب أن تكون جميع اختيارات السؤال فريدة ومختلفة.",
+  "noPhotosAvailable": "لا توجد صور متاحة"
 }

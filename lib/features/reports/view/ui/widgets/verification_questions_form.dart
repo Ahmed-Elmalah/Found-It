@@ -44,6 +44,9 @@ class QuestionDraft {
   }
 }
 
+/// Validation error types for verification questions.
+enum QuestionsError { required, tooShort, answerRequired, duplicate }
+
 /// Interactive form widget to build 1–3 verification questions for Found reports (Story #6).
 class VerificationQuestionsForm extends StatelessWidget {
   final List<QuestionDraft> questions;
@@ -64,31 +67,30 @@ class VerificationQuestionsForm extends StatelessWidget {
   /// - Correct answer 1–80 chars
   /// - 2–3 distinct wrong answers (1–80 chars)
   /// - All answers must be distinct
-  static String? validate(
-    List<QuestionDraft> questions,
-    AppLocalizations l10n, {
+  static QuestionsError? validateQuestions(
+    List<QuestionDraft> questions, {
     required bool isFound,
   }) {
     if (!isFound) return null;
 
     if (questions.isEmpty) {
-      return l10n.questionRequiredError;
+      return QuestionsError.required;
     }
 
     for (final q in questions) {
       final qText = q.question.trim();
       if (qText.length < 3) {
-        return l10n.questionTooShortError;
+        return QuestionsError.tooShort;
       }
       if (q.correct.trim().isEmpty) {
-        return l10n.answerRequiredError;
+        return QuestionsError.answerRequired;
       }
       if (q.wrong.length < 2) {
-        return l10n.answerRequiredError;
+        return QuestionsError.answerRequired;
       }
       for (final w in q.wrong) {
         if (w.trim().isEmpty) {
-          return l10n.answerRequiredError;
+          return QuestionsError.answerRequired;
         }
       }
 
@@ -98,12 +100,27 @@ class VerificationQuestionsForm extends StatelessWidget {
         ...q.wrong.map((w) => w.trim().toLowerCase()),
       ];
       if (allAnswers.toSet().length != allAnswers.length) {
-        return l10n.duplicateAnswersError;
+        return QuestionsError.duplicate;
       }
     }
 
     return null;
   }
+
+  static String? questionsErrorText(QuestionsError? e, AppLocalizations l10n) => switch (e) {
+        QuestionsError.required => l10n.questionRequiredError,
+        QuestionsError.tooShort => l10n.questionTooShortError,
+        QuestionsError.answerRequired => l10n.answerRequiredError,
+        QuestionsError.duplicate => l10n.duplicateAnswersError,
+        null => null,
+      };
+
+  static String? validate(
+    List<QuestionDraft> questions,
+    AppLocalizations l10n, {
+    required bool isFound,
+  }) =>
+      questionsErrorText(validateQuestions(questions, isFound: isFound), l10n);
 
   void _addQuestion() {
     if (questions.length >= 3) return;

@@ -47,6 +47,7 @@ class _ReportImageGalleryState extends State<ReportImageGallery> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context);
 
     if (widget.images.isEmpty) {
       return Container(
@@ -67,7 +68,7 @@ class _ReportImageGalleryState extends State<ReportImageGallery> {
             ),
             SizedBox(height: 8.h),
             Text(
-              'No photos available',
+              l10n.noPhotosAvailable,
               style: TextStyle(
                 fontSize: 13.sp,
                 color: colors.onSurfaceVariant.withValues(alpha: 0.6),

@@ -33,7 +33,7 @@ class EditReportState extends Equatable {
   final DateTime? selectedDate;
   final ReportFailureType? failure;
   final List<QuestionDraft> questions;
-  final String? questionsError;
+  final QuestionsError? questionsError;
 
   bool get isLoading => status == EditReportStatus.loading;
   bool get isSubmitting => status == EditReportStatus.submitting;
@@ -50,7 +50,7 @@ class EditReportState extends Equatable {
     DateTime? selectedDate,
     ReportFailureType? Function()? failure,
     List<QuestionDraft>? questions,
-    String? questionsError,
+    QuestionsError? questionsError,
     bool clearQuestionsError = false,
   }) {
     return EditReportState(
