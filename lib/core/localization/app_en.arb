@@ -549,5 +549,18 @@
   "questionTooShortError": "Question must be at least 3 characters.",
   "answerRequiredError": "All answers are required.",
   "duplicateAnswersError": "All choices for a question must be unique.",
-  "noPhotosAvailable": "No photos available"
+  "noPhotosAvailable": "No photos available",
+  "claimVerifyTitle": "Verify Ownership",
+  "claimVerifySubtitle": "Answer the finder's questions to claim this item.",
+  "claimVerifyNotice": "You only have one chance. A wrong answer closes the match permanently.",
+  "claimAnswerAllHint": "Answer every question to continue.",
+  "claimLoadErrorTitle": "Couldn't load the questions",
+  "claimLoadErrorSubtitle": "Check your internet connection and try again.",
+  "claimSubmitError": "Couldn't submit your answers. Please try again.",
+  "claimSubmitAnswers": "Submit answers",
+  "claimConfirmTitle": "You only have one chance",
+  "claimConfirmBody": "Once you submit, your answers can't be changed. If any answer is wrong, the match is closed and you can't claim this item again.",
+  "claimConfirmAction": "Confirm",
+  "claimFailedMessage": "Your answers didn't match. The match is closed and you can no longer claim this report.",
+  "claimBackToMatches": "Back to matches"
 }

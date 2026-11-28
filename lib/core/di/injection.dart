@@ -43,6 +43,12 @@ import 'package:found_it/features/city/domain/city_repository.dart';
 import 'package:found_it/features/city/domain/get_cities_use_case.dart';
 import 'package:found_it/features/city/domain/select_city_use_case.dart';
 import 'package:found_it/features/city/view/cubit/city_cubit.dart';
+import 'package:found_it/features/claim/data/claim_remote_data_source.dart';
+import 'package:found_it/features/claim/data/claim_repository_impl.dart';
+import 'package:found_it/features/claim/domain/repositories/claim_repository.dart';
+import 'package:found_it/features/claim/domain/use_cases/get_claim_questions_use_case.dart';
+import 'package:found_it/features/claim/domain/use_cases/submit_claim_answers_use_case.dart';
+import 'package:found_it/features/claim/view/cubit/claim_cubit.dart';
 import 'package:found_it/features/explore/data/explore_remote_data_source.dart';
 import 'package:found_it/features/explore/data/explore_repository_impl.dart';
 import 'package:found_it/features/explore/domain/explore_repository.dart';
@@ -171,6 +177,7 @@ Future<void> configureDependencies() async {
   _registerExplore();
   _registerChat();
   _registerMatches();
+  _registerClaim();
   _registerRecovery();
 }
 
@@ -493,6 +500,27 @@ void _registerMatches() {
         getMatchDetails: sl(),
         rejectMatchUseCase: sl(),
         getMyMatchesCount: sl(),
+      ),
+    );
+}
+
+// ---------------------------------------------------------------------
+// Claim / Verify Ownership (Mohamed, story #6)
+// ---------------------------------------------------------------------
+void _registerClaim() {
+  sl
+    ..registerLazySingleton<ClaimRemoteDataSource>(
+      () => ClaimRemoteDataSourceImpl(sl()),
+    )
+    ..registerLazySingleton<ClaimRepository>(
+      () => ClaimRepositoryImpl(remoteDataSource: sl()),
+    )
+    ..registerLazySingleton(() => GetClaimQuestionsUseCase(sl()))
+    ..registerLazySingleton(() => SubmitClaimAnswersUseCase(sl()))
+    ..registerFactory(
+      () => ClaimCubit(
+        getClaimQuestions: sl(),
+        submitClaimAnswers: sl(),
       ),
     );
 }

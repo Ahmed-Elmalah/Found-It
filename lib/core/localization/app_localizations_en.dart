@@ -1233,4 +1233,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noPhotosAvailable => 'No photos available';
+
+  @override
+  String get claimVerifyTitle => 'Verify Ownership';
+
+  @override
+  String get claimVerifySubtitle =>
+      'Answer the finder\'s questions to claim this item.';
+
+  @override
+  String get claimVerifyNotice =>
+      'You only have one chance. A wrong answer closes the match permanently.';
+
+  @override
+  String get claimAnswerAllHint => 'Answer every question to continue.';
+
+  @override
+  String get claimLoadErrorTitle => 'Couldn\'t load the questions';
+
+  @override
+  String get claimLoadErrorSubtitle =>
+      'Check your internet connection and try again.';
+
+  @override
+  String get claimSubmitError =>
+      'Couldn\'t submit your answers. Please try again.';
+
+  @override
+  String get claimSubmitAnswers => 'Submit answers';
+
+  @override
+  String get claimConfirmTitle => 'You only have one chance';
+
+  @override
+  String get claimConfirmBody =>
+      'Once you submit, your answers can\'t be changed. If any answer is wrong, the match is closed and you can\'t claim this item again.';
+
+  @override
+  String get claimConfirmAction => 'Confirm';
+
+  @override
+  String get claimFailedMessage =>
+      'Your answers didn\'t match. The match is closed and you can no longer claim this report.';
+
+  @override
+  String get claimBackToMatches => 'Back to matches';
 }

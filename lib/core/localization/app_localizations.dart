@@ -2339,6 +2339,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No photos available'**
   String get noPhotosAvailable;
+
+  /// No description provided for @claimVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Ownership'**
+  String get claimVerifyTitle;
+
+  /// No description provided for @claimVerifySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer the finder\'s questions to claim this item.'**
+  String get claimVerifySubtitle;
+
+  /// No description provided for @claimVerifyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You only have one chance. A wrong answer closes the match permanently.'**
+  String get claimVerifyNotice;
+
+  /// No description provided for @claimAnswerAllHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Answer every question to continue.'**
+  String get claimAnswerAllHint;
+
+  /// No description provided for @claimLoadErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the questions'**
+  String get claimLoadErrorTitle;
+
+  /// No description provided for @claimLoadErrorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and try again.'**
+  String get claimLoadErrorSubtitle;
+
+  /// No description provided for @claimSubmitError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t submit your answers. Please try again.'**
+  String get claimSubmitError;
+
+  /// No description provided for @claimSubmitAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit answers'**
+  String get claimSubmitAnswers;
+
+  /// No description provided for @claimConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You only have one chance'**
+  String get claimConfirmTitle;
+
+  /// No description provided for @claimConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Once you submit, your answers can\'t be changed. If any answer is wrong, the match is closed and you can\'t claim this item again.'**
+  String get claimConfirmBody;
+
+  /// No description provided for @claimConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get claimConfirmAction;
+
+  /// No description provided for @claimFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers didn\'t match. The match is closed and you can no longer claim this report.'**
+  String get claimFailedMessage;
+
+  /// No description provided for @claimBackToMatches.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to matches'**
+  String get claimBackToMatches;
 }
 
 class _AppLocalizationsDelegate
